@@ -11,6 +11,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import edu.jas.arith.ArithUtil;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 
@@ -56,6 +57,7 @@ public class RealArithUtil {
         int m = 0;
         while (!xd.isZERO() && m++ < M) {
             //System.out.println("xd = " + xd + ", q = " + q + ", x = " + x);
+            //System.out.println("xd = " + xd.decimalMagnitude());
             x = xd.inverse();
             q = new BigInteger(x.floor());
             cf.add(q);
@@ -74,26 +76,27 @@ public class RealArithUtil {
      * @return ratonal number approximation for A.
      */
     public static BigRational continuedFractionApprox(List<BigInteger> A) {
-        BigRational ab = BigRational.ZERO;
-        if (A == null || A.isEmpty()) {
-            return ab;
-        }
-        BigInteger a2, a1, b2, b1, a, b;
-        a2 = BigInteger.ZERO;
-        a1 = BigInteger.ONE;
-        b2 = BigInteger.ONE;
-        b1 = BigInteger.ZERO;
-        for (BigInteger q : A) {
-            a = q.multiply(a1).sum(a2);
-            b = q.multiply(b1).sum(b2);
-            //System.out.println("A/B = " + new BigRational(a,b));
-            a2 = a1;
-            a1 = a;
-            b2 = b1;
-            b1 = b;
-        }
-        ab = new BigRational(a1, b1);
-        return ab;
+        return ArithUtil.continuedFractionApprox(A);
+        // BigRational ab = BigRational.ZERO;
+        // if (A == null || A.isEmpty()) {
+        //     return ab;
+        // }
+        // BigInteger a2, a1, b2, b1, a, b;
+        // a2 = BigInteger.ZERO;
+        // a1 = BigInteger.ONE;
+        // b2 = BigInteger.ONE;
+        // b1 = BigInteger.ZERO;
+        // for (BigInteger q : A) {
+        //     a = q.multiply(a1).sum(a2);
+        //     b = q.multiply(b1).sum(b2);
+        //     //System.out.println("A/B = " + new BigRational(a,b));
+        //     a2 = a1;
+        //     a1 = a;
+        //     b2 = b1;
+        //     b1 = b;
+        // }
+        // ab = new BigRational(a1, b1);
+        // return ab;
     }
 
 }
