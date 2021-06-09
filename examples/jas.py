@@ -2418,7 +2418,7 @@ def pylist2arraylist(list,fac=None,rec=1):
            except:
                pass;
            if t and fac != None:
-               #print "e.p(%s) = %s" % (e,e.getClass().getName());
+               #print "e.p(%s) = %s :: %s" % (e,e,fac);
                e = fac.parse( str(e) ); #or makeJasArith(e) ?
            L.add(e);
        list = L;
@@ -2798,9 +2798,8 @@ def RealN(m,i,r=0):
     if isinstance(r,RingElem):
         r = r.elem;
     if isinstance(i,PyTuple) or isinstance(i,PyList):
-        il = BigRational(i[0]);
-        ir = BigRational(i[1]);
-        i = Interval(il,ir);
+        i = pylist2arraylist(i,BigRational(),1);
+        i = Interval(i[0],i[1]);
     #print "m.getClass() = " + str(m.getClass().getName());
     if isinstance(m,RealAlgebraicNumber):
         mf = RealAlgebraicRing(m.factory().algebraic.modul,i);

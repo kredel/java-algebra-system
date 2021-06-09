@@ -2364,9 +2364,8 @@ def RealN(m,i,r=0)
         r = r.elem;
     end
     if i.is_a? Array
-        il = BigRational.new(i[0]);
-        ir = BigRational.new(i[1]);
-        i = Interval.new(il,ir);
+        i = rbarray2arraylist(i,BigRational.new(0),1);
+        i = Interval.new(i[0],i[1]);
     end
     #puts "m.getClass() = " + m.getClass().getName().to_s;
     if m.is_a? RealAlgebraicNumber
@@ -2785,7 +2784,7 @@ def rbarray2arraylist(list,fac=nil,rec=1)
                #pass;
            end
            if t and fac != nil
-               #puts "e.p(#{e}) = #{e.class}\n";
+               #puts "e.p(#{e}) = #{e.class}, #{fac.toScriptFactory()}\n";
                e = fac.parse( str(e) ); #or makeJasArith(e) ?
            end
            ll.add(e);
