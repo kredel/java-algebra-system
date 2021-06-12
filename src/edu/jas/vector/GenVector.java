@@ -200,6 +200,27 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
 
     /**
+     * get element.
+     * @param i index
+     * @return e with e = this(i).
+     */
+    public C get(int i) {
+        return val.get(i);
+    }
+
+
+    /**
+     * set element, mutate this.
+     * @param i index
+     * @param e value
+     * @return this with this(i) = e.
+     */
+    public C setMutate(int i, C e) {
+        return val.set(i, e);
+    }
+
+
+    /**
      * sign of vector.
      * @return 1 if (this &lt; 0), 0 if (this == 0) or -1 if (this &gt; 0).
      */

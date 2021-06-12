@@ -376,4 +376,68 @@ public class GenMatrixTest extends TestCase {
         assertEquals("parse(toStirng(a) == a ", a, c);
     }
 
+
+    /**
+     * Test LU decomposition.
+     */
+    public void testLUdecomp() {
+        BigRational cfac = new BigRational(1);
+        int n = 10;
+        GenMatrixRing<BigRational> mfac = new GenMatrixRing<BigRational>(cfac, n, n );//rows, cols);
+        GenVectorModul<BigRational> vfac = new GenVectorModul<BigRational>(cfac, n );//rows);
+
+        GenMatrix<BigRational> A, Ap, iA, AiA;
+        //A = mfac.getONE().negate(); //.sum(mfac.getONE());
+        A = mfac.random(kl, 0.7f);
+        //A = mfac.parse("[ [3,4], [1,2] ]");
+        System.out.println("A = " + A);
+        if (A.isZERO()) {
+            return;
+        }
+        assertTrue(" not isZERO( A )", !A.isZERO());
+        Ap = A.copy();
+
+        LinAlg<BigRational> lu = new LinAlg<BigRational>();
+        BasicLinAlg<BigRational> blas = new BasicLinAlg<BigRational>();
+
+        List<Integer> P = lu.decompositionLU(A);
+        System.out.println("P = " + P);
+        System.out.println("A = " + A);
+        if (P.size() == 0) {
+            System.out.println("undecomposable");
+            return;
+        }
+
+        GenVector<BigRational> b, s;
+        //b = vfac.random(kl);
+        //b = vfac.parse("[5,5]");
+        //s = vfac.parse("[1,1]");
+        s = vfac.random(kl);
+        System.out.println("s = " + s);
+        List<BigRational> bs = blas.rightProduct(s.val, (List<List<BigRational>>)(Object)Ap.matrix);
+        b = new GenVector<BigRational>(vfac, bs);
+        System.out.println("b = " + b);
+
+        GenVector<BigRational> x = lu.solveLU(A,P,b);
+        System.out.println("x = " + x);
+        assertEquals("s == x: ", s, x);
+
+        List<BigRational> r = blas.rightProduct(x.val, (List<List<BigRational>>)(Object)Ap.matrix);
+        //System.out.println("r = " + r);
+
+        GenVector<BigRational> rr = new GenVector<BigRational>(vfac, r);
+        System.out.println("r = " + rr);
+        //System.out.println("b == r: " + b.equals(rr));
+        assertEquals("b == r: ", b, rr);
+
+        BigRational det = lu.determinantLU(A,P);
+        System.out.println("det = " + det + " ~= " + det.getDecimal());
+
+        iA = lu.inverseLU(A,P);
+        System.out.println("iA = " + iA);
+        AiA = Ap.multiply(iA);
+        System.out.println("AiA = " + AiA);
+        assertTrue("A*iA == 1: ", AiA.isONE());
+    }
+
 }

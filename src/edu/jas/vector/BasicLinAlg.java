@@ -218,4 +218,46 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
         return V;
     }
 
+
+    /**
+     * Product of a vector and a matrix of ring elements.
+     * @param G a ring element list.
+     * @param F a list of ring element lists.
+     * @return the left product of G and F.
+     */
+    public List<C> leftProduct(List<C> G, List<List<C>> F) {
+        List<C> sp = new ArrayList<C>(G.size());
+        Iterator<List<C>> jt = F.iterator();
+        while (jt.hasNext()) {
+            List<C> pj = jt.next();
+            if (pj == null) {
+                continue;
+            }
+            C s = scalarProduct(G, pj);
+            sp.add(s);
+        }
+        return sp;
+    }
+
+
+    /**
+     * Product of a vector and a matrix of ring elements.
+     * @param G a ring element list.
+     * @param F a list of ring element lists.
+     * @return the right product of G and F.
+     */
+    public List<C> rightProduct(List<C> G, List<List<C>> F) {
+        List<C> sp = new ArrayList<C>(G.size());
+        Iterator<List<C>> jt = F.iterator();
+        while (jt.hasNext()) {
+            List<C> pj = jt.next();
+            if (pj == null) {
+                continue;
+            }
+            C s = scalarProduct(pj, G);
+            sp.add(s);
+        }
+        return sp;
+    }
+
 }
