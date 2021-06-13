@@ -96,7 +96,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             //System.out.println("A(i," + i + ") = " + mat.get(i).get(i));
             for (int j = i + 1; j < N; j++) {
                 // A[j][i] /= A[i][i];
-		C d = mat.get(j).get(i).divide( mat.get(i).get(i) );
+                C d = mat.get(j).get(i).divide( mat.get(i).get(i) );
                 mat.get(j).set(i, d );
 
                 for (int k = i + 1; k < N; k++) {
@@ -141,7 +141,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             }
             vec.set(i, xi);
         }
-	//System.out.println("vec = " + vec);
+        //System.out.println("vec = " + vec);
         for (int i = N - 1; i >= 0; i--) {
             C xi = vec.get(i);
             for (int k = i + 1; k < N; k++) {
@@ -172,18 +172,18 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         }
         int N = P.size() - 1;
         ArrayList<ArrayList<C>> mat = A.matrix;
-	// det = A[0][0];
-	C det = mat.get(0).get(0);
+        // det = A[0][0];
+        C det = mat.get(0).get(0);
         for (int i = 1; i < N; i++) {
             //det *= A[i][i];
             det = det.multiply( mat.get(i).get(i) );
-	}
-	//return (P[N] - N) % 2 == 0 ? det : -det
+        }
+        //return (P[N] - N) % 2 == 0 ? det : -det
         int s = P.get( N ) - N;
-	if (s % 2 != 0) {
+        if (s % 2 != 0) {
             det = det.negate();
-	}
-	return det;
+        }
+        return det;
     }
     
 
@@ -221,12 +221,112 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 }
                 imat.get(i).set(j, b);
                 //IA[i][j] /= A[i][i];
-                C e = imat.get(i).get(j);
+                C e = b; //imat.get(i).get(j);
                 e = e.divide( mat.get(i).get(i) );
                 imat.get(i).set(j, e);
             }
         }
         return inv;
     }
-    
+
+
+    /**
+     * Matrix Null Space basis, cokernel.
+     * @param A a n&times;n matrix.
+     * @return V a list of vectors (v_1, ..., v_k) with v_i*A == 0.
+     */
+    public List<GenVector<C>> nullSpaceBasis(GenMatrix<C> A) {
+        if (A == null) {
+            return null;
+        }
+        GenMatrixRing<C> ring = A.ring;
+        int N = ring.rows;
+        if (N != ring.cols) {
+            logger.warn("nosquare matrix");
+        }
+        List<GenVector<C>> nspb = new ArrayList<GenVector<C>>();
+        GenVectorModul<C> vfac = new GenVectorModul<C>(ring.coFac, N);
+        ArrayList<ArrayList<C>> mat = A.matrix;
+        for (int i = 0; i < N; i++) {
+            C maxA, absA;
+            // search privot imax
+            int imax = i;
+            maxA = ring.coFac.getZERO();
+            for (int k = i; k < N; k++) {
+                // absA = fabs(A[k][i])
+                absA = mat.get(i).get(k).abs();
+                if (absA.compareTo(maxA) > 0 && maxA.isZERO()) {
+                    maxA = absA;
+                    imax = k;
+                }
+            }
+            System.out.println("pivot: " + imax + ", i = " + i + ", maxA = " + maxA);
+            if (maxA.isZERO()) {
+                continue; //
+            }
+            if (imax < N) { //!= i
+                //normalize column i
+                //System.out.println("col(" + imax + ") = " + A.getColumn(imax));
+                C mp = mat.get(i).get(imax).inverse();
+                for (int k = 0; k < N; k++) { // k = i ?
+                    C b = mat.get(k).get(imax);
+                    b = b.multiply(mp);
+                    mat.get(k).set(imax, b);
+                }
+                //System.out.println("col(" + imax + ") = " + A.getColumn(imax));
+                //pivoting columns of A
+                if (imax != i) {
+                    //System.out.println("col(" + i + ") = " + A.getColumn(i));
+                    for (int k = 0; k < N; k++) {
+                        C b = mat.get(k).get(i);
+                        mat.get(k).set(i, mat.get(k).get(imax));
+                        mat.get(k).set(imax, b);
+                    }
+                    //System.out.println("col(" + imax + ") = " + A.getColumn(imax));
+                    //System.out.println("col(" + i + ") = " + A.getColumn(i));
+                }
+                //eliminate rest of row i via column operations
+                for (int j = 0; j < N; j++) {
+                    if (i == j) {
+                        continue;
+                    }
+                    //System.out.println("row(" + i + ") = " + A.getRow(i));
+                    C mm = mat.get(i).get(j);
+                    for (int k = 0; k < N; k++) {
+                        C b = mat.get(k).get(j);
+                        C c = mat.get(k).get(i);
+                        C d = b.subtract( c.multiply(mm) );
+                        mat.get(k).set(j, d);
+                    }
+                    //System.out.println("row(" + i + ") = " + A.getRow(i));
+                }
+            }
+        }
+        System.out.println("mat = " + A);
+        // convert to A-I
+        for (int i = 0; i < N; i++) {
+            C b = mat.get(i).get(i);
+            b = b.subtract(ring.coFac.getONE());
+            mat.get(i).set(i, b);
+        }
+        //System.out.println("mat-1 = " + A);
+        // read off non zero rows of A
+        for (int i = 0; i < N; i++) {
+            List<C> row = mat.get(i);
+            //System.out.println("row = " + row);
+            boolean iszero = true;
+            for (int k = 0; k < N; k++) {
+                if ( !row.get(k).isZERO() ) {
+                    iszero = false;
+                    break;
+                }
+            }
+            if (!iszero) {
+                GenVector<C> v = new GenVector<C>(vfac, row);
+                nspb.add( v );
+            }
+        }
+        return nspb;
+    }
+
 }

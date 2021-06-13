@@ -13,6 +13,8 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import edu.jas.arith.BigRational;
+import edu.jas.arith.ModLong;
+import edu.jas.arith.ModLongRing;
 
 
 /**
@@ -390,7 +392,7 @@ public class GenMatrixTest extends TestCase {
         //A = mfac.getONE().negate(); //.sum(mfac.getONE());
         A = mfac.random(kl, 0.7f);
         //A = mfac.parse("[ [3,4], [1,2] ]");
-        System.out.println("A = " + A);
+        //System.out.println("A = " + A);
         if (A.isZERO()) {
             return;
         }
@@ -402,7 +404,7 @@ public class GenMatrixTest extends TestCase {
 
         List<Integer> P = lu.decompositionLU(A);
         System.out.println("P = " + P);
-        System.out.println("A = " + A);
+        //System.out.println("A = " + A);
         if (P.size() == 0) {
             System.out.println("undecomposable");
             return;
@@ -413,20 +415,20 @@ public class GenMatrixTest extends TestCase {
         //b = vfac.parse("[5,5]");
         //s = vfac.parse("[1,1]");
         s = vfac.random(kl);
-        System.out.println("s = " + s);
+        //System.out.println("s = " + s);
         List<BigRational> bs = blas.rightProduct(s.val, (List<List<BigRational>>)(Object)Ap.matrix);
         b = new GenVector<BigRational>(vfac, bs);
-        System.out.println("b = " + b);
+        //System.out.println("b = " + b);
 
         GenVector<BigRational> x = lu.solveLU(A,P,b);
-        System.out.println("x = " + x);
+        //System.out.println("x = " + x);
         assertEquals("s == x: ", s, x);
 
         List<BigRational> r = blas.rightProduct(x.val, (List<List<BigRational>>)(Object)Ap.matrix);
         //System.out.println("r = " + r);
 
         GenVector<BigRational> rr = new GenVector<BigRational>(vfac, r);
-        System.out.println("r = " + rr);
+        //System.out.println("r = " + rr);
         //System.out.println("b == r: " + b.equals(rr));
         assertEquals("b == r: ", b, rr);
 
@@ -434,10 +436,110 @@ public class GenMatrixTest extends TestCase {
         System.out.println("det = " + det + " ~= " + det.getDecimal());
 
         iA = lu.inverseLU(A,P);
-        System.out.println("iA = " + iA);
+        //System.out.println("iA = " + iA);
         AiA = Ap.multiply(iA);
-        System.out.println("AiA = " + AiA);
+        //System.out.println("AiA = " + AiA);
         assertTrue("A*iA == 1: ", AiA.isONE());
+    }
+
+
+    /**
+     * Test Null Space basis, modular coeffs.
+     */
+    public void xtestNullSpaceMod() {
+        ModLongRing cfac = new ModLongRing(11);
+        int n = 6;
+        GenMatrixRing<ModLong> mfac = new GenMatrixRing<ModLong>(cfac, n, n );//rows, cols);
+        System.out.println("mfac = " + mfac.toScript());
+        GenVectorModul<ModLong> vfac = new GenVectorModul<ModLong>(cfac, n );//rows);
+        GenMatrixRing<ModLong> tfac = mfac.transpose();
+
+        GenMatrix<ModLong> A, Ap, iA, AiA, B, T;
+        //A = mfac.getONE(); //.negate(); //.sum(mfac.getONE());
+        //A = mfac.random(kl, 0.2f);
+        //A = mfac.parse("[ [3,4,5], [1,2,3], [2,4,6] ]");
+        //A = mfac.parse("[ [1,0,0,0,0], [3,0,0,0,0], [0,0,1,0,0], [2,0,4,0,0], [0,0,0,0,1] ]");
+        A = mfac.parse("[ [0,0,0,0,0,0], [3,4,-3,-3,5,5], [3,-5,5,1,-1,0], [-2,4,-1,2,-4,-2], [-4,-3,-1,0,-1,-3], [-3,-1,-4,-3,-1,-4] ]");
+	//A = A.sum( mfac.getONE() );
+        System.out.println("A = " + A);
+        if (A.isZERO()) {
+            return;
+        }
+        assertTrue(" not isZERO( A )", !A.isZERO());
+        Ap = A.copy();
+	T = A.transpose(tfac);
+
+        LinAlg<ModLong> lu = new LinAlg<ModLong>();
+        BasicLinAlg<ModLong> blas = new BasicLinAlg<ModLong>();
+
+        List<GenVector<ModLong>> NSB = lu.nullSpaceBasis(A);
+        System.out.println("NSB = " + NSB);
+        System.out.println("mod A = " + A);
+        if (NSB.size() == 0) {
+            System.out.println("no null space basis");
+            return;
+        }
+	for (GenVector<ModLong> v : NSB) {
+	    List<ModLong> z = blas.leftProduct(v.val, (List<List<ModLong>>)(Object)T.matrix);
+            System.out.println("z = " + z);
+	    GenVector<ModLong> Z = new GenVector<ModLong>(vfac, z);
+	    //assertTrue("z == 0: " + Z, Z.isZERO());
+	}
+	Ap = A.sum( mfac.getONE() );
+        System.out.println("Ap = " + Ap);
+	B = Ap.multiply(Ap);
+        System.out.println("B = " + B);
+        //assertEquals("A**2 == A: ", Ap, B);
+    }
+
+
+    /**
+     * Test Null Space basis.
+     */
+    public void testNullSpace() {
+        BigRational cfac = new BigRational(11);
+        int n = 6;
+        GenMatrixRing<BigRational> mfac = new GenMatrixRing<BigRational>(cfac, n, n );//rows, cols);
+        System.out.println("mfac = " + mfac.toScript());
+        GenVectorModul<BigRational> vfac = new GenVectorModul<BigRational>(cfac, n );//rows);
+        GenMatrixRing<BigRational> tfac = mfac.transpose();
+
+        GenMatrix<BigRational> A, Ap, iA, AiA, B, T;
+        //A = mfac.getONE(); //.negate(); //.sum(mfac.getONE());
+        //A = mfac.random(kl, 0.2f);
+        //A = mfac.parse("[ [3,4,5], [1,2,3], [2,4,6] ]");
+        //A = mfac.parse("[ [1,0,0,0,0], [3,0,0,0,0], [0,0,1,0,0], [2,0,4,0,0], [0,0,0,0,1] ]");
+        A = mfac.parse("[ [0,0,0,0,0,0], [3,4,-3,-3,5,5], [3,-5,5,1,-1,0], [-2,4,-1,2,-4,-2], [-4,-3,-1,0,-1,-3], [-3,-1,-4,-3,-1,-4] ]");
+	//A = A.sum( mfac.getONE() );
+        System.out.println("A = " + A);
+        if (A.isZERO()) {
+            return;
+        }
+        assertTrue(" not isZERO( A )", !A.isZERO());
+        Ap = A.copy();
+	T = A.transpose(tfac);
+
+        LinAlg<BigRational> lu = new LinAlg<BigRational>();
+        BasicLinAlg<BigRational> blas = new BasicLinAlg<BigRational>();
+
+        List<GenVector<BigRational>> NSB = lu.nullSpaceBasis(A);
+        System.out.println("NSB = " + NSB);
+        System.out.println("mod A = " + A);
+        if (NSB.size() == 0) {
+            System.out.println("no null space basis");
+            return;
+        }
+	for (GenVector<BigRational> v : NSB) {
+	    List<BigRational> z = blas.leftProduct(v.val, (List<List<BigRational>>)(Object)T.matrix);
+	    GenVector<BigRational> Z = new GenVector<BigRational>(vfac, z);
+            System.out.println("Z = " + Z);
+	    assertTrue("z == 0: " + Z, Z.isZERO());
+	}
+	Ap = A.sum( mfac.getONE() );
+        System.out.println("Ap = " + Ap);
+	B = Ap.multiply(Ap);
+        //System.out.println("B = " + B);
+        assertEquals("A**2 == A: ", Ap, B);
     }
 
 }
