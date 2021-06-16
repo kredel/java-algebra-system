@@ -431,7 +431,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
     public int compareTo(BigDecimal b) {
         //return compareToAbsolute(b);
         //return compareToRelative(b);
-	return val.compareTo(b.val);
+        return val.compareTo(b.val);
     }
 
 

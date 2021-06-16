@@ -729,11 +729,11 @@ public class GenWordPolynomialTest extends TestCase {
         List<GenWordPolynomial<BigInteger>> gens = pf.generators();
         //System.out.println("pf = " + gens);
         GenWordPolynomial<BigInteger> ga, gb, crel;
-	ga = gens.get(1);
-	gb = gens.get(2);
+        ga = gens.get(1);
+        gb = gens.get(2);
         //System.out.println("ga = " + ga);
         //System.out.println("gb = " + gb);
-	crel = ga.multiply(gb).subtract(gb.multiply(ga));
+        crel = ga.multiply(gb).subtract(gb.multiply(ga));
         //System.out.println("crel = " + crel);
 
         StringReader sr = new StringReader("a b - b a, b c - c b");
