@@ -403,7 +403,7 @@ public class GenMatrixTest extends TestCase {
         BasicLinAlg<BigRational> blas = new BasicLinAlg<BigRational>();
 
         List<Integer> P = lu.decompositionLU(A);
-        System.out.println("P = " + P);
+        //System.out.println("P = " + P);
         //System.out.println("A = " + A);
         if (P.size() == 0) {
             System.out.println("undecomposable");
@@ -430,7 +430,8 @@ public class GenMatrixTest extends TestCase {
         assertEquals("b == r: ", b, r);
 
         BigRational det = lu.determinantLU(A, P);
-        System.out.println("det = " + det + " ~= " + det.getDecimal());
+        //System.out.println("det = " + det + " ~= " + det.getDecimal());
+        assertFalse("det(A) != 0: ", det.isZERO()); // since P != ()
 
         iA = lu.inverseLU(A, P);
         //System.out.println("iA = " + iA);
@@ -447,7 +448,7 @@ public class GenMatrixTest extends TestCase {
         ModLongRing cfac = new ModLongRing(11); //11, 32003
         int n = 100;
         GenMatrixRing<ModLong> mfac = new GenMatrixRing<ModLong>(cfac, n, n);//rows, cols);
-        System.out.println("mfac = " + mfac.toScript());
+        //System.out.println("mfac = " + mfac.toScript());
         //GenVectorModul<ModLong> vfac = new GenVectorModul<ModLong>(cfac, n);//rows);
         GenMatrixRing<ModLong> tfac = mfac.transpose();
 
@@ -473,7 +474,7 @@ public class GenMatrixTest extends TestCase {
         BasicLinAlg<ModLong> blas = new BasicLinAlg<ModLong>();
 
         List<GenVector<ModLong>> NSB = lu.nullSpaceBasis(A);
-        System.out.println("NS basis = " + NSB.size());
+        //System.out.println("NS basis = " + NSB.size());
         if (NSB.size() == 0) {
             System.out.println("no null space basis");
             return;
@@ -502,7 +503,7 @@ public class GenMatrixTest extends TestCase {
         BigRational cfac = new BigRational(11);
         int n = 100;
         GenMatrixRing<BigRational> mfac = new GenMatrixRing<BigRational>(cfac, n, n);//rows, cols);
-        System.out.println("mfac = " + mfac.toScript());
+        //System.out.println("mfac = " + mfac.toScript());
         //GenVectorModul<BigRational> vfac = new GenVectorModul<BigRational>(cfac, n);//rows);
         GenMatrixRing<BigRational> tfac = mfac.transpose();
 
@@ -529,7 +530,7 @@ public class GenMatrixTest extends TestCase {
         BasicLinAlg<BigRational> blas = new BasicLinAlg<BigRational>();
 
         List<GenVector<BigRational>> NSB = lu.nullSpaceBasis(A);
-        System.out.println("NS basis = " + NSB.size());
+        //System.out.println("NS basis = " + NSB.size());
         if (NSB.size() == 0) {
             System.out.println("no null space basis");
             return;

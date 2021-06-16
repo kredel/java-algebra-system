@@ -260,7 +260,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                     imax = k;
                 }
             }
-            System.out.println("pivot: " + imax + ", i = " + i + ", maxA = " + maxA);
+            logger.info("pivot: " + imax + ", i = " + i + ", maxA = " + maxA);
             if (maxA.isZERO()) {
                 // check for complete zero row or left pivot
                 int imaxl = i;
@@ -281,7 +281,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                         if (iszero) { // left pivot okay
                             imax = imaxl;
                             //System.out.println("col(" + imax + ") = " + A.getColumn(imax));
-                            System.out.println("pivot*: " + imax + ", i = " + i + ", absA = " + absA);
+                            logger.info("pivot*: " + imax + ", i = " + i + ", absA = " + absA);
                             maxA = ring.coFac.getONE();
                         }
                     }
