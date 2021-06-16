@@ -221,43 +221,43 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
 
     /**
      * Product of a vector and a matrix of ring elements.
-     * @param G a ring element list.
-     * @param F a list of ring element lists.
+     * @param G a vectors of ring elements.
+     * @param F a matrix of ring element lists.
      * @return the left product of G and F.
      */
-    public List<C> leftProduct(List<C> G, List<List<C>> F) {
-        List<C> sp = new ArrayList<C>(G.size());
-        Iterator<List<C>> jt = F.iterator();
+    public GenVector<C> leftProduct(GenVector<C> G, GenMatrix<C> F) {
+        ArrayList<C> sp = new ArrayList<C>(G.val.size());
+        Iterator<ArrayList<C>> jt = F.matrix.iterator();
         while (jt.hasNext()) {
-            List<C> pj = jt.next();
+            ArrayList<C> pj = jt.next();
             if (pj == null) {
                 continue;
             }
-            C s = scalarProduct(G, pj);
+            C s = scalarProduct(G.val, pj);
             sp.add(s);
         }
-        return sp;
+        return new GenVector<C>(G.modul, sp);
     }
 
 
     /**
      * Product of a vector and a matrix of ring elements.
-     * @param G a ring element list.
-     * @param F a list of ring element lists.
+     * @param G a vector of element list.
+     * @param F a matrix of ring element lists.
      * @return the right product of G and F.
      */
-    public List<C> rightProduct(List<C> G, List<List<C>> F) {
-        List<C> sp = new ArrayList<C>(G.size());
-        Iterator<List<C>> jt = F.iterator();
+    public GenVector<C> rightProduct(GenVector<C> G, GenMatrix<C> F) {
+        ArrayList<C> sp = new ArrayList<C>(G.val.size());
+        Iterator<ArrayList<C>> jt = F.matrix.iterator();
         while (jt.hasNext()) {
-            List<C> pj = jt.next();
+            ArrayList<C> pj = jt.next();
             if (pj == null) {
                 continue;
             }
-            C s = scalarProduct(pj, G);
+            C s = scalarProduct(pj, G.val);
             sp.add(s);
         }
-        return sp;
+        return new GenVector<C>(G.modul, sp);
     }
 
 }
