@@ -8,8 +8,8 @@ package edu.jas.vector;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.AlgebraElem;
@@ -123,10 +123,10 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
     public GenVector<C> getColumn(int i) {
         List<C> cl = new ArrayList<C>(ring.rows);
         for (int k = 0; k < ring.rows; k++) {
-            cl.add( matrix.get(k).get(i) );
+            cl.add(matrix.get(k).get(i));
         }
         GenVectorModul<C> vfac = new GenVectorModul<C>(ring.coFac, ring.rows);
-        GenVector<C> col = new GenVector<C>(vfac,cl);
+        GenVector<C> col = new GenVector<C>(vfac, cl);
         return col;
     }
 
@@ -138,9 +138,9 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
      */
     public GenVector<C> getRow(int i) {
         List<C> cl = new ArrayList<C>(ring.cols);
-        cl.addAll( matrix.get(i) );
+        cl.addAll(matrix.get(i));
         GenVectorModul<C> vfac = new GenVectorModul<C>(ring.coFac, ring.cols);
-        GenVector<C> row = new GenVector<C>(vfac,cl);
+        GenVector<C> row = new GenVector<C>(vfac, cl);
         return row;
     }
 

@@ -5,11 +5,11 @@
 package edu.jas.vector;
 
 
+import edu.jas.arith.BigRational;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import edu.jas.arith.BigRational;
 
 
 /**

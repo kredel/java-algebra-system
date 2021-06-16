@@ -280,7 +280,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                         }
                         if (iszero) { // left pivot okay
                             imax = imaxl;
-                            System.out.println("col(" + imax + ") = " + A.getColumn(imax));
+                            //System.out.println("col(" + imax + ") = " + A.getColumn(imax));
                             System.out.println("pivot*: " + imax + ", i = " + i + ", absA = " + absA);
                             maxA = ring.coFac.getONE();
                         }
