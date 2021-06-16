@@ -252,7 +252,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             // search privot imax
             int imax = i;
             maxA = ring.coFac.getZERO();
-            for (int k = i; k < N; k++) {
+            for (int k = i; k < N; k++) { // k = 0 ?
                 // absA = fabs(A[k][i])
                 absA = mat.get(i).get(k).abs();
                 if (absA.compareTo(maxA) > 0 && maxA.isZERO()) {
@@ -262,7 +262,34 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             }
             System.out.println("pivot: " + imax + ", i = " + i + ", maxA = " + maxA);
             if (maxA.isZERO()) {
-                continue; //
+                //continue;
+                // check for complete zero row not required for triangular matrix
+                int imaxl = i;
+                for (int k = 0; k < i; k++) { // k = 0 ?
+                    // absA = fabs(A[k][i])
+                    absA = mat.get(i).get(k).abs();
+                    if (absA.compareTo(maxA) > 0) { // last imax, first: && maxA.isZERO()
+                        imaxl = k;
+                        // check if upper triangular column is zero
+                        boolean iszero = true;
+                        for (int m = 0; m < i; m++) {
+                            absA = mat.get(m).get(imaxl).abs();
+                            if (!absA.isZERO()) {
+                                iszero = false;
+				break;
+                            }
+                        }
+                        if (iszero) {
+                            imax = imaxl;
+                            System.out.println("col(" + imax + ") = " + A.getColumn(imax));
+                            System.out.println("pivot*: " + imax + ", i = " + i);
+                            maxA = ring.coFac.getONE();
+                        }
+                    }
+                }
+                if (maxA.isZERO()) { // complete zero row
+                    continue; 
+                }
             }
             if (imax < N) { //!= i
                 //normalize column i
@@ -286,23 +313,27 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                     //System.out.println("col(" + i + ") = " + A.getColumn(i));
                 }
                 //eliminate rest of row i via column operations
+                //System.out.println("col(" + i + ") = " + A.getColumn(i));
                 for (int j = 0; j < N; j++) {
                     if (i == j) {
                         continue;
                     }
+                    //System.out.println("col(" + j + ") = " + A.getColumn(j));
                     //System.out.println("row(" + i + ") = " + A.getRow(i));
                     C mm = mat.get(i).get(j);
-                    for (int k = 0; k < N; k++) {
+                    //System.out.println("A(" + i + "," + j + ") = " + mm);
+                    for (int k = 0; k < N; k++) { // or k = 0
                         C b = mat.get(k).get(j);
                         C c = mat.get(k).get(i);
                         C d = b.subtract( c.multiply(mm) );
                         mat.get(k).set(j, d);
                     }
+                    //System.out.println("col(" + j + ") = " + A.getColumn(j));
                     //System.out.println("row(" + i + ") = " + A.getRow(i));
                 }
             }
+            System.out.println("mat = " + A);
         }
-        System.out.println("mat = " + A);
         // convert to A-I
         for (int i = 0; i < N; i++) {
             C b = mat.get(i).get(i);
