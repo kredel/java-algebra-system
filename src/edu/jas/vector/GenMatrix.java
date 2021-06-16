@@ -78,6 +78,25 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
 
     /**
+     * Constructor for GenMatrix.
+     * @param r matrix ring
+     * @param m matrix
+     */
+    public GenMatrix(GenMatrixRing<C> r, C[][] m) {
+        ring = r;
+        matrix = new ArrayList<ArrayList<C>>(r.rows);
+        for (C[] row : m) {
+            ArrayList<C> nr = new ArrayList<C>(r.cols);
+            for (int i = 0; i < row.length; i++) {
+                nr.add(row[i]);
+            }
+            matrix.add(nr);
+        }
+        logger.info(ring.rows + " x " + ring.cols + " matrix constructed");
+    }
+
+
+    /**
      * Get element at row i, column j.
      * @param i row index.
      * @param j column index.

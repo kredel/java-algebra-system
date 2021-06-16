@@ -158,6 +158,28 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
 
 
     /**
+     * Solve linear system of equations. 
+     * @param A a n&times;n matrix.
+     * @param b right hand side vector.
+     * @return x solution vector of A*x = b.
+     */
+    public GenVector<C> solve(GenMatrix<C> A, GenVector<C> b) {
+        if (A == null || b == null) {
+            return null;
+        }
+        List<Integer> P = decompositionLU(A);
+        //System.out.println("P = " + P);
+        //System.out.println("A = " + A);
+        if (P.size() == 0) {
+            System.out.println("undecomposable");
+            return b.modul.getZERO();
+        }
+        GenVector<C> x = solveLU(A, P, b);
+        return x;
+    }
+
+
+    /**
      * Determinant with LU decomposition. 
      * @param A a n&times;n matrix in LU decomposition.
      * @param P permutation vector.

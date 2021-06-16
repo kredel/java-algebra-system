@@ -56,6 +56,22 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
 
 
     /**
+     * Constructor for GenVector.
+     */
+    public GenVector(GenVectorModul<C> m, C[] v) {
+        if (m == null || v == null) {
+            throw new IllegalArgumentException("Empty m or v not allowed, m = " + m + ", v = " + v);
+        }
+        modul = m;
+        val = new ArrayList<C>( v.length );
+        for (int i = 0; i < v.length; i++) {
+            val.add(v[i]);
+        }
+        logger.debug(modul.cols + " vector constructed");
+    }
+
+
+    /**
      * Get the String representation as RingElem.
      * @see java.lang.Object#toString()
      */
