@@ -78,6 +78,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             }
             if (maxA.isZERO()) {
                 P.clear();
+                logger.warn("matrix is degenerate at col " + i);
                 return P; //failure, matrix is degenerate
             }
             if (imax != i) {

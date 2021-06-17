@@ -713,7 +713,16 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      * @return Biginteger from s.
      */
     public BigDecimal parse(String s) {
-        return new BigDecimal(s, context);
+        int i = s.indexOf("/");
+        if (i < 0) { // i = 0 also error
+           return new BigDecimal(s, context);
+        }
+        String sd = s.substring(0,i);
+        String sn = s.substring(i+1);
+        //System.out.println("s = " + s + ", sd = " + sd + ", sn = " + sn);
+        BigDecimal dd = new BigDecimal(sd, context);
+        BigDecimal dn = new BigDecimal(sn, context);
+        return dd.divide(dn);
     }
 
 
