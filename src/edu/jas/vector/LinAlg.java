@@ -167,14 +167,15 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         if (A == null || b == null) {
             return null;
         }
-        List<Integer> P = decompositionLU(A);
+        GenMatrix<C> Ap = A.copy();
+        List<Integer> P = decompositionLU(Ap);
         //System.out.println("P = " + P);
-        //System.out.println("A = " + A);
+        //System.out.println("Ap = " + Ap);
         if (P.size() == 0) {
             System.out.println("undecomposable");
             return b.modul.getZERO();
         }
-        GenVector<C> x = solveLU(A, P, b);
+        GenVector<C> x = solveLU(Ap, P, b);
         return x;
     }
 
