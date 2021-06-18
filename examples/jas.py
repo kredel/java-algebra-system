@@ -47,8 +47,8 @@ from edu.jas.gbufd       import GroebnerBasePseudoRecSeq, GroebnerBasePseudoSeq,
                                 CharacteristicSetWu, PolyGBUtil,\
                                 SolvableSyzygySeq, SyzygySeq
 #from edu.jas.gbmod       import ModGroebnerBaseSeq, ModSolvableGroebnerBaseSeq
-from edu.jas.vector      import GenVector, GenVectorModul,\
-                                GenMatrix, GenMatrixRing
+from edu.jas.vector      import GenVector, GenVectorModul, BasicLinAlg,\
+                                GenMatrix, GenMatrixRing, LinAlg
 from edu.jas.application import FactorFactory, PolyUtilApp, RingFactoryTokenizer,\
                                 Residue, ResidueRing, Ideal,\
                                 Local, LocalRing, IdealWithRealAlgebraicRoots,\
@@ -3283,6 +3283,9 @@ class RingElem:
                 o = pylist2arraylist(other,self.elem.factory().coFac,rec=2);
                 o = GenMatrix(self.elem.factory(),o);
                 return RingElem( o );
+            if isinstance(other,GenVector):
+                o = other;
+                return RingElem( o );
         if isinstance(self.elem,GenPolynomial):
             #print "self, other = %s, %s " % (type(self),type(other));
             #print "o type(%s) = %s, str = %s" % (o,type(o),str(o));
@@ -3305,7 +3308,7 @@ class RingElem:
                     return RingElem( o );
         if isinstance(other,RingElem):
             if self.isPolynomial() and not other.isPolynomial():
-                #print "self.ring = %s" % (self.ring);
+                #print "parse self.ring = %s" % (self.ring);
                 o = self.ring.parse( other.elem.toString() ); # not toScript()
                 #print "o type(%s) = %s, str = %s" % (o,type(o),str(o));
                 return RingElem( o );
@@ -3412,6 +3415,8 @@ class RingElem:
         [s,o] = coercePair(self,other);
         #print "self  type(%s) = %s" % (s,type(s));
         #print "other type(%s) = %s" % (o,type(o));
+        if isinstance(s.elem,GenMatrix) or isinstance(o.elem,GenVector):
+            return RingElem( BasicLinAlg().rightProduct(o.elem, s.elem) );
         return RingElem( s.elem.multiply( o.elem ) ); 
 
     def __rmul__(self,other):
@@ -3891,6 +3896,46 @@ class RingElem:
             return RingElem( d );
         nb = ArithUtil.continuedFractionApprox(lst);
         return RingElem( nb );
+
+    def solve(self, b):
+        '''Solve system of linear equations.
+        '''
+        if isinstance(b,RingElem):
+            b = b.elem;
+        x = LinAlg().solve(self.elem, b);
+        return RingElem( x );
+
+    def decompLU(self):
+        '''Decompose to LU matrix. this is modified.
+        '''
+        p = LinAlg().decompositionLU(self.elem);
+        uu = self.elem.getUpper();
+        ll = self.elem.getLower();
+        return [ RingElem(ll), RingElem(uu), RingElem(p) ];
+
+    def solveLU(self, p, b):
+        '''Solve with LU matrix.
+        '''
+        if isinstance(b,RingElem):
+            b = b.elem;
+        if isinstance(p,RingElem):
+            p = p.elem;
+        x = LinAlg().solveLU(self.elem, p, b);
+        return RingElem(x);
+
+    def determinant(self, p):
+        '''Determinant from LU matrix.
+        '''
+        if isinstance(p,RingElem):
+            p = p.elem;
+        d = LinAlg().determinantLU(self.elem, p);
+        return RingElem(d);
+
+    def rank(self):
+        '''Rank from LU matrix.
+        '''
+        r = LinAlg().rankLU(self.elem);
+        return r;
 
     def coefficients(self):
         '''Get the coefficients of a polynomial.

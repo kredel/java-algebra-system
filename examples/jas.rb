@@ -1406,7 +1406,7 @@ Solve system of linear equations.
 
 
 =begin rdoc
-decompose to LU matrix. this is modified.
+Decompose to LU matrix. this is modified.
 =end
     def decompLU()
         a = @elem;
@@ -1418,7 +1418,7 @@ decompose to LU matrix. this is modified.
 
 
 =begin rdoc
-solve with to LU matrix. 
+Solve with LU matrix. 
 =end
     def solveLU(p, b)
         a = @elem;
@@ -1434,7 +1434,7 @@ solve with to LU matrix.
 
 
 =begin rdoc
-determinant from LU matrix.
+Determinant from LU matrix.
 =end
     def determinant(p)
         a = @elem;
