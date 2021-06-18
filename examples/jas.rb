@@ -696,6 +696,9 @@ Coerce other to self
     def coerceElem(other)
         #puts "self  type(#{self}) = #{self.class}\n";
         #puts "other type(#{other}) = #{other.class}\n";
+        if other.is_a? RingElem
+           other = other.elem;
+        end
         if @elem.is_a? GenVector
             if other.is_a? Array 
                 o = rbarray2arraylist(other,@elem.factory().coFac,rec=1);
@@ -704,15 +707,23 @@ Coerce other to self
                 end
         end
         if @elem.is_a? GenMatrix
+            #puts "other #{@ring} #{other.factory()}\n";
             if other.is_a? Array 
                 o = rbarray2arraylist(other,@elem.factory().coFac,rec=2);
                 o = GenMatrix.new(@elem.factory(),o);
                 return RingElem.new( o );
                 end
+            if other.is_a? GenVector
+                #puts "other vec #{other.factory()} #{other}\n";
+                #o = rbarray2arraylist(other,other.factory().coFac,rec=1);
+                #o = GenVector.new(other.factory().coFac, o);
+                o = other;
+                return RingElem.new( o );
+                end
         end
         if other.is_a? RingElem
             if isPolynomial() and not other.isPolynomial()
-                #puts "other parse(#{@ring})\n";
+                #puts "other pol.parse(#{@ring})\n";
                 o = @ring.parse( other.elem.toString() ); # not toScript()
                 return RingElem.new( o );
             end
@@ -847,6 +858,9 @@ Multiply two ring elements.
         #puts "* other type(#{other.elem}) = #{other.elem.class}\n";
         s,o = coercePair(self,other);
         #puts "* s = #{s}, o = #{o}, s*o = #{s.elem.multiply(o.elem)}\n";
+        if s.elem.is_a? GenMatrix and o.elem.is_a? GenVector
+           return RingElem.new( BasicLinAlg.new().rightProduct(o.elem, s.elem) );
+        end;
         return RingElem.new( s.elem.multiply( o.elem ) ); 
     end
 
@@ -1375,6 +1389,68 @@ Continued fraction expansion to approximate fraction.
         end
         nb = ArithUtil.continuedFractionApprox(lst);
         return RingElem.new( nb );
+    end
+
+
+=begin rdoc
+Solve system of linear equations.
+=end
+    def solve(b)
+        a = @elem;
+        if b.is_a? RingElem
+           b = b.elem;
+        end
+        x = LinAlg.new().solve(a,b);
+        return RingElem.new(x);
+    end
+
+
+=begin rdoc
+decompose to LU matrix. this is modified.
+=end
+    def decompLU()
+        a = @elem;
+        p = LinAlg.new().decompositionLU(a);
+        uu = a.getUpper();
+        ll = a.getLower();
+        return [ RingElem.new(ll), RingElem.new(uu), RingElem.new(p) ];
+    end
+
+
+=begin rdoc
+solve with to LU matrix. 
+=end
+    def solveLU(p, b)
+        a = @elem;
+        if b.is_a? RingElem
+           b = b.elem;
+        end
+        if p.is_a? RingElem
+           p = p.elem;
+        end
+        x = LinAlg.new().solveLU(a,p,b);
+        return RingElem.new(x);
+    end
+
+
+=begin rdoc
+determinant from LU matrix.
+=end
+    def determinant(p)
+        a = @elem;
+        p = p.elem;
+        d = LinAlg.new().determinantLU(a,p);
+        return RingElem.new(d);
+    end
+
+
+=begin rdoc
+rank from LU matrix.
+=end
+    def rank()
+        a = @elem;
+        r = LinAlg.new().rankLU(a);
+        return r;
     end
 
 
@@ -5601,6 +5677,8 @@ java_import "edu.jas.vector.GenVector";
 java_import "edu.jas.vector.GenVectorModul";
 java_import "edu.jas.vector.GenMatrix";
 java_import "edu.jas.vector.GenMatrixRing";
+java_import "edu.jas.vector.LinAlg";
+java_import "edu.jas.vector.BasicLinAlg";
 
 
 =begin rdoc
