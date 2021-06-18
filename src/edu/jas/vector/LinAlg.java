@@ -77,9 +77,11 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 }
             }
             if (maxA.isZERO()) {
-                P.clear();
                 logger.warn("matrix is degenerate at col " + i);
-                return P; //failure, matrix is degenerate
+                mat.get(i).set(i, maxA);
+                continue;
+                //P.clear();
+                //return P; //failure, matrix is degenerate
             }
             if (imax != i) {
                 //pivoting P
@@ -209,7 +211,28 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         }
         return det;
     }
-    
+
+
+    /**
+     * Rank from LU decomposition.
+     * @param A a n&times;n matrix in LU decomposition.
+     * @return r rank of A.
+     */
+    public long rankLU(GenMatrix<C> A) {
+        long r = 0;
+        if (A == null) {
+            return -1l;
+        }
+        ArrayList<ArrayList<C>> mat = A.matrix;
+        for (int i = 0; i < mat.size(); i++) {
+            // A[i][i] == 0?;
+            if ( !mat.get(i).get(i).isZERO() ) {
+                r++;
+            }
+        }
+        return r;
+    }
+
 
     /**
      * Inverse with LU decomposition. 

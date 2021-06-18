@@ -165,6 +165,57 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
 
     /**
+     * Get upper triangular U matrix.
+     * @return U as matrix with equal length rows.
+     */
+    public GenMatrix<C> getUpper() {
+        final C zero = ring.coFac.getZERO();
+        final C one = ring.coFac.getONE();
+        List<List<C>> cl = new ArrayList<List<C>>(ring.rows);
+        for (int k = 0; k < ring.rows; k++) {
+            List<C> ul = matrix.get(k);
+            List<C> rl = new ArrayList<C>(ring.cols);
+            for (int i = 0; i < ring.cols; i++) {
+		if (i < k) {
+                    rl.add(zero);
+                } else if (i > k) {
+                    rl.add( ul.get(i) );
+                } else {
+                    rl.add(one);
+                }
+            }
+            cl.add(rl);
+        }
+        GenMatrix<C> U = new GenMatrix<C>(ring, cl);
+        return U;
+    }
+
+
+    /**
+     * Get lower triangular L matrix.
+     * @return L as matrix with equal length rows.
+     */
+    public GenMatrix<C> getLower() {
+        final C zero = ring.coFac.getZERO();
+        List<List<C>> cl = new ArrayList<List<C>>(ring.rows);
+        for (int k = 0; k < ring.rows; k++) {
+            List<C> ul = matrix.get(k);
+            List<C> rl = new ArrayList<C>(ring.cols);
+            for (int i = 0; i < ring.cols; i++) {
+		if (i <= k) {
+                    rl.add( ul.get(i) );
+                } else if (i > k) {
+                    rl.add(zero);
+                }
+            }
+            cl.add(rl);
+        }
+        GenMatrix<C> L = new GenMatrix<C>(ring, cl);
+        return L;
+    }
+
+
+    /**
      * Get the String representation as RingElem.
      * @see java.lang.Object#toString()
      */
