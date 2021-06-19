@@ -367,7 +367,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                     }
                 }
             }
-            if (N < 10) System.out.println("mat = " + A);
+            //if (N < 10) System.out.println("mat = " + A);
         }
         // convert to A-I
         for (int i = 0; i < N; i++) {

@@ -554,4 +554,68 @@ public class GenMatrixTest extends TestCase {
         assertEquals("A*A == B: ", Ap, B);
     }
 
+
+    /**
+     * Test Null Space basis for cokernel and kernel.
+     */
+    public void testNullSpaceKernels() {
+        BigRational cfac = new BigRational(11);
+        int n = 6;
+        GenMatrixRing<BigRational> mfac = new GenMatrixRing<BigRational>(cfac, n, n);//rows, cols);
+        //System.out.println("mfac = " + mfac.toScript());
+        //GenVectorModul<BigRational> vfac = new GenVectorModul<BigRational>(cfac, n);//rows);
+        GenMatrixRing<BigRational> tfac = mfac.transpose();
+
+        GenMatrix<BigRational> A, Ap, B, T, Tp;
+        //A = mfac.getZERO(); //.negate(); //.sum(mfac.getONE());
+        //A.setMutate(4,1, cfac.parse("44") );
+        //A.setMutate(5,2, cfac.parse("22") );
+        //A.setMutate(5,3, cfac.parse("33") );
+        A = mfac.random(kl, 0.6f / n);
+        //A = mfac.parse("[ [3,4,5], [1,2,3], [2,4,6] ]");
+        //A = mfac.parse("[ [1,0,0,0,0], [3,0,0,0,0], [0,0,1,0,0], [2,0,4,0,0], [0,0,0,0,1] ]");
+        //A = mfac.parse("[ [0,0,0,0,0,0], [3,4,-3,-3,5,5], [3,-5,5,1,-1,0], [-2,4,-1,2,-4,-2], [-4,-3,-1,0,-1,-3], [-3,-1,-4,-3,-1,-4] ]");
+        //A = A.sum( mfac.getONE() ); // subtract
+        if (n < 10)
+            System.out.println("A = " + A);
+        if (A.isZERO()) {
+            return;
+        }
+        assertTrue(" not isZERO( A )", !A.isZERO());
+        Ap = A.copy();
+        T = A.transpose(tfac);
+        Tp = T.copy();
+        if (n < 10)
+            System.out.println("T = " + T);
+
+        LinAlg<BigRational> lu = new LinAlg<BigRational>();
+        BasicLinAlg<BigRational> blas = new BasicLinAlg<BigRational>();
+
+        List<GenVector<BigRational>> cokern = lu.nullSpaceBasis(A);
+        System.out.println("cokern basis = " + cokern);
+        if (cokern.size() == 0) {
+            System.out.println("no cokern null space basis");
+            return;
+        }
+        for (GenVector<BigRational> v : cokern) {
+            System.out.println("v = " + v);
+            GenVector<BigRational> z = blas.leftProduct(v, Tp);
+            //System.out.println("z == 0: " + z.isZERO());
+            assertTrue("z == 0: " + z, z.isZERO());
+        }
+
+        List<GenVector<BigRational>> kern = lu.nullSpaceBasis(T);
+        System.out.println("kern basis = " + kern);
+        if (kern.size() == 0) {
+            System.out.println("no kern null space basis");
+            return;
+        }
+        for (GenVector<BigRational> v : kern) {
+            System.out.println("v = " + v);
+            GenVector<BigRational> z = blas.rightProduct(v, Ap);
+            //System.out.println("z == 0: " + z.isZERO());
+            assertTrue("z == 0: " + z, z.isZERO());
+        }
+    }
+
 }
