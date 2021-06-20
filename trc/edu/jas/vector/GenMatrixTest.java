@@ -431,7 +431,10 @@ public class GenMatrixTest extends TestCase {
 
         BigRational det = lu.determinantLU(A, P);
         //System.out.println("det = " + det + " ~= " + det.getDecimal());
-        assertFalse("det(A) != 0: ", det.isZERO()); // since P != ()
+        assertFalse("det(A) != 0: ", det.isZERO()); 
+        long rank = lu.rankLU(A, P);
+        //System.out.println("rank = " + rank);
+        assertTrue("0 <= rank < n: ", 0 <= rank && rank <= n);
 
         iA = lu.inverseLU(A, P);
         //System.out.println("iA = " + iA);
@@ -486,6 +489,7 @@ public class GenMatrixTest extends TestCase {
             //System.out.println("z == 0: " + z.isZERO());
             assertTrue("z == 0: " + z, z.isZERO());
         }
+	// test idempotent
         Ap = A.sum(mfac.getONE());
         B = Ap.multiply(Ap);
         if (!Ap.equals(B)) {
@@ -545,6 +549,7 @@ public class GenMatrixTest extends TestCase {
             //System.out.println("z == 0: " + z.isZERO());
             assertTrue("z == 0: " + z, z.isZERO());
         }
+	// test idempotent
         Ap = A.sum(mfac.getONE());
         B = Ap.multiply(Ap);
         if (!Ap.equals(B)) {
@@ -560,22 +565,13 @@ public class GenMatrixTest extends TestCase {
      */
     public void testNullSpaceKernels() {
         BigRational cfac = new BigRational(11);
-        int n = 6;
+        int n = 9;
         GenMatrixRing<BigRational> mfac = new GenMatrixRing<BigRational>(cfac, n, n);//rows, cols);
         //System.out.println("mfac = " + mfac.toScript());
-        //GenVectorModul<BigRational> vfac = new GenVectorModul<BigRational>(cfac, n);//rows);
         GenMatrixRing<BigRational> tfac = mfac.transpose();
 
         GenMatrix<BigRational> A, Ap, B, T, Tp;
-        //A = mfac.getZERO(); //.negate(); //.sum(mfac.getONE());
-        //A.setMutate(4,1, cfac.parse("44") );
-        //A.setMutate(5,2, cfac.parse("22") );
-        //A.setMutate(5,3, cfac.parse("33") );
-        A = mfac.random(kl, 0.6f / n);
-        //A = mfac.parse("[ [3,4,5], [1,2,3], [2,4,6] ]");
-        //A = mfac.parse("[ [1,0,0,0,0], [3,0,0,0,0], [0,0,1,0,0], [2,0,4,0,0], [0,0,0,0,1] ]");
-        //A = mfac.parse("[ [0,0,0,0,0,0], [3,4,-3,-3,5,5], [3,-5,5,1,-1,0], [-2,4,-1,2,-4,-2], [-4,-3,-1,0,-1,-3], [-3,-1,-4,-3,-1,-4] ]");
-        //A = A.sum( mfac.getONE() ); // subtract
+        A = mfac.random(kl, 0.65f / n);
         if (n < 10)
             System.out.println("A = " + A);
         if (A.isZERO()) {
@@ -616,6 +612,26 @@ public class GenMatrixTest extends TestCase {
             //System.out.println("z == 0: " + z.isZERO());
             assertTrue("z == 0: " + z, z.isZERO());
         }
+
+        // test ranks
+        long r, s;
+        List<Integer> P;
+        P = lu.decompositionLU(Ap);
+        //System.out.println("P: " + P);
+        r = lu.rankLU(Ap);
+        s = cokern.size();
+        System.out.println("rank = " + r + ", s = " + s + ", n = " + n);
+        assertTrue("0 <= rank < n: ", 0 <= r && r <= n);
+
+        P = lu.decompositionLU(Tp);
+        //System.out.println("P: " + P);
+        r = lu.rankLU(Tp);
+        s = kern.size();
+        System.out.println("rank = " + r + ", s = " + s);
+        assertTrue("0 <= rank < n: ", 0 <= r && r <= n);
+        //assertTrue("r + s == n: " + r + " + " + s, r + s == n);
+        //System.out.println("Ap: " + Ap);
+        //System.out.println("Tp: " + Tp);
     }
 
 }

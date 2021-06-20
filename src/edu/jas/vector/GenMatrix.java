@@ -176,12 +176,16 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
             List<C> ul = matrix.get(k);
             List<C> rl = new ArrayList<C>(ring.cols);
             for (int i = 0; i < ring.cols; i++) {
-		if (i < k) {
+                if (i < k) {
                     rl.add(zero);
                 } else if (i > k) {
                     rl.add( ul.get(i) );
                 } else {
-                    rl.add(one);
+                    if ( ul.get(i).isZERO() ) {
+                        rl.add(zero);
+                    } else {
+                        rl.add(one);
+                    }
                 }
             }
             cl.add(rl);
@@ -203,7 +207,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
             List<C> rl = new ArrayList<C>(ring.cols);
             for (int i = 0; i < ring.cols; i++) {
 		if (i <= k) {
-                    rl.add( ul.get(i) );
+                    rl.add( ul.get(i) ); // can be zero
                 } else if (i > k) {
                     rl.add(zero);
                 }

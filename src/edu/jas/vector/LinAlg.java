@@ -219,10 +219,10 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
      * @return r rank of A.
      */
     public long rankLU(GenMatrix<C> A) {
-        long r = 0;
         if (A == null) {
             return -1l;
         }
+        long r = 0;
         ArrayList<ArrayList<C>> mat = A.matrix;
         for (int i = 0; i < mat.size(); i++) {
             // A[i][i] == 0?;
@@ -231,6 +231,17 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             }
         }
         return r;
+    }
+
+
+    /**
+     * Rank from LU decomposition.
+     * @param A a n&times;n matrix in LU decomposition.
+     * @param P permutation vector.
+     * @return r rank of A.
+     */
+    public long rankLU(GenMatrix<C> A, List<Integer> P) {
+        return rankLU(A);
     }
 
 
@@ -279,8 +290,9 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
 
     /**
      * Matrix Null Space basis, cokernel.
+     * From the transpose matrix At it computes the kernel with At*v_i = 0.
      * @param A a n&times;n matrix.
-     * @return V a list of vectors (v_1, ..., v_k) with v_i*A == 0.
+     * @return V a list of basis vectors (v_1, ..., v_k) with v_i*A == 0.
      */
     public List<GenVector<C>> nullSpaceBasis(GenMatrix<C> A) {
         if (A == null) {
