@@ -58,7 +58,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         if (N != ring.cols) {
             logger.warn("nosquare matrix");
         }
-        int i, imax; 
+        int i, imax, kmax;
         C maxA, absA;
         List<Integer> P = new ArrayList<Integer>(N+1);
         for (i = 0; i <= N; i++) {
@@ -78,7 +78,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             }
             if (maxA.isZERO()) {
                 logger.warn("matrix is degenerate at col " + i);
-                mat.get(i).set(i, maxA);
+                mat.get(i).set(i, ring.coFac.getZERO());
                 continue;
                 //P.clear();
                 //return P; //failure, matrix is degenerate
@@ -128,7 +128,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             return null;
         }
         GenMatrixRing<C> ring = A.ring;
-        int N = P.size() - 1;
+        int N = ring.rows;
         GenVectorModul<C> xfac = new GenVectorModul<C>(ring.coFac, N);
         GenVector<C> x = new GenVector<C>(xfac);
         List<C> vec = x.val;
@@ -196,7 +196,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         if (P.size() == 0) {
             return A.ring.coFac.getZERO();
         }
-        int N = P.size() - 1;
+        int N = A.ring.rows; //P.size() - 1 - 1;
         ArrayList<ArrayList<C>> mat = A.matrix;
         // det = A[0][0];
         C det = mat.get(0).get(0);
@@ -214,38 +214,6 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * Rank from LU decomposition.
-     * @param A a n&times;n matrix in LU decomposition.
-     * @return r rank of A.
-     */
-    public long rankLU(GenMatrix<C> A) {
-        if (A == null) {
-            return -1l;
-        }
-        long r = 0;
-        ArrayList<ArrayList<C>> mat = A.matrix;
-        for (int i = 0; i < mat.size(); i++) {
-            // A[i][i] == 0?;
-            if ( !mat.get(i).get(i).isZERO() ) {
-                r++;
-            }
-        }
-        return r;
-    }
-
-
-    /**
-     * Rank from LU decomposition.
-     * @param A a n&times;n matrix in LU decomposition.
-     * @param P permutation vector.
-     * @return r rank of A.
-     */
-    public long rankLU(GenMatrix<C> A, List<Integer> P) {
-        return rankLU(A);
-    }
-
-
-    /**
      * Inverse with LU decomposition. 
      * @param A a n&times;n matrix in LU decomposition.
      * @param P permutation vector.
@@ -254,7 +222,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
     public GenMatrix<C> inverseLU(GenMatrix<C> A, List<Integer> P) {
         GenMatrixRing<C> ring = A.ring;
         GenMatrix<C> inv = new GenMatrix<C>(ring);
-        int N = P.size() - 1;
+        int N = ring.rows; //P.size() - 1 - 1;
         ArrayList<ArrayList<C>> mat = A.matrix;
         ArrayList<ArrayList<C>> imat = inv.matrix;
         for (int j = 0; j < N; j++) {
@@ -334,7 +302,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                             C amm = mat.get(m).get(imaxl).abs();
                             if (!amm.isZERO()) {
                                 iszero = false;
-				break;
+                                break;
                             }
                         }
                         if (iszero) { // left pivot okay
@@ -404,6 +372,122 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             }
         }
         return nspb;
+    }
+
+
+    /**
+     * Rank via null space.
+     * @param A a n&times;n matrix.
+     * @return r rank of A.
+     */
+    public long rankNS(GenMatrix<C> A) {
+        if (A == null) {
+            return -1l;
+        }
+        GenMatrix<C> Ap = A.copy();
+        long n = A.ring.rows;
+        List<GenVector<C>> ns = nullSpaceBasis(Ap);
+        long s = ns.size();
+        System.out.println("s = " + s + ", ns = " + ns);
+        return n - s;
+    }
+
+
+    /**
+     * Matrix row echelon form construction. Matrix A is replaced by its row echelon form.
+     * @param A a n&times;n matrix.
+     * @return A row echelon form of A, matrix A is modified.
+     */
+    public GenMatrix<C> rowEchelonForm(GenMatrix<C> A) {
+        if (A == null) {
+            return null;
+        }
+        GenMatrixRing<C> ring = A.ring;
+        int N = ring.rows;
+        if (N != ring.cols) {
+            logger.warn("nosquare matrix");
+        }
+        int i, imax, kmax;
+        C maxA, absA;
+        kmax = 0;
+        ArrayList<ArrayList<C>> mat = A.matrix;
+        for (i = 0; i < N; ) {
+            imax = i;
+            maxA = ring.coFac.getZERO();
+            for (int k = i; k < N; k++) {
+                // absA = fabs(A[k][i])
+                absA = mat.get(k).get(kmax).abs();
+                if (absA.compareTo(maxA) > 0) {
+                    maxA = absA;
+                    imax = k;
+                    break; // first
+                }
+            }
+            if (maxA.isZERO()) {
+                //System.out.println("matrix is zero at col " + kmax);
+                //mat.get(i).set(i, ring.coFac.getZERO());
+                kmax++;
+                if (kmax >= N) {
+                    break;
+                }
+                continue;
+            }
+            //System.out.println("matrix is non zero at row " + imax);
+            if (imax != i) {
+                //pivoting rows of A
+                ArrayList<C> ptr = mat.get(i);
+                mat.set(i, mat.get(imax));
+                mat.set(imax, ptr);
+                //System.out.println("A(" + i + ") = " + mat.get(i));
+            }
+            // A[j][i] /= A[i][i];
+            C dd = mat.get(i).get(kmax);
+            for (int k = kmax; k < N; k ++) {
+                C d = mat.get(i).get(k).divide( dd );
+                mat.get(i).set(k, d );
+                //System.out.println("A(" + i + ", " + k + ") = " + mat.get(i).get(k));
+            }
+            for (int j = i + 1; j < N; j++) {
+                for (int k = kmax; k < N; k++) {
+                    // A[j][k] -= A[j][i] * A[i][k];
+                    C a = mat.get(j).get(k).multiply( mat.get(i).get(k) );
+                    mat.get(j).set(k, mat.get(j).get(k).subtract(a) );
+                }
+            }
+            mat.get(i).set(kmax, ring.coFac.getONE());
+            i++;
+            kmax++;
+            if (kmax >= N) {
+                break;
+            }
+        }
+        return A;
+    }
+
+
+    /**
+     * Rank via row echelon form.
+     * @param A a n&times;n matrix.
+     * @return r rank of A.
+     */
+    public long rankRE(GenMatrix<C> A) {
+        if (A == null) {
+            return -1l;
+        }
+        long n = A.ring.rows;
+        ArrayList<ArrayList<C>> mat = A.matrix;
+        long r = 0;
+        for (int i = 0; i < n; i++) {
+            ArrayList<C> row = mat.get(i);
+            for (int j = i; j < n; j++) {
+                if ( !row.get(j).isZERO() ) {
+                    r++;
+                    break;
+                }
+            }
+        }
+        System.out.println("rRE = " + r);
+        return r;
     }
 
 }

@@ -432,9 +432,6 @@ public class GenMatrixTest extends TestCase {
         BigRational det = lu.determinantLU(A, P);
         //System.out.println("det = " + det + " ~= " + det.getDecimal());
         assertFalse("det(A) != 0: ", det.isZERO()); 
-        long rank = lu.rankLU(A, P);
-        //System.out.println("rank = " + rank);
-        assertTrue("0 <= rank < n: ", 0 <= rank && rank <= n);
 
         iA = lu.inverseLU(A, P);
         //System.out.println("iA = " + iA);
@@ -563,7 +560,7 @@ public class GenMatrixTest extends TestCase {
     /**
      * Test Null Space basis for cokernel and kernel.
      */
-    public void testNullSpaceKernels() {
+    public void xtestNullSpaceKernels() {
         BigRational cfac = new BigRational(11);
         int n = 9;
         GenMatrixRing<BigRational> mfac = new GenMatrixRing<BigRational>(cfac, n, n);//rows, cols);
@@ -571,7 +568,7 @@ public class GenMatrixTest extends TestCase {
         GenMatrixRing<BigRational> tfac = mfac.transpose();
 
         GenMatrix<BigRational> A, Ap, B, T, Tp;
-        A = mfac.random(kl, 0.65f / n);
+        A = mfac.random(kl, 0.7f/n ); 
         if (n < 10)
             System.out.println("A = " + A);
         if (A.isZERO()) {
@@ -579,7 +576,7 @@ public class GenMatrixTest extends TestCase {
         }
         assertTrue(" not isZERO( A )", !A.isZERO());
         Ap = A.copy();
-        T = A.transpose(tfac);
+        T = Ap.transpose(tfac);
         Tp = T.copy();
         if (n < 10)
             System.out.println("T = " + T);
@@ -591,7 +588,7 @@ public class GenMatrixTest extends TestCase {
         System.out.println("cokern basis = " + cokern);
         if (cokern.size() == 0) {
             System.out.println("no cokern null space basis");
-            return;
+            //return;
         }
         for (GenVector<BigRational> v : cokern) {
             System.out.println("v = " + v);
@@ -604,7 +601,7 @@ public class GenMatrixTest extends TestCase {
         System.out.println("kern basis = " + kern);
         if (kern.size() == 0) {
             System.out.println("no kern null space basis");
-            return;
+            //return;
         }
         for (GenVector<BigRational> v : kern) {
             System.out.println("v = " + v);
@@ -614,24 +611,70 @@ public class GenMatrixTest extends TestCase {
         }
 
         // test ranks
-        long r, s;
-        List<Integer> P;
-        P = lu.decompositionLU(Ap);
-        //System.out.println("P: " + P);
-        r = lu.rankLU(Ap);
-        s = cokern.size();
-        System.out.println("rank = " + r + ", s = " + s + ", n = " + n);
-        assertTrue("0 <= rank < n: ", 0 <= r && r <= n);
-
-        P = lu.decompositionLU(Tp);
-        //System.out.println("P: " + P);
-        r = lu.rankLU(Tp);
-        s = kern.size();
-        System.out.println("rank = " + r + ", s = " + s);
-        assertTrue("0 <= rank < n: ", 0 <= r && r <= n);
-        //assertTrue("r + s == n: " + r + " + " + s, r + s == n);
+        long r1, r2, k, c;
+        System.out.println("diag(Ap): " + Ap.getDiagonal());
         //System.out.println("Ap: " + Ap);
+        r1 = lu.rankNS(Ap);
+        c = cokern.size();
+        assertTrue("0 <= rank < n: ", 0 <= r1 && r1 <= n);
+
+        System.out.println("diag(Tp): " + Tp.getDiagonal());
         //System.out.println("Tp: " + Tp);
+        r2 = lu.rankNS(Tp);
+        k = kern.size();
+        System.out.println("rank A = " + r1 + ", c = " + c + ", n = " + n);
+        System.out.println("rank T = " + r2 + ", k = " + k);
+        assertTrue("0 <= rank < n: ", 0 <= r2 && r2 <= n);
+    }
+
+
+    /**
+     * Test row echelon form and rank.
+     */
+    public void testRowEchelonForm() {
+        BigRational cfac = new BigRational(11);
+        int n = 9;
+        GenMatrixRing<BigRational> mfac = new GenMatrixRing<BigRational>(cfac, n, n);//rows, cols);
+        //System.out.println("mfac = " + mfac.toScript());
+        GenMatrixRing<BigRational> tfac = mfac.transpose();
+
+        GenMatrix<BigRational> A, Ap, App, B, T, Tp, Tpp;
+        A = mfac.random(kl, 0.9f/n ); 
+        //A = mfac.getONE();
+        //A = mfac.getZERO(); A.setMutate(3,4, cfac.parse("2")); A.setMutate(5,4, cfac.parse("3"));
+        if (n < 10)
+            System.out.println("A = " + A);
+        if (A.isZERO()) {
+            return;
+        }
+        assertTrue(" not isZERO( A )", !A.isZERO());
+        Ap = A.copy();
+        T = Ap.transpose(tfac);
+        Tp = T.copy();
+        if (n < 10)
+            System.out.println("T = " + T.ring.rows);
+
+        LinAlg<BigRational> lu = new LinAlg<BigRational>();
+        BasicLinAlg<BigRational> blas = new BasicLinAlg<BigRational>();
+
+        // test ranks
+        long r1 = 0, r2 = 0, k = 0, c = 0;
+        App = lu.rowEchelonForm(A);
+        //System.out.println("A:   " + A);
+        System.out.println("App: " + App);
+        //r1 = lu.rankNS(Ap);
+        r1 = lu.rankRE(App);
+        System.out.println("rank A = " + r1 + ", c = " + c + ", n = " + n);
+        //assertTrue("0 <= rank < n: ", 0 <= r1 && r1 <= n);
+
+        // Tpp = lu.rowEchelonForm(T);
+        // //System.out.println("T:   " + T);
+        // System.out.println("Tpp: " + Tpp);
+        // r2 = lu.rankNS(Tp);
+        // k = lu.rankRE(Tpp);
+        // System.out.println("rank A = " + r1 + ", c = " + c + ", n = " + n);
+        // System.out.println("rank T = " + r2 + ", k = " + k);
+        // assertTrue("0 <= rank < n: ", 0 <= r2 && r2 <= n);
     }
 
 }

@@ -165,6 +165,21 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
 
     /**
+     * Get diagonal.
+     * @return diagonal(this) as vector.
+     */
+    public GenVector<C> getDiagonal() {
+        List<C> cl = new ArrayList<C>(ring.rows);
+        for (int i = 0; i < ring.rows; i++) {
+            cl.add(matrix.get(i).get(i));
+        }
+        GenVectorModul<C> vfac = new GenVectorModul<C>(ring.coFac, ring.rows);
+        GenVector<C> dia = new GenVector<C>(vfac, cl);
+        return dia;
+    }
+
+
+    /**
      * Get upper triangular U matrix.
      * @return U as matrix with equal length rows.
      */
