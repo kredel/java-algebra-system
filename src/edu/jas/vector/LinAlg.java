@@ -79,9 +79,9 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             if (maxA.isZERO()) {
                 logger.warn("matrix is degenerate at col " + i);
                 mat.get(i).set(i, ring.coFac.getZERO());
-                continue;
-                //P.clear();
-                //return P; //failure, matrix is degenerate
+                //continue;
+                P.clear();
+                return P; //failure, matrix is degenerate
             }
             if (imax != i) {
                 //pivoting P
@@ -96,10 +96,10 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 //counting pivots starting from N (for determinant)
                 P.set(N, P.get(N)+1);
             }
-            //System.out.println("A(i," + i + ") = " + mat.get(i).get(i));
+            C dd = mat.get(i).get(i);
             for (int j = i + 1; j < N; j++) {
                 // A[j][i] /= A[i][i];
-                C d = mat.get(j).get(i).divide( mat.get(i).get(i) );
+                C d = mat.get(j).get(i).divide( dd );
                 mat.get(j).set(i, d );
 
                 for (int k = i + 1; k < N; k++) {
@@ -172,8 +172,6 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         }
         GenMatrix<C> Ap = A.copy();
         List<Integer> P = decompositionLU(Ap);
-        //System.out.println("P = " + P);
-        //System.out.println("Ap = " + Ap);
         if (P.size() == 0) {
             System.out.println("undecomposable");
             return b.modul.getZERO();
@@ -307,7 +305,6 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                         }
                         if (iszero) { // left pivot okay
                             imax = imaxl;
-                            //System.out.println("col(" + imax + ") = " + A.getColumn(imax));
                             logger.info("pivot*: " + imax + ", i = " + i + ", absA = " + absA);
                             maxA = ring.coFac.getONE();
                         }
@@ -347,7 +344,6 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                     }
                 }
             }
-            //if (N < 10) System.out.println("mat = " + A);
         }
         // convert to A-I
         for (int i = 0; i < N; i++) {
@@ -388,7 +384,6 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         long n = A.ring.rows;
         List<GenVector<C>> ns = nullSpaceBasis(Ap);
         long s = ns.size();
-        System.out.println("s = " + s + ", ns = " + ns);
         return n - s;
     }
 
@@ -438,14 +433,12 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 ArrayList<C> ptr = mat.get(i);
                 mat.set(i, mat.get(imax));
                 mat.set(imax, ptr);
-                //System.out.println("A(" + i + ") = " + mat.get(i));
             }
             // A[j][i] /= A[i][i];
             C dd = mat.get(i).get(kmax);
             for (int k = kmax; k < N; k ++) {
                 C d = mat.get(i).get(k).divide( dd );
                 mat.get(i).set(k, d );
-                //System.out.println("A(" + i + ", " + k + ") = " + mat.get(i).get(k));
             }
             for (int j = i + 1; j < N; j++) {
                 for (int k = kmax; k < N; k++) {
@@ -486,7 +479,6 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 }
             }
         }
-        System.out.println("rRE = " + r);
         return r;
     }
 
