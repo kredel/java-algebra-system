@@ -25,7 +25,7 @@ print "r.factory() = " + str(r.factory());
 #print;
 
 v = Vec(QQ(),N);
-#v = Vec(GF(P),N);
+#v = Vec(GF(p),N);
 #print "v = " + str(v);
 print "v.factory() = " + str(v.factory());
 print;
@@ -62,18 +62,24 @@ print;
 print "U:  " + str(U);
 print;
 
-x = a.solveLU(P, c);
-print "x:  " + str(x);
+if P.elem.size() != 0:
+    x = a.solveLU(P, c);
+    print "x:  " + str(x);
 
-print "x == b: " + str(x == b);
-print;
+    print "x == b: " + str(x == b);
+    print;
 
 
-d = a.determinant(P)
-print "det(A):  " + str(d) + " ~= " + str(d.elem.getDecimal());
-print;
+    d = a.determinant(P)
+    print "det(A):  " + str(d) + " ~= " + str(d.elem.getDecimal());
+    #print "det(A):  " + str(d) + " ~= " + str(d.elem.getSymmetricVal());
+    print;
+
+
+a = r.random(11);
 
 print "rank(A):  " + str(a.rank());
+print "a:  " + str(a);
 print;
 
 

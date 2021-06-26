@@ -20,7 +20,7 @@ puts "r.factory() = " + str(r.factory());
 #puts;
 
 v = Vec(QQ(),N);
-#v = Vec(GF(P),N);
+#v = Vec(GF(p),N);
 #puts "v = " + str(v);
 puts "v.factory() = " + str(v.factory());
 puts;
@@ -57,18 +57,25 @@ puts;
 puts "U:  " + str(U);
 puts;
 
-x = a.solveLU(P, c);
-puts "x:  " + str(x);
+if P.elem.size() != 0 
+  x = a.solveLU(P, c);
+  puts "x:  " + str(x);
 
-puts "x == b: " + str(x == b);
-puts;
+  puts "x == b: " + str(x == b);
+  puts;
 
 
-d = a.determinant(P)
-puts "det(A):  " + str(d) + " ~= " + str(d.elem.getDecimal());
-puts;
+  d = a.determinant(P)
+  puts "det(A):  " + str(d) + " ~= " + str(d.elem.getDecimal());
+  #puts "det(A):  " + str(d) + " ~= " + str(d.elem.getSymmetricVal());
+  puts;
 
+end
+
+a = r.random(11);
+#puts "a:  " + str(a);
 puts "rank(A):  " + str(a.rank());
+puts "a:  " + str(a);
 puts;
 
 
