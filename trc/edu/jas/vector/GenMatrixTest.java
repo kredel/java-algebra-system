@@ -431,7 +431,7 @@ public class GenMatrixTest extends TestCase {
 
         BigRational det = lu.determinantLU(A, P);
         //System.out.println("det = " + det + " ~= " + det.getDecimal());
-        assertFalse("det(A) != 0: ", det.isZERO()); 
+        assertFalse("det(A) != 0: ", det.isZERO());
 
         iA = lu.inverseLU(A, P);
         //System.out.println("iA = " + iA);
@@ -486,7 +486,7 @@ public class GenMatrixTest extends TestCase {
             //System.out.println("z == 0: " + z.isZERO());
             assertTrue("z == 0: " + z, z.isZERO());
         }
-	// test idempotent
+        // test idempotent
         Ap = A.sum(mfac.getONE());
         B = Ap.multiply(Ap);
         if (!Ap.equals(B)) {
@@ -546,7 +546,7 @@ public class GenMatrixTest extends TestCase {
             //System.out.println("z == 0: " + z.isZERO());
             assertTrue("z == 0: " + z, z.isZERO());
         }
-	// test idempotent
+        // test idempotent
         Ap = A.sum(mfac.getONE());
         B = Ap.multiply(Ap);
         if (!Ap.equals(B)) {
@@ -567,8 +567,8 @@ public class GenMatrixTest extends TestCase {
         //System.out.println("mfac = " + mfac.toScript());
         GenMatrixRing<BigRational> tfac = mfac.transpose();
 
-        GenMatrix<BigRational> A, Ap, B, T, Tp;
-        A = mfac.random(kl, 0.7f/n ); 
+        GenMatrix<BigRational> A, Ap, T, Tp;
+        A = mfac.random(kl, 0.7f / n);
         if (n < 10)
             System.out.println("A = " + A);
         if (A.isZERO()) {
@@ -617,7 +617,7 @@ public class GenMatrixTest extends TestCase {
         r1 = lu.rankNS(Ap);
         c = cokern.size();
         assertTrue("0 <= rank < n: ", 0 <= r1 && r1 <= n);
-        assertTrue("rank + dim coker == n ", r1+c == n);
+        assertTrue("rank + dim coker == n ", r1 + c == n);
 
         //System.out.println("diag(Tp): " + Tp.getDiagonal());
         //System.out.println("Tp: " + Tp);
@@ -626,7 +626,7 @@ public class GenMatrixTest extends TestCase {
         //System.out.println("rank A = " + r1 + ", c = " + c + ", n = " + n);
         //System.out.println("rank T = " + r2 + ", k = " + k);
         assertTrue("0 <= rank < n: ", 0 <= r2 && r2 <= n);
-        assertTrue("rank + dim ker == n ", r2+k == n);
+        assertTrue("rank + dim ker == n ", r2 + k == n);
     }
 
 
@@ -640,8 +640,8 @@ public class GenMatrixTest extends TestCase {
         //System.out.println("mfac = " + mfac.toScript());
         GenMatrixRing<BigRational> tfac = mfac.transpose();
 
-        GenMatrix<BigRational> A, Ap, App, B, T, Tp, Tpp;
-        A = mfac.random(kl, 0.9f/n ); 
+        GenMatrix<BigRational> A, Ap, App, T, Tpp;
+        A = mfac.random(kl, 0.9f / n);
         //A = mfac.getONE();
         //A = mfac.getZERO(); A.setMutate(3,4, cfac.parse("2")); A.setMutate(5,4, cfac.parse("3"));
         if (n < 10)
@@ -652,15 +652,15 @@ public class GenMatrixTest extends TestCase {
         assertTrue(" not isZERO( A )", !A.isZERO());
         Ap = A.copy();
         T = Ap.transpose(tfac);
-        Tp = T.copy();
+        //Tp = T.copy();
         if (n < 10)
             System.out.println("T = " + T.ring.rows);
 
         LinAlg<BigRational> lu = new LinAlg<BigRational>();
-        BasicLinAlg<BigRational> blas = new BasicLinAlg<BigRational>();
+        //BasicLinAlg<BigRational> blas = new BasicLinAlg<BigRational>();
 
         // test ranks
-        long r1 = 0, r2 = 0, k = 0, c = 0;
+        long r1 = 0, r2 = 0;
         App = lu.rowEchelonForm(A);
         //System.out.println("A:   " + A);
         //System.out.println("App: " + App);

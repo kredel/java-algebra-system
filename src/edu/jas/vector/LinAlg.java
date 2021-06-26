@@ -7,19 +7,19 @@ package edu.jas.vector;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.RingElem;
 
 
 /**
- * Linear algebra methods. Implements linear algebra computations and
- * tests, mainly based on Gauss elimination.  Partly based on
- * <a href="https://en.wikipedia.org/wiki/LU_decomposition">LU_decomposition</a>
+ * Linear algebra methods. Implements linear algebra computations and tests,
+ * mainly based on Gauss elimination. Partly based on <a href=
+ * "https://en.wikipedia.org/wiki/LU_decomposition">LU_decomposition</a>.
+ * Computation of Null space basis, row echelon form, inverses and ranks.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -41,11 +41,12 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * Matrix LU decomposition. Matrix A is replaced by its LU decomposition.
-     * A contains a copy of both matrices L-E and U as A=(L-E)+U such that P*A=L*U.
-     * The permutation matrix is not stored as a matrix, but in an integer vector P of size N+1 
-     * containing column indexes where the permutation matrix has "1". The last element P[N]=S+N, 
-     * where S is the number of row exchanges needed for determinant computation, det(P)=(-1)^S    
+     * Matrix LU decomposition. Matrix A is replaced by its LU decomposition. A
+     * contains a copy of both matrices L-E and U as A=(L-E)+U such that
+     * P*A=L*U. The permutation matrix is not stored as a matrix, but in an
+     * integer vector P of size N+1 containing column indexes where the
+     * permutation matrix has "1". The last element P[N]=S+N, where S is the
+     * number of row exchanges needed for determinant computation, det(P)=(-1)^S
      * @param A a n&times;n matrix.
      * @return permutation vector P and modified matrix A.
      */
@@ -58,9 +59,9 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         if (N != ring.cols) {
             logger.warn("nosquare matrix");
         }
-        int i, imax, kmax;
+        int i, imax;
         C maxA, absA;
-        List<Integer> P = new ArrayList<Integer>(N+1);
+        List<Integer> P = new ArrayList<Integer>(N + 1);
         for (i = 0; i <= N; i++) {
             P.add(i); //Unit permutation matrix, P[N] initialized with N
         }
@@ -71,7 +72,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             for (int k = i; k < N; k++) {
                 // absA = fabs(A[k][i])
                 absA = mat.get(k).get(i).abs();
-                if (absA.compareTo(maxA) > 0) { 
+                if (absA.compareTo(maxA) > 0) {
                     maxA = absA;
                     imax = k;
                 }
@@ -94,18 +95,18 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 mat.set(i, mat.get(imax));
                 mat.set(imax, ptr);
                 //counting pivots starting from N (for determinant)
-                P.set(N, P.get(N)+1);
+                P.set(N, P.get(N) + 1);
             }
             C dd = mat.get(i).get(i);
             for (int j = i + 1; j < N; j++) {
                 // A[j][i] /= A[i][i];
-                C d = mat.get(j).get(i).divide( dd );
-                mat.get(j).set(i, d );
+                C d = mat.get(j).get(i).divide(dd);
+                mat.get(j).set(i, d);
 
                 for (int k = i + 1; k < N; k++) {
                     // A[j][k] -= A[j][i] * A[i][k];
-                    C a = mat.get(j).get(i).multiply( mat.get(i).get(k) );
-                    mat.get(j).set(k, mat.get(j).get(k).subtract(a) );
+                    C a = mat.get(j).get(i).multiply(mat.get(i).get(k));
+                    mat.get(j).set(k, mat.get(j).get(k).subtract(a));
                 }
             }
         }
@@ -114,7 +115,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * Solve with LU decomposition. 
+     * Solve with LU decomposition.
      * @param A a n&times;n matrix in LU decomposition.
      * @param P permutation vector.
      * @param b right hand side vector.
@@ -135,7 +136,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         ArrayList<ArrayList<C>> mat = A.matrix;
         for (int i = 0; i < N; i++) {
             //x[i] = b[P[i]];
-            vec.set(i, b.get( P.get(i) ) );
+            vec.set(i, b.get(P.get(i)));
             C xi = vec.get(i);
             for (int k = 0; k < i; k++) {
                 //x[i] -= A[i][k] * x[k];
@@ -161,7 +162,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * Solve linear system of equations. 
+     * Solve linear system of equations.
      * @param A a n&times;n matrix.
      * @param b right hand side vector.
      * @return x solution vector of A*x = b.
@@ -182,7 +183,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * Determinant with LU decomposition. 
+     * Determinant with LU decomposition.
      * @param A a n&times;n matrix in LU decomposition.
      * @param P permutation vector.
      * @return d determinant of A.
@@ -200,10 +201,10 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         C det = mat.get(0).get(0);
         for (int i = 1; i < N; i++) {
             //det *= A[i][i];
-            det = det.multiply( mat.get(i).get(i) );
+            det = det.multiply(mat.get(i).get(i));
         }
         //return (P[N] - N) % 2 == 0 ? det : -det
-        int s = P.get( N ) - N;
+        int s = P.get(N) - N;
         if (s % 2 != 0) {
             det = det.negate();
         }
@@ -212,7 +213,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * Inverse with LU decomposition. 
+     * Inverse with LU decomposition.
      * @param A a n&times;n matrix in LU decomposition.
      * @param P permutation vector.
      * @return inv(A) with A * inv(A) == 1.
@@ -231,8 +232,8 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 C b = e; //imat.get(i).get(j);
                 for (int k = 0; k < i; k++) {
                     //IA[i][j] -= A[i][k] * IA[k][j];
-                    C a = mat.get(i).get(k).multiply( imat.get(k).get(j) );
-                    b = b.subtract(a); 
+                    C a = mat.get(i).get(k).multiply(imat.get(k).get(j));
+                    b = b.subtract(a);
                 }
                 imat.get(i).set(j, b);
             }
@@ -240,13 +241,13 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 C b = imat.get(i).get(j);
                 for (int k = i + 1; k < N; k++) {
                     //IA[i][j] -= A[i][k] * IA[k][j];
-                    C a = mat.get(i).get(k).multiply( imat.get(k).get(j) );
-                    b = b.subtract(a); 
+                    C a = mat.get(i).get(k).multiply(imat.get(k).get(j));
+                    b = b.subtract(a);
                 }
                 imat.get(i).set(j, b);
                 //IA[i][j] /= A[i][i];
                 C e = b; //imat.get(i).get(j);
-                e = e.divide( mat.get(i).get(i) );
+                e = e.divide(mat.get(i).get(i));
                 imat.get(i).set(j, e);
             }
         }
@@ -255,8 +256,8 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * Matrix Null Space basis, cokernel.
-     * From the transpose matrix At it computes the kernel with At*v_i = 0.
+     * Matrix Null Space basis, cokernel. From the transpose matrix At it
+     * computes the kernel with At*v_i = 0.
      * @param A a n&times;n matrix.
      * @return V a list of basis vectors (v_1, ..., v_k) with v_i*A == 0.
      */
@@ -311,7 +312,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                     }
                 }
                 if (maxA.isZERO()) { // complete zero row
-                    continue; 
+                    continue;
                 }
             }
             if (imax < N) { //!= i
@@ -339,7 +340,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                     for (int k = 0; k < N; k++) { // or k = 0
                         C b = mat.get(k).get(j);
                         C c = mat.get(k).get(i);
-                        C d = b.subtract( c.multiply(mm) );
+                        C d = b.subtract(c.multiply(mm));
                         mat.get(k).set(j, d);
                     }
                 }
@@ -357,14 +358,14 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             List<C> row = mat.get(i);
             boolean iszero = true;
             for (int k = 0; k < N; k++) {
-                if ( !row.get(k).isZERO() ) {
+                if (!row.get(k).isZERO()) {
                     iszero = false;
                     break;
                 }
             }
             if (!iszero) {
                 GenVector<C> v = new GenVector<C>(vfac, row);
-                nspb.add( v );
+                nspb.add(v);
             }
         }
         return nspb;
@@ -389,7 +390,8 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * Matrix row echelon form construction. Matrix A is replaced by its row echelon form.
+     * Matrix row echelon form construction. Matrix A is replaced by its row
+     * echelon form.
      * @param A a n&times;n matrix.
      * @return A row echelon form of A, matrix A is modified.
      */
@@ -406,7 +408,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         C maxA, absA;
         kmax = 0;
         ArrayList<ArrayList<C>> mat = A.matrix;
-        for (i = 0; i < N; ) {
+        for (i = 0; i < N;) {
             imax = i;
             maxA = ring.coFac.getZERO();
             for (int k = i; k < N; k++) {
@@ -436,15 +438,15 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             }
             // A[j][i] /= A[i][i];
             C dd = mat.get(i).get(kmax);
-            for (int k = kmax; k < N; k ++) {
-                C d = mat.get(i).get(k).divide( dd );
-                mat.get(i).set(k, d );
+            for (int k = kmax; k < N; k++) {
+                C d = mat.get(i).get(k).divide(dd);
+                mat.get(i).set(k, d);
             }
             for (int j = i + 1; j < N; j++) {
                 for (int k = kmax; k < N; k++) {
                     // A[j][k] -= A[j][i] * A[i][k];
-                    C a = mat.get(j).get(k).multiply( mat.get(i).get(k) );
-                    mat.get(j).set(k, mat.get(j).get(k).subtract(a) );
+                    C a = mat.get(j).get(k).multiply(mat.get(i).get(k));
+                    mat.get(j).set(k, mat.get(j).get(k).subtract(a));
                 }
             }
             mat.get(i).set(kmax, ring.coFac.getONE());
@@ -473,7 +475,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         for (int i = 0; i < n; i++) {
             ArrayList<C> row = mat.get(i);
             for (int j = i; j < n; j++) {
-                if ( !row.get(j).isZERO() ) {
+                if (!row.get(j).isZERO()) {
                     r++;
                     break;
                 }

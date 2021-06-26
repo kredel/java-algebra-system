@@ -63,7 +63,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
             throw new IllegalArgumentException("Empty m or v not allowed, m = " + m + ", v = " + v);
         }
         modul = m;
-        val = new ArrayList<C>( v.length );
+        val = new ArrayList<C>(v.length);
         for (int i = 0; i < v.length; i++) {
             val.add(v[i]);
         }
