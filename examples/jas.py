@@ -3415,8 +3415,10 @@ class RingElem:
         [s,o] = coercePair(self,other);
         #print "self  type(%s) = %s" % (s,type(s));
         #print "other type(%s) = %s" % (o,type(o));
-        if isinstance(s.elem,GenMatrix) or isinstance(o.elem,GenVector):
+        if isinstance(s.elem,GenMatrix) and isinstance(o.elem,GenVector):
             return RingElem( BasicLinAlg().rightProduct(o.elem, s.elem) );
+        if isinstance(s.elem,GenVector) and isinstance(o.elem,GenMatrix):
+            return RingElem( BasicLinAlg().leftProduct(s.elem, o.elem) );
         return RingElem( s.elem.multiply( o.elem ) ); 
 
     def __rmul__(self,other):

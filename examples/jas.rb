@@ -696,9 +696,7 @@ Coerce other to self
     def coerceElem(other)
         #puts "self  type(#{self}) = #{self.class}\n";
         #puts "other type(#{other}) = #{other.class}\n";
-        if other.is_a? RingElem
-           other = other.elem;
-        end
+        #not ok: if other.is_a? RingElem other = other.elem; end
         if @elem.is_a? GenVector
             if other.is_a? Array 
                 o = rbarray2arraylist(other,@elem.factory().coFac,rec=1);
@@ -713,12 +711,12 @@ Coerce other to self
                 o = GenMatrix.new(@elem.factory(),o);
                 return RingElem.new( o );
                 end
-            if other.is_a? GenVector
+            if other.elem.is_a? GenVector
                 #puts "other vec #{other.factory()} #{other}\n";
                 #o = rbarray2arraylist(other,other.factory().coFac,rec=1);
                 #o = GenVector.new(other.factory().coFac, o);
                 o = other;
-                return RingElem.new( o );
+                return o; #RingElem.new( o );
                 end
         end
         if other.is_a? RingElem
@@ -860,6 +858,9 @@ Multiply two ring elements.
         #puts "* s = #{s}, o = #{o}, s*o = #{s.elem.multiply(o.elem)}\n";
         if s.elem.is_a? GenMatrix and o.elem.is_a? GenVector
            return RingElem.new( BasicLinAlg.new().rightProduct(o.elem, s.elem) );
+        end;
+        if s.elem.is_a? GenVector and o.elem.is_a? GenMatrix
+           return RingElem.new( BasicLinAlg.new().leftProduct(s.elem, o.elem) );
         end;
         return RingElem.new( s.elem.multiply( o.elem ) ); 
     end
