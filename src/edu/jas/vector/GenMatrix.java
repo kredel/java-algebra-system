@@ -193,14 +193,14 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
             for (int i = 0; i < ring.cols; i++) {
                 if (i < k) {
                     rl.add(zero);
-                } else if (i > k) {
+                } else if (i >= k) {
                     rl.add(ul.get(i));
-                } else {
-                    if (ul.get(i).isZERO()) {
-                        rl.add(zero);
-                    } else {
-                        rl.add(one);
-                    }
+                // } else {
+                //     if (ul.get(i).isZERO()) {
+                //         rl.add(zero);
+                //     } else {
+                //         rl.add(one); // mat(k,k).inverse()
+                //     }
                 }
             }
             cl.add(rl);

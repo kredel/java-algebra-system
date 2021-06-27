@@ -97,12 +97,11 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 //counting pivots starting from N (for determinant)
                 P.set(N, P.get(N) + 1);
             }
-            C dd = mat.get(i).get(i);
+            C dd = mat.get(i).get(i).inverse();
             for (int j = i + 1; j < N; j++) {
                 // A[j][i] /= A[i][i];
-                C d = mat.get(j).get(i).divide(dd);
+                C d = mat.get(j).get(i).multiply(dd); //divide(dd);
                 mat.get(j).set(i, d);
-
                 for (int k = i + 1; k < N; k++) {
                     // A[j][k] -= A[j][i] * A[i][k];
                     C a = mat.get(j).get(i).multiply(mat.get(i).get(k));
@@ -437,9 +436,9 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 mat.set(imax, ptr);
             }
             // A[j][i] /= A[i][i];
-            C dd = mat.get(i).get(kmax);
+            C dd = mat.get(i).get(kmax).inverse();
             for (int k = kmax; k < N; k++) {
-                C d = mat.get(i).get(k).divide(dd);
+                C d = mat.get(i).get(k).multiply(dd); //divide(dd);
                 mat.get(i).set(k, d);
             }
             for (int j = i + 1; j < N; j++) {
