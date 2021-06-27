@@ -24,7 +24,8 @@ import edu.jas.structure.RingFactory;
  * @see java.math.BigDecimal
  */
 
-public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<BigDecimal> {
+public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<BigDecimal>,
+                                         Rational {
 
 
     /**
@@ -262,6 +263,24 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
      */
     public BigDecimal getONE() {
         return ONE;
+    }
+
+
+    /**
+     * Get the decimal representation.
+     * @return decimal.
+     */
+    public BigDecimal getDecimal() {
+        return this;
+    }
+
+
+    /**
+     * Get the rational representation.
+     * @return rational number.
+     */
+    public BigRational getRational() {
+        return new BigRational(toString());
     }
 
 
