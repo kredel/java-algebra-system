@@ -711,7 +711,7 @@ Coerce other to self
                 o = GenMatrix.new(@elem.factory(),o);
                 return RingElem.new( o );
                 end
-            if other.elem.is_a? GenVector
+            if other.is_a? RingElem and other.elem.is_a? GenVector
                 #puts "other vec #{other.factory()} #{other}\n";
                 #o = rbarray2arraylist(other,other.factory().coFac,rec=1);
                 #o = GenVector.new(other.factory().coFac, o);
