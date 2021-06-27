@@ -3933,11 +3933,16 @@ class RingElem:
         d = LinAlg().determinantLU(self.elem, p);
         return RingElem(d);
 
+    def rowEchelon(self):
+        '''Row echelon form matrix.
+        '''
+        re = LinAlg().rowEchelonForm(self.elem);
+        return RingElem(re);
+
     def rank(self):
         '''Rank from row echelon form matrix.
         '''
-        re = LinAlg().rowEchelonForm(self.elem);
-        r = LinAlg().rankRE(re);
+        r = LinAlg().rankRE(self.elem);
         return r;
 
     def coefficients(self):

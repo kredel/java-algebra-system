@@ -1446,12 +1446,21 @@ Determinant from LU matrix.
 
 
 =begin rdoc
+Row echelon form matrix.
+=end
+    def rowEchelon()
+        a = @elem;
+        re = LinAlg.new().rowEchelonForm(a);
+        return RingElem.new(re);
+    end
+
+
+=begin rdoc
 rank from row echelon form matrix.
 =end
     def rank()
         a = @elem;
-        re = LinAlg.new().rowEchelonForm(a);
-        r = LinAlg.new().rankRE(re);
+        r = LinAlg.new().rankRE(a);
         return r;
     end
 

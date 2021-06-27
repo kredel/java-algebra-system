@@ -74,8 +74,12 @@ end
 
 a = r.random(11);
 #puts "a:  " + str(a);
-puts "rank(A):  " + str(a.rank());
-puts "a:  " + str(a);
+
+b = a.rowEchelon();
+puts "b:  " + str(b);
+
+puts "rank(b):  " + str(b.rank());
+#puts "b:  " + str(b);
 puts;
 
 

@@ -69,7 +69,6 @@ if P.elem.size() != 0:
     print "x == b: " + str(x == b);
     print;
 
-
     d = a.determinant(P)
     print "det(A):  " + str(d) + " ~= " + str(d.elem.getDecimal());
     #print "det(A):  " + str(d) + " ~= " + str(d.elem.getSymmetricVal());
@@ -77,9 +76,13 @@ if P.elem.size() != 0:
 
 
 a = r.random(11);
+#print "b:  " + str(b);
 
-print "rank(A):  " + str(a.rank());
-print "a:  " + str(a);
+b = a.rowEchelon();
+print "b:  " + str(b);
+
+print "rank(b):  " + str(b.rank());
+#print "b:  " + str(b);
 print;
 
 
