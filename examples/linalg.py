@@ -5,7 +5,7 @@
 
 import sys;
 
-from jas import Ring, PolyRing, Mat, Vec, QQ, GF, DD
+from jas import Ring, PolyRing, Mat, Vec, QQ, GF, DD, RingElem
 from jas import terminate
 
 #from edu.jas.arith import BigRational
@@ -57,12 +57,16 @@ print;
 L, U, P = a.decompLU();
 print "P:  " + str(P);
 print;
-print "L:  " + str(L);
-print;
-print "U:  " + str(U);
-print;
 
 if P.elem.size() != 0:
+    print "L:  " + str(L);
+    print;
+    print "U:  " + str(U);
+    print;
+    Us = RingElem(a.elem.getUpperScaled());
+    print "scale(U):  " + str(Us);
+    print;
+
     x = a.solveLU(P, c);
     print "x:  " + str(x);
 
@@ -78,11 +82,11 @@ if P.elem.size() != 0:
 a = r.random(11);
 #print "b:  " + str(b);
 
-b = a.rowEchelon();
-print "b:  " + str(b);
+B = a.rowEchelon();
+print "B:  " + str(B);
 
-print "rank(b):  " + str(b.rank());
-#print "b:  " + str(b);
+print "rank(B):  " + str(B.rank());
+#print "B:  " + str(B);
 print;
 
 

@@ -52,34 +52,36 @@ puts;
 L, U, P = a.decompLU();
 puts "P:  " + str(P);
 puts;
-puts "L:  " + str(L);
-puts;
-puts "U:  " + str(U);
-puts;
 
 if P.elem.size() != 0 
+  puts "L:  " + str(L);
+  puts;
+  puts "U:  " + str(U);
+  puts;
+  Us = RingElem.new(a.elem.getUpperScaled());
+  puts "scale(U):  " + str(Us);
+  puts;
+
   x = a.solveLU(P, c);
   puts "x:  " + str(x);
 
   puts "x == b: " + str(x == b);
   puts;
 
-
   d = a.determinant(P)
   puts "det(A):  " + str(d) + " ~= " + str(d.elem.getDecimal());
   #puts "det(A):  " + str(d) + " ~= " + str(d.elem.getSymmetricVal());
   puts;
-
 end
 
-a = r.random(11);
-#puts "a:  " + str(a);
+A = r.random(11);
+#puts "A:  " + str(A);
 
-b = a.rowEchelon();
-puts "b:  " + str(b);
+B = A.rowEchelon();
+puts "B:  " + str(B);
 
-puts "rank(b):  " + str(b.rank());
-#puts "b:  " + str(b);
+puts "rank(B):  " + str(B.rank());
+#puts "B:  " + str(B);
 puts;
 
 
