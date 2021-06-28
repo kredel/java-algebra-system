@@ -3738,7 +3738,7 @@ class RingElem:
 ##                L[ RingElem( a ) ] = i;
               return L;
            except Exception, e:
-              raise ValueError, "error in factorsAbsolute " + str(e)
+              raise ValueError, "error in factorsAbsolute " + str(e);
         else:
            raise ValueError, "factors not implemented for " + a.to_s;
 
@@ -3888,7 +3888,7 @@ class RingElem:
         if isinstance(a,BigRational):
             d = ArithUtil.continuedFraction(a);
             return d;
-        raise ValueError, "type " + str(a.class) + " not supported"
+        raise ValueError, "type " + str(type(a)) + " not supported";
 
     def contFracApprox(self, lst):
         '''Continued fraction expansion to approximate fraction.
