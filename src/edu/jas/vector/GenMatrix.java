@@ -850,9 +850,10 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
     /**
      * Inverse of this.
      * @return x with this * x = 1, if it exists.
+     * @see edu.jas.vector.LinAlg#inverseLU(edu.jas.vector.GenMatrix,java.util.List)
      */
     public GenMatrix<C> inverse() {
-        throw new UnsupportedOperationException("inverse not yet implemented");
+        throw new UnsupportedOperationException("inverse implemented in LinAlg.inverseLU()");
     }
 
 
