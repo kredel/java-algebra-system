@@ -79,6 +79,7 @@ if P.elem.size() != 0:
     print;
 
 
+r = Mat(QQ(), 2*N, N);
 a = r.random(11);
 #print "b:  " + str(b);
 

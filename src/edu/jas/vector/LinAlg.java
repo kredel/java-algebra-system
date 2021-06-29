@@ -266,18 +266,19 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         }
         GenMatrixRing<C> ring = A.ring;
         int N = ring.rows;
-        if (N != ring.cols) {
+        int M = ring.cols;
+        if (N != M) {
             logger.warn("nosquare matrix");
         }
         List<GenVector<C>> nspb = new ArrayList<GenVector<C>>();
-        GenVectorModul<C> vfac = new GenVectorModul<C>(ring.coFac, N);
+        GenVectorModul<C> vfac = new GenVectorModul<C>(ring.coFac, M);
         ArrayList<ArrayList<C>> mat = A.matrix;
         for (int i = 0; i < N; i++) {
             C maxA, absA;
             // search privot imax
             int imax = i;
             maxA = ring.coFac.getZERO();
-            for (int k = i; k < N; k++) { // k = 0 ?
+            for (int k = i; k < M; k++) { // k = 0 ?
                 // absA = fabs(A[k][i])
                 absA = mat.get(i).get(k).abs();
                 if (absA.compareTo(maxA) > 0 && maxA.isZERO()) {
@@ -314,7 +315,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                     continue;
                 }
             }
-            if (imax < N) { //!= i
+            if (imax < M) { //!= i
                 //normalize column i
                 C mp = mat.get(i).get(imax).inverse();
                 for (int k = 0; k < N; k++) { // k = i ?
@@ -331,7 +332,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                     }
                 }
                 //eliminate rest of row i via column operations
-                for (int j = 0; j < N; j++) {
+                for (int j = 0; j < M; j++) {
                     if (i == j) { // is already normalized
                         continue;
                     }
@@ -356,7 +357,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         for (int i = 0; i < N; i++) {
             List<C> row = mat.get(i);
             boolean iszero = true;
-            for (int k = 0; k < N; k++) {
+            for (int k = 0; k < M; k++) {
                 if (!row.get(k).isZERO()) {
                     iszero = false;
                     break;
@@ -381,7 +382,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             return -1l;
         }
         GenMatrix<C> Ap = A.copy();
-        long n = A.ring.rows;
+        long n = Math.min(A.ring.rows, A.ring.cols);
         List<GenVector<C>> ns = nullSpaceBasis(Ap);
         long s = ns.size();
         return n - s;
@@ -391,7 +392,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
     /**
      * Matrix row echelon form construction. Matrix A is replaced by its row
      * echelon form.
-     * @param A a n&times;n matrix.
+     * @param A a n&times;m matrix.
      * @return A row echelon form of A, matrix A is modified.
      */
     public GenMatrix<C> rowEchelonForm(GenMatrix<C> A) {
@@ -400,7 +401,8 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         }
         GenMatrixRing<C> ring = A.ring;
         int N = ring.rows;
-        if (N != ring.cols) {
+        int M = ring.cols;
+        if (N != M) {
             logger.warn("nosquare matrix");
         }
         int i, imax, kmax;
@@ -423,7 +425,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 //System.out.println("matrix is zero at col " + kmax);
                 //mat.get(i).set(i, ring.coFac.getZERO());
                 kmax++;
-                if (kmax >= N) {
+                if (kmax >= M) {
                     break;
                 }
                 continue;
@@ -437,21 +439,22 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             }
             // A[j][i] /= A[i][i];
             C dd = mat.get(i).get(kmax).inverse();
-            for (int k = kmax; k < N; k++) {
+            for (int k = kmax; k < M; k++) {
                 C d = mat.get(i).get(k).multiply(dd); //divide(dd);
                 mat.get(i).set(k, d);
             }
             for (int j = i + 1; j < N; j++) {
-                for (int k = kmax; k < N; k++) {
+                for (int k = kmax; k < M; k++) {
                     // A[j][k] -= A[j][i] * A[i][k];
                     C a = mat.get(j).get(k).multiply(mat.get(i).get(k));
                     mat.get(j).set(k, mat.get(j).get(k).subtract(a));
                 }
             }
+            //System.out.println("i = " + i + " " + kmax);
             mat.get(i).set(kmax, ring.coFac.getONE());
             i++;
             kmax++;
-            if (kmax >= N) {
+            if (kmax >= M) {
                 break;
             }
         }
@@ -469,11 +472,12 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             return -1l;
         }
         long n = A.ring.rows;
+        long m = A.ring.cols;
         ArrayList<ArrayList<C>> mat = A.matrix;
         long r = 0;
         for (int i = 0; i < n; i++) {
             ArrayList<C> row = mat.get(i);
-            for (int j = i; j < n; j++) {
+            for (int j = i; j < m; j++) {
                 if (!row.get(j).isZERO()) {
                     r++;
                     break;
