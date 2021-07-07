@@ -7,12 +7,17 @@ package edu.jas.ufd;
 
 
 import java.util.SortedMap;
+import java.util.List;
 
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+import edu.jas.vector.GenMatrix;
+import edu.jas.vector.GenMatrixRing;
+import edu.jas.vector.GenVector;
+import edu.jas.vector.LinAlg;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -342,6 +347,63 @@ public class QuotientRatTest extends TestCase {
         boolean t = PolyUfdUtil.<BigRational> isFactorization(c, factors);
         //System.out.println("t = " + t);
         assertTrue("c == prod(factors): " + c + ", " + factors, t);
+    }
+
+
+    /**
+     * Test symbolic row echelon form and LU decomposition.
+     */
+    public void testLinAlg() {
+        BigRational cfac = new BigRational(11);
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, new String[]{ "a" });
+        //System.out.println("pfac = " + pfac.toScript());
+        QuotientRing<BigRational> qfac = new QuotientRing<BigRational>(pfac);
+        //System.out.println("qfac = " + qfac.toScript());
+        Quotient<BigRational> a = new Quotient<BigRational>(qfac,pfac.univariate(0));
+        //System.out.println("a: " + a.toScript());
+        int n = 3;
+        GenMatrixRing<Quotient<BigRational>> mfac = new GenMatrixRing<Quotient<BigRational>>(qfac, n, n);
+        //System.out.println("mfac = " + mfac.toScript());
+        GenMatrixRing<Quotient<BigRational>> tfac = mfac.transpose();
+        @SuppressWarnings("unchecked")
+        Quotient<BigRational>[][] mm = new Quotient[n][n];
+        // ( {{1, a, 2}, {0, 1, 1}, {-1, 1, 1}} )
+        mm[0][0] = qfac.fromInteger(1);
+        mm[0][1] = a;
+        mm[0][2] = qfac.fromInteger(2);
+
+        mm[1][0] = qfac.getZERO();
+        mm[1][1] = qfac.fromInteger(1);
+        mm[1][2] = qfac.fromInteger(1);
+
+        mm[2][0] = qfac.fromInteger(-1);
+        mm[2][1] = qfac.fromInteger(1);
+        mm[2][2] = qfac.fromInteger(1);
+
+        GenMatrix<Quotient<BigRational>> A = new GenMatrix<Quotient<BigRational>>(mfac, mm);
+        //System.out.println("A:   " + A.toScript());
+
+        LinAlg<Quotient<BigRational>> lu = new LinAlg<Quotient<BigRational>>();
+
+        // test rowEchelonForm
+        GenMatrix<Quotient<BigRational>> B = lu.rowEchelonForm(A);
+        //System.out.println("B:   " + B.toScript());
+
+        // test LU decomposition
+        A = new GenMatrix<Quotient<BigRational>>(mfac, mm);
+        List<Integer> P = lu.decompositionLU(A);
+        //System.out.println("P  :   " + P);
+        //System.out.println("A  :   " + A.toScript());
+        //System.out.println("U  :   " + A.getUpper().toScript());
+
+        // test LU inverse
+        GenMatrix<Quotient<BigRational>> I = lu.inverseLU(A,P);
+        //System.out.println("I  :   " + I.toScript());
+
+        GenMatrix<Quotient<BigRational>> C = new GenMatrix<Quotient<BigRational>>(mfac, mm);
+        GenMatrix<Quotient<BigRational>> CI = C.multiply(I);
+        //System.out.println("C*I:   " + CI.toScript());
+        assertTrue("C*I == 1: ", CI.isONE());
     }
 
 }

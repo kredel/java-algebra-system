@@ -457,9 +457,9 @@ public class FactorMoreTest extends TestCase {
         //GenPolynomial<BigInteger> p2 = fac.parse("m2");
         //GenPolynomial<BigInteger> p3 = fac.parse("v2-u2");
         //poly = poly.multiply(p3);
-        final int loops = 10; //0000
+        final int loops = 10; //0000;
+        //System.out.println("Run: " + loops + ": -" + poly.toString());
         for (int i = 0; i < loops; i++) {
-            //System.out.println("Run: " + i + " -" + poly.toString());
             FactorAbstract<BigInteger> factorAbstract = FactorFactory.getImplementation(BigInteger.ZERO);
             SortedMap<GenPolynomial<BigInteger>, Long> map = factorAbstract.factors(poly);
             //System.out.println("Factors: " + map.toString());
