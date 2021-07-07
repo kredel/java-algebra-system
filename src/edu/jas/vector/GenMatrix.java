@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.AlgebraElem;
+import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.RingElem;
 
 
@@ -401,9 +402,11 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
             for (C elem : row) {
                 if (i == j) {
                     if (!elem.isONE()) {
+                        //System.out.println("elem.isONE = " + elem);
                         return false;
                     }
                 } else if (!elem.isZERO()) {
+                    //System.out.println("elem.isZERO = " + elem);
                     return false;
                 }
                 j++;
@@ -745,6 +748,16 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
 
     /**
+     * Transposed matrix.
+     * @return transpose(this)
+     */
+    public GenMatrix<C> transpose() {
+        GenMatrixRing<C> tr = ring.transpose();
+        return transpose(tr);
+    }
+
+
+    /**
      * Multiply this with S.
      * @param S
      * @return this * S.
@@ -820,10 +833,11 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
     /**
      * Divide this by S.
      * @param S
-     * @return this / S.
+     * @return this * S^{-1}.
      */
     public GenMatrix<C> divide(GenMatrix<C> S) {
-        throw new UnsupportedOperationException("divide not yet implemented");
+        //throw new UnsupportedOperationException("divide not yet implemented");
+        return multiply(S.inverse());
     }
 
 
@@ -853,7 +867,15 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
      * @see edu.jas.vector.LinAlg#inverseLU(edu.jas.vector.GenMatrix,java.util.List)
      */
     public GenMatrix<C> inverse() {
-        throw new UnsupportedOperationException("inverse implemented in LinAlg.inverseLU()");
+        //throw new UnsupportedOperationException("inverse implemented in LinAlg.inverseLU()");
+        LinAlg<C> la = new LinAlg<C>();
+        GenMatrix<C> mat = this.copy();
+        List<Integer> P = la.decompositionLU(mat);
+        if (P == null || P.isEmpty()) {
+            throw new NotInvertibleException("matrix not invertible");
+        }
+        mat = la.inverseLU(mat,P);
+        return mat;
     }
 
 
