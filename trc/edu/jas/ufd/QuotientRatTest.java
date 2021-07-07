@@ -404,6 +404,13 @@ public class QuotientRatTest extends TestCase {
         GenMatrix<Quotient<BigRational>> CI = C.multiply(I);
         //System.out.println("C*I:   " + CI.toScript());
         assertTrue("C*I == 1: ", CI.isONE());
+
+        GenMatrix<Quotient<BigRational>> C2 = C.sum(C);
+        GenMatrix<Quotient<BigRational>> CA = A.divide(C2);
+        GenMatrix<Quotient<BigRational>> AC = A.divideLeft(C2);
+        //System.out.println("C/A :    " + CA);
+        //System.out.println("A\\C :   " + AC);
+        assertFalse("C/A != A\\C: ", CA.equals(AC));
     }
 
 }

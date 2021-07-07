@@ -842,6 +842,16 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
 
     /**
+     * Divide left this by S.
+     * @param S
+     * @return S^{-1} * this.
+     */
+    public GenMatrix<C> divideLeft(GenMatrix<C> S) {
+        return S.inverse().multiply(this);
+    }
+
+
+    /**
      * Remainder after division of this by S.
      * @param S
      * @return this - (this / S) * S.

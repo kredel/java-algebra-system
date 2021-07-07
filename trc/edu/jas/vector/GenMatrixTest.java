@@ -438,6 +438,18 @@ public class GenMatrixTest extends TestCase {
         AiA = Ap.multiply(iA);
         //System.out.println("AiA = " + AiA);
         assertTrue("A*iA == 1: ", AiA.isONE());
+
+        GenMatrix<BigRational> I = Ap.inverse();
+        GenMatrix<BigRational> CI = Ap.multiply(I);
+        //System.out.println("C*I:   " + CI.toScript());
+        assertTrue("Ap*I == 1: ", CI.isONE());
+
+        GenMatrix<BigRational> C2 = mfac.random(3, 0.5f);
+        GenMatrix<BigRational> CA = Ap.divide(C2);
+        GenMatrix<BigRational> AC = Ap.divideLeft(C2);
+        //System.out.println("C/A :    " + CA);
+        //System.out.println("A\\C :   " + AC);
+        assertFalse("C/A != A\\C: ", CA.equals(AC));
     }
 
 
