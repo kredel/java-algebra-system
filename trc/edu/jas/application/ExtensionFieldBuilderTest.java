@@ -28,6 +28,8 @@ import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.Quotient;
 import edu.jas.ufd.QuotientRing;
+import edu.jas.vector.GenMatrix;
+import edu.jas.vector.GenMatrixRing;
 
 
 /**
@@ -452,6 +454,46 @@ public class ExtensionFieldBuilderTest extends TestCase {
         elem = Power.positivePower(elem, 3);
         //System.out.println("elem    = " + elem);
         assertFalse("elem == 0 " + elem, elem.isZERO());
+    }
+
+
+    /**
+     * Test construction of matrix extensions.
+     */
+    @SuppressWarnings("unchecked")
+    public void testConstructionMat() {
+        RingFactory fac = ExtensionFieldBuilder.baseField(BigRational.ONE).transcendentExtension("a")
+                        .build();
+        //System.out.println("fac = " + fac.toScript());
+
+        List<RingElem> gens = fac.generators();
+        int s = gens.size();
+        //System.out.println("gens    = " + gens);
+        assertTrue("#gens == 2 " + s, s == 2);
+
+        GenMatrixRing mfac = (GenMatrixRing) ExtensionFieldBuilder.baseField(fac)
+                        .matrixExtension(3).build();
+        //System.out.println("mfac = " + mfac.toScript());
+
+        List<RingElem> mgens = mfac.generators();
+        s = mgens.size();
+        //System.out.println("mgens(1) = " + mgens.get(1));
+        assertTrue("#gens == 9*2 " + s, s == 18);
+
+        GenMatrix elem = mfac.parse("[ [1,a,2], [0,1,1], [-1,1,1] ]");
+        //System.out.println("elem    = " + elem);
+
+        GenMatrix elemt = elem.transpose();
+        //System.out.println("elem**t = " + elemt);
+        elem = elem.multiply(elemt);
+        //System.out.println("elem    = " + elem);
+        GenMatrix elemp = (GenMatrix)elem.power(3);
+        //System.out.println("elem**3 = " + elemp);
+        GenMatrix elemi = elem.inverse();
+        //System.out.println("elem^-1 = " + elemi);
+        GenMatrix mat = elem.multiply(elemi);
+        //System.out.println("mat     = " + mat);
+        assertTrue("elem*elem^-1 == 1 " + mat, mat.isONE());
     }
 
 }

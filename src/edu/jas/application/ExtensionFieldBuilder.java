@@ -25,6 +25,7 @@ import edu.jas.root.RootUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.QuotientRing;
+import edu.jas.vector.GenMatrixRing;
 
 
 /**
@@ -98,6 +99,18 @@ public class ExtensionFieldBuilder implements Serializable {
         String[] variables = GenPolynomialTokenizer.variableList(vars);
         GenPolynomialRing pfac = new GenPolynomialRing(factory, variables);
         RingFactory base = (RingFactory) pfac;
+        return new ExtensionFieldBuilder(base);
+    }
+
+
+    /**
+     * Matrix ring extension.
+     * @param n dimension of n x n matrix.
+     */
+    @SuppressWarnings("unchecked")
+    public ExtensionFieldBuilder matrixExtension(int n) {
+        GenMatrixRing mfac = new GenMatrixRing(factory, n, n);
+        RingFactory base = (RingFactory) mfac;
         return new ExtensionFieldBuilder(base);
     }
 
