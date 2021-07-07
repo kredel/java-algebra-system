@@ -391,7 +391,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
 
     /**
      * Matrix row echelon form construction. Matrix A is replaced by its row
-     * echelon form.
+     * echelon form, an upper triangle matrix.
      * @param A a n&times;m matrix.
      * @return A row echelon form of A, matrix A is modified.
      */
