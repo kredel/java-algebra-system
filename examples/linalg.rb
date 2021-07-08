@@ -74,7 +74,7 @@ if P.elem.size() != 0
   puts;
 end
 
-r = Mat(QQ(),2*N,N);
+r = Mat(QQ(),N,N+2);
 A = r.random(11);
 #puts "A:  " + str(A);
 

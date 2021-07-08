@@ -263,7 +263,7 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
      * @return true if this monoid is associative, else false.
      */
     public boolean isAssociative() {
-        return (rows == cols);
+        return (rows == cols) && coFac.isAssociative();
     }
 
 

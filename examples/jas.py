@@ -3937,7 +3937,8 @@ class RingElem:
         '''Row echelon form matrix.
         '''
         re = LinAlg().rowEchelonForm(self.elem);
-        return RingElem(re);
+        res = LinAlg().rowEchelonFormSparse(re);
+        return RingElem(res);
 
     def rank(self):
         '''Rank from row echelon form matrix.

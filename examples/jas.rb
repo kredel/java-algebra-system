@@ -1451,7 +1451,8 @@ Row echelon form matrix.
     def rowEchelon()
         a = @elem;
         re = LinAlg.new().rowEchelonForm(a);
-        return RingElem.new(re);
+        res = LinAlg.new().rowEchelonFormSparse(re);
+        return RingElem.new(res);
     end
 
 
