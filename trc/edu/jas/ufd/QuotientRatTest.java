@@ -351,7 +351,8 @@ public class QuotientRatTest extends TestCase {
 
 
     /**
-     * Test symbolic row echelon form and LU decomposition.
+     * Test symbolic row echelon form and LU decomposition. Using an example from 
+     * <a href="https://github.com/kredel/java-algebra-system/issues/21">Issue #21</a>.
      */
     public void testLinAlg() {
         BigRational cfac = new BigRational(11);
@@ -381,13 +382,17 @@ public class QuotientRatTest extends TestCase {
         mm[2][2] = qfac.fromInteger(1);
 
         GenMatrix<Quotient<BigRational>> A = new GenMatrix<Quotient<BigRational>>(mfac, mm);
-        //System.out.println("A:   " + A.toScript());
+        //System.out.println("A:   " + A);
 
         LinAlg<Quotient<BigRational>> lu = new LinAlg<Quotient<BigRational>>();
 
-        // test rowEchelonForm
+        // test rowEchelonForm and rowEchelonFormSparse
         GenMatrix<Quotient<BigRational>> B = lu.rowEchelonForm(A);
-        //System.out.println("B:   " + B.toScript());
+        //System.out.println("B:   " + B);
+        long r = lu.rankRE(B);
+        GenMatrix<Quotient<BigRational>> D = lu.rowEchelonFormSparse(B);
+        //System.out.println("D:   " + D);
+        assertTrue("rank1 == rank2: ", lu.rankRE(D) == r);
 
         // test LU decomposition
         A = new GenMatrix<Quotient<BigRational>>(mfac, mm);

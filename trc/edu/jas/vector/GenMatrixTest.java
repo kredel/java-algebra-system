@@ -444,12 +444,17 @@ public class GenMatrixTest extends TestCase {
         //System.out.println("C*I:   " + CI.toScript());
         assertTrue("Ap*I == 1: ", CI.isONE());
 
-        GenMatrix<BigRational> C2 = mfac.random(3, 0.5f);
-        GenMatrix<BigRational> CA = Ap.divide(C2);
-        GenMatrix<BigRational> AC = Ap.divideLeft(C2);
+        GenMatrix<BigRational> C = mfac.random(3, 0.5f);
+        GenMatrix<BigRational> CA = C.divide(Ap);
+        GenMatrix<BigRational> AC = C.divideLeft(Ap);
         //System.out.println("C/A :    " + CA);
         //System.out.println("A\\C :   " + AC);
         assertFalse("C/A != A\\C: ", CA.equals(AC));
+
+        GenMatrix<BigRational> B = CA.multiply(Ap);
+        assertEquals("C == C/A*A: ", B, C);
+        B = Ap.multiply(AC);
+        assertEquals("C == A*A\\C: ", B, C);
     }
 
 
@@ -647,13 +652,13 @@ public class GenMatrixTest extends TestCase {
      */
     public void testRowEchelonForm() {
         BigRational cfac = new BigRational(11);
-        int n = 10;
+        int n = 50;
         GenMatrixRing<BigRational> mfac = new GenMatrixRing<BigRational>(cfac, n, n);//rows, cols);
         //System.out.println("mfac = " + mfac.toScript());
         GenMatrixRing<BigRational> tfac = mfac.transpose();
 
-        GenMatrix<BigRational> A, Ap, App, T, Tpp;
-        A = mfac.random(kl, 0.9f / n);
+        GenMatrix<BigRational> A, Ap, App, B, T, Tpp;
+        A = mfac.random(kl, 2.0f / n);
         //A = mfac.getONE();
         //A = mfac.getZERO(); A.setMutate(3,4, cfac.parse("2")); A.setMutate(5,4, cfac.parse("3"));
         if (n < 10)
@@ -674,7 +679,7 @@ public class GenMatrixTest extends TestCase {
         // test ranks
         long r1 = 0, r2 = 0;
         App = lu.rowEchelonForm(A);
-        //System.out.println("A:   " + A);
+        //System.out.println("A:   " + Ap);
         //System.out.println("App: " + App);
         r1 = lu.rankRE(App);
         //System.out.println("rank A = " + r1 + ", c = " + c + ", n = " + n);
@@ -687,6 +692,15 @@ public class GenMatrixTest extends TestCase {
         //System.out.println("rank A = " + r1 + ", c = " + c + ", n = " + n);
         //System.out.println("rank T = " + r2 + ", k = " + k);
         assertTrue("0 <= rank < n: ", 0 <= r2 && r2 <= n);
+        //assertTrue("rank == rank^t: ", r1 == r2);
+
+        // reduce upper triagonal part
+        //System.out.println("App: " + App);
+        B = lu.rowEchelonFormSparse(App);
+        //System.out.println("B:   " + B);
+        //System.out.println("B^2: " + B.power(2));
+        r2 = lu.rankRE(B);
+        assertTrue("rank1 == rank2: ", r1 == r2);
     }
 
 }
