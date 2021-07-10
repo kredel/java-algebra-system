@@ -5,6 +5,8 @@
 package edu.jas.ufd;
 
 import java.util.SortedMap;
+import java.util.List;
+import java.util.ArrayList;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -12,6 +14,8 @@ import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.ModInt;
+import edu.jas.arith.ModIntRing;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -20,6 +24,12 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.TermOrderByName;
+import edu.jas.ps.UnivPowerSeries;
+import edu.jas.ps.UnivPowerSeriesRing;
+import edu.jas.vector.GenVector;
+import edu.jas.vector.GenMatrix;
+import edu.jas.vector.GenMatrixRing;
+import edu.jas.vector.LinAlg;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -489,6 +499,54 @@ public class PolyUfdUtilTest extends TestCase {
         System.out.println("fnPQ = " + fnPQ);
         SortedMap<GenPolynomial<BigRational>,Long> fnR = facr.factors(nR);
         System.out.println("fnR = " + fnR);
+    }
+
+
+    /**
+     * Q matrix construction for Berlekamp.
+     */
+    public void testQmatix() {
+        int q = 11;
+        ModIntRing mi = new ModIntRing(q);
+        //System.out.println("mi = " + mi.toScript());
+        GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[]{"x"});
+        System.out.println("pfac = " + pfac.toScript());
+        GenPolynomial<ModInt> A  = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
+        System.out.println("A = " + A.toScript());
+        ArrayList<ArrayList<ModInt>> Q = PolyUfdUtil.<ModInt>constructQmatrix(A);
+        System.out.println("Q = " + Q);
+
+        int n = Q.size();
+        int m = Q.get(0).size();
+        GenMatrixRing<ModInt> mfac = new GenMatrixRing<ModInt>(mi,n,m);
+        System.out.println("mfac = " + mfac.toScript());
+        GenMatrix<ModInt> Qm = new GenMatrix<ModInt>(mfac,Q);
+        System.out.println("Qm = " + Qm);
+        GenMatrix<ModInt> Qm1 = Qm.subtract(mfac.getONE());
+        System.out.println("Qm1 = " + Qm1);
+        LinAlg<ModInt> lu = new LinAlg<ModInt>();
+        List<GenVector<ModInt>> Nsb = lu.nullSpaceBasis(Qm1);
+        System.out.println("Nsb = " + Nsb);
+        int k = Nsb.size();
+        int d = (int)A.degree(0);
+        //GenMatrixRing<ModInt> nfac = new GenMatrixRing<ModInt>(mi,k,d);
+        GenMatrix<ModInt> Ns = mfac.fromVectors(Nsb);
+        System.out.println("Ns = " + Ns);
+        GenMatrix<ModInt> L1 = Ns.negate(); //mfac.getONE().subtract(Ns);
+        System.out.println("L1 = " + L1);
+
+        //UnivPowerSeriesRing<ModInt> ufac = new UnivPowerSeriesRing<ModInt>(pfac);
+        //System.out.println("ufac = " + ufac.toScript());
+
+        for (int i = 0; i < L1.ring.rows; i++) {
+            GenVector<ModInt> rv = L1.getRow(i);
+            GenPolynomial<ModInt> rp = pfac.fromVector(rv);
+            System.out.println("rp = " + rp.toScript());
+        }
+        //A  = pfac.random(10);
+        //System.out.println("A = " + A.toScript());
+        //Q = PolyUfdUtil.<ModInt>constructQmatrix(A);
+        //System.out.println("Q = " + Q);
     }
 
 }

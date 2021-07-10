@@ -364,6 +364,25 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
 
 
     /**
+     * From List of GenVectors.
+     * @param om list of GenVectors.
+     */
+    public GenMatrix<C> fromVectors(List<GenVector<C>> om) {
+        List<List<C>> mat = new ArrayList<List<C>>();
+        for (GenVector<C> row : om) {
+            List<C> nr = new ArrayList<C>(row.val);
+            mat.add(nr);
+        }
+        //List<C> zero = this.getZERO().getRow(0).val;
+        //for (int i = mat.size(); i < rows; i++) {
+        //    mat.add(zero);
+        //}
+        GenMatrixRing<C> rfac = new GenMatrixRing<C>(coFac,mat.size(),cols);
+        return rfac.fromList(mat);
+    }
+
+
+    /**
      * Random matrix.
      * @param k size of random coefficients.
      */

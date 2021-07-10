@@ -17,6 +17,8 @@ import org.apache.logging.log4j.Logger;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.Modular;
+import edu.jas.arith.ModularRingFactory;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.ExpVector;
@@ -24,6 +26,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrderByName;
+import edu.jas.ps.UnivPowerSeries;
+import edu.jas.ps.UnivPowerSeriesRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -630,6 +634,59 @@ public class PolyUfdUtil {
         GenPolynomial<C> mod = randomIrreduciblePolynomial(cfac, degree);
         AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(mod, true);
         return afac;
+    }
+
+
+    /**
+     * Construct Berlekamp Q matrix.
+     * @param A univariate modular polynomial.
+     * @return Q matrix.
+     */
+    public static <C extends GcdRingElem<C> & Modular> ArrayList<ArrayList<C>> constructQmatrix(GenPolynomial<C> A) {
+        ArrayList<ArrayList<C>> Q = new ArrayList<ArrayList<C>>();
+        if (A == null || A.isZERO()) {
+            return Q;
+        }
+        GenPolynomialRing<C> pfac = A.ring;
+        System.out.println("pfac = " + pfac.toScript());
+        ModularRingFactory cfac = (ModularRingFactory)pfac.coFac;
+        long q = cfac.getIntegerModul().longValueExact();
+        long n = A.degree(0);
+        GenPolynomial<C> x = pfac.univariate(0);
+        //System.out.println("x = " + x.toScript());
+        GenPolynomial<C> r = pfac.getONE();
+        //System.out.println("r = " + r.toScript());
+        List<GenPolynomial<C>> Qp = new ArrayList<GenPolynomial<C>>();
+        Qp.add(r);
+        boolean once = true;
+        for (long m = 1; m <= (n-1)*q; m++) {
+            r = r.multiply(x).remainder(A);
+            //System.out.println("m = " + m + ", r = " + r.toScript());
+            if (m % q == 0) { // q | m
+                Qp.add(r);
+                if (once) {
+                    x = r;
+                    //System.out.println("x = " + x.toScript());
+                    once = false;
+                }
+                m += (q-1);
+            }
+        }
+        System.out.println("Qp = " + Qp);
+        UnivPowerSeriesRing<C> psfac = new UnivPowerSeriesRing<C>(pfac);
+        System.out.println("psfac = " + psfac.toScript());
+        for (GenPolynomial<C> p : Qp) {
+            UnivPowerSeries<C> ps = psfac.fromPolynomial(p);
+            //System.out.println("ps = " + ps.toScript());
+            ArrayList<C> pr = new ArrayList<C>();
+            for (int d = 0; d < n; d++) {
+                C c = ps.coefficient(d);
+                pr.add(c);
+            }
+            Q.add(pr);
+        }
+        //System.out.println("Q = " + Q);
+        return Q;
     }
 
 
