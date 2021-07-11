@@ -534,19 +534,48 @@ public class PolyUfdUtilTest extends TestCase {
         System.out.println("Ns = " + Ns);
         GenMatrix<ModInt> L1 = Ns.negate(); //mfac.getONE().subtract(Ns);
         System.out.println("L1 = " + L1);
-
-        //UnivPowerSeriesRing<ModInt> ufac = new UnivPowerSeriesRing<ModInt>(pfac);
-        //System.out.println("ufac = " + ufac.toScript());
-
         for (int i = 0; i < L1.ring.rows; i++) {
             GenVector<ModInt> rv = L1.getRow(i);
             GenPolynomial<ModInt> rp = pfac.fromVector(rv);
             System.out.println("rp = " + rp.toScript());
         }
-        //A  = pfac.random(10);
-        //System.out.println("A = " + A.toScript());
-        //Q = PolyUfdUtil.<ModInt>constructQmatrix(A);
-        //System.out.println("Q = " + Q);
+
+        A  = pfac.random(10);
+        System.out.println("A = " + A.toScript());
+        Q = PolyUfdUtil.<ModInt>constructQmatrix(A);
+        System.out.println("Q = " + Q);
+    }
+
+
+    /**
+     * Berlekamp factorization test.
+     */
+    public void testFactorBerlekamp() {
+        int q = 11;
+        ModIntRing mi = new ModIntRing(q);
+        //System.out.println("mi = " + mi.toScript());
+        GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[]{"x"});
+        System.out.println("pfac = " + pfac.toScript());
+        GenPolynomial<ModInt> A  = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
+        System.out.println("A = " + A.toScript());
+
+        FactorAbstract<ModInt> bf = new FactorModularBerlekamp<ModInt>(pfac.coFac);
+        List<GenPolynomial<ModInt>> factors = bf.baseFactorsSquarefree(A);
+        System.out.println("factors = " + factors);
+        //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
+        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A,factors));
+
+        GenPolynomial<ModInt> B  = pfac.random(5).monic();
+        GenPolynomial<ModInt> C  = pfac.random(5).monic();
+	A = B.multiply(C);
+        System.out.println("A = " + A.toScript());
+        System.out.println("B = " + B.toScript());
+        System.out.println("C = " + C.toScript());
+
+        factors = bf.baseFactorsSquarefree(A);
+        System.out.println("factors = " + factors);
+        //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
+        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A,factors));
     }
 
 }
