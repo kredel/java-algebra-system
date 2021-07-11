@@ -508,7 +508,10 @@ public class PolyUfdUtilTest extends TestCase {
     public void testQmatix() {
         int q = 11;
         ModIntRing mi = new ModIntRing(q);
-        //System.out.println("mi = " + mi.toScript());
+        // for (ModInt s : mi) {
+        //      System.out.print(" " + s + " ");
+        // }
+        // System.out.println("mi = " + mi.toScript());
         GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[]{"x"});
         System.out.println("pfac = " + pfac.toScript());
         GenPolynomial<ModInt> A  = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");

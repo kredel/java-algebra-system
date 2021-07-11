@@ -124,8 +124,10 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
         System.out.println("trials = " + trials);
         factors.add(P);
         // ModularRingFactory cofac = (ModularRingFactory) pfac.coFac;
-        // long q = cofac.getIntegerModul().longValueExact();
-        // System.out.println("q = " + q);
+        // for (Object so : cofac) {
+        //     MOD sm = (MOD) so;
+        //     System.out.print(" " + sm + " ");
+        // }
         MOD inc = pfac.coFac.getONE();
         for (GenPolynomial<MOD> t : trials) {
             if (factors.size() == k || factors.size() == 0) {
@@ -135,7 +137,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
             GenPolynomial<MOD> a = factors.remove(0);
             System.out.println("a = " + a);
             MOD s = pfac.coFac.getZERO();
-	    do {//for (MOD s : pfac.coFac) {
+            do {//for (MOD s : pfac.coFac) {
                 //System.out.println("s = " + s);
                 GenPolynomial<MOD> v = t.subtract(s);
                 s = s.sum(inc);
