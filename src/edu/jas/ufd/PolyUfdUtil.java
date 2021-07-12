@@ -648,7 +648,7 @@ public class PolyUfdUtil {
             return Q;
         }
         GenPolynomialRing<C> pfac = A.ring;
-        System.out.println("pfac = " + pfac.toScript());
+        //System.out.println("pfac = " + pfac.toScript());
         ModularRingFactory cfac = (ModularRingFactory)pfac.coFac;
         long q = cfac.getIntegerModul().longValueExact();
         long n = A.degree(0);
@@ -672,9 +672,9 @@ public class PolyUfdUtil {
                 m += (q-1);
             }
         }
-        System.out.println("Qp = " + Qp);
+        //System.out.println("Qp = " + Qp);
         UnivPowerSeriesRing<C> psfac = new UnivPowerSeriesRing<C>(pfac);
-        System.out.println("psfac = " + psfac.toScript());
+        //System.out.println("psfac = " + psfac.toScript());
         for (GenPolynomial<C> p : Qp) {
             UnivPowerSeries<C> ps = psfac.fromPolynomial(p);
             //System.out.println("ps = " + ps.toScript());

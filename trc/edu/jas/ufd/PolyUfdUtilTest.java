@@ -513,40 +513,66 @@ public class PolyUfdUtilTest extends TestCase {
         // }
         // System.out.println("mi = " + mi.toScript());
         GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[]{"x"});
-        System.out.println("pfac = " + pfac.toScript());
+        //System.out.println("pfac = " + pfac.toScript());
         GenPolynomial<ModInt> A  = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
-        System.out.println("A = " + A.toScript());
+        //System.out.println("A = " + A.toScript());
+        int d = (int)A.degree(0);
         ArrayList<ArrayList<ModInt>> Q = PolyUfdUtil.<ModInt>constructQmatrix(A);
-        System.out.println("Q = " + Q);
-
+        //System.out.println("Q = " + Q);
         int n = Q.size();
         int m = Q.get(0).size();
+        assertTrue("size(Q) == deg(a): " + Q, n == d);
+        assertTrue("size(Q(0)) == deg(a): " + Q, m == d);
+
         GenMatrixRing<ModInt> mfac = new GenMatrixRing<ModInt>(mi,n,m);
-        System.out.println("mfac = " + mfac.toScript());
+        //System.out.println("mfac = " + mfac.toScript());
         GenMatrix<ModInt> Qm = new GenMatrix<ModInt>(mfac,Q);
-        System.out.println("Qm = " + Qm);
+        //System.out.println("Qm = " + Qm);
         GenMatrix<ModInt> Qm1 = Qm.subtract(mfac.getONE());
-        System.out.println("Qm1 = " + Qm1);
+        //System.out.println("Qm1 = " + Qm1);
+
         LinAlg<ModInt> lu = new LinAlg<ModInt>();
         List<GenVector<ModInt>> Nsb = lu.nullSpaceBasis(Qm1);
-        System.out.println("Nsb = " + Nsb);
-        int k = Nsb.size();
-        int d = (int)A.degree(0);
+        //System.out.println("Nsb = " + Nsb);
         //GenMatrixRing<ModInt> nfac = new GenMatrixRing<ModInt>(mi,k,d);
         GenMatrix<ModInt> Ns = mfac.fromVectors(Nsb);
-        System.out.println("Ns = " + Ns);
+        //System.out.println("Ns = " + Ns);
         GenMatrix<ModInt> L1 = Ns.negate(); //mfac.getONE().subtract(Ns);
-        System.out.println("L1 = " + L1);
-        for (int i = 0; i < L1.ring.rows; i++) {
-            GenVector<ModInt> rv = L1.getRow(i);
-            GenPolynomial<ModInt> rp = pfac.fromVector(rv);
-            System.out.println("rp = " + rp.toScript());
-        }
+        //System.out.println("L1 = " + L1);
+        int k = L1.ring.rows;
+        //System.out.println("k = " + k);
+        assertTrue("0 <= k && k < n: " + L1, 0 <= k && k < n);
 
-        A  = pfac.random(10);
-        System.out.println("A = " + A.toScript());
+        // test with random polynomial
+        do {
+            A  = pfac.random(10);
+            System.out.println("A = " + A.toScript());
+	} while (A.isZERO() || A.degree(0) <= 1 );
+        d = (int)A.degree(0);
         Q = PolyUfdUtil.<ModInt>constructQmatrix(A);
-        System.out.println("Q = " + Q);
+        //System.out.println("Q = " + Q);
+        n = Q.size();
+        m = Q.get(0).size();
+        assertTrue("size(Q) == deg(a): " + Q, n == d);
+        assertTrue("size(Q(0)) == deg(a): " + Q, m == d);
+
+        mfac = new GenMatrixRing<ModInt>(mi,n,m);
+        //System.out.println("mfac = " + mfac.toScript());
+        Qm = new GenMatrix<ModInt>(mfac,Q);
+        //System.out.println("Qm = " + Qm);
+        Qm1 = Qm.subtract(mfac.getONE());
+        //System.out.println("Qm1 = " + Qm1);
+
+        Nsb = lu.nullSpaceBasis(Qm1);
+        //System.out.println("Nsb = " + Nsb);
+        //GenMatrixRing<ModInt> nfac = new GenMatrixRing<ModInt>(mi,k,d);
+        Ns = mfac.fromVectors(Nsb);
+        //System.out.println("Ns = " + Ns);
+        L1 = Ns.negate(); //mfac.getONE().subtract(Ns);
+        //System.out.println("L1 = " + L1);
+        k = L1.ring.rows;
+        //System.out.println("k = " + k);
+        assertTrue("0 <= k && k < n: " + L1, 0 <= k && k < n);
     }
 
 
