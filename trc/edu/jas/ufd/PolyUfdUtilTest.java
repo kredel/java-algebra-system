@@ -26,6 +26,7 @@ import edu.jas.poly.TermOrder;
 import edu.jas.poly.TermOrderByName;
 import edu.jas.ps.UnivPowerSeries;
 import edu.jas.ps.UnivPowerSeriesRing;
+import edu.jas.structure.Power;
 import edu.jas.vector.GenVector;
 import edu.jas.vector.GenMatrix;
 import edu.jas.vector.GenMatrixRing;
@@ -506,7 +507,7 @@ public class PolyUfdUtilTest extends TestCase {
      * Q matrix construction for Berlekamp.
      */
     public void testQmatix() {
-        int q = 11;
+        int q = 11; //32003; //11;
         ModIntRing mi = new ModIntRing(q);
         // for (ModInt s : mi) {
         //      System.out.print(" " + s + " ");
@@ -547,10 +548,10 @@ public class PolyUfdUtilTest extends TestCase {
         do {
             A  = pfac.random(10);
             System.out.println("A = " + A.toScript());
-	} while (A.isZERO() || A.degree(0) <= 1 );
+        } while (A.isZERO() || A.degree(0) <= 1 );
         d = (int)A.degree(0);
         Q = PolyUfdUtil.<ModInt>constructQmatrix(A);
-        //System.out.println("Q = " + Q);
+        System.out.println("Q = " + Q);
         n = Q.size();
         m = Q.get(0).size();
         assertTrue("size(Q) == deg(a): " + Q, n == d);
@@ -572,15 +573,66 @@ public class PolyUfdUtilTest extends TestCase {
         //System.out.println("L1 = " + L1);
         k = L1.ring.rows;
         //System.out.println("k = " + k);
-        assertTrue("0 <= k && k < n: " + L1, 0 <= k && k < n);
+        assertTrue("0 <= k && k < n: " + L1, 0 <= k && k <= n);
+
+        // test with modPower
+        GenPolynomial<ModInt> x = pfac.univariate(0);
+        //System.out.println("x = " + x.toScript());
+        GenPolynomial<ModInt> r = pfac.getONE();
+        //System.out.println("r = " + r.toScript());
+        ArrayList<GenPolynomial<ModInt>> Qp = new ArrayList<GenPolynomial<ModInt>>();
+        Qp.add(r);
+        GenPolynomial<ModInt> pow = Power.<GenPolynomial<ModInt>> modPositivePower(x,q,A);
+        //System.out.println("pow = " + pow.toScript());
+        Qp.add(pow);
+        r = pow;
+        for (int i = 2; i < d; i++) {
+            r = r.multiply(pow).remainder(A);
+            // GenPolynomial<ModInt> pw = Power.<GenPolynomial<ModInt>> modPositivePower(x,q,A);
+            Qp.add(r);
+        }
+        System.out.println("Qp = " + Qp);
+        assertTrue("deg(r) < deg(A): " + Qp, r.degree(0) <= A.degree(0));
     }
 
 
     /**
-     * Berlekamp factorization test.
+     * Berlekamp small prime factorization test.
      */
-    public void testFactorBerlekamp() {
-        int q = 11;
+    public void testFactorBerlekampSmall() {
+        int q = 11; //32003; //11;
+        ModIntRing mi = new ModIntRing(q);
+        //System.out.println("mi = " + mi.toScript());
+        GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[]{"x"});
+        //System.out.println("pfac = " + pfac.toScript());
+        GenPolynomial<ModInt> A  = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
+        System.out.println("A = " + A.toScript());
+
+        FactorAbstract<ModInt> bf = new FactorModularBerlekamp<ModInt>(pfac.coFac);
+        List<GenPolynomial<ModInt>> factors = bf.baseFactorsSquarefree(A);
+        System.out.println("factors = " + factors + "\n");
+        //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
+        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A,factors));
+
+        GenPolynomial<ModInt> B  = pfac.random(5).monic();
+        GenPolynomial<ModInt> C  = pfac.random(5).monic();
+        A = B.multiply(C);
+        System.out.println("A = " + A.toScript());
+        System.out.println("B = " + B.toScript());
+        System.out.println("C = " + C.toScript());
+
+        factors = bf.baseFactorsSquarefree(A);
+        System.out.println("factors = " + factors);
+        //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
+        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A,factors));
+    }
+
+
+    /**
+     * Berlekamp big prime factorization test.
+     */
+    public void testFactorBerlekampBig() {
+        int q = 32003; //11;
         ModIntRing mi = new ModIntRing(q);
         //System.out.println("mi = " + mi.toScript());
         GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[]{"x"});
@@ -588,20 +640,21 @@ public class PolyUfdUtilTest extends TestCase {
         GenPolynomial<ModInt> A  = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
         System.out.println("A = " + A.toScript());
 
-        FactorAbstract<ModInt> bf = new FactorModularBerlekamp<ModInt>(pfac.coFac);
-        List<GenPolynomial<ModInt>> factors = bf.baseFactorsSquarefree(A);
-        System.out.println("factors = " + factors);
+        //FactorAbstract<ModInt> bf = new FactorModularBerlekamp<ModInt>(pfac.coFac);
+        FactorModularBerlekamp<ModInt> bf = new FactorModularBerlekamp<ModInt>(pfac.coFac);
+        List<GenPolynomial<ModInt>> factors = bf.baseFactorsSquarefreeBigPrime(A);
+        System.out.println("factors = " + factors + "\n");
         //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
         assertTrue("A == prod(factors): " + factors, bf.isFactorization(A,factors));
 
         GenPolynomial<ModInt> B  = pfac.random(5).monic();
         GenPolynomial<ModInt> C  = pfac.random(5).monic();
-	A = B.multiply(C);
+        A = B.multiply(C);
         System.out.println("A = " + A.toScript());
         System.out.println("B = " + B.toScript());
         System.out.println("C = " + C.toScript());
 
-        factors = bf.baseFactorsSquarefree(A);
+        factors = bf.baseFactorsSquarefreeBigPrime(A);
         System.out.println("factors = " + factors);
         //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
         assertTrue("A == prod(factors): " + factors, bf.isFactorization(A,factors));

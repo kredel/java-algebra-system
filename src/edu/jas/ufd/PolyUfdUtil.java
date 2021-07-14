@@ -31,6 +31,7 @@ import edu.jas.ps.UnivPowerSeriesRing;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.structure.Power;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.util.ListUtil;
 
@@ -651,26 +652,34 @@ public class PolyUfdUtil {
         //System.out.println("pfac = " + pfac.toScript());
         ModularRingFactory cfac = (ModularRingFactory)pfac.coFac;
         long q = cfac.getIntegerModul().longValueExact();
-        long n = A.degree(0);
+        long d = A.degree(0);
         GenPolynomial<C> x = pfac.univariate(0);
         //System.out.println("x = " + x.toScript());
         GenPolynomial<C> r = pfac.getONE();
         //System.out.println("r = " + r.toScript());
         List<GenPolynomial<C>> Qp = new ArrayList<GenPolynomial<C>>();
         Qp.add(r);
-        boolean once = true;
-        for (long m = 1; m <= (n-1)*q; m++) {
-            r = r.multiply(x).remainder(A);
-            //System.out.println("m = " + m + ", r = " + r.toScript());
-            if (m % q == 0) { // q | m
-                Qp.add(r);
-                if (once) {
-                    x = r;
-                    //System.out.println("x = " + x.toScript());
-                    once = false;
-                }
-                m += (q-1);
-            }
+        // boolean once = true;
+        // for (long m = 1; m <= (n-1)*q; m++) {
+        //     r = r.multiply(x).remainder(A);
+        //     //System.out.println("m = " + m + ", r = " + r.toScript());
+        //     if (m % q == 0) { // q | m
+        //         Qp.add(r);
+        //         if (once) {
+        //             x = r;
+        //             //System.out.println("x = " + x.toScript());
+        //             once = false;
+        //         }
+        //         m += (q-1);
+        //     }
+        // }
+        GenPolynomial<C> pow = Power.<GenPolynomial<C>> modPositivePower(x,q,A);
+        //System.out.println("pow = " + pow.toScript());
+        Qp.add(pow);
+        r = pow;
+        for (int i = 2; i < d; i++) {
+            r = r.multiply(pow).remainder(A);
+            Qp.add(r);
         }
         //System.out.println("Qp = " + Qp);
         UnivPowerSeriesRing<C> psfac = new UnivPowerSeriesRing<C>(pfac);
@@ -679,8 +688,8 @@ public class PolyUfdUtil {
             UnivPowerSeries<C> ps = psfac.fromPolynomial(p);
             //System.out.println("ps = " + ps.toScript());
             ArrayList<C> pr = new ArrayList<C>();
-            for (int d = 0; d < n; d++) {
-                C c = ps.coefficient(d);
+            for (int i = 0; i < d; i++) {
+                C c = ps.coefficient(i);
                 pr.add(c);
             }
             Q.add(pr);

@@ -27,6 +27,7 @@ import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
 import edu.jas.vector.GenVector;
+import edu.jas.vector.GenVectorModul;
 import edu.jas.vector.GenMatrix;
 import edu.jas.vector.GenMatrixRing;
 import edu.jas.vector.LinAlg;
@@ -74,14 +75,29 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
     @Override
     public List<GenPolynomial<MOD>> baseFactorsSquarefree(GenPolynomial<MOD> P) {
         if (P == null) {
-            throw new IllegalArgumentException(this.getClass().getName() + " P == null");
+            throw new IllegalArgumentException("P == null not allowed");
+        }
+        ModularRingFactory cfac = (ModularRingFactory)P.ring.coFac;
+        long q = cfac.getIntegerModul().longValueExact();
+        if (q < 10000) {
+            return baseFactorsSquarefreeSmallPrime(P);
+        }
+        return baseFactorsSquarefreeBigPrime(P);
+    }
+
+
+    /**
+     * GenPolynomial base factorization of a squarefree polynomial.
+     * Small prime version of Berlekamps algorithm.
+     * @param P squarefree and monic! GenPolynomial.
+     * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
+     */
+    public List<GenPolynomial<MOD>> baseFactorsSquarefreeSmallPrime(GenPolynomial<MOD> P) {
+        if (P == null) {
+            throw new IllegalArgumentException("P == null");
         }
         List<GenPolynomial<MOD>> factors = new ArrayList<GenPolynomial<MOD>>();
         if (P.isZERO()) {
-            return factors;
-        }
-        if (P.isONE()) {
-            factors.add(P);
             return factors;
         }
         GenPolynomialRing<MOD> pfac = P.ring;
@@ -91,31 +107,34 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
         if (!P.leadingBaseCoefficient().isONE()) {
             throw new IllegalArgumentException("ldcf(P) != 1: " + P);
         }
+        if (P.isONE() || P.degree(0) <= 1) {
+            factors.add(P);
+            return factors;
+        }
         ArrayList<ArrayList<MOD>> Q = PolyUfdUtil.<MOD>constructQmatrix(P);
         System.out.println("Q = " + Q);
 
         int n = Q.size();
         int m = Q.get(0).size();
         GenMatrixRing<MOD> mfac = new GenMatrixRing<MOD>(pfac.coFac,n,m);
-        System.out.println("mfac = " + mfac.toScript());
+        //System.out.println("mfac = " + mfac.toScript());
         GenMatrix<MOD> Qm = new GenMatrix<MOD>(mfac,Q);
-        System.out.println("Qm = " + Qm);
+        //System.out.println("Qm = " + Qm);
         GenMatrix<MOD> Qm1 = Qm.subtract(mfac.getONE());
-        System.out.println("Qm1 = " + Qm1);
+        //System.out.println("Qm1 = " + Qm1);
         LinAlg<MOD> lu = new LinAlg<MOD>();
         List<GenVector<MOD>> Nsb = lu.nullSpaceBasis(Qm1);
         System.out.println("Nsb = " + Nsb);
         int k = Nsb.size();
         int d = (int)P.degree(0);
         GenMatrix<MOD> Ns = mfac.fromVectors(Nsb);
-        System.out.println("Ns = " + Ns);
+        //System.out.println("Ns = " + Ns);
         GenMatrix<MOD> L1 = Ns.negate(); //mfac.getONE().subtract(Ns);
-        System.out.println("L1 = " + L1);
+        //System.out.println("L1 = " + L1);
         List<GenPolynomial<MOD>> trials = new ArrayList<GenPolynomial<MOD>>();
         for (int i = 0; i < L1.ring.rows; i++) {
             GenVector<MOD> rv = L1.getRow(i);
             GenPolynomial<MOD> rp = pfac.fromVector(rv);
-            System.out.println("rp = " + rp.toScript());
             if (!rp.isONE()) { 
                 trials.add(rp);
             }
@@ -156,6 +175,124 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
                 factors.add(a);
             }
         }
+        //System.out.println("factors  = " + factors);
+        factors = PolyUtil.<MOD> monic(factors);
+        SortedSet<GenPolynomial<MOD>> ss = new TreeSet<GenPolynomial<MOD>>(factors);
+        //System.out.println("sorted   = " + ss);
+        factors.clear();
+        factors.addAll(ss);
+        return factors;
+    }
+
+
+    /**
+     * GenPolynomial base factorization of a squarefree polynomial.
+     * Big prime version of Berlekamps algorithm.
+     * @param P squarefree and monic! GenPolynomial.
+     * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
+     */
+    public List<GenPolynomial<MOD>> baseFactorsSquarefreeBigPrime(GenPolynomial<MOD> P) {
+        if (P == null) {
+            throw new IllegalArgumentException("P == null");
+        }
+        List<GenPolynomial<MOD>> factors = new ArrayList<GenPolynomial<MOD>>();
+        if (P.isZERO()) {
+            return factors;
+        }
+        GenPolynomialRing<MOD> pfac = P.ring;
+        if (pfac.nvar > 1) {
+            throw new IllegalArgumentException("only for univariate polynomials");
+        }
+        if (!P.leadingBaseCoefficient().isONE()) {
+            throw new IllegalArgumentException("ldcf(P) != 1: " + P);
+        }
+        if (P.isONE() || P.degree(0) <= 1) {
+            factors.add(P);
+            return factors;
+        }
+        ArrayList<ArrayList<MOD>> Q = PolyUfdUtil.<MOD>constructQmatrix(P);
+        System.out.println("Q = " + Q);
+        int n = Q.size();
+        int m = Q.get(0).size();
+        GenMatrixRing<MOD> mfac = new GenMatrixRing<MOD>(pfac.coFac,n,m);
+        //System.out.println("mfac = " + mfac.toScript());
+        GenMatrix<MOD> Qm = new GenMatrix<MOD>(mfac,Q);
+        //System.out.println("Qm = " + Qm);
+        GenMatrix<MOD> Qm1 = Qm.subtract(mfac.getONE());
+        //System.out.println("Qm1 = " + Qm1);
+        LinAlg<MOD> lu = new LinAlg<MOD>();
+        List<GenVector<MOD>> Nsb = lu.nullSpaceBasis(Qm1);
+        System.out.println("Nsb = " + Nsb);
+        int k = Nsb.size();
+        int d = (int)P.degree(0);
+        GenMatrix<MOD> Ns = mfac.fromVectors(Nsb);
+        //System.out.println("Ns = " + Ns);
+        GenMatrix<MOD> L1 = Ns.negate(); //mfac.getONE().subtract(Ns);
+        //System.out.println("L1 = " + L1);
+        List<GenPolynomial<MOD>> trials = new ArrayList<GenPolynomial<MOD>>();
+        for (int i = 0; i < L1.ring.rows; i++) {
+            GenVector<MOD> rv = L1.getRow(i);
+            GenPolynomial<MOD> rp = pfac.fromVector(rv);
+            //System.out.println("rp = " + rp.toScript());
+            trials.add(rp);
+        }
+        System.out.println("k = " + k);
+        System.out.println("trials = " + trials);
+        factors.add(P);
+        GenVectorModul<MOD> vfac = new GenVectorModul<MOD>(pfac.coFac,k);
+        System.out.println("vfac = " + vfac.toScript());
+        do {
+            // if (factors.size() == k) {
+            //     break;
+            // }
+            GenPolynomial<MOD> a = factors.remove(0);
+            System.out.println("a = " + a);
+            if (a.degree(0) <= 1) {
+                factors.add(a);
+                continue;
+            }
+            GenVector<MOD> rv = vfac.random(10, 0.9f);
+            System.out.println("rv = " + rv.toScript());
+            GenPolynomial<MOD> rpol = pfac.getZERO();
+            int i = 0; 
+            for (GenPolynomial<MOD> t : trials) {
+                MOD c = rv.get(i++);
+                GenPolynomial<MOD> s = t.multiply(c);
+                rpol = rpol.sum(s);
+            }
+            rpol = rpol.monic();
+            if (rpol.isONE()) {
+                factors.add(a);
+                continue;
+            }
+            //System.out.println("rpol = " + rpol.toScript());
+            ModularRingFactory cfac = (ModularRingFactory) pfac.coFac;
+            long q = cfac.getIntegerModul().longValueExact();
+            // if q ...
+            long e = (q-1)/2;
+            //System.out.println("q = " + q + ", e = " + e);
+            GenPolynomial<MOD> pow = Power.<GenPolynomial<MOD>> modPositivePower(rpol,e,a);
+            rpol = pow.subtract(pfac.getONE()).monic();
+            System.out.println("rpol^e-1 = " + rpol.toScript());
+            if (rpol.isZERO() || rpol.isONE()) {
+                factors.add(a);
+                continue;
+            }
+            GenPolynomial<MOD> g = rpol.gcd(a);
+            System.out.println("g = " + g);
+            if (g.isONE()) {
+                factors.add(a);
+                continue;
+            }
+            factors.add(g);
+            a = a.divide(g);
+            System.out.println("a/g = " + a);
+            if (!a.isONE()) {
+                factors.add(a);
+            }
+            System.out.println("factors  = " + factors);
+        } while (factors.size() < k);
+
         //System.out.println("factors  = " + factors);
         factors = PolyUtil.<MOD> monic(factors);
         SortedSet<GenPolynomial<MOD>> ss = new TreeSet<GenPolynomial<MOD>>(factors);
