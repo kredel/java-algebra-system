@@ -17,6 +17,8 @@ import edu.jas.arith.ModLongRing;
 import edu.jas.arith.Modular;
 import edu.jas.arith.ModularRingFactory;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.AlgebraicNumber;
+import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
@@ -36,7 +38,7 @@ import edu.jas.vector.LinAlg;
  * @author Heinz Kredel
  */
 
-public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> extends FactorAbsolute<MOD> {
+public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends FactorAbsolute<MOD> {
 
 
     private static final Logger logger = LogManager.getLogger(FactorModularBerlekamp.class);
@@ -151,9 +153,9 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
             System.out.println("a = " + a);
             MOD s = pfac.coFac.getZERO();
             do {//for (MOD s : pfac.coFac) {
-                //System.out.println("s = " + s);
+                System.out.println("s = " + s);
                 GenPolynomial<MOD> v = t.subtract(s);
-                s = s.sum(inc);
+                s = s.sum(inc); // TODO 
                 GenPolynomial<MOD> g = v.gcd(a);
                 if (g.isONE() || g.equals(a)) {
                     continue;
@@ -238,10 +240,15 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
         System.out.println("trials = " + trials);
         factors.add(P);
         GenVectorModul<MOD> vfac = new GenVectorModul<MOD>(pfac.coFac, k);
-        System.out.println("vfac = " + vfac.toScript());
-        ModularRingFactory cfac = (ModularRingFactory) pfac.coFac;
-        long q = cfac.getIntegerModul().longValueExact();
+        //System.out.println("vfac = " + vfac.toScript());
+        //ModularRingFactory cfac = (ModularRingFactory) pfac.coFac;
+        //long q = cfac.getIntegerModul().longValueExact();
+        long q = pfac.coFac.characteristic().longValueExact();
         long lq = Power.logarithm(2, q);
+        if (pfac.coFac instanceof AlgebraicNumberRing) {
+          lq = ((AlgebraicNumberRing)pfac.coFac).extensionDegree();
+        }
+        System.out.println("q = " + q + ", lq = " + lq);
         do {
             // if (factors.size() == k) {
             //     break;
@@ -252,7 +259,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
                 factors.add(a);
                 continue;
             }
-            GenVector<MOD> rv = vfac.random(10, 0.95f);
+            GenVector<MOD> rv = vfac.random(8, 0.95f);
             System.out.println("rv = " + rv.toScript());
             GenPolynomial<MOD> rpol = pfac.getZERO();
             int i = 0;

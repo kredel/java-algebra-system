@@ -644,7 +644,7 @@ public class PolyUfdUtil {
      * @param A univariate modular polynomial.
      * @return Q matrix.
      */
-    public static <C extends GcdRingElem<C> & Modular> ArrayList<ArrayList<C>> constructQmatrix(
+    public static <C extends GcdRingElem<C>> ArrayList<ArrayList<C>> constructQmatrix(
                     GenPolynomial<C> A) {
         ArrayList<ArrayList<C>> Q = new ArrayList<ArrayList<C>>();
         if (A == null || A.isZERO()) {
@@ -652,9 +652,15 @@ public class PolyUfdUtil {
         }
         GenPolynomialRing<C> pfac = A.ring;
         //System.out.println("pfac = " + pfac.toScript());
-        ModularRingFactory cfac = (ModularRingFactory) pfac.coFac;
-        long q = cfac.getIntegerModul().longValueExact();
-        logger.info("Q matrix for q = " + q);
+        //ModularRingFactory cfac = (ModularRingFactory) pfac.coFac;
+        //long q = cfac.getIntegerModul().longValueExact();
+        long q = pfac.coFac.characteristic().longValueExact();
+        long lq = Power.logarithm(2, q);
+        if (pfac.coFac instanceof AlgebraicNumberRing) {
+          lq = ((AlgebraicNumberRing)pfac.coFac).extensionDegree();
+	  q = Power.power(q,lq);
+        }
+        logger.info("Q matrix for cfac = " + q);
         long d = A.degree(0);
         GenPolynomial<C> x = pfac.univariate(0);
         //System.out.println("x = " + x.toScript());
