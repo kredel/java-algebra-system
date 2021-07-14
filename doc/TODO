@@ -237,5 +237,7 @@ resolved and completed issues:
 
 - remove @usage doc tag
 
+- extend mod integer factory interface by Iterable
+
 
 $Id$
