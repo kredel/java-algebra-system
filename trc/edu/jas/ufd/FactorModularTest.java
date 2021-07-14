@@ -8,10 +8,6 @@ package edu.jas.ufd;
 import java.util.List;
 import java.util.SortedMap;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.ModInt;
 import edu.jas.arith.ModIntRing;
 import edu.jas.arith.ModInteger;
@@ -21,6 +17,10 @@ import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -299,7 +299,7 @@ public class FactorModularTest extends TestCase {
         FactorsMap<ModInteger> F
         //= engine.baseFactorsAbsoluteSquarefree(agen);
         //= engine.baseFactorsAbsoluteIrreducible(agen);
-        = engine.baseFactorsAbsolute(agen);
+                        = engine.baseFactorsAbsolute(agen);
         //System.out.println("agen        = " + agen);
         //System.out.println("F           = " + F);
 
