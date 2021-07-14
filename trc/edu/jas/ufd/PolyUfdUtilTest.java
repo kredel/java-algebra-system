@@ -25,6 +25,8 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.TermOrderByName;
+import edu.jas.ps.UnivPowerSeries;
+import edu.jas.ps.UnivPowerSeriesRing;
 import edu.jas.structure.Power;
 import edu.jas.vector.GenMatrix;
 import edu.jas.vector.GenMatrixRing;
@@ -548,15 +550,16 @@ public class PolyUfdUtilTest extends TestCase {
         // test with random polynomial
         do {
             A = pfac.random(10);
-            System.out.println("A = " + A.toScript());
+            //System.out.println("A = " + A.toScript());
         } while (A.isZERO() || A.degree(0) <= 1);
         d = (int) A.degree(0);
         Q = PolyUfdUtil.<ModInt> constructQmatrix(A);
-        System.out.println("Q = " + Q);
+        //System.out.println("Q = " + Q);
         n = Q.size();
         m = Q.get(0).size();
         assertTrue("size(Q) == deg(a): " + Q, n == d);
         assertTrue("size(Q(0)) == deg(a): " + Q, m == d);
+        ArrayList<ArrayList<ModInt>> Qa = Q;
 
         mfac = new GenMatrixRing<ModInt>(mi, n, m);
         //System.out.println("mfac = " + mfac.toScript());
@@ -589,11 +592,26 @@ public class PolyUfdUtilTest extends TestCase {
         r = pow;
         for (int i = 2; i < d; i++) {
             r = r.multiply(pow).remainder(A);
-            // GenPolynomial<ModInt> pw = Power.<GenPolynomial<ModInt>> modPositivePower(x,q,A);
             Qp.add(r);
         }
-        System.out.println("Qp = " + Qp);
+        //System.out.println("Qp = " + Qp);
         assertTrue("deg(r) < deg(A): " + Qp, r.degree(0) <= A.degree(0));
+
+        UnivPowerSeriesRing<ModInt> psfac = new UnivPowerSeriesRing<ModInt>(pfac);
+        //System.out.println("psfac = " + psfac.toScript());
+        ArrayList<ArrayList<ModInt>> Qb = new ArrayList<ArrayList<ModInt>>();
+        for (GenPolynomial<ModInt> p : Qp) {
+            UnivPowerSeries<ModInt> ps = psfac.fromPolynomial(p);
+            //System.out.println("ps = " + ps.toScript());
+            ArrayList<ModInt> pr = new ArrayList<ModInt>();
+            for (int i = 0; i < d; i++) {
+                ModInt c = ps.coefficient(i);
+                pr.add(c);
+            }
+            Qb.add(pr);
+        }
+        //System.out.println("Qb = " + Qb);
+        assertEquals("Qa == Qb: ", Qa, Qb);
     }
 
 }

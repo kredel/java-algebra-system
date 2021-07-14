@@ -17,6 +17,7 @@ import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+import edu.jas.structure.Power;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -317,7 +318,7 @@ public class FactorModularTest extends TestCase {
         ModIntRing mi = new ModIntRing(q);
         //System.out.println("mi = " + mi.toScript());
         GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[] { "x" });
-        //System.out.println("pfac = " + pfac.toScript());
+        System.out.println("pfac = " + pfac.toScript());
         GenPolynomial<ModInt> A = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
         System.out.println("A = " + A.toScript());
 
@@ -342,9 +343,9 @@ public class FactorModularTest extends TestCase {
 
 
     /**
-     * Berlekamp big prime factorization test.
+     * Berlekamp big odd prime factorization test.
      */
-    public void testFactorBerlekampBig() {
+    public void testFactorBerlekampBigOdd() {
         int q = 32003; //11;
         ModIntRing mi = new ModIntRing(q);
         //System.out.println("mi = " + mi.toScript());
@@ -362,6 +363,72 @@ public class FactorModularTest extends TestCase {
 
         GenPolynomial<ModInt> B = pfac.random(5).monic();
         GenPolynomial<ModInt> C = pfac.random(5).monic();
+        A = B.multiply(C);
+        System.out.println("A = " + A.toScript());
+        System.out.println("B = " + B.toScript());
+        System.out.println("C = " + C.toScript());
+
+        factors = bf.baseFactorsSquarefreeBigPrime(A);
+        System.out.println("factors = " + factors);
+        //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
+        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A, factors));
+    }
+
+
+    /**
+     * Berlekamp big even prime factorization test.
+     */
+    public void testFactorBerlekampBigEven() {
+        int q = 2; //(int)Power.power(2,5);
+        ModIntRing mi = new ModIntRing(q);
+        //System.out.println("mi = " + mi.toScript());
+        GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[] { "x" });
+        System.out.println("pfac = " + pfac.toScript());
+        GenPolynomial<ModInt> A = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
+        System.out.println("A = " + A.toScript());
+
+        //FactorAbstract<ModInt> bf = new FactorModularBerlekamp<ModInt>(pfac.coFac);
+        FactorModularBerlekamp<ModInt> bf = new FactorModularBerlekamp<ModInt>(pfac.coFac);
+        List<GenPolynomial<ModInt>> factors = bf.baseFactorsSquarefreeBigPrime(A);
+        System.out.println("factors = " + factors + "\n");
+        //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
+        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A, factors));
+
+        GenPolynomial<ModInt> B = pfac.random(10).monic();
+        GenPolynomial<ModInt> C = pfac.random(10).monic();
+        A = B.multiply(C);
+        System.out.println("A = " + A.toScript());
+        System.out.println("B = " + B.toScript());
+        System.out.println("C = " + C.toScript());
+
+        factors = bf.baseFactorsSquarefreeBigPrime(A);
+        System.out.println("factors = " + factors);
+        //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
+        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A, factors));
+    }
+
+
+    /**
+     * Berlekamp big even prime factorization test.
+     */
+    public void testFactorBerlekampBigEvenPower() {
+        int q = 2; //(int)Power.power(2,5);
+        ModIntRing mi = new ModIntRing(q);
+        //System.out.println("mi = " + mi.toScript());
+        GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[] { "x" });
+        System.out.println("pfac = " + pfac.toScript());
+        GenPolynomial<ModInt> A = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
+        System.out.println("A = " + A.toScript());
+
+        //FactorAbstract<ModInt> bf = new FactorModularBerlekamp<ModInt>(pfac.coFac);
+        FactorModularBerlekamp<ModInt> bf = new FactorModularBerlekamp<ModInt>(pfac.coFac);
+        List<GenPolynomial<ModInt>> factors = bf.baseFactorsSquarefreeBigPrime(A);
+        System.out.println("factors = " + factors + "\n");
+        //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
+        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A, factors));
+
+        GenPolynomial<ModInt> B = pfac.random(10).monic();
+        GenPolynomial<ModInt> C = pfac.random(10).monic();
         A = B.multiply(C);
         System.out.println("A = " + A.toScript());
         System.out.println("B = " + B.toScript());

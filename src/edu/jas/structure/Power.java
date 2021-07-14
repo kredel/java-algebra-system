@@ -376,7 +376,7 @@ public class Power<C extends RingElem<C>> {
      * Logarithm.
      * @param p logarithm base.
      * @param a element.
-     * @return k &ge; 1 minimal with p^k &ge; b.
+     * @return k &ge; 1 minimal with p^k &ge; a.
      */
     public static <C extends RingElem<C>> long logarithm(C p, C a) {
         //if ( p.compareTo(a) < 0 ) {
@@ -386,6 +386,23 @@ public class Power<C extends RingElem<C>> {
         C m = p;
         while (m.compareTo(a) < 0) {
             m = m.multiply(p);
+            k++;
+        }
+        return k;
+    }
+
+
+    /**
+     * Logarithm.
+     * @param p logarithm base.
+     * @param a element.
+     * @return k &ge; 1 minimal with p^k &ge; a.
+     */
+    public static <C extends RingElem<C>> long logarithm(long p, long a) {
+        long k = 1;
+        long m = p;
+        while (m < a) {
+            m = m * p;
             k++;
         }
         return k;

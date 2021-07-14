@@ -121,6 +121,10 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
         List<GenVector<MOD>> Nsb = lu.nullSpaceBasis(Qm1);
         System.out.println("Nsb = " + Nsb);
         int k = Nsb.size();
+        if (k == 1) {
+            factors.add(P);
+            return factors;
+        }
         //int d = (int) P.degree(0);
         GenMatrix<MOD> Ns = mfac.fromVectors(Nsb);
         //System.out.println("Ns = " + Ns);
@@ -214,6 +218,10 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
         List<GenVector<MOD>> Nsb = lu.nullSpaceBasis(Qm1);
         System.out.println("Nsb = " + Nsb);
         int k = Nsb.size();
+        if (k == 1) {
+            factors.add(P);
+            return factors;
+        }
         //int d = (int) P.degree(0);
         GenMatrix<MOD> Ns = mfac.fromVectors(Nsb);
         //System.out.println("Ns = " + Ns);
@@ -233,6 +241,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
         System.out.println("vfac = " + vfac.toScript());
         ModularRingFactory cfac = (ModularRingFactory) pfac.coFac;
         long q = cfac.getIntegerModul().longValueExact();
+        long lq = Power.logarithm(2, q);
         do {
             // if (factors.size() == k) {
             //     break;
@@ -243,7 +252,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
                 factors.add(a);
                 continue;
             }
-            GenVector<MOD> rv = vfac.random(10, 0.9f);
+            GenVector<MOD> rv = vfac.random(10, 0.95f);
             System.out.println("rv = " + rv.toScript());
             GenPolynomial<MOD> rpol = pfac.getZERO();
             int i = 0;
@@ -258,12 +267,24 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
                 continue;
             }
             //System.out.println("rpol = " + rpol.toScript());
-            // if q ...
-            long e = (q - 1) / 2;
-            //System.out.println("q = " + q + ", e = " + e);
-            GenPolynomial<MOD> pow = Power.<GenPolynomial<MOD>> modPositivePower(rpol, e, a);
-            rpol = pow.subtract(pfac.getONE()).monic();
-            System.out.println("rpol^e-1 = " + rpol.toScript());
+            if (q % 2 == 0) {
+                long e = lq - 1;
+                //System.out.println("q = " + q + ", e = " + e);
+                GenPolynomial<MOD> pow = rpol;
+                GenPolynomial<MOD> v = rpol;
+                for (int l = 1; l < e; l++) {
+                    pow = pow.multiply(pow).remainder(a);
+                    v = v.sum(pow);
+                }
+                rpol = v.remainder(a).monic(); // automatic monic
+                System.out.println("sum_l rpol^l = " + rpol.toScript());
+            } else {
+                long e = (q - 1) / 2;
+                //System.out.println("q = " + q + ", e = " + e);
+                GenPolynomial<MOD> pow = Power.<GenPolynomial<MOD>> modPositivePower(rpol, e, a);
+                rpol = pow.subtract(pfac.getONE()).monic();
+                System.out.println("rpol^e-1 = " + rpol.toScript());
+            }
             if (rpol.isZERO() || rpol.isONE()) {
                 factors.add(a);
                 continue;
