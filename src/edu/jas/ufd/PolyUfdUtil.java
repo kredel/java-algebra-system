@@ -29,9 +29,9 @@ import edu.jas.poly.TermOrderByName;
 import edu.jas.ps.UnivPowerSeries;
 import edu.jas.ps.UnivPowerSeriesRing;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
-import edu.jas.structure.Power;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.util.ListUtil;
 
@@ -305,6 +305,7 @@ public class PolyUfdUtil {
 
 
     //------------------------------
+
 
     /**
      * BigInteger from BigRational coefficients. Represent as polynomial with
@@ -643,15 +644,17 @@ public class PolyUfdUtil {
      * @param A univariate modular polynomial.
      * @return Q matrix.
      */
-    public static <C extends GcdRingElem<C> & Modular> ArrayList<ArrayList<C>> constructQmatrix(GenPolynomial<C> A) {
+    public static <C extends GcdRingElem<C> & Modular> ArrayList<ArrayList<C>> constructQmatrix(
+                    GenPolynomial<C> A) {
         ArrayList<ArrayList<C>> Q = new ArrayList<ArrayList<C>>();
         if (A == null || A.isZERO()) {
             return Q;
         }
         GenPolynomialRing<C> pfac = A.ring;
         //System.out.println("pfac = " + pfac.toScript());
-        ModularRingFactory cfac = (ModularRingFactory)pfac.coFac;
+        ModularRingFactory cfac = (ModularRingFactory) pfac.coFac;
         long q = cfac.getIntegerModul().longValueExact();
+        logger.info("Q matrix for q = " + q);
         long d = A.degree(0);
         GenPolynomial<C> x = pfac.univariate(0);
         //System.out.println("x = " + x.toScript());
@@ -659,21 +662,7 @@ public class PolyUfdUtil {
         //System.out.println("r = " + r.toScript());
         List<GenPolynomial<C>> Qp = new ArrayList<GenPolynomial<C>>();
         Qp.add(r);
-        // boolean once = true;
-        // for (long m = 1; m <= (n-1)*q; m++) {
-        //     r = r.multiply(x).remainder(A);
-        //     //System.out.println("m = " + m + ", r = " + r.toScript());
-        //     if (m % q == 0) { // q | m
-        //         Qp.add(r);
-        //         if (once) {
-        //             x = r;
-        //             //System.out.println("x = " + x.toScript());
-        //             once = false;
-        //         }
-        //         m += (q-1);
-        //     }
-        // }
-        GenPolynomial<C> pow = Power.<GenPolynomial<C>> modPositivePower(x,q,A);
+        GenPolynomial<C> pow = Power.<GenPolynomial<C>> modPositivePower(x, q, A);
         //System.out.println("pow = " + pow.toScript());
         Qp.add(pow);
         r = pow;

@@ -4,18 +4,19 @@
 
 package edu.jas.ufd;
 
-import java.util.SortedMap;
-import java.util.List;
+
 import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedMap;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
-import edu.jas.arith.ModLong;
-import edu.jas.arith.ModLongRing;
-import edu.jas.arith.ModInteger;
-import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModInt;
 import edu.jas.arith.ModIntRing;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
+import edu.jas.arith.ModLong;
+import edu.jas.arith.ModLongRing;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
@@ -24,12 +25,10 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.TermOrderByName;
-import edu.jas.ps.UnivPowerSeries;
-import edu.jas.ps.UnivPowerSeriesRing;
 import edu.jas.structure.Power;
-import edu.jas.vector.GenVector;
 import edu.jas.vector.GenMatrix;
 import edu.jas.vector.GenMatrixRing;
+import edu.jas.vector.GenVector;
 import edu.jas.vector.LinAlg;
 
 import junit.framework.Test;
@@ -97,7 +96,7 @@ public class PolyUfdUtilTest extends TestCase {
 
     GenPolynomialRing<GenPolynomial<BigRational>> rrfac;
 
- 
+
     GenPolynomial<GenPolynomial<BigRational>> arr, brr, crr, drr, err, frr;
 
 
@@ -226,7 +225,7 @@ public class PolyUfdUtilTest extends TestCase {
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(dfac, to, mnames);
         QuotientRing<BigInteger> qfac = new QuotientRing<BigInteger>(dfac);
         GenPolynomialRing<Quotient<BigInteger>> rqfac = new GenPolynomialRing<Quotient<BigInteger>>(qfac,
-                                                                                                    rfac);
+                        rfac);
         //System.out.println("\ndfac  = " + dfac);
         //System.out.println("rdfac = " + rdfac);
         //System.out.println("rfac  = " + rfac);
@@ -251,13 +250,13 @@ public class PolyUfdUtilTest extends TestCase {
         //assertTrue("lc^n a = q b + r: " + cr, t); // ?? not always true
 
         GenPolynomial<Quotient<BigInteger>> ap = PolyUfdUtil
-            .<BigInteger> quotientFromIntegralCoefficients(rqfac, ar);
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, ar);
         GenPolynomial<Quotient<BigInteger>> bp = PolyUfdUtil
-            .<BigInteger> quotientFromIntegralCoefficients(rqfac, br);
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, br);
         GenPolynomial<Quotient<BigInteger>> cp = PolyUfdUtil
-            .<BigInteger> quotientFromIntegralCoefficients(rqfac, cr);
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, cr);
         GenPolynomial<Quotient<BigInteger>> dp = PolyUfdUtil
-            .<BigInteger> quotientFromIntegralCoefficients(rqfac, dr);
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, dr);
         //System.out.println("ap  = " + ap);
         //System.out.println("bp  = " + bp);
         //System.out.println("cp  = " + cp);
@@ -291,7 +290,7 @@ public class PolyUfdUtilTest extends TestCase {
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(dfac, to, mnames);
         QuotientRing<BigInteger> qfac = new QuotientRing<BigInteger>(dfac);
         GenPolynomialRing<Quotient<BigInteger>> rqfac = new GenPolynomialRing<Quotient<BigInteger>>(qfac,
-                                                                                                    rfac);
+                        rfac);
         //System.out.println("\ndfac  = " + dfac);
         //System.out.println("rdfac = " + rdfac);
         //System.out.println("rfac  = " + rfac);
@@ -316,13 +315,13 @@ public class PolyUfdUtilTest extends TestCase {
         //assertTrue("lc^n a = q b + r: " + cr, t); // ?? not always true
 
         GenPolynomial<Quotient<BigInteger>> ap = PolyUfdUtil
-            .<BigInteger> quotientFromIntegralCoefficients(rqfac, ar);
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, ar);
         GenPolynomial<Quotient<BigInteger>> bp = PolyUfdUtil
-            .<BigInteger> quotientFromIntegralCoefficients(rqfac, br);
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, br);
         GenPolynomial<Quotient<BigInteger>> cp = PolyUfdUtil
-            .<BigInteger> quotientFromIntegralCoefficients(rqfac, cr);
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, cr);
         GenPolynomial<Quotient<BigInteger>> dp = PolyUfdUtil
-            .<BigInteger> quotientFromIntegralCoefficients(rqfac, dr);
+                        .<BigInteger> quotientFromIntegralCoefficients(rqfac, dr);
         //System.out.println("ap  = " + ap);
         //System.out.println("bp  = " + bp);
         //System.out.println("cp  = " + cp);
@@ -357,7 +356,7 @@ public class PolyUfdUtilTest extends TestCase {
         //System.out.println("rrfac  = " + rrfac);
 
         // BigRational
-        arr = rrfac.random(kl*kl, 2 * ll, el + 4, q);
+        arr = rrfac.random(kl * kl, 2 * ll, el + 4, q);
         arr = arr.sum(arr).multiply(arr); //rrfac.fromInteger(11));
         //System.out.println("arr   = " + arr);
 
@@ -391,12 +390,13 @@ public class PolyUfdUtilTest extends TestCase {
         assertTrue("gfqq.isField: ", gfqq.isField());
 
         GenPolynomialRing<AlgebraicNumber<BigRational>> pafac;
-        pafac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(gfqq, new String[] { "x" }, TermOrderByName.INVLEX);
+        pafac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(gfqq, new String[] { "x" },
+                        TermOrderByName.INVLEX);
         //System.out.println("pafac = " + pafac.toScript());
 
         GenPolynomial<AlgebraicNumber<BigRational>> P, Q, R;
-        P = pafac.random(2,4,3,0.4f).monic();
-        Q = pafac.random(2,4,3,0.4f).monic();
+        P = pafac.random(2, 4, 3, 0.4f).monic();
+        Q = pafac.random(2, 4, 3, 0.4f).monic();
         R = P.multiply(Q);
         //System.out.println("P = " + P);
         //System.out.println("Q = " + Q);
@@ -424,22 +424,22 @@ public class PolyUfdUtilTest extends TestCase {
             return;
         }
 
-        GreatestCommonDivisorAbstract<BigRational> gcdr = GCDFactory.<BigRational>getImplementation(q);
-        gcd = gcdr.gcd(nPQ,nR);
+        GreatestCommonDivisorAbstract<BigRational> gcdr = GCDFactory.getImplementation(q);
+        gcd = gcdr.gcd(nPQ, nR);
         //System.out.println("gcd(norm(P*Q), normP*normQ) != 1: " + (!gcd.isONE()));
         if (!gcd.isONE()) {
             assertFalse("gcd(norm(P*Q), normP*normQ) != 1", gcd.isONE());
             return;
         }
         // unreachable:        
-        FactorAbstract<BigRational> facr = FactorFactory.<BigRational>getImplementation(q);
-        SortedMap<GenPolynomial<BigRational>,Long> fnPQ = facr.factors(nPQ);
+        FactorAbstract<BigRational> facr = FactorFactory.getImplementation(q);
+        SortedMap<GenPolynomial<BigRational>, Long> fnPQ = facr.factors(nPQ);
         System.out.println("fnPQ = " + fnPQ);
-        SortedMap<GenPolynomial<BigRational>,Long> fnR = facr.factors(nR);
+        SortedMap<GenPolynomial<BigRational>, Long> fnR = facr.factors(nR);
         System.out.println("fnR = " + fnR);
     }
 
-    
+
     /**
      * Test multivariate norm over algebraic number field.
      */
@@ -453,12 +453,13 @@ public class PolyUfdUtilTest extends TestCase {
         assertTrue("gfqq.isField: ", gfqq.isField());
 
         GenPolynomialRing<AlgebraicNumber<BigRational>> pafac;
-        pafac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(gfqq, new String[] { "x", "y" }, TermOrderByName.INVLEX);
+        pafac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(gfqq, new String[] { "x", "y" },
+                        TermOrderByName.INVLEX);
         //System.out.println("pafac = " + pafac.toScript());
 
         GenPolynomial<AlgebraicNumber<BigRational>> P, Q, R;
-        P = pafac.random(2,4,2,0.2f).monic();
-        Q = pafac.random(2,4,2,0.2f).monic();
+        P = pafac.random(2, 4, 2, 0.2f).monic();
+        Q = pafac.random(2, 4, 2, 0.2f).monic();
         R = P.multiply(Q);
         //System.out.println("P = " + P);
         //System.out.println("Q = " + Q);
@@ -487,18 +488,18 @@ public class PolyUfdUtilTest extends TestCase {
             return;
         }
 
-        GreatestCommonDivisorAbstract<BigRational> gcdr = GCDFactory.<BigRational>getImplementation(q);
-        gcd = gcdr.gcd(nPQ,nR);
+        GreatestCommonDivisorAbstract<BigRational> gcdr = GCDFactory.getImplementation(q);
+        gcd = gcdr.gcd(nPQ, nR);
         //System.out.println("gcd(norm(P*Q), normP*normQ) != 1: " + (!gcd.isONE()));
         if (!gcd.isONE()) {
             assertFalse("gcd(norm(P*Q), normP*normQ) != 1", gcd.isONE());
             return;
         }
         // unreachable:        
-        FactorAbstract<BigRational> facr = FactorFactory.<BigRational>getImplementation(q);
-        SortedMap<GenPolynomial<BigRational>,Long> fnPQ = facr.factors(nPQ);
+        FactorAbstract<BigRational> facr = FactorFactory.getImplementation(q);
+        SortedMap<GenPolynomial<BigRational>, Long> fnPQ = facr.factors(nPQ);
         System.out.println("fnPQ = " + fnPQ);
-        SortedMap<GenPolynomial<BigRational>,Long> fnR = facr.factors(nR);
+        SortedMap<GenPolynomial<BigRational>, Long> fnR = facr.factors(nR);
         System.out.println("fnR = " + fnR);
     }
 
@@ -513,21 +514,21 @@ public class PolyUfdUtilTest extends TestCase {
         //      System.out.print(" " + s + " ");
         // }
         // System.out.println("mi = " + mi.toScript());
-        GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[]{"x"});
+        GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[] { "x" });
         //System.out.println("pfac = " + pfac.toScript());
-        GenPolynomial<ModInt> A  = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
+        GenPolynomial<ModInt> A = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
         //System.out.println("A = " + A.toScript());
-        int d = (int)A.degree(0);
-        ArrayList<ArrayList<ModInt>> Q = PolyUfdUtil.<ModInt>constructQmatrix(A);
+        int d = (int) A.degree(0);
+        ArrayList<ArrayList<ModInt>> Q = PolyUfdUtil.<ModInt> constructQmatrix(A);
         //System.out.println("Q = " + Q);
         int n = Q.size();
         int m = Q.get(0).size();
         assertTrue("size(Q) == deg(a): " + Q, n == d);
         assertTrue("size(Q(0)) == deg(a): " + Q, m == d);
 
-        GenMatrixRing<ModInt> mfac = new GenMatrixRing<ModInt>(mi,n,m);
+        GenMatrixRing<ModInt> mfac = new GenMatrixRing<ModInt>(mi, n, m);
         //System.out.println("mfac = " + mfac.toScript());
-        GenMatrix<ModInt> Qm = new GenMatrix<ModInt>(mfac,Q);
+        GenMatrix<ModInt> Qm = new GenMatrix<ModInt>(mfac, Q);
         //System.out.println("Qm = " + Qm);
         GenMatrix<ModInt> Qm1 = Qm.subtract(mfac.getONE());
         //System.out.println("Qm1 = " + Qm1);
@@ -546,20 +547,20 @@ public class PolyUfdUtilTest extends TestCase {
 
         // test with random polynomial
         do {
-            A  = pfac.random(10);
+            A = pfac.random(10);
             System.out.println("A = " + A.toScript());
-        } while (A.isZERO() || A.degree(0) <= 1 );
-        d = (int)A.degree(0);
-        Q = PolyUfdUtil.<ModInt>constructQmatrix(A);
+        } while (A.isZERO() || A.degree(0) <= 1);
+        d = (int) A.degree(0);
+        Q = PolyUfdUtil.<ModInt> constructQmatrix(A);
         System.out.println("Q = " + Q);
         n = Q.size();
         m = Q.get(0).size();
         assertTrue("size(Q) == deg(a): " + Q, n == d);
         assertTrue("size(Q(0)) == deg(a): " + Q, m == d);
 
-        mfac = new GenMatrixRing<ModInt>(mi,n,m);
+        mfac = new GenMatrixRing<ModInt>(mi, n, m);
         //System.out.println("mfac = " + mfac.toScript());
-        Qm = new GenMatrix<ModInt>(mfac,Q);
+        Qm = new GenMatrix<ModInt>(mfac, Q);
         //System.out.println("Qm = " + Qm);
         Qm1 = Qm.subtract(mfac.getONE());
         //System.out.println("Qm1 = " + Qm1);
@@ -582,7 +583,7 @@ public class PolyUfdUtilTest extends TestCase {
         //System.out.println("r = " + r.toScript());
         ArrayList<GenPolynomial<ModInt>> Qp = new ArrayList<GenPolynomial<ModInt>>();
         Qp.add(r);
-        GenPolynomial<ModInt> pow = Power.<GenPolynomial<ModInt>> modPositivePower(x,q,A);
+        GenPolynomial<ModInt> pow = Power.<GenPolynomial<ModInt>> modPositivePower(x, q, A);
         //System.out.println("pow = " + pow.toScript());
         Qp.add(pow);
         r = pow;
@@ -603,19 +604,19 @@ public class PolyUfdUtilTest extends TestCase {
         int q = 11; //32003; //11;
         ModIntRing mi = new ModIntRing(q);
         //System.out.println("mi = " + mi.toScript());
-        GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[]{"x"});
+        GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[] { "x" });
         //System.out.println("pfac = " + pfac.toScript());
-        GenPolynomial<ModInt> A  = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
+        GenPolynomial<ModInt> A = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
         System.out.println("A = " + A.toScript());
 
         FactorAbstract<ModInt> bf = new FactorModularBerlekamp<ModInt>(pfac.coFac);
         List<GenPolynomial<ModInt>> factors = bf.baseFactorsSquarefree(A);
         System.out.println("factors = " + factors + "\n");
         //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
-        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A,factors));
+        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A, factors));
 
-        GenPolynomial<ModInt> B  = pfac.random(5).monic();
-        GenPolynomial<ModInt> C  = pfac.random(5).monic();
+        GenPolynomial<ModInt> B = pfac.random(5).monic();
+        GenPolynomial<ModInt> C = pfac.random(5).monic();
         A = B.multiply(C);
         System.out.println("A = " + A.toScript());
         System.out.println("B = " + B.toScript());
@@ -624,7 +625,7 @@ public class PolyUfdUtilTest extends TestCase {
         factors = bf.baseFactorsSquarefree(A);
         System.out.println("factors = " + factors);
         //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
-        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A,factors));
+        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A, factors));
     }
 
 
@@ -635,9 +636,9 @@ public class PolyUfdUtilTest extends TestCase {
         int q = 32003; //11;
         ModIntRing mi = new ModIntRing(q);
         //System.out.println("mi = " + mi.toScript());
-        GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[]{"x"});
+        GenPolynomialRing<ModInt> pfac = new GenPolynomialRing<ModInt>(mi, new String[] { "x" });
         System.out.println("pfac = " + pfac.toScript());
-        GenPolynomial<ModInt> A  = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
+        GenPolynomial<ModInt> A = pfac.parse("x^6 - 3 x^5 + x^4 - 3 x^3 - x^2 -3 x + 1");
         System.out.println("A = " + A.toScript());
 
         //FactorAbstract<ModInt> bf = new FactorModularBerlekamp<ModInt>(pfac.coFac);
@@ -645,10 +646,10 @@ public class PolyUfdUtilTest extends TestCase {
         List<GenPolynomial<ModInt>> factors = bf.baseFactorsSquarefreeBigPrime(A);
         System.out.println("factors = " + factors + "\n");
         //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
-        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A,factors));
+        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A, factors));
 
-        GenPolynomial<ModInt> B  = pfac.random(5).monic();
-        GenPolynomial<ModInt> C  = pfac.random(5).monic();
+        GenPolynomial<ModInt> B = pfac.random(5).monic();
+        GenPolynomial<ModInt> C = pfac.random(5).monic();
         A = B.multiply(C);
         System.out.println("A = " + A.toScript());
         System.out.println("B = " + B.toScript());
@@ -657,7 +658,7 @@ public class PolyUfdUtilTest extends TestCase {
         factors = bf.baseFactorsSquarefreeBigPrime(A);
         System.out.println("factors = " + factors);
         //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
-        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A,factors));
+        assertTrue("A == prod(factors): " + factors, bf.isFactorization(A, factors));
     }
 
 }

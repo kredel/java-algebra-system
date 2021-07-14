@@ -7,16 +7,12 @@ package edu.jas.ufd;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.SortedMap;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModLongRing;
 import edu.jas.arith.Modular;
 import edu.jas.arith.ModularRingFactory;
@@ -26,17 +22,17 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingFactory;
-import edu.jas.vector.GenVector;
-import edu.jas.vector.GenVectorModul;
 import edu.jas.vector.GenMatrix;
 import edu.jas.vector.GenMatrixRing;
+import edu.jas.vector.GenVector;
+import edu.jas.vector.GenVectorModul;
 import edu.jas.vector.LinAlg;
 
 
 /**
  * Modular coefficients Berlekamp factorization algorithms. This class
- * implements Berlekamp, Cantor and Zassenhaus factorization methods
- * for polynomials over (prime) modular integers.
+ * implements Berlekamp, Cantor and Zassenhaus factorization methods for
+ * polynomials over (prime) modular integers.
  * @author Heinz Kredel
  */
 
@@ -46,7 +42,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
     private static final Logger logger = LogManager.getLogger(FactorModularBerlekamp.class);
 
 
-    private static final boolean debug = logger.isDebugEnabled();
+    //private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -77,7 +73,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
         if (P == null) {
             throw new IllegalArgumentException("P == null not allowed");
         }
-        ModularRingFactory cfac = (ModularRingFactory)P.ring.coFac;
+        ModularRingFactory cfac = (ModularRingFactory) P.ring.coFac;
         long q = cfac.getIntegerModul().longValueExact();
         if (q < 10000) {
             return baseFactorsSquarefreeSmallPrime(P);
@@ -87,8 +83,8 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
 
 
     /**
-     * GenPolynomial base factorization of a squarefree polynomial.
-     * Small prime version of Berlekamps algorithm.
+     * GenPolynomial base factorization of a squarefree polynomial. Small prime
+     * version of Berlekamps algorithm.
      * @param P squarefree and monic! GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
@@ -111,14 +107,13 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
             factors.add(P);
             return factors;
         }
-        ArrayList<ArrayList<MOD>> Q = PolyUfdUtil.<MOD>constructQmatrix(P);
+        ArrayList<ArrayList<MOD>> Q = PolyUfdUtil.<MOD> constructQmatrix(P);
         System.out.println("Q = " + Q);
-
         int n = Q.size();
         int m = Q.get(0).size();
-        GenMatrixRing<MOD> mfac = new GenMatrixRing<MOD>(pfac.coFac,n,m);
+        GenMatrixRing<MOD> mfac = new GenMatrixRing<MOD>(pfac.coFac, n, m);
         //System.out.println("mfac = " + mfac.toScript());
-        GenMatrix<MOD> Qm = new GenMatrix<MOD>(mfac,Q);
+        GenMatrix<MOD> Qm = new GenMatrix<MOD>(mfac, Q);
         //System.out.println("Qm = " + Qm);
         GenMatrix<MOD> Qm1 = Qm.subtract(mfac.getONE());
         //System.out.println("Qm1 = " + Qm1);
@@ -126,7 +121,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
         List<GenVector<MOD>> Nsb = lu.nullSpaceBasis(Qm1);
         System.out.println("Nsb = " + Nsb);
         int k = Nsb.size();
-        int d = (int)P.degree(0);
+        //int d = (int) P.degree(0);
         GenMatrix<MOD> Ns = mfac.fromVectors(Nsb);
         //System.out.println("Ns = " + Ns);
         GenMatrix<MOD> L1 = Ns.negate(); //mfac.getONE().subtract(Ns);
@@ -135,18 +130,13 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
         for (int i = 0; i < L1.ring.rows; i++) {
             GenVector<MOD> rv = L1.getRow(i);
             GenPolynomial<MOD> rp = pfac.fromVector(rv);
-            if (!rp.isONE()) { 
+            if (!rp.isONE()) {
                 trials.add(rp);
             }
         }
-        System.out.println("k = " + k);
+        logger.info("#ofFactors k = " + k);
         System.out.println("trials = " + trials);
         factors.add(P);
-        // ModularRingFactory cofac = (ModularRingFactory) pfac.coFac;
-        // for (Object so : cofac) {
-        //     MOD sm = (MOD) so;
-        //     System.out.print(" " + sm + " ");
-        // }
         MOD inc = pfac.coFac.getONE();
         for (GenPolynomial<MOD> t : trials) {
             if (factors.size() == k || factors.size() == 0) {
@@ -186,8 +176,8 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
 
 
     /**
-     * GenPolynomial base factorization of a squarefree polynomial.
-     * Big prime version of Berlekamps algorithm.
+     * GenPolynomial base factorization of a squarefree polynomial. Big prime
+     * version of Berlekamps algorithm.
      * @param P squarefree and monic! GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
@@ -210,13 +200,13 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
             factors.add(P);
             return factors;
         }
-        ArrayList<ArrayList<MOD>> Q = PolyUfdUtil.<MOD>constructQmatrix(P);
+        ArrayList<ArrayList<MOD>> Q = PolyUfdUtil.<MOD> constructQmatrix(P);
         System.out.println("Q = " + Q);
         int n = Q.size();
         int m = Q.get(0).size();
-        GenMatrixRing<MOD> mfac = new GenMatrixRing<MOD>(pfac.coFac,n,m);
+        GenMatrixRing<MOD> mfac = new GenMatrixRing<MOD>(pfac.coFac, n, m);
         //System.out.println("mfac = " + mfac.toScript());
-        GenMatrix<MOD> Qm = new GenMatrix<MOD>(mfac,Q);
+        GenMatrix<MOD> Qm = new GenMatrix<MOD>(mfac, Q);
         //System.out.println("Qm = " + Qm);
         GenMatrix<MOD> Qm1 = Qm.subtract(mfac.getONE());
         //System.out.println("Qm1 = " + Qm1);
@@ -224,7 +214,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
         List<GenVector<MOD>> Nsb = lu.nullSpaceBasis(Qm1);
         System.out.println("Nsb = " + Nsb);
         int k = Nsb.size();
-        int d = (int)P.degree(0);
+        //int d = (int) P.degree(0);
         GenMatrix<MOD> Ns = mfac.fromVectors(Nsb);
         //System.out.println("Ns = " + Ns);
         GenMatrix<MOD> L1 = Ns.negate(); //mfac.getONE().subtract(Ns);
@@ -236,11 +226,13 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
             //System.out.println("rp = " + rp.toScript());
             trials.add(rp);
         }
-        System.out.println("k = " + k);
+        logger.info("#ofFactors k = " + k);
         System.out.println("trials = " + trials);
         factors.add(P);
-        GenVectorModul<MOD> vfac = new GenVectorModul<MOD>(pfac.coFac,k);
+        GenVectorModul<MOD> vfac = new GenVectorModul<MOD>(pfac.coFac, k);
         System.out.println("vfac = " + vfac.toScript());
+        ModularRingFactory cfac = (ModularRingFactory) pfac.coFac;
+        long q = cfac.getIntegerModul().longValueExact();
         do {
             // if (factors.size() == k) {
             //     break;
@@ -254,7 +246,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
             GenVector<MOD> rv = vfac.random(10, 0.9f);
             System.out.println("rv = " + rv.toScript());
             GenPolynomial<MOD> rpol = pfac.getZERO();
-            int i = 0; 
+            int i = 0;
             for (GenPolynomial<MOD> t : trials) {
                 MOD c = rv.get(i++);
                 GenPolynomial<MOD> s = t.multiply(c);
@@ -266,12 +258,10 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD> & Modular> exte
                 continue;
             }
             //System.out.println("rpol = " + rpol.toScript());
-            ModularRingFactory cfac = (ModularRingFactory) pfac.coFac;
-            long q = cfac.getIntegerModul().longValueExact();
             // if q ...
-            long e = (q-1)/2;
+            long e = (q - 1) / 2;
             //System.out.println("q = " + q + ", e = " + e);
-            GenPolynomial<MOD> pow = Power.<GenPolynomial<MOD>> modPositivePower(rpol,e,a);
+            GenPolynomial<MOD> pow = Power.<GenPolynomial<MOD>> modPositivePower(rpol, e, a);
             rpol = pow.subtract(pfac.getONE()).monic();
             System.out.println("rpol^e-1 = " + rpol.toScript());
             if (rpol.isZERO() || rpol.isONE()) {
