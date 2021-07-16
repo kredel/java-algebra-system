@@ -15,11 +15,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import edu.jas.arith.ModLongRing;
-import edu.jas.arith.Modular;
 import edu.jas.arith.ModularRingFactory;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
+import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.structure.GcdRingElem;
@@ -91,7 +89,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
      * @param P squarefree and monic! GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     public List<GenPolynomial<MOD>> baseFactorsSquarefreeSmallPrime(GenPolynomial<MOD> P) {
         if (P == null) {
             throw new IllegalArgumentException("P == null");
@@ -116,9 +114,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         int n = Q.size();
         int m = Q.get(0).size();
         GenMatrixRing<MOD> mfac = new GenMatrixRing<MOD>(pfac.coFac, n, m);
-        //System.out.println("mfac = " + mfac.toScript());
         GenMatrix<MOD> Qm = new GenMatrix<MOD>(mfac, Q);
-        //System.out.println("Qm = " + Qm);
         GenMatrix<MOD> Qm1 = Qm.subtract(mfac.getONE());
         //System.out.println("Qm1 = " + Qm1);
         LinAlg<MOD> lu = new LinAlg<MOD>();
@@ -131,7 +127,6 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         }
         //int d = (int) P.degree(0);
         GenMatrix<MOD> Ns = mfac.fromVectors(Nsb);
-        //System.out.println("Ns = " + Ns);
         GenMatrix<MOD> L1 = Ns.negate(); //mfac.getONE().subtract(Ns);
         //System.out.println("L1 = " + L1);
         List<GenPolynomial<MOD>> trials = new ArrayList<GenPolynomial<MOD>>();
@@ -145,7 +140,6 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         logger.info("#ofFactors k = " + k);
         logger.info("trials = " + trials);
         factors.add(P);
-        MOD inc = pfac.coFac.getONE();
         for (GenPolynomial<MOD> t : trials) {
             if (factors.size() == k) {
                 break;
@@ -157,18 +151,17 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
             MOD s = null;
             Iterator<MOD> eit = null;
             if (pfac.coFac instanceof ModularRingFactory) {
-                eit = ((ModularRingFactory)pfac.coFac).iterator();
+                eit = ((ModularRingFactory) pfac.coFac).iterator();
             } else if (pfac.coFac instanceof AlgebraicNumberRing) {
-                eit = ((AlgebraicNumberRing)pfac.coFac).iterator();
+                eit = ((AlgebraicNumberRing) pfac.coFac).iterator();
             } else {
                 throw new IllegalArgumentException("no iterator for: " + pfac.coFac);
             }
             //System.out.println("eit = " + eit);
-            while (eit.hasNext()) {//for (MOD s : pfac.coFac) {
+            while (eit.hasNext()) {
                 s = eit.next();
                 //System.out.println("s = " + s);
                 GenPolynomial<MOD> v = t.subtract(s);
-                //s = s.sum(inc); // obsolete
                 GenPolynomial<MOD> g = v.gcd(a);
                 if (g.isONE() || g.equals(a)) {
                     continue;
@@ -224,9 +217,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         int n = Q.size();
         int m = Q.get(0).size();
         GenMatrixRing<MOD> mfac = new GenMatrixRing<MOD>(pfac.coFac, n, m);
-        //System.out.println("mfac = " + mfac.toScript());
         GenMatrix<MOD> Qm = new GenMatrix<MOD>(mfac, Q);
-        //System.out.println("Qm = " + Qm);
         GenMatrix<MOD> Qm1 = Qm.subtract(mfac.getONE());
         //System.out.println("Qm1 = " + Qm1);
         LinAlg<MOD> lu = new LinAlg<MOD>();
@@ -239,25 +230,22 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         }
         //int d = (int) P.degree(0);
         GenMatrix<MOD> Ns = mfac.fromVectors(Nsb);
-        //System.out.println("Ns = " + Ns);
         GenMatrix<MOD> L1 = Ns.negate(); //mfac.getONE().subtract(Ns);
         //System.out.println("L1 = " + L1);
         List<GenPolynomial<MOD>> trials = new ArrayList<GenPolynomial<MOD>>();
         for (int i = 0; i < L1.ring.rows; i++) {
             GenVector<MOD> rv = L1.getRow(i);
             GenPolynomial<MOD> rp = pfac.fromVector(rv);
-            //System.out.println("rp = " + rp.toScript());
             trials.add(rp);
         }
         logger.info("#ofFactors k = " + k);
         logger.info("trials = " + trials);
         factors.add(P);
         GenVectorModul<MOD> vfac = new GenVectorModul<MOD>(pfac.coFac, k);
-        //System.out.println("vfac = " + vfac.toScript());
         long q = pfac.coFac.characteristic().longValueExact();
         long lq = Power.logarithm(2, q);
         if (pfac.coFac instanceof AlgebraicNumberRing) {
-            lq = ((AlgebraicNumberRing)pfac.coFac).extensionDegree();
+            lq = ((AlgebraicNumberRing) pfac.coFac).extensionDegree();
             q = Power.power(q, lq);
         }
         //System.out.println("q = " + q + ", lq = " + lq);

@@ -17,8 +17,6 @@ import org.apache.logging.log4j.Logger;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
-import edu.jas.arith.Modular;
-import edu.jas.arith.ModularRingFactory;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.ExpVector;
@@ -597,7 +595,7 @@ public class PolyUfdUtil {
             throw new IllegalArgumentException("coefficient ring must be a field " + cfac);
         }
         GenPolynomialRing<C> ring = new GenPolynomialRing<C>(cfac, 1, TermOrderByName.INVLEX);
-	return randomIrreduciblePolynomial(ring,degree);
+        return randomIrreduciblePolynomial(ring, degree);
     }
 
 
@@ -607,8 +605,8 @@ public class PolyUfdUtil {
      * @param degree of random polynomial.
      * @return irreducible univariate polynomial.
      */
-    public static <C extends GcdRingElem<C>> GenPolynomial<C> randomIrreduciblePolynomial(GenPolynomialRing<C> ring,
-                    int degree) {
+    public static <C extends GcdRingElem<C>> GenPolynomial<C> randomIrreduciblePolynomial(
+                    GenPolynomialRing<C> ring, int degree) {
         if (!ring.coFac.isField()) {
             throw new IllegalArgumentException("coefficient ring must be a field " + ring.coFac);
         }
@@ -662,8 +660,8 @@ public class PolyUfdUtil {
      * @param degree of random polynomial.
      * @return algebraic number field.
      */
-    public static <C extends GcdRingElem<C>> AlgebraicNumberRing<C> algebraicNumberField(GenPolynomialRing<C> ring,
-                    int degree) {
+    public static <C extends GcdRingElem<C>> AlgebraicNumberRing<C> algebraicNumberField(
+                    GenPolynomialRing<C> ring, int degree) {
         GenPolynomial<C> mod = randomIrreduciblePolynomial(ring, degree);
         AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(mod, true);
         return afac;
@@ -675,8 +673,7 @@ public class PolyUfdUtil {
      * @param A univariate modular polynomial.
      * @return Q matrix.
      */
-    public static <C extends GcdRingElem<C>> ArrayList<ArrayList<C>> constructQmatrix(
-                    GenPolynomial<C> A) {
+    public static <C extends GcdRingElem<C>> ArrayList<ArrayList<C>> constructQmatrix(GenPolynomial<C> A) {
         ArrayList<ArrayList<C>> Q = new ArrayList<ArrayList<C>>();
         if (A == null || A.isZERO()) {
             return Q;
@@ -686,8 +683,8 @@ public class PolyUfdUtil {
         long q = pfac.coFac.characteristic().longValueExact();
         long lq = Power.logarithm(2, q);
         if (pfac.coFac instanceof AlgebraicNumberRing) {
-          lq = ((AlgebraicNumberRing)pfac.coFac).extensionDegree();
-	  q = Power.power(q,lq);
+            lq = ((AlgebraicNumberRing) pfac.coFac).extensionDegree();
+            q = Power.power(q, lq);
         }
         logger.info("Q matrix for cfac = " + q);
         long d = A.degree(0);
