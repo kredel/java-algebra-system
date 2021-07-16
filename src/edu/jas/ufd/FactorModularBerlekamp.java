@@ -78,7 +78,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         }
         ModularRingFactory cfac = (ModularRingFactory) P.ring.coFac;
         long q = cfac.getIntegerModul().longValueExact();
-        if (q < 10000) {
+        if (q < 10000) { // todo
             return baseFactorsSquarefreeSmallPrime(P);
         }
         return baseFactorsSquarefreeBigPrime(P);
@@ -112,7 +112,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
             return factors;
         }
         ArrayList<ArrayList<MOD>> Q = PolyUfdUtil.<MOD> constructQmatrix(P);
-        System.out.println("Q = " + Q);
+        //System.out.println("Q = " + Q);
         int n = Q.size();
         int m = Q.get(0).size();
         GenMatrixRing<MOD> mfac = new GenMatrixRing<MOD>(pfac.coFac, n, m);
@@ -147,12 +147,12 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         factors.add(P);
         MOD inc = pfac.coFac.getONE();
         for (GenPolynomial<MOD> t : trials) {
-            if (factors.size() == k || factors.size() == 0) {
+            if (factors.size() == k) {
                 break;
             }
-            System.out.println("t = " + t);
+            //System.out.println("t = " + t);
             GenPolynomial<MOD> a = factors.remove(0);
-            System.out.println("a = " + a);
+            //System.out.println("a = " + a);
             MOD s = null;
             Iterator<MOD> eit = null;
             if (pfac.coFac instanceof ModularRingFactory) {
@@ -172,13 +172,13 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
                 if (g.isONE() || g.equals(a)) {
                     continue;
                 }
-                System.out.println("s = " + s + ", g = " + g);
                 factors.add(g);
                 a = a.divide(g);
+                System.out.println("s = " + s + ", g = " + g + ", a = " + a);
                 if (a.isONE()) {
                     break;
                 }
-            } //while (true); //(!s.isZERO());
+            }
             if (!a.isONE()) {
                 factors.add(a);
             }
@@ -219,7 +219,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
             return factors;
         }
         ArrayList<ArrayList<MOD>> Q = PolyUfdUtil.<MOD> constructQmatrix(P);
-        System.out.println("Q = " + Q);
+        //System.out.println("Q = " + Q);
         int n = Q.size();
         int m = Q.get(0).size();
         GenMatrixRing<MOD> mfac = new GenMatrixRing<MOD>(pfac.coFac, n, m);
@@ -259,7 +259,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
             lq = ((AlgebraicNumberRing)pfac.coFac).extensionDegree();
             q = Power.power(q, lq);
         }
-        System.out.println("q = " + q + ", lq = " + lq);
+        //System.out.println("q = " + q + ", lq = " + lq);
         do {
             GenPolynomial<MOD> a = factors.remove(0);
             System.out.println("a = " + a);
@@ -268,7 +268,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
                 continue;
             }
             GenVector<MOD> rv = vfac.random(8, 0.95f);
-            System.out.println("rv = " + rv.toScript());
+            //System.out.println("rv = " + rv.toScript());
             GenPolynomial<MOD> rpol = pfac.getZERO();
             int i = 0;
             for (GenPolynomial<MOD> t : trials) {
@@ -292,31 +292,30 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
                     v = v.sum(pow);
                 }
                 rpol = v.remainder(a).monic(); // automatic monic
-                System.out.println("sum_l rpol^l = " + rpol.toScript());
+                //System.out.println("sum_l rpol^l = " + rpol.toScript());
             } else {
                 long e = (q - 1) / 2;
                 //System.out.println("q = " + q + ", e = " + e);
                 GenPolynomial<MOD> pow = Power.<GenPolynomial<MOD>> modPositivePower(rpol, e, a);
                 rpol = pow.subtract(pfac.getONE()).monic();
-                System.out.println("rpol^e-1 = " + rpol.toScript());
+                //System.out.println("rpol^e-1 = " + rpol.toScript());
             }
             if (rpol.isZERO() || rpol.isONE()) {
                 factors.add(a);
                 continue;
             }
             GenPolynomial<MOD> g = rpol.gcd(a);
-            System.out.println("g = " + g);
             if (g.isONE()) {
                 factors.add(a);
                 continue;
             }
             factors.add(g);
             a = a.divide(g);
-            System.out.println("a/g = " + a);
+            System.out.println("rv = " + rv + ", g = " + g + ", a/g = " + a);
             if (!a.isONE()) {
                 factors.add(a);
             }
-            System.out.println("factors  = " + factors);
+            //System.out.println("factors  = " + factors);
         } while (factors.size() < k);
 
         //System.out.println("factors  = " + factors);

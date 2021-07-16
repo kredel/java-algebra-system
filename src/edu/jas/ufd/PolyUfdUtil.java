@@ -587,7 +587,7 @@ public class PolyUfdUtil {
 
     /**
      * Construct a random irreducible univariate polynomial of degree d.
-     * @param ring coefficient polynomial ring.
+     * @param cfac coefficient polynomial ring.
      * @param degree of random polynomial.
      * @return irreducible univariate polynomial.
      */
@@ -603,7 +603,7 @@ public class PolyUfdUtil {
 
     /**
      * Construct a random irreducible univariate polynomial of degree d.
-     * @param cfac coefficient ring.
+     * @param ring coefficient ring.
      * @param degree of random polynomial.
      * @return irreducible univariate polynomial.
      */
