@@ -123,7 +123,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         //System.out.println("Qm1 = " + Qm1);
         LinAlg<MOD> lu = new LinAlg<MOD>();
         List<GenVector<MOD>> Nsb = lu.nullSpaceBasis(Qm1);
-        System.out.println("Nsb = " + Nsb);
+        logger.info("Nsb = " + Nsb);
         int k = Nsb.size();
         if (k == 1) {
             factors.add(P);
@@ -143,7 +143,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
             }
         }
         logger.info("#ofFactors k = " + k);
-        System.out.println("trials = " + trials);
+        logger.info("trials = " + trials);
         factors.add(P);
         MOD inc = pfac.coFac.getONE();
         for (GenPolynomial<MOD> t : trials) {
@@ -163,7 +163,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
             } else {
                 throw new IllegalArgumentException("no iterator for: " + pfac.coFac);
             }
-            System.out.println("eit = " + eit);
+            //System.out.println("eit = " + eit);
             while (eit.hasNext()) {//for (MOD s : pfac.coFac) {
                 s = eit.next();
                 //System.out.println("s = " + s);
@@ -175,7 +175,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
                 }
                 factors.add(g);
                 a = a.divide(g);
-                System.out.println("s = " + s + ", g = " + g + ", a = " + a);
+                logger.info("s = " + s + ", g = " + g + ", a = " + a);
                 if (a.isONE()) {
                     break;
                 }
@@ -231,7 +231,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         //System.out.println("Qm1 = " + Qm1);
         LinAlg<MOD> lu = new LinAlg<MOD>();
         List<GenVector<MOD>> Nsb = lu.nullSpaceBasis(Qm1);
-        System.out.println("Nsb = " + Nsb);
+        logger.info("Nsb = " + Nsb);
         int k = Nsb.size();
         if (k == 1) {
             factors.add(P);
@@ -250,7 +250,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
             trials.add(rp);
         }
         logger.info("#ofFactors k = " + k);
-        System.out.println("trials = " + trials);
+        logger.info("trials = " + trials);
         factors.add(P);
         GenVectorModul<MOD> vfac = new GenVectorModul<MOD>(pfac.coFac, k);
         //System.out.println("vfac = " + vfac.toScript());
@@ -312,9 +312,9 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
                 continue;
             }
             factors.add(g);
-            System.out.println("a = " + a);
+            //System.out.println("a = " + a);
             a = a.divide(g);
-            System.out.println("rv = " + rv + ", g = " + g + ", a/g = " + a);
+            logger.info("rv = " + rv + ", g = " + g + ", a/g = " + a);
             if (!a.isONE()) {
                 factors.add(a);
             }
