@@ -338,7 +338,7 @@ public class FactorModularTest extends TestCase {
         System.out.println("C = " + C.toScript());
 
         factors = bf.baseFactorsSquarefree(A);
-        System.out.println("factors = " + factors);
+        System.out.println("factors = " + factors + "\n");
         //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
         assertTrue("A == prod(factors): " + factors, bf.isFactorization(A, factors));
     }
@@ -371,7 +371,7 @@ public class FactorModularTest extends TestCase {
         System.out.println("C = " + C.toScript());
 
         factors = bf.baseFactorsSquarefreeBigPrime(A);
-        System.out.println("factors = " + factors);
+        System.out.println("factors = " + factors + "\n");
         //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
         assertTrue("A == prod(factors): " + factors, bf.isFactorization(A, factors));
     }
@@ -404,7 +404,7 @@ public class FactorModularTest extends TestCase {
         System.out.println("C = " + C.toScript());
 
         factors = bf.baseFactorsSquarefreeBigPrime(A);
-        System.out.println("factors = " + factors);
+        System.out.println("factors = " + factors + "\n");
         //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
         assertTrue("A == prod(factors): " + factors, bf.isFactorization(A, factors));
     }
@@ -438,7 +438,7 @@ public class FactorModularTest extends TestCase {
         System.out.println("C = " + C.toScript());
 
         factors = bf.baseFactorsSquarefreeSmallPrime(A);
-        System.out.println("factors = " + factors);
+        System.out.println("factors = " + factors + "\n");
         //System.out.println("isFactorization = " + bf.isFactorization(A,factors));
         assertTrue("A == prod(factors): " + factors, bf.isFactorization(A, factors));
     }

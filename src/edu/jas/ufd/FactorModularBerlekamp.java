@@ -151,6 +151,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
                 break;
             }
             //System.out.println("t = " + t);
+            // depth first search, since Iterator is finite
             GenPolynomial<MOD> a = factors.remove(0);
             //System.out.println("a = " + a);
             MOD s = null;
@@ -261,8 +262,9 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         }
         //System.out.println("q = " + q + ", lq = " + lq);
         do {
+            // breadth first search, since some a might be irreducible
             GenPolynomial<MOD> a = factors.remove(0);
-            System.out.println("a = " + a);
+            //System.out.println("a = " + a);
             if (a.degree(0) <= 1) {
                 factors.add(a);
                 continue;
@@ -310,6 +312,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
                 continue;
             }
             factors.add(g);
+            System.out.println("a = " + a);
             a = a.divide(g);
             System.out.println("rv = " + rv + ", g = " + g + ", a/g = " + a);
             if (!a.isONE()) {
