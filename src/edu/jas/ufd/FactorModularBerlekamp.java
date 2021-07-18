@@ -76,7 +76,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         }
         ModularRingFactory cfac = (ModularRingFactory) P.ring.coFac;
         long q = cfac.getIntegerModul().longValueExact();
-        if (q < 10000) { // todo
+        if (q < 100) { // todo, 32003 too high
             return baseFactorsSquarefreeSmallPrime(P);
         }
         return baseFactorsSquarefreeBigPrime(P);
