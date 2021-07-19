@@ -74,8 +74,8 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         if (P == null) {
             throw new IllegalArgumentException("P == null not allowed");
         }
-        ModularRingFactory cfac = (ModularRingFactory) P.ring.coFac;
-        long q = cfac.getIntegerModul().longValueExact();
+        //ModularRingFactory cfac = (ModularRingFactory) P.ring.coFac;
+        long q = P.ring.coFac.characteristic().longValueExact();
         if (q < 100) { // todo, 32003 too high
             return baseFactorsSquarefreeSmallPrime(P);
         }
