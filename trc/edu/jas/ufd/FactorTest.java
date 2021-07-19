@@ -92,7 +92,7 @@ public class FactorTest extends TestCase {
 
 
     /**
-     * Test factory.
+     * Test factory, typed implementation.
      */
     public void testFactory() {
         ModIntegerRing mi = new ModIntegerRing(19, true);
@@ -120,7 +120,8 @@ public class FactorTest extends TestCase {
         AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm, true);
         Factorization<AlgebraicNumber<ModInteger>> ufdam = FactorFactory.getImplementation(am);
         //System.out.println("ufdam = " + ufdam);
-        assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic);
+        //assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic);
+        assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorModularBerlekamp);
 
         GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
         GenPolynomial<BigRational> pr = prfac.univariate(0);
@@ -138,7 +139,7 @@ public class FactorTest extends TestCase {
 
 
     /**
-     * Test factory generic.
+     * Test factory generic implementation.
      */
     @SuppressWarnings("unchecked")
     public void testFactoryGeneric() {
@@ -162,7 +163,8 @@ public class FactorTest extends TestCase {
         AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm, true);
         Factorization<AlgebraicNumber<ModInteger>> ufdam = FactorFactory.getImplementation((RingFactory) am);
         //System.out.println("ufdam = " + ufdam);
-        assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic);
+        //assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic);
+        assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorModularBerlekamp);
 
         GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
         GenPolynomial<BigRational> pr = prfac.univariate(0);
@@ -194,7 +196,7 @@ public class FactorTest extends TestCase {
 
 
     /**
-     * Test factory specific.
+     * Test factory specific implementation.
      */
     public void testFactorySpecific() {
         ModIntegerRing mi = new ModIntegerRing(19, true);
@@ -217,7 +219,8 @@ public class FactorTest extends TestCase {
         AlgebraicNumberRing<ModInteger> am = new AlgebraicNumberRing<ModInteger>(pm, true);
         Factorization<AlgebraicNumber<ModInteger>> ufdam = FactorFactory.<ModInteger> getImplementation(am);
         //System.out.println("ufdam = " + ufdam);
-        assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic);
+        //assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorAlgebraic);
+        assertTrue("ufd != AlgebraicNumber<ModInteger> " + ufdam, ufdam instanceof FactorModularBerlekamp);
 
         GenPolynomialRing<BigRational> prfac = new GenPolynomialRing<BigRational>(br, 1);
         GenPolynomial<BigRational> pr = prfac.univariate(0);
