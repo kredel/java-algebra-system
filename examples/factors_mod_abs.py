@@ -13,6 +13,9 @@ from jas import terminate, startLog
 #r = PolyRing(GF(19),"x",PolyRing.lex );
 #r = PolyRing(GF(23),"x",PolyRing.lex );
 r = PolyRing(GF(1152921504606846883),"(x)",PolyRing.lex);
+#r = PolyRing(GF(32003),"(x)",PolyRing.lex);
+#r = PolyRing(GF(65413),"(x)",PolyRing.lex);
+#r = PolyRing(GF(536870909),"(x)",PolyRing.lex);
 print "Ring: " + str(r);
 print;
 
