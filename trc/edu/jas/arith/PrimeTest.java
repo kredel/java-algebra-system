@@ -255,6 +255,12 @@ public class PrimeTest extends TestCase {
         for (java.math.BigInteger p : ff.keySet()) {
             assertTrue("isPrime: " + p, p.isProbablePrime(32));
         }
+
+        N = new java.math.BigInteger("1152921504606846883");
+        //System.out.println("N = " + N);
+        ff = PrimeInteger.factors(N);
+        //System.out.println("ff = " + ff);
+        assertTrue("isPrime: " + ff, ff.size() == 1);
     }
 
 

@@ -141,6 +141,37 @@ public class Power<C extends RingElem<C>> {
 
 
     /**
+     * power of a to the n-th, n positive, modulo m.
+     * @param a element.
+     * @param n big integer exponent &ge; 0.
+     * @param m modulus.
+     * @return a^n mod m.
+     */
+    public static <C extends RingElem<C>> C modPositivePower(C a, java.math.BigInteger n, C m) {
+        if (n.signum() <= 0) {
+            throw new IllegalArgumentException("only positive n allowed");
+        }
+        if (a.isZERO() || a.isONE()) {
+            return a;
+        }
+
+        C b = a.remainder(m);
+        java.math.BigInteger i = n.subtract(java.math.BigInteger.ONE);
+        C p = b;
+        do {
+            if (i.testBit(0)) { // i % 2 == 1
+                p = p.multiply(b).remainder(m);
+            }
+            i = i.shiftRight(1); // / 2;
+            if (i.signum() > 0) {
+                b = b.multiply(b).remainder(m);
+            }
+        } while (i.signum() > 0);
+        return p;
+    }
+
+
+    /**
      * power of a to the n-th.
      * @param a element.
      * @param n integer exponent.
