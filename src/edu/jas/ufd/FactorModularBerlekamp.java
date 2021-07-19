@@ -242,13 +242,15 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         logger.info("trials = " + trials);
         factors.add(P);
         GenVectorModul<MOD> vfac = new GenVectorModul<MOD>(pfac.coFac, k);
-        long q = pfac.coFac.characteristic().longValueExact();
-        long lq = Power.logarithm(2, q);
+        //long q = pfac.coFac.characteristic().longValueExact();
+        //long lq = Power.logarithm(2, q);
+        java.math.BigInteger q = pfac.coFac.characteristic(); //.longValueExact();
+        int lq = q.bitLength(); //Power.logarithm(2, q);
         if (pfac.coFac instanceof AlgebraicNumberRing) {
-            lq = ((AlgebraicNumberRing) pfac.coFac).extensionDegree();
-            q = Power.power(q, lq);
+            lq = (int) ((AlgebraicNumberRing) pfac.coFac).extensionDegree();
+            q = q.pow(lq); //Power.power(q, lq);
         }
-        //System.out.println("q = " + q + ", lq = " + lq);
+        logger.info("char = " + pfac.coFac.characteristic() + ", q = " + q + ", lq = " + lq);
         do {
             // breadth first search, since some a might be irreducible
             GenPolynomial<MOD> a = factors.remove(0);
@@ -272,7 +274,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
                 continue;
             }
             //System.out.println("rpol = " + rpol.toScript());
-            if (q % 2 == 0) {
+            if (!q.testBit(0)) { // q % 2 == 0
                 long e = lq - 1;
                 //System.out.println("q = " + q + ", e = " + e);
                 GenPolynomial<MOD> pow = rpol;
@@ -284,7 +286,8 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
                 rpol = v.remainder(a).monic(); // automatic monic
                 //System.out.println("sum_l rpol^l = " + rpol.toScript());
             } else {
-                long e = (q - 1) / 2;
+                //long e = (q - 1) / 2;
+                java.math.BigInteger e = q.subtract(java.math.BigInteger.ONE).shiftRight(1);
                 //System.out.println("q = " + q + ", e = " + e);
                 GenPolynomial<MOD> pow = Power.<GenPolynomial<MOD>> modPositivePower(rpol, e, a);
                 rpol = pow.subtract(pfac.getONE()).monic();

@@ -680,11 +680,11 @@ public class PolyUfdUtil {
         }
         GenPolynomialRing<C> pfac = A.ring;
         //System.out.println("pfac = " + pfac.toScript());
-        long q = pfac.coFac.characteristic().longValueExact();
-        long lq = Power.logarithm(2, q);
+        java.math.BigInteger q = pfac.coFac.characteristic(); //.longValueExact();
+        int lq = q.bitLength(); //Power.logarithm(2, q);
         if (pfac.coFac instanceof AlgebraicNumberRing) {
-            lq = ((AlgebraicNumberRing) pfac.coFac).extensionDegree();
-            q = Power.power(q, lq);
+            lq = (int) ((AlgebraicNumberRing) pfac.coFac).extensionDegree();
+            q = q.pow(lq); //Power.power(q, lq);
         }
         logger.info("Q matrix for cfac = " + q);
         long d = A.degree(0);
