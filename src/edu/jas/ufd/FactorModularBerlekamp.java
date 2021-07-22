@@ -89,7 +89,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
      * @param P squarefree and monic! GenPolynomial.
      * @return [p_1,...,p_k] with P = prod_{i=1,...,r} p_i.
      */
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public List<GenPolynomial<MOD>> baseFactorsSquarefreeSmallPrime(GenPolynomial<MOD> P) {
         if (P == null) {
             throw new IllegalArgumentException("P == null");
