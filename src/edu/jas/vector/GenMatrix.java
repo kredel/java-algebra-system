@@ -594,6 +594,16 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
     /**
      * Product of this matrix with scalar.
+     * @param s scalar.
+     * @return this*s
+     */
+    public GenMatrix<C> multiply(C s) {
+        return scalarMultiply(s);
+    }
+
+
+    /**
+     * Product of this matrix with scalar.
      * @return this*s
      */
     public GenMatrix<C> scalarMultiply(C s) {
