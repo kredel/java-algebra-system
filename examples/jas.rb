@@ -1461,21 +1461,20 @@ Solve with LU matrix.
 =begin rdoc
 Determinant from LU matrix.
 =end
-    def determinant(p)
+    def determinant(p=nil)
         a = @elem;
-        p = p.elem;
-        d = LinAlg.new().determinantLU(a,p);
-        return RingElem.new(d);
-    end
-
-
-=begin rdoc
-Determinant of square matrix.
-=end
-    def determinant()
-        a = @elem;
-        p = LinAlg.new().decompositionLU(a);
-        d = LinAlg.new().determinantLU(a,p);
+        la = LinAlg.new();
+        if p == nil
+          p = la.decompositionLU(a);
+        end;
+        if p.is_a? RingElem
+           p = p.elem;
+        end
+        if p.isEmpty()
+          d = @ring.coFac.getZERO();
+        else
+          d = la.determinantLU(a,p);
+        end;
         return RingElem.new(d);
     end
 
@@ -1485,8 +1484,9 @@ Row echelon form matrix.
 =end
     def rowEchelon()
         a = @elem;
-        re = LinAlg.new().rowEchelonForm(a);
-        res = LinAlg.new().rowEchelonFormSparse(re);
+        la = LinAlg.new();
+        re = la.rowEchelonForm(a);
+        res = la.rowEchelonFormSparse(re);
         return RingElem.new(res);
     end
 

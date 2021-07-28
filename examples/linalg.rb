@@ -53,7 +53,7 @@ L, U, P = a.decompLU();
 puts "P:  " + str(P);
 puts;
 
-if P.elem.size() != 0 
+if P.elem.size() != 0
   puts "L:  " + str(L);
   puts;
   puts "U:  " + str(U);
