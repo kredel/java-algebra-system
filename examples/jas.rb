@@ -1470,6 +1470,17 @@ Determinant from LU matrix.
 
 
 =begin rdoc
+Determinant of square matrix.
+=end
+    def determinant()
+        a = @elem;
+        p = LinAlg.new().decompositionLU(a);
+        d = LinAlg.new().determinantLU(a,p);
+        return RingElem.new(d);
+    end
+
+
+=begin rdoc
 Row echelon form matrix.
 =end
     def rowEchelon()
@@ -1491,11 +1502,20 @@ rank from row echelon form matrix.
 
 
 =begin rdoc
+Null space basis. {v_i} with v_i * self = 0.
+=end
+    def nullSpace()
+        a = @elem;
+        r = LinAlg.new().nullSpaceBasis(a);
+        return r;
+    end
+
+
+=begin rdoc
 Get the coefficients of a polynomial.
 =end
     def coefficients()
         a = @elem;
-        #L = [ c.toScriptFactory() for c in a.coefficientIterator() ];
         ll = a.coefficientIterator().map { |c| RingElem.new(c) }; 
         return ll
     end
@@ -5733,6 +5753,9 @@ def Vec(cofac,n,v=nil)
     if v.is_a? RingElem
         v = v.elem;
     end
+    if v.is_a? Array
+        v = rbarray2arraylist(v,cf,rec=1);
+    end
     vr = GenVectorModul.new(cf,n);
     if v == nil
         r = GenVector.new(vr);
@@ -5873,7 +5896,6 @@ Get extension field tower.
         if rf.is_a? GenPolynomialRing
             return PolyRing.new(rf.coFac,rf.getVars(),rf.tord);
         else
-            #return RingElem.new(rf.getZERO());
             return Ring.new("", rf);
         end
     end

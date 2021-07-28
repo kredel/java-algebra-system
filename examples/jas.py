@@ -3138,6 +3138,8 @@ def Vec(cofac,n,v=None):
         n = n.elem;
     if isinstance(v,RingElem):
         v = v.elem;
+    if isinstance(v,PyList) or isinstance(v,PyTuple):
+        v = pylist2arraylist(v,cf,rec=1);
     vr = GenVectorModul(cf,n);
     if v == None:
         r = GenVector(vr);
@@ -3948,6 +3950,13 @@ class RingElem:
         d = LinAlg().determinantLU(self.elem, p);
         return RingElem(d);
 
+    def determinant(self):
+        '''Determinant of matrix.
+        '''
+        p = LinAlg().decompositionLU(self.elem);
+        d = LinAlg().determinantLU(self.elem, p);
+        return RingElem(d);
+
     def rowEchelon(self):
         '''Row echelon form matrix.
         '''
@@ -3959,6 +3968,12 @@ class RingElem:
         '''Rank from row echelon form matrix.
         '''
         r = LinAlg().rankRE(self.elem);
+        return r;
+
+    def nullSpace(self):
+        '''Null space basis. {v_i} with v_i * self = 0.
+        '''
+        r = LinAlg().nullSpaceBasis(self.elem);
         return r;
 
     def coefficients(self):
@@ -4457,7 +4472,7 @@ class EF:
         if isinstance(rf,GenPolynomialRing):
             return PolyRing(rf.coFac,rf.getVars(),rf.tord);
         else:
-            return RingElem(rf.getZERO());
+            return Ring("", rf);
 
 
 class WordRing(Ring):
