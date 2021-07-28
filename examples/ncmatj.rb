@@ -9,20 +9,19 @@ require "examples/jas"
 # conditions for (non) commuting matrices
 
 r = EF.new(QQ()).polynomial("a,b,c,d,e,f,g,h").build()
-#r = Ring.new("", r.ring);
 puts "r = " + str(r)
-#puts
+
 #one, a, b, c, d, e, f, g, h = r.gens();
 puts "h = " + str(h)
 puts
 
-
 x = Mat(r,2,2,[[a,b],[c,d]])
 y = Mat(r,2,2,[[e,f],[g,h]])
-puts "x = " + str(x) + ", y = " + str(y) #+ ", x y = " + str(x*y)
+z = Mat(r,2,2,[[one,0],[0,one]])
+puts "x = " + str(x) + ", y = " + str(y) + ", z = " + str(z)
 puts
 
-com = x*y - y*x
+com = x*y - y*x #+ z
 puts "commutator = " + com.to_s
 puts
 

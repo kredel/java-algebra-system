@@ -11,13 +11,11 @@ from jas import PolyRing, Ideal, QQ, ZZ, EF, Mat
 # conditions for (non) commuting matrices
 
 r = EF(QQ()).polynomial("a,b,c,d,e,f,g,h").build();
-#r = Ring.new("", r.ring);
 print "r = " + str(r);
-#print
+
 #one, a, b, c, d, e, f, g, h = r.gens();
 print "h = " + str(h);
 print
-
 
 x = Mat(r,2,2,[[a,b],[c,d]])
 y = Mat(r,2,2,[[e,f],[g,h]])
@@ -29,7 +27,6 @@ print "commutator = " + str(com)
 print
 
 ff = r.ideal("", [ com[0][0], com[0][1], com[1][0], com[1][1] ] )
-#ff = r.ideal("", [ ] )
 print "ff = " + str(ff)
 print
 
