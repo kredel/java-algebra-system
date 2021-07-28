@@ -22,6 +22,10 @@ f = (1+z)*(1-z); # / ( x**2 + y**2 );
 puts "f     = " + str(f);
 puts;
 
+g = one / (1 - z);
+puts "g     = " + str(g);
+puts;
+
 g = f / (1 - z); 
 puts "g     = " + str(g);
 puts;

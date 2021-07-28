@@ -3161,6 +3161,8 @@ def Mat(cofac,n,m,v=None):
     if isinstance(v,RingElem):
         v = v.elem;
     #print "cf type(%s) = %s" % (cf,type(cf));
+    if isinstance(v,PyList) or isinstance(v,PyTuple):
+        v = pylist2arraylist(v,cf,rec=2);
     mr = GenMatrixRing(cf,n,m);
     if v == None:
         r = GenMatrix(mr);
@@ -3526,7 +3528,20 @@ class RingElem:
         if isinstance(e,BigDecimal):
             e = e.toString();
         e = float(e);
-        return e;
+        return e
+
+    def __getitem__(self,i):
+        '''Matrix or vector entry.
+        '''
+        if isinstance(i,RingElem):
+            i = i.elem;
+        if isinstance(self.elem,GenMatrix):
+            e = self.elem.getRow(i);
+            return RingElem( e );
+        if isinstance(self.elem,GenVector):
+            e = self.elem.get(i);
+            return RingElem( e );
+        raise ValueError, "no matrix or vector " + str(self.ring)
 
     def factory(self):
         '''Get the factory of this element.
@@ -4423,9 +4438,15 @@ class EF:
         return EF(ef.build());
 
     def polynomial(self,vars):
-        '''Create an polynomial ring extension.
+        '''Create a polynomial ring extension.
         '''
         ef = self.builder.polynomialExtension(vars);
+        return EF(ef.build());
+
+    def matrix(self,n):
+        '''Create a matrix ring extension.
+        '''
+        ef = self.builder.matrixExtension(n);
         return EF(ef.build());
 
     def build(self):

@@ -902,6 +902,30 @@ Modular remainder of two ring elements.
     end
 
 =begin rdoc
+Matrix entry.
+=end
+    def [](i,j)
+        return get(i,j);
+    end
+
+=begin rdoc
+Matrix entry.
+=end
+    def get(i,j)
+        if not elem.is_a? GenMatrix
+          raise "no matrix " + ring.to_s
+        end
+        if i.is_a? RingElem
+          i = i.elem;
+        end
+        if j.is_a? RingElem
+          j = j.elem;
+        end
+        e = elem.get(i,j);
+        return RingElem.new( e );
+    end
+
+=begin rdoc
 Can not be used as power.
 =end
     def ^(other)
@@ -5826,10 +5850,18 @@ Construct a complex algebraic extension field with an isolating rectangle for a 
     end
 
 =begin rdoc
-Create an polynomial ring extension.
+Create a polynomial ring extension.
 =end
     def polynomial(vars)
         ef = @builder.polynomialExtension(vars);
+        return EF.new(ef.build());
+    end
+
+=begin rdoc
+Create a matrix ring extension.
+=end
+    def matrix(n)
+        ef = @builder.matrixExtension(n);
         return EF.new(ef.build());
     end
 
@@ -5841,7 +5873,8 @@ Get extension field tower.
         if rf.is_a? GenPolynomialRing
             return PolyRing.new(rf.coFac,rf.getVars(),rf.tord);
         else
-            return RingElem.new(rf.getZERO());
+            #return RingElem.new(rf.getZERO());
+            return Ring.new("", rf);
         end
     end
 
