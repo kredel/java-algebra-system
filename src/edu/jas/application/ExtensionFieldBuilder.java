@@ -11,6 +11,7 @@ import java.io.StringReader;
 import java.util.List;
 
 import edu.jas.arith.Rational;
+import edu.jas.arith.PrimeInteger;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.Complex;
 import edu.jas.poly.GenPolynomial;
@@ -25,6 +26,7 @@ import edu.jas.root.RootUtil;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.QuotientRing;
+import edu.jas.ufd.PolyUfdUtil;
 import edu.jas.vector.GenMatrixRing;
 
 
@@ -111,6 +113,26 @@ public class ExtensionFieldBuilder implements Serializable {
     public ExtensionFieldBuilder matrixExtension(int n) {
         GenMatrixRing mfac = new GenMatrixRing(factory, n, n);
         RingFactory base = (RingFactory) mfac;
+        return new ExtensionFieldBuilder(base);
+    }
+
+
+    /**
+     * Finite field extension.
+     * Construct a finite field with q = p**n elements, where
+     * p is the characteristic of the base field.
+     * @param n exponent.
+     */
+    @SuppressWarnings("unchecked")
+    public ExtensionFieldBuilder finiteFieldExtension(int n) {
+        java.math.BigInteger p = factory.characteristic();
+        if (p.signum() != 1) {
+            throw new IllegalArgumentException("characteristic not finite");
+        }
+        if (!PrimeInteger.isPrime(p)) { //??
+            throw new IllegalArgumentException("characteristic not prime");
+        }
+        RingFactory base = (RingFactory) PolyUfdUtil.algebraicNumberField(factory,n);
         return new ExtensionFieldBuilder(base);
     }
 
