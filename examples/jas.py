@@ -3942,19 +3942,17 @@ class RingElem:
         x = LinAlg().solveLU(self.elem, p, b);
         return RingElem(x);
 
-    def determinant(self, p):
+    def determinant(self, p=None):
         '''Determinant from LU matrix.
         '''
+        a = self.elem;
+        if p == None:
+            p = LinAlg().decompositionLU(a);
         if isinstance(p,RingElem):
             p = p.elem;
-        d = LinAlg().determinantLU(self.elem, p);
-        return RingElem(d);
-
-    def determinant(self):
-        '''Determinant of matrix.
-        '''
-        p = LinAlg().decompositionLU(self.elem);
-        d = LinAlg().determinantLU(self.elem, p);
+        if p.isEmpty():
+            d = self.ring.coFac.getZERO();
+        d = LinAlg().determinantLU(a, p);
         return RingElem(d);
 
     def rowEchelon(self):

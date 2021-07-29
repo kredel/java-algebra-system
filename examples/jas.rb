@@ -5801,8 +5801,8 @@ end
 java_import "edu.jas.application.ExtensionFieldBuilder";
 
 =begin rdoc
-Extension field builder.
-Construction of extension field towers according to then builder pattern.
+Extension ring and field builder.
+Construction of extension ring and field towers using the builder pattern.
 =end
 class EF
 
@@ -5889,7 +5889,7 @@ Create a matrix ring extension.
     end
 
 =begin rdoc
-Get extension field tower.
+Get extension ring or field tower.
 =end
     def build()
         rf = @builder.build();
