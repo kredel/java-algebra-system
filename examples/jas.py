@@ -4431,7 +4431,10 @@ class EF:
         if algebraic == None:
             ef = self.builder.transcendentExtension(vars);
         else:
-            ef = self.builder.algebraicExtension(vars,algebraic);
+            if isinstance(algebraic,PyInteger) or isinstance(algebraic,PyLong):
+               ef = self.builder.finiteFieldExtension(algebraic);
+            else:
+               ef = self.builder.algebraicExtension(vars,algebraic);
         return EF(ef.build());
 
     def realExtend(self,vars,algebraic,interval):

@@ -5848,8 +5848,11 @@ else a transcendental extension field is constructed.
     def extend(vars,algebraic=nil) 
         if algebraic == nil
             ef = @builder.transcendentExtension(vars);
-        else
-            ef = @builder.algebraicExtension(vars,algebraic);
+        else if algebraic.is_a? Integer
+                ef = @builder.finiteFiledExtension(algebraic);
+             else
+                ef = @builder.algebraicExtension(vars,algebraic);
+             end
         end
         return EF.new(ef.build());
     end
