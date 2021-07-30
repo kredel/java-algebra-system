@@ -324,8 +324,8 @@ public final class PrimeInteger {
     /**
      * Integer primality test. n is a positive integer. r is true, if n is
      * prime, else false.
-     * @param n integer to test.
-     * @return true if n is prime, else false.
+     * @param N integer to test.
+     * @return true if N is prime, else false.
      */
     public static boolean isPrime(java.math.BigInteger N) {
         if (N.isProbablePrime(N.bitLength())) {
