@@ -652,12 +652,14 @@ print "e32 = " + str(e32);
 print "e33 = " + str(e33);
 m1 = e11 + e31;
 print "m1 = " + str(m1);
-m2 = m1 * m1 + 5*e22;
+m2 = m1 * m1 + 5*e22 + 9*e33;
 print "m2 = " + str(m2);
 m3 = m2**3 - 125*e21 - 125*e23;
 print "m3 = " + str(m3);
-#m4 = 1/m2;
-#print "m4 = " + str(m4);
+m4 = 1/m2;
+print "m4 = " + str(m4);
+mi = m2*m4;
+print "mi = " + str(mi) + ", isONE: " + str(mi.isONE()); 
 m5 = ( ( 1, 0, 0 ), ( -125, 125, -125 ), ( 1, 0, 0 ) ); # is PyTuple!
 print "m5 = " + str(m5);
 m6 = m3 * m5;
@@ -673,6 +675,13 @@ print "r.factory() = " + str(r.factory());
 for g in r.gens():
     print "g = " + str(g);
 print;
+m1 = r.random(5);
+print "m1 = " + str(m1);
+m2 = r.one(); #r.random(3);
+print "m2 = " + str(m2);
+m3 = m1*m2 - m2*m1;
+print "m3 = " + str(m3) + ", isZERO?: " + str(m3.isZERO());
+print;
 
 
 print "------- PolyRing(Mat(QQ(),3,3),\"x,y,z\",PolyRing.lex) ---------";
@@ -680,6 +689,13 @@ r = PolyRing(Mat(QQ(),3,3),"x,y,z",PolyRing.lex);
 print "r = " + str(r);
 for g in r.gens():
     print "g = " + str(g);
+print;
+m1 = r.random(5);
+print "m1 = " + str(m1);
+m2 = m1.monic();
+print "m2 = " + str(m2);
+m3 = m2.lc();
+print "m3 = " + str(m3) + ", isONE?: " + str(m3.isONE());
 print;
 
 

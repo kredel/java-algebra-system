@@ -482,27 +482,17 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
     /**
      * Test if this is a unit. I.e. there exists x with this.multiply(x).isONE()
-     * == true. Tests if all diagonal elements are units and all other elements
-     * are zero.
+     * == true. Tests if matrix is not singular.
+     * Was previously a test if all diagonal elements are units and all other
+     *  elements are zero.
      * @return true if this is a unit, else false.
      */
     public boolean isUnit() {
-        int i = 0;
-        for (ArrayList<C> val : matrix) {
-            int j = 0;
-            for (C el : val) {
-                if (i == j) {
-                    if (!el.isUnit()) {
-                        return false;
-                    }
-                } else {
-                    if (!el.isZERO()) {
-                        return false;
-                    }
-                }
-                j++;
-            }
-            i++;
+        LinAlg<C> la = new LinAlg<C>();
+        GenMatrix<C> mat = this.copy();
+        List<Integer> P = la.decompositionLU(mat);
+        if (P == null || P.isEmpty()) {
+            return false;
         }
         return true;
     }

@@ -658,12 +658,14 @@ puts "e32 = " + str(e32);
 puts "e33 = " + str(e33);
 m1 = e11 + e31;
 puts "m1 = " + str(m1);
-m2 = m1 * m1 + 5*e22;
+m2 = m1 * m1 + 5*e22 + 9*e33;
 puts "m2 = " + str(m2);
 m3 = m2**3 - 125*e21 - 125*e23;
 puts "m3 = " + str(m3);
-#m4 = 1/m2;
-#puts "m4 = " + str(m4);
+m4 = 1/m2;
+puts "m4 = " + str(m4);
+mi = m2*m4;
+puts "mi = " + str(mi) + ", isONE: " + str(mi.one?); 
 m5 = Mat(QQ(),3,3,v=[ [ 1, 0, 0 ], [ -125, 125, -125 ], [ 1, 0, 0 ] ]); 
 puts "m5 = " + str(m5);
 m6 = m3 * m5;
@@ -680,6 +682,13 @@ for g in r.gens()
     print "g = ", str(g), "\n";
 end
 puts;
+m1 = r.random(5);
+puts "m1 = " + str(m1);
+m2 = r.one; #r.random(3);
+puts "m2 = " + str(m2);
+m3 = m1*m2 - m2*m1;
+puts "m3 = " + str(m3) + ", isZERO?: " + str(m3.zero?);
+puts;
 
 
 puts "------- PolyRing(Mat(QQ(),3,3),\"x,y,z\",PolyRing.lex) ---------";
@@ -688,6 +697,13 @@ puts "r = " + str(r);
 for g in r.gens()
     print "g = ", str(g), "\n";
 end
+puts;
+m1 = r.random(5);
+puts "m1 = " + str(m1);
+m2 = m1.monic();
+puts "m2 = " + str(m2);
+m3 = m2.lc();
+puts "m3 = " + str(m3) + ", isONE?: " + str(m3.one?);
 puts;
 
 
