@@ -5849,7 +5849,7 @@ else a transcendental extension field is constructed.
         if algebraic == nil
             ef = @builder.transcendentExtension(vars);
         else if algebraic.is_a? Integer
-                ef = @builder.finiteFiledExtension(algebraic);
+                ef = @builder.finiteFieldExtension(algebraic);
              else
                 ef = @builder.algebraicExtension(vars,algebraic);
              end
