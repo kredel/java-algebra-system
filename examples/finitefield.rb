@@ -63,4 +63,21 @@ puts "pg**(17**5-1)    = " + str(pol);
 puts "17**5            = " + str(17**5);
 puts
 
+
+r = EF.new(ZM(17)).extend("",5).build();
+puts "r     = " + str(r);
+e,a = r.gens();
+puts "e     = " + str(e);
+puts "a     = " + str(a);
+
+pg = r.gens()[1];
+puts "pg               = " + str(pg);
+pol = pg**(17**5) - pg;
+puts "pg**(17**5) - pg = " + str(pol);
+pol = pg**(17**5-1);
+puts "pg**(17**5-1)    = " + str(pol);
+puts "17**5            = " + str(17**5);
+puts
+
+
 terminate();
