@@ -75,6 +75,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 if (absA.compareTo(maxA) > 0) {
                     maxA = absA;
                     imax = k;
+                    break; // first
                 }
             }
             if (maxA.isZERO()) {
@@ -108,6 +109,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                     mat.get(j).set(k, mat.get(j).get(k).subtract(a));
                 }
             }
+            //System.out.println("row(last) = " + mat.get(N-1));
         }
         return P;
     }
@@ -441,6 +443,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             }
             // A[j][i] /= A[i][i];
             C dd = mat.get(i).get(kmax).inverse();
+            //System.out.println("matrix is non zero at row " + imax + ", dd = " + dd);
             for (int k = kmax; k < M; k++) {
                 C d = mat.get(i).get(k).multiply(dd); //divide(dd);
                 mat.get(i).set(k, d);
@@ -461,6 +464,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             if (kmax >= M) {
                 break;
             }
+            //System.out.println("rowEch(last) = " + mat.get(N-1));
         }
         return A;
     }
