@@ -7,8 +7,6 @@ require "examples/jas"
 
 # multiple algebraic field extensions
 
-startLog();
-
 puts "------- multiple algebraic field extensions QQ(alpha)(beta)(gamma)(delta) ---------";
 r = PolyRing.new(QQ(),"alpha",PolyRing.lex);
 puts "r     = " + str(r);
@@ -30,6 +28,7 @@ b = alpha**2 - 1;
 puts "b     = " + str(b);
 c = 1 / b;
 puts "c     = " + str(c);
+puts "b*c   = " + str(b*c);
 puts
 
 ar = PolyRing.new(qs2,"beta",PolyRing.lex);

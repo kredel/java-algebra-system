@@ -2445,8 +2445,9 @@ def arraylist2pylist(list,rec=1):
 
 def makeJasArith(item):
     '''Construct a jas.arith object.
-    If item is a python tuple or list then a BigRational, BigComplex is constructed. 
-    If item is a python float then a BigDecimal is constructed. 
+    If item is a python tuple or list then a BigRational, BigComplex is constructed.
+    If item is a python float then a BigDecimal is constructed.
+    Otherwise, item is returned unchanged.
     '''
     #print "item type(%s) = %s" % (item,type(item));
     if isinstance(item,PyInteger) or isinstance(item,PyLong):
@@ -2477,8 +2478,9 @@ def makeJasArith(item):
                 jasArith = BigRational( item[0] ).divide( BigRational( item[1] ) );
             else:
                 jasArith = BigRational( item[0] );
+        #print "makeJasArith: type(%s) = %s" % (jasArith,type(jasArith));
         return jasArith;
-    print "makeJasArith: unknown item type(%s) = %s" % (item,type(item));
+    #print "makeJasArith: unknown item type(%s) = %s" % (item,type(item));
     return item;
 
 
@@ -3183,8 +3185,12 @@ def coercePair(a,b):
             s = b.coerce(a);
             o = b;
         else:
-            s = a;
-            o = a.coerce(b);
+            if not a.isAlgNum() and b.isAlgNum():
+                s = b.coerce(a);
+                o = b;
+            else:
+                s = a;
+                o = a.coerce(b);
     except:
         s = a;
         o = a.coerce(b);
@@ -3290,11 +3296,15 @@ class RingElem:
             if isinstance(other,GenVector):
                 o = other;
                 return RingElem( o );
-        if isinstance(self.elem,GenPolynomial):
+        if isinstance(self.elem,GenPolynomial) or isinstance(self.elem,AlgebraicNumber):
             #print "self, other = %s, %s " % (type(self),type(other));
-            #print "o type(%s) = %s, str = %s" % (o,type(o),str(o));
+            #print "o type(%s) = %s, str = %s" % (other,type(other),str(other));
             if isinstance(other,PyInteger) or isinstance(other,PyLong):
                o = self.ring.fromInteger(other);
+               return RingElem( o );
+            if isinstance(other,PyList) or isinstance(other,PyTuple):
+               #print "self, other = %s, %s " % (type(self),type(other));
+               o = self.ring.parse( str(makeJasArith(other)) );
                return RingElem( o );
             if isinstance(other,RingElem):
                 o = other.elem;
@@ -3307,9 +3317,10 @@ class RingElem:
                 if isinstance(o,ExpVector): # want startsWith or substring(0,8) == "ExpVector":
                     o = GenPolynomial(self.ring,o);
                     return RingElem( o );
-                if self.ring.coFac.getClass().getSimpleName() == o.getClass().getSimpleName():
-                    o = GenPolynomial(self.ring,o);
-                    return RingElem( o );
+                o = self.ring.parse( str(makeJasArith(o)) );
+                    #if self.ring.coFac.getClass().getSimpleName() == o.getClass().getSimpleName():
+                    #o = GenPolynomial(self.ring,o);
+                return RingElem( o );
         if isinstance(other,RingElem):
             if self.isPolynomial() and not other.isPolynomial():
                 #print "parse self.ring = %s" % (self.ring);
@@ -3395,6 +3406,17 @@ class RingElem:
             nv = self.elem.ring.nvar;
         except:
             return False;
+        return True;
+
+    def isAlgNum(self):
+        '''Test if this is an algebraic number.
+        '''
+        try:
+            nv = self.elem.ring.ring.nvar;
+        except:
+            #print "isAlgNum fail: type(%s) = %s" % (self.elem,type(self.elem));
+            return False;
+        #print "isAlgNum true: type(%s) = %s" % (self.elem,type(self.elem));
         return True;
 
     def __cmp__(self,other):

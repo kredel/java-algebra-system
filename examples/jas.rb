@@ -676,9 +676,14 @@ Coerce type a to type b or type b to type a.
                #puts "b = " + str(b.isPolynomial());
                s = b.coerceElem(a);
                o = b;
-            else
-               s = a;
-               o = a.coerceElem(b);
+            else if not a.isAlgNum() and b.isAlgNum()
+                    #puts "b = " + str(b.isAlgNum());
+                    s = b.coerceElem(a);
+                    o = b;
+                 else
+                    s = a;
+                    o = a.coerceElem(b);
+                 end
             end
         rescue => e
                #puts "e #{e.message}, a = #{a}";
@@ -720,7 +725,7 @@ Coerce other to self
                 end
         end
         if other.is_a? RingElem
-            if isPolynomial() and not other.isPolynomial()
+            if (isPolynomial() and not other.isPolynomial()) or (isAlgNum() and not other.isAlgNum())
                 #puts "other pol.parse(#{@ring})\n";
                 o = @ring.parse( other.elem.toString() ); # not toScript()
                 return RingElem.new( o );
@@ -809,6 +814,18 @@ Test if this is a polynomial.
     def isPolynomial()
         begin
             nv = @elem.ring.coFac; #nvar;
+        rescue
+            return false;
+        end
+        return true;
+    end
+
+=begin rdoc
+Test if this is an algebraic number.
+=end
+    def isAlgNum()
+        begin
+            nv = @elem.ring.ring.nvar; #coFac
         rescue
             return false;
         end
@@ -2933,6 +2950,7 @@ Construct a jas.arith object.
 
 If item is an ruby array then a BigComplex is constructed. 
 If item is a ruby float then a BigDecimal is constructed. 
+Otherwise, item is returned unchanged.
 =end
 def makeJasArith(item)
     #puts "item type(#{item}) = #{item.class}\n";
