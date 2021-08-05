@@ -3315,12 +3315,20 @@ class RingElem:
             if isJavaInstance(o):
                 #print "self.elem, o = %s, %s " % (type(self.ring.coFac),type(o));
                 if isinstance(o,ExpVector): # want startsWith or substring(0,8) == "ExpVector":
-                    o = GenPolynomial(self.ring,o);
-                    return RingElem( o );
-                o = self.ring.parse( str(makeJasArith(o)) );
-                    #if self.ring.coFac.getClass().getSimpleName() == o.getClass().getSimpleName():
                     #o = GenPolynomial(self.ring,o);
-                return RingElem( o );
+                    o = self.ring.valueOf(o);
+                    return RingElem( o );
+                #o = self.ring.parse( str(makeJasArith(o)) );
+                #o = self.ring.valueOf( makeJasArith(o) );
+                if isinstance(self.elem,GenPolynomial):
+                    if self.ring.coFac.getClass().getSimpleName() == o.getClass().getSimpleName():
+                        #o = GenPolynomial(self.ring,o);
+                        o = self.ring.valueOf(o);
+                        return RingElem( o );
+                else: # AlgebraicNumber
+                    if self.ring.ring.coFac.getClass().getSimpleName() == o.getClass().getSimpleName():
+                        o = self.ring.valueOf(o);
+                        return RingElem( o );
         if isinstance(other,RingElem):
             if self.isPolynomial() and not other.isPolynomial():
                 #print "parse self.ring = %s" % (self.ring);
