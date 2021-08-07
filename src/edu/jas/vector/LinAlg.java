@@ -56,17 +56,19 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         }
         GenMatrixRing<C> ring = A.ring;
         int N = ring.rows;
-        if (N != ring.cols) {
+        int M = ring.cols;
+        int NM = Math.min(N,M);
+        if (N != M) {
             logger.warn("nosquare matrix");
         }
         int i, imax;
         C maxA, absA;
-        List<Integer> P = new ArrayList<Integer>(N + 1);
-        for (i = 0; i <= N; i++) {
-            P.add(i); //Unit permutation matrix, P[N] initialized with N
+        List<Integer> P = new ArrayList<Integer>(NM + 1);
+        for (i = 0; i <= NM; i++) {
+            P.add(i); //Unit permutation matrix, P[NM] initialized with NM
         }
         ArrayList<ArrayList<C>> mat = A.matrix;
-        for (i = 0; i < N; i++) {
+        for (i = 0; i < NM; i++) {
             imax = i;
             maxA = ring.coFac.getZERO();
             for (int k = i; k < N; k++) {
@@ -95,21 +97,21 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 ArrayList<C> ptr = mat.get(i);
                 mat.set(i, mat.get(imax));
                 mat.set(imax, ptr);
-                //counting pivots starting from N (for determinant)
-                P.set(N, P.get(N) + 1);
+                //counting pivots starting from NM (for determinant)
+                P.set(NM, P.get(NM) + 1);
             }
             C dd = mat.get(i).get(i).inverse();
             for (int j = i + 1; j < N; j++) {
                 // A[j][i] /= A[i][i];
                 C d = mat.get(j).get(i).multiply(dd); //divide(dd);
                 mat.get(j).set(i, d);
-                for (int k = i + 1; k < N; k++) {
+                for (int k = i + 1; k < M; k++) {
                     // A[j][k] -= A[j][i] * A[i][k];
                     C a = mat.get(j).get(i).multiply(mat.get(i).get(k));
                     mat.get(j).set(k, mat.get(j).get(k).subtract(a));
                 }
             }
-            //System.out.println("row(last) = " + mat.get(N-1));
+            //System.out.println("row(last) = " + mat.get(NM-1));
         }
         return P;
     }
