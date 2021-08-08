@@ -724,7 +724,7 @@ public class GenMatrixTest extends TestCase {
         GenMatrix<BigInteger> A, Ap, iA, AiA;
         //A = mfac.random(kl, 0.7f);
         A = mfac.parse("[ [3,4,-2,1,-2], [1,-1,2,2,7], [4,-3,4,-3,2], [-1,1,6,-1,1] ]");
-        System.out.println("A = " + A);
+        //System.out.println("A = " + A);
         if (A.isZERO()) {
             return;
         }
@@ -735,19 +735,20 @@ public class GenMatrixTest extends TestCase {
         BasicLinAlg<BigInteger> blas = new BasicLinAlg<BigInteger>();
 
         List<Integer> P = lu.fractionfreeGaussElimination(A);
-        System.out.println("P = " + P);
+        //System.out.println("P = " + P);
         if (P.size() == 0) {
-            System.out.println("undecomposable");
+            //System.out.println("undecomposable");
+            return;
         }
         assertTrue("#P != 0: ", P.size() > 0);
-        System.out.println("A = " + A);
+        //System.out.println("A = " + A);
 
         n = 10;
         m = n;
         mfac = new GenMatrixRing<BigInteger>(cfac, n, m);//rows, cols);
 
         A = mfac.random(5, 0.67f);
-        System.out.println("A = " + A);
+        //System.out.println("A = " + A);
         if (A.isZERO()) {
             return;
         }
@@ -755,13 +756,13 @@ public class GenMatrixTest extends TestCase {
         Ap = A.copy();
 
         P = lu.fractionfreeGaussElimination(A);
-        System.out.println("P = " + P);
+        //System.out.println("P = " + P);
         if (P.size() == 0) {
-            System.out.println("undecomposable");
+            //System.out.println("undecomposable");
             return;
         }
         assertTrue("#P != 0: ", P.size() > 0);
-        System.out.println("A = " + A);
+        //System.out.println("A = " + A);
     }
 
 
@@ -772,15 +773,14 @@ public class GenMatrixTest extends TestCase {
         BigRational cfac = new BigRational(1);
         int n = 4;
         int m = n;
-        String[] vs = new String[]{ "a1", "a2", "a3", "a4" };
-        String[] vars = new String[]{ "a11", "a12", "a13", "a14", "a21", "a22", "a23", "a24", "a31", "a32", "a33", "a34", "a41", "a42", "a43", "a44" };
-        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, vs);
+        String[] vars = new String[]{ "a1", "a2", "a3", "a4" };
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, vars);
         GenMatrixRing<GenPolynomial<BigRational>> mfac = new GenMatrixRing<GenPolynomial<BigRational>>(pfac, n, m);
 
         GenMatrix<GenPolynomial<BigRational>> A, Ap, iA, AiA;
         A = mfac.random(4, 0.5f);
         //A = mfac.parse("[ [3,4,-2,1,-2], [1,-1,2,2,7], [4,-3,4,-3,2], [-1,1,6,-1,1] ]");
-        System.out.println("A = " + A);
+        //System.out.println("A = " + A);
         if (A.isZERO()) {
             return;
         }
@@ -790,34 +790,34 @@ public class GenMatrixTest extends TestCase {
         LinAlg<GenPolynomial<BigRational>> lu = new LinAlg<GenPolynomial<BigRational>>();
 
         List<Integer> P = lu.fractionfreeGaussElimination(A);
-        System.out.println("P = " + P);
+        //System.out.println("P = " + P);
         if (P.size() == 0) {
-            System.out.println("undecomposable");
+            //System.out.println("undecomposable");
             return;
         }
         assertTrue("#P != 0: ", P.size() > 0);
-        System.out.println("A = " + A);
+        //System.out.println("A = " + A);
 
 
+        vars = new String[]{ "a11", "a12", "a13", "a14", "a21", "a22", "a23", "a24", "a31", "a32", "a33", "a34", "a41", "a42", "a43", "a44" };
         pfac = new GenPolynomialRing<BigRational>(cfac, vars);
         mfac = new GenMatrixRing<GenPolynomial<BigRational>>(pfac, n, m);
         A = mfac.parse("[ [a11, a12, a13, a14], [a21, a22, a23, a24], [a31, a32, a33, a34], [a41, a42, a43, a44]] ");
-        System.out.println("A = " + A);
+        //System.out.println("A = " + A);
         if (A.isZERO()) {
             return;
         }
         assertTrue(" not isZERO( A )", !A.isZERO());
         Ap = A.copy();
 
-
         P = lu.fractionfreeGaussElimination(A);
-        System.out.println("P = " + P);
+        //System.out.println("P = " + P);
         if (P.size() == 0) {
-            System.out.println("undecomposable");
+            //System.out.println("undecomposable");
             return;
         }
         assertTrue("#P != 0: ", P.size() > 0);
-        System.out.println("A = " + A);
+        //System.out.println("A = " + A);
 
         FactorAbstract<BigRational> ufd = FactorFactory.getImplementation(cfac);
         int i = 0;
@@ -829,8 +829,8 @@ public class GenMatrixTest extends TestCase {
                      continue;
                  }
                  SortedMap<GenPolynomial<BigRational>, Long> pf = ufd.factors(elem);
-                 System.out.println("A(" + i + "," + j + ") = " + elem);
-                 System.out.println("factors = " + pf);
+                 //System.out.println("A(" + i + "," + j + ") = " + elem);
+                 //System.out.println("factors = " + pf);
                  assertTrue("#factors == 1:", pf.size() == 1);
                  j++;
              }

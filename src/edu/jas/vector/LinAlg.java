@@ -61,19 +61,17 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         if (N != M) {
             logger.warn("nosquare matrix");
         }
-        int i, imax;
-        C maxA, absA;
         List<Integer> P = new ArrayList<Integer>(NM + 1);
-        for (i = 0; i <= NM; i++) {
+        for (int i = 0; i <= NM; i++) {
             P.add(i); //Unit permutation matrix, P[NM] initialized with NM
         }
         ArrayList<ArrayList<C>> mat = A.matrix;
-        for (i = 0; i < NM; i++) {
-            imax = i;
-            maxA = ring.coFac.getZERO();
+        for (int i = 0; i < NM; i++) {
+            int imax = i;
+            C maxA = ring.coFac.getZERO();
             for (int k = i; k < N; k++) {
                 // absA = fabs(A[k][i])
-                absA = mat.get(k).get(i).abs();
+                C absA = mat.get(k).get(i).abs();
                 if (absA.compareTo(maxA) > 0) {
                     maxA = absA;
                     imax = k;
@@ -82,7 +80,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             }
             if (maxA.isZERO()) {
                 logger.warn("matrix is degenerate at col " + i);
-                mat.get(i).set(i, ring.coFac.getZERO());
+                mat.get(i).set(i, ring.coFac.getZERO()); // already zero
                 //continue;
                 P.clear();
                 return P; //failure, matrix is degenerate
@@ -411,17 +409,15 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
         if (N != M) {
             logger.warn("nosquare matrix");
         }
-        int i, imax, kmax;
-        C maxA, absA;
-        kmax = 0;
+        int kmax = 0;
         ArrayList<ArrayList<C>> mat = A.matrix;
-        for (i = 0; i < N;) {
-            imax = i;
-            maxA = ring.coFac.getZERO();
+        for (int i = 0; i < N;) {
+            int imax = i;
+            C maxA = ring.coFac.getZERO();
             // search non-zero rows
             for (int k = i; k < N; k++) {
                 // absA = fabs(A[k][i])
-                absA = mat.get(k).get(kmax).abs();
+                C absA = mat.get(k).get(kmax).abs();
                 if (absA.compareTo(maxA) > 0) {
                     maxA = absA;
                     imax = k;
@@ -565,12 +561,12 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
     /**
      * Matrix fraction free Gauss elimination. Matrix A is replaced by
      * its fraction free LU decomposition. A contains a copy of both
-     * matrices L-E and U as A=(L-E)+U such that P*A=L*U. The
-     * permutation matrix is not stored as a matrix, but in an integer
-     * vector P of size N+1 containing column indexes where the
-     * permutation matrix has "1". The last element P[N]=S+N, where S
-     * is the number of row exchanges needed for determinant
-     * computation, det(P)=(-1)^S
+     * matrices L-E and U as A=(L-E)+U such that P*A=L*U. Todo: L is
+     * not computed but 0. The permutation matrix is not stored as a
+     * matrix, but in an integer vector P of size N+1 containing
+     * column indexes where the permutation matrix has "1". The last
+     * element P[N]=S+N, where S is the number of row exchanges needed
+     * for determinant computation, det(P)=(-1)^S
      * @param A a n&times;n matrix.
      * @return permutation vector P and modified matrix A.
      */
@@ -606,7 +602,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
             }
             if (maxA.isZERO()) {
                 logger.warn("matrix is degenerate at col " + i);
-                mat.get(i).set(i, ring.coFac.getZERO());
+                mat.get(i).set(i, ring.coFac.getZERO()); //already zero
                 //continue;
                 P.clear();
                 return P; //failure, matrix is degenerate
@@ -641,7 +637,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                     mat.get(j).set(k, d);
                 }
             }
-            for (int j = r + 1; j < N; j++) { // set L = 0
+            for (int j = r + 1; j < N; j++) { // set L-E = 0
                 mat.get(j).set(i, ring.coFac.getZERO());
             }
             divisor = mat.get(r).get(i);
