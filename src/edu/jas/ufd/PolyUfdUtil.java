@@ -764,9 +764,6 @@ public class PolyUfdUtil {
                 } else {
                     ll = one.subtract(ll);
                 }
-                if (s++ > 100l) {
-                    break;
-                }
                 ape = PolyUtil.<C> evaluateMainRecursive(cpfac, ap, Vi);
                 System.out.println("ape = " + ape);
                 //long degp = ape.degree(0);
@@ -782,6 +779,10 @@ public class PolyUfdUtil {
                 //System.out.println("isSquarefree");
                 //ap = ape;
                 unlucky = false;
+                if (s++ > 300l) {
+                    throw new RuntimeException(s + " evaluations not squarefree: " + Vi + ", " + ape);
+                    //break;
+                }
             }
             L.add(Vi);
             rpfac = cpfac;
