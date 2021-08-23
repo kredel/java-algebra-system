@@ -1668,8 +1668,9 @@ public class PolyUtilTest extends TestCase {
      */
     public void testTransformation() {
         //dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 1, to);
+        //System.out.println("ring = " + dfac.toScript());
         c = dfac.getONE();
-        //System.out.println("c = " + c + ", ring = " + dfac.toScript());
+        //System.out.println("c = " + c);
         a = PolyUtil.reciprocalTransformation(c);
         //System.out.println("a = " + a);
 
@@ -1685,6 +1686,16 @@ public class PolyUtilTest extends TestCase {
         b = PolyUtil.reciprocalTransformation(a);
         //System.out.println("b = " + b);
         assertEquals("recip(recip(c)) == c: ", c, b);
+
+        for (int i = 0; i < rl; i++) {
+            //System.out.println("i = " + i + ", deg(c,i) = " + c.degree(i));
+            a = PolyUtil.reciprocalTransformation(c,i);
+            //System.out.println("a = " + a);
+            b = PolyUtil.reciprocalTransformation(a,i);
+            //System.out.println("b = " + b);
+            assertEquals("recip(recip(c)) == c: ", c, b);
+            //break;
+        }
     }
 
 }

@@ -1844,6 +1844,18 @@ public class PolyUtil {
      * @return B with B(x) = x**n*A(1/x), where x is the main variable of A.
      */
     public static <C extends RingElem<C>> GenPolynomial<C> reciprocalTransformation(GenPolynomial<C> A) {
+        return reciprocalTransformation(A,0);
+    }
+
+
+    /**
+     * Polynomial reciprocal transformation.
+     * @param <C> coefficient type.
+     * @param A is a non-zero polynomial, with n=DEG(A,i), A(x_r, ..., x_0).
+     * @param i variable to be transformed, 0 is the main variable.
+     * @return B with B(x) = x_i**n*A(1/x_i), where x_i is the i-th variable of A.
+     */
+    public static <C extends RingElem<C>> GenPolynomial<C> reciprocalTransformation(GenPolynomial<C> A, int i) {
         if (A == null) {
             return null;
         }
@@ -1852,16 +1864,15 @@ public class PolyUtil {
         if (A.isZERO()) {
             return B;
         }
-        int m = pfac.nvar;
-        int mm = pfac.nvar - m;
-        long d = A.degree(mm);
-        //System.out.println("d = " + d + ", mm = " + mm);
+        int m = i;
+        long d = A.degree(m);
+        //System.out.println("d = " + d + ", m = " + m);
         Map<ExpVector, C> val = A.val;
         Map<ExpVector, C> valb = B.val;
         for (Map.Entry<ExpVector, C> me : val.entrySet()) {
             ExpVector e = me.getKey();
-            long de = d - e.getVal(mm);
-            ExpVector f = e.subst(mm, de);
+            long de = d - e.getVal(m);
+            ExpVector f = e.subst(m, de);
             C c = me.getValue();
             valb.put(f,c);
         }
