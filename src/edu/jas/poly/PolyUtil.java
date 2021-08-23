@@ -1838,6 +1838,38 @@ public class PolyUtil {
 
 
     /**
+     * Polynomial reciprocal transformation.
+     * @param <C> coefficient type.
+     * @param A is a non-zero polynomial, with n=DEG(A).
+     * @return B with B(x) = x**n*A(1/x), where x is the main variable of A.
+     */
+    public static <C extends RingElem<C>> GenPolynomial<C> reciprocalTransformation(GenPolynomial<C> A) {
+        if (A == null) {
+            return null;
+        }
+        GenPolynomialRing<C> pfac = A.ring;
+        GenPolynomial<C> B = pfac.getZERO().copy();
+        if (A.isZERO()) {
+            return B;
+        }
+        int m = pfac.nvar;
+        int mm = pfac.nvar - m;
+        long d = A.degree(mm);
+        //System.out.println("d = " + d + ", mm = " + mm);
+        Map<ExpVector, C> val = A.val;
+        Map<ExpVector, C> valb = B.val;
+        for (Map.Entry<ExpVector, C> me : val.entrySet()) {
+            ExpVector e = me.getKey();
+            long de = d - e.getVal(mm);
+            ExpVector f = e.subst(mm, de);
+            C c = me.getValue();
+            valb.put(f,c);
+        }
+        return B;
+    }
+
+
+    /**
      * Evaluate at main variable.
      * @param <C> coefficient type.
      * @param cfac coefficent polynomial ring factory.

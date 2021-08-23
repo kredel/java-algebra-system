@@ -68,49 +68,13 @@ public class PolyUtilTest extends TestCase {
     GenPolynomialRing<GenPolynomial<BigInteger>> rfac;
 
 
-    BigInteger ai;
+    BigInteger ai, bi, ci, di, ei;
 
 
-    BigInteger bi;
+    GenPolynomial<BigInteger> a, b, c, d, e;
 
 
-    BigInteger ci;
-
-
-    BigInteger di;
-
-
-    BigInteger ei;
-
-
-    GenPolynomial<BigInteger> a;
-
-
-    GenPolynomial<BigInteger> b;
-
-
-    GenPolynomial<BigInteger> c;
-
-
-    GenPolynomial<BigInteger> d;
-
-
-    GenPolynomial<BigInteger> e;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> ar;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> br;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> cr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> dr;
-
-
-    GenPolynomial<GenPolynomial<BigInteger>> er;
+    GenPolynomial<GenPolynomial<BigInteger>> ar, br, cr, dr, er;
 
 
     int rl = 5;
@@ -1696,6 +1660,31 @@ public class PolyUtilTest extends TestCase {
         c = PolyUtil.<BigInteger> removeUnusedMiddleVariables(c);
         //System.out.println("c = " + c + ", fac = " + c.ring);
         assertTrue("#var == 2: " + c.ring.nvar, c.ring.nvar == 2);
+    }
+
+
+    /**
+     * Test transformation.
+     */
+    public void testTransformation() {
+        //dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 1, to);
+        c = dfac.getONE();
+        //System.out.println("c = " + c + ", ring = " + dfac.toScript());
+        a = PolyUtil.reciprocalTransformation(c);
+        //System.out.println("a = " + a);
+
+        d = dfac.getZERO();
+        //System.out.println("d = " + d);
+        b = PolyUtil.reciprocalTransformation(d);
+        //System.out.println("b = " + b);
+
+        c = dfac.random(kl * 2, ll + 2, el * 2, q+q);
+        //System.out.println("c = " + c);
+        a = PolyUtil.reciprocalTransformation(c);
+        //System.out.println("a = " + a);
+        b = PolyUtil.reciprocalTransformation(a);
+        //System.out.println("b = " + b);
+        assertEquals("recip(recip(c)) == c: ", c, b);
     }
 
 }
