@@ -66,6 +66,7 @@ public class EvalPoints<C extends RingElem<C>> implements Serializable {
         sb.append(upoly.toString());
         sb.append(", ");
         sb.append(evalPoints.toString());
+        sb.append(")");
         return sb.toString();
     }
 
@@ -91,6 +92,7 @@ public class EvalPoints<C extends RingElem<C>> implements Serializable {
         sb.append(upoly.toScript());
         sb.append(", ");
         sb.append(evalPoints.toString());
+        sb.append(")");
         return sb.toString();
     }
 
