@@ -1698,4 +1698,59 @@ public class PolyUtilTest extends TestCase {
         }
     }
 
+
+    /**
+     * Test translation.
+     */
+    public void testTranslation() {
+        //dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 1, to);
+        System.out.println("ring = " + rfac.toScript());
+        ai = new BigInteger(5);
+        System.out.println("ai = " + ai);
+
+        cr = rfac.getONE();
+        System.out.println("cr = " + cr);
+        ar = PolyUtil.translationMainRecursive(cr, ai);
+        System.out.println("ar = " + ar);
+        br = PolyUtil.translationMainRecursive(ar, ai.negate());
+        System.out.println("br = " + br);
+        assertEquals("translat(translat(cr)) == cr: ", cr, br);
+
+        dr = rfac.getZERO();
+        System.out.println("dr = " + dr);
+        ar = PolyUtil.translationMainRecursive(dr, ai);
+        System.out.println("ar = " + ar);
+        br = PolyUtil.translationMainRecursive(ar, ai.negate());
+        System.out.println("br = " + br);
+        assertEquals("translat(translat(dr)) == dr: ", dr, br);
+
+        cr = rfac.univariate(0).power(3);
+        cr = cr.sum(cr.power(5));
+        System.out.println("cr = " + cr);
+        ar = PolyUtil.translationMainRecursive(cr, ai);
+        System.out.println("ar = " + ar);
+        br = PolyUtil.translationMainRecursive(ar, ai.negate());
+        System.out.println("br = " + br);
+        assertEquals("translat(translat(cr)) == cr: ", cr, br);
+
+
+        System.out.println("ring = " + dfac.toScript());
+        c = dfac.getONE();
+        System.out.println("c = " + c);
+        a = PolyUtil.translationMain(c, ai);
+        System.out.println("a = " + a);
+        b = PolyUtil.translationMain(a, ai.negate());
+        System.out.println("b = " + b);
+        assertEquals("translat(translat(c)) == c: ", c, b);
+
+        c = dfac.univariate(0).power(2);
+        c = c.sum(c.power(6));
+        System.out.println("c = " + c);
+        a = PolyUtil.translationMain(c, ai);
+        System.out.println("a = " + a);
+        b = PolyUtil.translationMain(a, ai.negate());
+        System.out.println("b = " + b);
+        assertEquals("translat(translat(c)) == c: ", c, b);
+    }
+
 }

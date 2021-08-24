@@ -1881,6 +1881,82 @@ public class PolyUtil {
 
 
     /**
+     * Polynomial translation, main variable.
+     * @param <C> coefficient type.
+     * @param A is a non-zero polynomial in r variables,  A(x_1, ..., x(r-1), x_r).
+     * @param h is a coefficient ring element.
+     * @return B with B(x1, ..., x(r-1), xr) = A(x1, ..., x(r-1), xr+h).
+     */
+    public static <C extends RingElem<C>> GenPolynomial<C>
+           translationMain(GenPolynomial<C> A, C h) {
+        if (A == null) {
+            return null;
+        }
+        if (A.isZERO() || h.isZERO()) {
+            return A;
+        }
+        GenPolynomialRing<C> pfac = A.ring;
+        GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1);
+        GenPolynomial<GenPolynomial<C>> Ar = recursive(rfac, A);
+        GenPolynomial<GenPolynomial<C>> Br = translationMainRecursive(Ar, h);
+        GenPolynomial<C> B = distribute(pfac, Br);
+        return B;
+    }
+
+
+    /**
+     * Polynomial translation, main variable.
+     * @param <C> coefficient type.
+     * @param A is a non-zero recursive polynomial in r variables,  A(x_1, ..., x(r-1))(x_r).
+     * @param h is a coefficient ring element.
+     * @return B with B(x1, ..., x(r-1))(xr) = A(x1, ..., x(r-1))(xr+h).
+     */
+    public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>>
+           translationMainRecursive(GenPolynomial<GenPolynomial<C>> A, C h) {
+        if (A == null) {
+            return null;
+        }
+        GenPolynomialRing<GenPolynomial<C>> pfac = A.ring;
+        if (pfac.nvar != 1) {
+            throw new IllegalArgumentException("translationMainRecursive no univariate polynomial");
+        }
+        if (A.isZERO() || h.isZERO()) {
+            return A;
+        }
+        // assert descending exponents, i.e. compatible term order
+        Map<ExpVector, GenPolynomial<C>> val = A.val;
+        GenPolynomial<GenPolynomial<C>> c = null;
+        ExpVector z = pfac.evzero;
+        ExpVector x = pfac.evzero.subst(0,1L);
+        GenPolynomial<C> H = pfac.getONECoefficient().multiply(h);
+        long el1 = -1; // undefined
+        long el2 = -1;
+        for (Map.Entry<ExpVector, GenPolynomial<C>> me : val.entrySet()) {
+            ExpVector e = me.getKey();
+            el2 = e.getVal(0);
+            GenPolynomial<C> b = me.getValue();
+            if (c == null) {
+                c = pfac.valueOf(b,z);
+            } else {
+                for (long i = el2; i < el1; i++) { // i = 0, el1-el2.
+                    GenPolynomial<GenPolynomial<C>> d1 = c.multiply(x);
+                    GenPolynomial<GenPolynomial<C>> d2 = c.multiply(H);
+                    c = d1.sum(d2);
+                }
+                c = c.sum(b);
+            }
+            el1 = el2;
+        }
+        for (long i = 0; i < el2; i++) {
+            GenPolynomial<GenPolynomial<C>> d1 = c.multiply(x);
+            GenPolynomial<GenPolynomial<C>> d2 = c.multiply(H);
+            c = d1.sum(d2);
+        }
+        return c;
+    }
+
+
+    /**
      * Evaluate at main variable.
      * @param <C> coefficient type.
      * @param cfac coefficent polynomial ring factory.
