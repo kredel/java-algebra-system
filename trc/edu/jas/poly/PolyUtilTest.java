@@ -1751,6 +1751,27 @@ public class PolyUtilTest extends TestCase {
         b = PolyUtil.translationMain(a, ai.negate());
         System.out.println("b = " + b);
         assertEquals("translat(translat(c)) == c: ", c, b);
+
+        List<BigInteger> H = new ArrayList<BigInteger>(rl);
+        List<BigInteger> Hm = new ArrayList<BigInteger>(rl);
+        for (int i = 1; i <= rl; i++) {
+            H.add(new BigInteger(i));
+            Hm.add(new BigInteger(-i));
+	}
+        System.out.println("H = " + H + ", Hm = " + Hm);
+
+        c = dfac.univariate(0).power(2);
+        c = c.sum(c.power(5));
+        c = c.multiply( dfac.univariate(1).power(3) );
+        c = c.multiply( dfac.univariate(2).power(4) );
+        c = c.sum( dfac.univariate(3).power(7) );
+        c = c.sum( dfac.univariate(4).power(11) );
+        System.out.println("c = " + c);
+        a = PolyUtil.translation(c, H);
+        System.out.println("a = " + a);
+        b = PolyUtil.translation(a, Hm);
+        System.out.println("b = " + b);
+        assertEquals("translat(translat(c)) == c: ", c, b);
     }
 
 }

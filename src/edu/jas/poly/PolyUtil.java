@@ -1957,6 +1957,99 @@ public class PolyUtil {
 
 
     /**
+     * Polynomial translation, base univariate.
+     * @param <C> coefficient type.
+     * @param A is a non-zero polynomial in 1 variables,  A(x_1).
+     * @param h is a coefficient ring element.
+     * @return B with B(x1) = A(x1+h1).
+     */
+    public static <C extends RingElem<C>> GenPolynomial<C>
+           translationBase(GenPolynomial<C> A, C h) {
+        if (A == null) {
+            return null;
+        }
+        if (A.isZERO()) {
+            return A;
+        }
+        GenPolynomialRing<C> pfac = A.ring;
+        // assert descending exponents, i.e. compatible term order
+        Map<ExpVector, C> val = A.val;
+        GenPolynomial<C> c = null;
+        ExpVector z = pfac.evzero;
+        ExpVector x = pfac.evzero.subst(0,1L);
+        long el1 = -1; // undefined
+        long el2 = -1;
+        for (Map.Entry<ExpVector, C> me : val.entrySet()) {
+            ExpVector e = me.getKey();
+            el2 = e.getVal(0);
+            C b = me.getValue();
+            if (c == null) {
+                c = pfac.valueOf(b,z);
+            } else {
+                for (long i = el2; i < el1; i++) { // i = 0, el1-el2.
+                    GenPolynomial<C> d1 = c.multiply(x);
+                    GenPolynomial<C> d2 = c.multiply(h);
+                    c = d1.sum(d2);
+                }
+                c = c.sum(b);
+            }
+            //System.out.println("c = " + c + ", h = " + h + ", x = " + x);
+            el1 = el2;
+        }
+        for (long i = 0; i < el2; i++) {
+            GenPolynomial<C> d1 = c.multiply(x);
+            GenPolynomial<C> d2 = c.multiply(h);
+            c = d1.sum(d2);
+        }
+        return c;
+    }
+
+
+    /**
+     * Polynomial translation, all variables.
+     * @param <C> coefficient type.
+     * @param A is a non-zero polynomial in r variables,  A(x_1, ..., x(r-1), x_r).
+     * @param H is a list of coefficient ring elements H = (h1, ..., hr).
+     * @return B with B(x1, ..., x(r-1), xr) = A(x1+h1, ..., x(r-1)+h(r-1), xr+hr).
+     */
+    public static <C extends RingElem<C>> GenPolynomial<C>
+           translation(GenPolynomial<C> A, List<C> H) {
+        if (A == null) {
+            return null;
+        }
+        if (A.isZERO()) {
+            return A;
+        }
+        GenPolynomialRing<C> pfac = A.ring;
+        if (pfac.nvar <= 1) {
+            return translationBase(A, H.get(0));
+        }
+        //System.out.println("pfac = " + pfac.toScript() + ", nvar = " + pfac.nvar);
+        if (H == null || pfac.nvar != H.size()) {
+            throw new IllegalArgumentException("number of translation points do not match number of variables " + pfac.nvar + " != " + H.size());
+        }
+        C h = H.get(0);
+        List<C> L = H.subList(1, H.size());
+        //System.out.println("L = " + L + ", h = " + h);
+        GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1);
+        GenPolynomial<GenPolynomial<C>> Ar = recursive(rfac, A);
+        GenPolynomial<GenPolynomial<C>> Br = translationMainRecursive(Ar, h);
+        GenPolynomial<GenPolynomial<C>> Cr = rfac.getZERO().copy();
+        Map<ExpVector, GenPolynomial<C>> val = Br.val;
+        Map<ExpVector, GenPolynomial<C>> cval = Cr.val;
+        for (Map.Entry<ExpVector, GenPolynomial<C>> me : val.entrySet()) {
+            ExpVector e = me.getKey();
+            GenPolynomial<C> b = me.getValue();
+            GenPolynomial<C> c = translation(b, L);
+	    cval.put(e,c);
+            //System.out.println("Cr = " + Cr);
+        }
+	GenPolynomial<C> B = distribute(pfac, Cr);
+        return B;
+    }
+
+
+    /**
      * Evaluate at main variable.
      * @param <C> coefficient type.
      * @param cfac coefficent polynomial ring factory.
