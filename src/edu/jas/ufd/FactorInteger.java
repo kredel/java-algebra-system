@@ -1016,7 +1016,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 pe = pep;
                 ce = cep;
             }
-            //System.out.println("ce = " + ce + ", pe = " + pe);
+            //System.out.println("ce = " + ce + ", pe = " + pe + ", V = " + V);
             pecw = engine.baseContent(pe); // original Wang
             isPrimitive = pecw.isONE();
             ped = ccpfac.coFac.getONE();
