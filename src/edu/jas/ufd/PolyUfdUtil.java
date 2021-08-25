@@ -725,6 +725,7 @@ public class PolyUfdUtil {
      * deg(B) = deg(A(x_1,...)) and B is also squarefree.
      * @param A squarefree polynomial in r variables.
      * @return L list of evaluation points and a squarefree univariate Polynomial B = A(x_1,L_1,...L_{r-2}).
+     * @see SAC2/MAS:sacring/SACPFAC.mi#IPCEVP
      */
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> EvalPoints<C> evaluationPoints(GenPolynomial<C> A) {
