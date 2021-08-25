@@ -752,7 +752,7 @@ public class PolyUfdUtil {
             GenPolynomialRing<GenPolynomial<C>> rfac = rpfac.recursive(1);
             GenPolynomialRing<C> cpfac = (GenPolynomialRing) rfac.coFac;
             GenPolynomial<GenPolynomial<C>> ap = PolyUtil.<C> recursive(rfac, ape);
-            System.out.println("ap = " + ap);
+            //System.out.println("ap = " + ap);
             long degd = ape.degree(rpfac.nvar - 2);
             boolean unlucky = true;
             long s = 0;
@@ -766,7 +766,7 @@ public class PolyUfdUtil {
                     ll = one.subtract(ll);
                 }
                 ape = PolyUtil.<C> evaluateMainRecursive(cpfac, ap, Vi);
-                System.out.println("ape = " + ape);
+                //System.out.println("ape = " + ape);
                 //long degp = ape.degree(0);
                 long degc = ape.degree(cpfac.nvar - 1);
                 //System.out.println("degc = " + degc + ", degd = " + degd);
