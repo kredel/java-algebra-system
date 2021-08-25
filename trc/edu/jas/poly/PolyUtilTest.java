@@ -1704,52 +1704,52 @@ public class PolyUtilTest extends TestCase {
      */
     public void testTranslation() {
         //dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), 1, to);
-        System.out.println("ring = " + rfac.toScript());
+        //System.out.println("ring = " + rfac.toScript());
         ai = new BigInteger(5);
-        System.out.println("ai = " + ai);
+        //System.out.println("ai = " + ai);
 
         cr = rfac.getONE();
-        System.out.println("cr = " + cr);
+        //System.out.println("cr = " + cr);
         ar = PolyUtil.translationMainRecursive(cr, ai);
-        System.out.println("ar = " + ar);
+        //System.out.println("ar = " + ar);
         br = PolyUtil.translationMainRecursive(ar, ai.negate());
-        System.out.println("br = " + br);
+        //System.out.println("br = " + br);
         assertEquals("translat(translat(cr)) == cr: ", cr, br);
 
         dr = rfac.getZERO();
-        System.out.println("dr = " + dr);
+        //System.out.println("dr = " + dr);
         ar = PolyUtil.translationMainRecursive(dr, ai);
-        System.out.println("ar = " + ar);
+        //System.out.println("ar = " + ar);
         br = PolyUtil.translationMainRecursive(ar, ai.negate());
-        System.out.println("br = " + br);
+        //System.out.println("br = " + br);
         assertEquals("translat(translat(dr)) == dr: ", dr, br);
 
         cr = rfac.univariate(0).power(3);
         cr = cr.sum(cr.power(5));
-        System.out.println("cr = " + cr);
+        //System.out.println("cr = " + cr);
         ar = PolyUtil.translationMainRecursive(cr, ai);
-        System.out.println("ar = " + ar);
+        //System.out.println("ar = " + ar);
         br = PolyUtil.translationMainRecursive(ar, ai.negate());
-        System.out.println("br = " + br);
+        //System.out.println("br = " + br);
         assertEquals("translat(translat(cr)) == cr: ", cr, br);
 
 
-        System.out.println("ring = " + dfac.toScript());
+        //System.out.println("ring = " + dfac.toScript());
         c = dfac.getONE();
-        System.out.println("c = " + c);
+        //System.out.println("c = " + c);
         a = PolyUtil.translationMain(c, ai);
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
         b = PolyUtil.translationMain(a, ai.negate());
-        System.out.println("b = " + b);
+        //System.out.println("b = " + b);
         assertEquals("translat(translat(c)) == c: ", c, b);
 
         c = dfac.univariate(0).power(2);
         c = c.sum(c.power(6));
-        System.out.println("c = " + c);
+        //System.out.println("c = " + c);
         a = PolyUtil.translationMain(c, ai);
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
         b = PolyUtil.translationMain(a, ai.negate());
-        System.out.println("b = " + b);
+        //System.out.println("b = " + b);
         assertEquals("translat(translat(c)) == c: ", c, b);
 
         List<BigInteger> H = new ArrayList<BigInteger>(rl);
@@ -1757,8 +1757,8 @@ public class PolyUtilTest extends TestCase {
         for (int i = 1; i <= rl; i++) {
             H.add(new BigInteger(i));
             Hm.add(new BigInteger(-i));
-	}
-        System.out.println("H = " + H + ", Hm = " + Hm);
+        }
+        //System.out.println("H = " + H + ", Hm = " + Hm);
 
         c = dfac.univariate(0).power(2);
         c = c.sum(c.power(5));
@@ -1766,11 +1766,19 @@ public class PolyUtilTest extends TestCase {
         c = c.multiply( dfac.univariate(2).power(4) );
         c = c.sum( dfac.univariate(3).power(7) );
         c = c.sum( dfac.univariate(4).power(11) );
-        System.out.println("c = " + c);
+        //System.out.println("c = " + c);
         a = PolyUtil.translation(c, H);
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
         b = PolyUtil.translation(a, Hm);
-        System.out.println("b = " + b);
+        //System.out.println("b = " + b);
+        assertEquals("translat(translat(c)) == c: ", c, b);
+
+        c = dfac.random(kl * 2, ll + 2, el * 2, q+q);
+        //System.out.println("c = " + c);
+        a = PolyUtil.translation(c, H);
+        //System.out.println("a = " + a);
+        b = PolyUtil.translation(a, Hm);
+        //System.out.println("b = " + b);
         assertEquals("translat(translat(c)) == c: ", c, b);
     }
 
