@@ -23,9 +23,15 @@
 
 <dl>
 
-<dt>2021, August </dt> <!-- 2.7.70 -->
+<dt>2021, September </dt> <!-- 2.7.80 -->
 <dd>
 
+ Fraction free Gauss elimination.
+
+</dd> 
+
+<dt>2021, August </dt> <!-- 2.7.70 -->
+<dd>
  Factorization now provides Berlekamp, Cantor and Zassenhaus
  algorithms. Corresponding methods are contained in classes
  <code>ufd.PolyUfdUtil</code> and
@@ -35,15 +41,12 @@
  variants.  Berlekamp factorization algorithm is now the default for
  polynomials over finite fields (algebraic extensions of prime
  fields), defined in <code>FactorFactory</code> for this case.
-
  <code>GenMatrix</code> is equiped with an <code>inverse</code> method
  with the help of <code>LinAlg.decomposeLU</code>. The extension field
  builder has a new method <code>matrixExtension</code> to provide
  matrix extension rings. A sparser form of a given row echelon matrix
- is computed by <code>rowEchelonFormSparse</code>.
-
- Some other small fixes and improvements.
-
+ is computed by <code>rowEchelonFormSparse</code>.  Some other small
+ fixes and improvements.
 </dd>
 
 
@@ -2871,7 +2874,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Thu Jul 29 13:20:10 CEST 2021
+Last modified: Sat Aug  7 13:52:25 CEST 2021
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
