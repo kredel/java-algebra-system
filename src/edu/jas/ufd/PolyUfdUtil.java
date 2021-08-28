@@ -721,10 +721,11 @@ public class PolyUfdUtil {
 
 
     /**
-     * Polynomial suitable evaluation points.
-     * deg(B) = deg(A(x_1,...)) and B is also squarefree.
+     * Polynomial suitable evaluation points. deg(B) = deg(A(x_1,...)) and B is
+     * also squarefree.
      * @param A squarefree polynomial in r variables.
-     * @return L list of evaluation points and a squarefree univariate Polynomial B = A(x_1,L_1,...L_{r-2}).
+     * @return L list of evaluation points and a squarefree univariate
+     *         Polynomial B = A(x_1,L_1,...L_{r-2}).
      * @see sacring.SACPFAC.mi#IPCEVP from SAC2/MAS
      */
     @SuppressWarnings("unchecked")
@@ -735,11 +736,11 @@ public class PolyUfdUtil {
         }
         GenPolynomialRing<C> pfac = A.ring;
         if (pfac.nvar <= 1) {
-            return new EvalPoints<C>(A,A,L);
+            return new EvalPoints<C>(A, A, L);
         }
         GenPolynomial<C> B = A;
-        if (A.isZERO()||A.isONE()) {
-            return new EvalPoints<C>(A,A,L);
+        if (A.isZERO() || A.isONE()) {
+            return new EvalPoints<C>(A, A, L);
         }
         SquarefreeAbstract<C> sengine = SquarefreeFactory.<C> getImplementation(pfac.coFac);
         //long dega = A.degree(0);
@@ -789,7 +790,7 @@ public class PolyUfdUtil {
             rpfac = cpfac;
         }
         B = ape;
-        return new EvalPoints<C>(A,B,L);
+        return new EvalPoints<C>(A, B, L);
     }
 
 

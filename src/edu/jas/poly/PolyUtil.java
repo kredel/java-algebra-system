@@ -1754,9 +1754,9 @@ public class PolyUtil {
 
 
     /**
-     * Factor coefficient bound. The product of all maxNorms of
-     * potential factors is less than or equal to 2**b times the
-     * maxNorm of A. Gelfonds bound is used.
+     * Factor coefficient bound. The product of all maxNorms of potential
+     * factors is less than or equal to 2**b times the maxNorm of A. Gelfonds
+     * bound is used.
      * @param e degree vector of a GenPolynomial A.
      * @return 2**b.
      * @see maspoly.SACIPOL.mi#IPFCB from SAC2/MAS
@@ -1846,7 +1846,7 @@ public class PolyUtil {
      * @see maspoly.SACPOL.mi#PRT from SAC2/MAS
      */
     public static <C extends RingElem<C>> GenPolynomial<C> reciprocalTransformation(GenPolynomial<C> A) {
-        return reciprocalTransformation(A,0);
+        return reciprocalTransformation(A, 0);
     }
 
 
@@ -1855,10 +1855,12 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param A is a non-zero polynomial, with n=DEG(A,i), A(x_r, ..., x_0).
      * @param i variable to be transformed, 0 is the main variable.
-     * @return B with B(x) = x_i**n*A(1/x_i), where x_i is the i-th variable of A.
+     * @return B with B(x) = x_i**n*A(1/x_i), where x_i is the i-th variable of
+     *         A.
      * @see maspoly.SACPOL.mi#PRT from SAC2/MAS
      */
-    public static <C extends RingElem<C>> GenPolynomial<C> reciprocalTransformation(GenPolynomial<C> A, int i) {
+    public static <C extends RingElem<C>> GenPolynomial<C> reciprocalTransformation(GenPolynomial<C> A,
+                    int i) {
         if (A == null) {
             return null;
         }
@@ -1877,7 +1879,7 @@ public class PolyUtil {
             long de = d - e.getVal(m);
             ExpVector f = e.subst(m, de);
             C c = me.getValue();
-            valb.put(f,c);
+            valb.put(f, c);
         }
         return B;
     }
@@ -1886,13 +1888,13 @@ public class PolyUtil {
     /**
      * Polynomial translation, main variable.
      * @param <C> coefficient type.
-     * @param A is a non-zero polynomial in r variables,  A(x_1, ..., x(r-1), x_r).
+     * @param A is a non-zero polynomial in r variables, A(x_1, ..., x(r-1),
+     *            x_r).
      * @param h is a coefficient ring element.
      * @return B with B(x1, ..., x(r-1), xr) = A(x1, ..., x(r-1), xr+h).
      * @see maspoly.SACIPOL.mi#IPTRAN from SAC2/MAS
      */
-    public static <C extends RingElem<C>> GenPolynomial<C>
-           translationMain(GenPolynomial<C> A, C h) {
+    public static <C extends RingElem<C>> GenPolynomial<C> translationMain(GenPolynomial<C> A, C h) {
         if (A == null) {
             return null;
         }
@@ -1911,13 +1913,14 @@ public class PolyUtil {
     /**
      * Polynomial translation, main variable.
      * @param <C> coefficient type.
-     * @param A is a non-zero recursive polynomial in r variables,  A(x_1, ..., x(r-1))(x_r).
+     * @param A is a non-zero recursive polynomial in r variables, A(x_1, ...,
+     *            x(r-1))(x_r).
      * @param h is a coefficient ring element.
      * @return B with B(x1, ..., x(r-1))(xr) = A(x1, ..., x(r-1))(xr+h).
      * @see maspoly.SACIPOL.mi#IPTRAN from SAC2/MAS
      */
-    public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>>
-           translationMainRecursive(GenPolynomial<GenPolynomial<C>> A, C h) {
+    public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> translationMainRecursive(
+                    GenPolynomial<GenPolynomial<C>> A, C h) {
         if (A == null) {
             return null;
         }
@@ -1932,7 +1935,7 @@ public class PolyUtil {
         Map<ExpVector, GenPolynomial<C>> val = A.val;
         GenPolynomial<GenPolynomial<C>> c = null;
         ExpVector z = pfac.evzero;
-        ExpVector x = pfac.evzero.subst(0,1L);
+        ExpVector x = pfac.evzero.subst(0, 1L);
         GenPolynomial<C> H = pfac.getONECoefficient().multiply(h);
         long el1 = -1; // undefined
         long el2 = -1;
@@ -1941,7 +1944,7 @@ public class PolyUtil {
             el2 = e.getVal(0);
             GenPolynomial<C> b = me.getValue();
             if (c == null) {
-                c = pfac.valueOf(b,z);
+                c = pfac.valueOf(b, z);
             } else {
                 for (long i = el2; i < el1; i++) { // i = 0, el1-el2.
                     GenPolynomial<GenPolynomial<C>> d1 = c.multiply(x);
@@ -1964,13 +1967,12 @@ public class PolyUtil {
     /**
      * Polynomial translation, base univariate.
      * @param <C> coefficient type.
-     * @param A is a non-zero polynomial in 1 variables,  A(x_1).
+     * @param A is a non-zero polynomial in 1 variables, A(x_1).
      * @param h is a coefficient ring element.
      * @return B with B(x1) = A(x1+h1).
      * @see maspoly.SACIPOL.mi#IPTRAN from SAC2/MAS
      */
-    public static <C extends RingElem<C>> GenPolynomial<C>
-           translationBase(GenPolynomial<C> A, C h) {
+    public static <C extends RingElem<C>> GenPolynomial<C> translationBase(GenPolynomial<C> A, C h) {
         if (A == null) {
             return null;
         }
@@ -1985,7 +1987,7 @@ public class PolyUtil {
         Map<ExpVector, C> val = A.val;
         GenPolynomial<C> c = null;
         ExpVector z = pfac.evzero;
-        ExpVector x = pfac.evzero.subst(0,1L);
+        ExpVector x = pfac.evzero.subst(0, 1L);
         long el1 = -1; // undefined
         long el2 = -1;
         for (Map.Entry<ExpVector, C> me : val.entrySet()) {
@@ -1993,7 +1995,7 @@ public class PolyUtil {
             el2 = e.getVal(0);
             C b = me.getValue();
             if (c == null) {
-                c = pfac.valueOf(b,z);
+                c = pfac.valueOf(b, z);
             } else {
                 for (long i = el2; i < el1; i++) { // i = 0, el1-el2.
                     GenPolynomial<C> d1 = c.multiply(x);
@@ -2016,13 +2018,14 @@ public class PolyUtil {
     /**
      * Polynomial translation, all variables.
      * @param <C> coefficient type.
-     * @param A is a non-zero polynomial in r variables,  A(x_1, ..., x(r-1), x_r).
+     * @param A is a non-zero polynomial in r variables, A(x_1, ..., x(r-1),
+     *            x_r).
      * @param H is a list of coefficient ring elements H = (h1, ..., hr).
-     * @return B with B(x1, ..., x(r-1), xr) = A(x1+h1, ..., x(r-1)+h(r-1), xr+hr).
+     * @return B with B(x1, ..., x(r-1), xr) = A(x1+h1, ..., x(r-1)+h(r-1),
+     *         xr+hr).
      * @see maspoly.SACIPOL.mi#IPTRAN from SAC2/MAS
      */
-    public static <C extends RingElem<C>> GenPolynomial<C>
-           translation(GenPolynomial<C> A, List<C> H) {
+    public static <C extends RingElem<C>> GenPolynomial<C> translation(GenPolynomial<C> A, List<C> H) {
         if (A == null) {
             return null;
         }
@@ -2034,7 +2037,9 @@ public class PolyUtil {
             return translationBase(A, H.get(0));
         }
         if (H == null || pfac.nvar != H.size()) {
-            throw new IllegalArgumentException("number of translation points do not match number of variables " + pfac.nvar + " != " + H.size());
+            throw new IllegalArgumentException(
+                            "number of translation points do not match number of variables " + pfac.nvar
+                                            + " != " + H.size());
         }
         C h = H.get(0);
         List<C> L = H.subList(1, H.size());
@@ -2048,7 +2053,7 @@ public class PolyUtil {
             ExpVector e = me.getKey();
             GenPolynomial<C> b = me.getValue();
             GenPolynomial<C> c = translation(b, L);
-            cval.put(e,c);
+            cval.put(e, c);
         }
         GenPolynomial<C> B = distribute(pfac, Cr);
         return B;
@@ -2307,7 +2312,8 @@ public class PolyUtil {
      * @param a = (a_1, a_2, ..., a_n) a tuple of values to evaluate at.
      * @return L = ( A_1(a_1, a_2, ..., a_n), ... A_k(a_1, a_2, ..., a_n)).
      */
-    public static <C extends RingElem<C>> List<C> evaluateAll(RingFactory<C> cfac, List<GenPolynomial<C>> L, List<C> a) {
+    public static <C extends RingElem<C>> List<C> evaluateAll(RingFactory<C> cfac, List<GenPolynomial<C>> L,
+                    List<C> a) {
         return ListUtil.<GenPolynomial<C>, C> map(L, new EvalAllPol<C>(cfac, a));
     }
 

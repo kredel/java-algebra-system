@@ -11,7 +11,6 @@ import java.util.List;
 import edu.jas.kern.Scripting;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.RingElem;
-import edu.jas.structure.GcdRingElem;
 
 
 /**
