@@ -1754,11 +1754,12 @@ public class PolyUtil {
 
 
     /**
-     * Factor coefficient bound. See SACIPOL.IPFCB: the product of all maxNorms
-     * of potential factors is less than or equal to 2**b times the maxNorm of
-     * A.
+     * Factor coefficient bound. The product of all maxNorms of
+     * potential factors is less than or equal to 2**b times the
+     * maxNorm of A. Gelfonds bound is used.
      * @param e degree vector of a GenPolynomial A.
      * @return 2**b.
+     * @see maspoly.SACIPOL.mi#IPFCB from SAC2/MAS
      */
     public static BigInteger factorBound(ExpVector e) {
         long n = 0;
@@ -1842,7 +1843,7 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param A is a non-zero polynomial, with n=DEG(A).
      * @return B with B(x) = x**n*A(1/x), where x is the main variable of A.
-     * @see SAC2/MAS maspoly.SACPOL.mi#PRT
+     * @see maspoly.SACPOL.mi#PRT from SAC2/MAS
      */
     public static <C extends RingElem<C>> GenPolynomial<C> reciprocalTransformation(GenPolynomial<C> A) {
         return reciprocalTransformation(A,0);
@@ -1855,7 +1856,7 @@ public class PolyUtil {
      * @param A is a non-zero polynomial, with n=DEG(A,i), A(x_r, ..., x_0).
      * @param i variable to be transformed, 0 is the main variable.
      * @return B with B(x) = x_i**n*A(1/x_i), where x_i is the i-th variable of A.
-     * @see SAC2/MAS maspoly.SACPOL.mi#PRT
+     * @see maspoly.SACPOL.mi#PRT from SAC2/MAS
      */
     public static <C extends RingElem<C>> GenPolynomial<C> reciprocalTransformation(GenPolynomial<C> A, int i) {
         if (A == null) {
@@ -1888,7 +1889,7 @@ public class PolyUtil {
      * @param A is a non-zero polynomial in r variables,  A(x_1, ..., x(r-1), x_r).
      * @param h is a coefficient ring element.
      * @return B with B(x1, ..., x(r-1), xr) = A(x1, ..., x(r-1), xr+h).
-     * @see SAC2/MAS maspoly.SACIPOL.mi#IPTRAN
+     * @see maspoly.SACIPOL.mi#IPTRAN from SAC2/MAS
      */
     public static <C extends RingElem<C>> GenPolynomial<C>
            translationMain(GenPolynomial<C> A, C h) {
@@ -1913,7 +1914,7 @@ public class PolyUtil {
      * @param A is a non-zero recursive polynomial in r variables,  A(x_1, ..., x(r-1))(x_r).
      * @param h is a coefficient ring element.
      * @return B with B(x1, ..., x(r-1))(xr) = A(x1, ..., x(r-1))(xr+h).
-     * @see SAC2/MAS maspoly.SACIPOL.mi#IPTRAN
+     * @see maspoly.SACIPOL.mi#IPTRAN from SAC2/MAS
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>>
            translationMainRecursive(GenPolynomial<GenPolynomial<C>> A, C h) {
@@ -1966,7 +1967,7 @@ public class PolyUtil {
      * @param A is a non-zero polynomial in 1 variables,  A(x_1).
      * @param h is a coefficient ring element.
      * @return B with B(x1) = A(x1+h1).
-     * @see SAC2/MAS maspoly.SACIPOL.mi#IPTRAN
+     * @see maspoly.SACIPOL.mi#IPTRAN from SAC2/MAS
      */
     public static <C extends RingElem<C>> GenPolynomial<C>
            translationBase(GenPolynomial<C> A, C h) {
@@ -2018,7 +2019,7 @@ public class PolyUtil {
      * @param A is a non-zero polynomial in r variables,  A(x_1, ..., x(r-1), x_r).
      * @param H is a list of coefficient ring elements H = (h1, ..., hr).
      * @return B with B(x1, ..., x(r-1), xr) = A(x1+h1, ..., x(r-1)+h(r-1), xr+hr).
-     * @see SAC2/MAS maspoly.SACIPOL.mi#IPTRAN
+     * @see maspoly.SACIPOL.mi#IPTRAN from SAC2/MAS
      */
     public static <C extends RingElem<C>> GenPolynomial<C>
            translation(GenPolynomial<C> A, List<C> H) {
