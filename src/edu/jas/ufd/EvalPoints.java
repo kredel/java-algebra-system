@@ -77,7 +77,6 @@ public class EvalPoints<C extends RingElem<C>> implements Serializable {
      * @see edu.jas.structure.ElemFactory#toScript()
      */
     public String toScript() {
-        // Python case
         StringBuffer sb = new StringBuffer();
         switch (Scripting.getLang()) {
         case Python:
