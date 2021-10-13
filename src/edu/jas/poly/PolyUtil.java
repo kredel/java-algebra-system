@@ -2061,6 +2061,51 @@ public class PolyUtil {
 
 
     /**
+     * Polynomial translation, r-1 variables.
+     * @param <C> coefficient type.
+     * @param A is a non-zero polynomial in r variables, A(x_1, ..., x(r-1),
+     *            x_r).
+     * @param H is a list of coefficient ring elements H = (h2, ..., hr).
+     * @return B with B(x1, ..., x(r-1), xr) = A(x1, x2+h2, ..., x(r-1)+h(r-1),
+     *         xr+hr).
+     * @see "maspoly.SACIPOL.mi#IPTRAN from SAC2/MAS"
+     */
+    public static <C extends RingElem<C>> GenPolynomial<C> translation1(GenPolynomial<C> A, List<C> H) {
+        if (A == null) {
+            return null;
+        }
+        if (A.isZERO()) {
+            return A;
+        }
+        GenPolynomialRing<C> pfac = A.ring;
+        if (pfac.nvar <= 1) {
+            return A; //translationBase(A, H.get(0));
+        }
+        if (H == null || pfac.nvar-1 != H.size()) {
+            throw new IllegalArgumentException(
+					       "number of translation points do not match number of variables " + (pfac.nvar-1)
+			    + " != " + H.size());
+        }
+        C h = H.get(0);
+        List<C> L = H.subList(1, H.size());
+        GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1);
+        GenPolynomial<GenPolynomial<C>> Ar = recursive(rfac, A);
+        GenPolynomial<GenPolynomial<C>> Br = translationMainRecursive(Ar, h);
+        GenPolynomial<GenPolynomial<C>> Cr = rfac.getZERO().copy();
+        Map<ExpVector, GenPolynomial<C>> val = Br.val;
+        Map<ExpVector, GenPolynomial<C>> cval = Cr.val;
+        for (Map.Entry<ExpVector, GenPolynomial<C>> me : val.entrySet()) {
+            ExpVector e = me.getKey();
+            GenPolynomial<C> b = me.getValue();
+            GenPolynomial<C> c = translation1(b, L);
+            cval.put(e, c);
+        }
+        GenPolynomial<C> B = distribute(pfac, Cr);
+        return B;
+    }
+
+
+    /**
      * Evaluate at main variable.
      * @param <C> coefficient type.
      * @param cfac coefficent polynomial ring factory.
