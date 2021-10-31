@@ -18,10 +18,10 @@ MPJE_BIN=$(MPJE_HOME)/bin
 NP=2
 PPN=3
 
-CLASSPATH=$(LIBPATH)/log4j-api-2.5.jar:$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/junit-4.12.jar:$(FMPJ_LIB):$(JASPATH)
+CLASSPATH=$(LIBPATH)/log4j-core-2.13.2.jar:$(LIBPATH)/log4j-api-2.13.2.jar:$(LIBPATH)/junit-4.12.jar:$(FMPJ_LIB):$(JASPATH)
 #$(LIBPATH)/jas.jar
-CLASSPATHE=$(LIBPATH)/log4j-api-2.5.jar:$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/junit-4.12.jar:$(JASPATH)
-
+CLASSPATHE=$(LIBPATH)/log4j-core-2.13.2.jar:$(LIBPATH)/log4j-api-2.13.2.jar:$(LIBPATH)/junit-4.12.jar:$(JASPATH)
+#LOG4JPATH=$(LIBPATH)/log4j-core-2.13.2.jar:$(LIBPATH)/log4j-api-2.13.2.jar
 
 #FMPJ_RUNLIB=$(FMPJ_HOME)/lib/runtime.jar
 #FMPJ_CMD=java -cp $(FMPJ_RUNLIB) runtime.FMPJRun -dev niodev -cp $(CLASSPATH):jas-mpj.jar

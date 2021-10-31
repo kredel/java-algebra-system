@@ -10,9 +10,10 @@ JASPATH=..
 LIBPATH=$(HOME)/java/lib
 CMJAR=$(LIBPATH)/commons-math3-3.3.jar
 
-CLASSPATH=$(LIBPATH)/log4j-api-2.5.jar:$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/junit.jar:$(CMJAR):$(JASPATH)
+CLASSPATH=$(LIBPATH)/log4j-core-2.13.2.jar:$(LIBPATH)/log4j-api-2.13.2.jar:$(LIBPATH)/junit.jar:$(CMJAR):$(JASPATH)
 #CLASSPATH=$(LIBPATH)/log4j.jar:$(LIBPATH)/junit.jar:$(CMJAR):$(JASPATH)
 #$(LIBPATH)/jas.jar
+#LOG4JPATH=$(LIBPATH)/log4j-core-2.13.2.jar:$(LIBPATH)/log4j-api-2.13.2.jar
 
 #DOCOPTS=-package
 DOCOPTS=-package -author -version -linksource -Xdoclint:none -overview overview.html
