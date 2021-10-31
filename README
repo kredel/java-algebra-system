@@ -103,7 +103,7 @@ There is a Maven compatible repository for bytecode, source and javadocs at
 
   https://oss.sonatype.org/
 
-groupId: edu.jas, artifactId: jas, version (for example): 2.6.5675
+groupId: de.uni-mannheim.rz.krum, artifactId: jas, version (for example): 2.7.50
 
 
 The version is specified by a two digit major.minor number and a
