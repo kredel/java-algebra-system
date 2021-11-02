@@ -332,7 +332,7 @@ public final class BigOctonion
         String s = or.toString();
         boolean i = oi.isZERO();
         if (debug) {
-            logger.debug("compareTo " + i + " ? 0 = " + oi);
+            logger.debug("compareTo {} ? 0 = {}", oi, i);
         }
         if (i) {
             return s;

@@ -311,7 +311,7 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
     public String toString() {
         String s = re.toString();
         //int i = im.compareTo(BigDecimal.ZERO);
-        //logger.info("compareTo "+im+" ? 0 = "+i);
+        //logger.info("compareTo {} ? 0 = {}", im, i);
         if (im.isZERO()) {
             return s;
         }
@@ -628,9 +628,7 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
         }
         BigDecimalComplex n = norm();
         BigDecimal d = Roots.sqrt(n.re);
-        if (logger.isDebugEnabled()) {
-            logger.debug("sqrt(re) = " + d);
-        }
+        logger.debug("sqrt(re) = {}", d);
         return new BigDecimalComplex(d);
     }
 

@@ -190,7 +190,7 @@ public final class BigQuaternionInteger extends BigQuaternion
     @Override
     public BigQuaternion inverse() {
         if (!isUnit()) {
-            logger.info("ring = " + ring);
+            logger.info("ring = {}", ring);
             throw new ArithmeticException("not invertible: " + this);
         }
         return super.inverse();

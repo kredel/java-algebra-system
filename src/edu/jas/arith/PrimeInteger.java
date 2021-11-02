@@ -407,7 +407,7 @@ public final class PrimeInteger {
                 FP = factors(MLP);
                 SL = primalityTestSelfridge(ML, MLP, FP);
                 if (SL == 1) {
-                    logger.info("primalityTestSelfridge: FP = " + FP);
+                    logger.info("primalityTestSelfridge: FP = {}", FP);
                     Integer e = F.get(ML);
                     if (e == null) {
                         e = 1;
@@ -424,7 +424,7 @@ public final class PrimeInteger {
             if (AL > BL) {
                 PL = 1L;
             } else {
-                logger.info("mediumPrimeDivisorSearch: a = " + AL + ", b = " + BL);
+                logger.info("mediumPrimeDivisorSearch: a = {}, b = {}", AL, BL);
                 PL = mediumPrimeDivisorSearch(ML, AL, BL); //, PL, ML );
                 //System.out.println("PL = " + PL);
                 if (PL != 1L) {
@@ -449,7 +449,7 @@ public final class PrimeInteger {
         }
         AL = BL;
         BL = CL;
-        logger.info("largePrimeDivisorSearch: a = " + AL + ", b = " + BL + ", m = " + ML);
+        logger.info("largePrimeDivisorSearch: a = {}, b = {}, m = {}", AL, BL, ML);
         // search large prime factors
         do {
             //ILPDS( ML, AL, BL, PL, ML );
@@ -582,7 +582,7 @@ public final class PrimeInteger {
         while (true) {
             do {
                 if (i == FP.size()) { 
-                    logger.info("SL=1: m = " + m);
+                    logger.info("SL=1: m = {}", m);
                     SL = 1;
                     return SL;
                 }
@@ -594,7 +594,7 @@ public final class PrimeInteger {
             int j = 0;
             do {
                 if (j == PP.size()) {
-                    logger.info("SL=0: m = " + m);
+                    logger.info("SL=0: m = {}", m);
                     SL = 0;
                     return SL;
                 }
@@ -604,7 +604,7 @@ public final class PrimeInteger {
                     PL1 = PL;
                     AL = (new ModLong(new ModLongRing(m), PL)).power(mp).getVal(); //(PL**MLP) mod ML; 
                     if (AL != 1) {
-                        logger.info("SL=-1: m = " + m);
+                        logger.info("SL=-1: m = {}", m);
                         SL = (-1);
                         return SL;
                     }
@@ -941,7 +941,7 @@ public final class PrimeInteger {
         if (n.compareTo(b) > 0) {
             n = smallPrimeDivisors(n, F);
             if (n.compareTo(b) > 0) {
-                logger.info("run factorsPollardRho on n = " + n);
+                logger.info("run factorsPollardRho on n = {}", n);
                 factorsPollardRho(n, F); 
                 return F;
             }

@@ -281,9 +281,9 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
         int j = jm.compareTo(BigRational.ZERO);
         int k = km.compareTo(BigRational.ZERO);
         if (debug) {
-            logger.debug("compareTo " + im + " ? 0 = " + i);
-            logger.debug("compareTo " + jm + " ? 0 = " + j);
-            logger.debug("compareTo " + km + " ? 0 = " + k);
+            logger.debug("compareTo {} ? 0 = {}", im, i);
+            logger.debug("compareTo {} ? 0 = {}", jm, j);
+            logger.debug("compareTo {} ? 0 = {}", km, k);
         }
         if (i == 0 && j == 0 && k == 0) {
             return sb.toString();

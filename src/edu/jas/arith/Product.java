@@ -262,7 +262,7 @@ public class Product<C extends RingElem<C>> implements RegularRingElem<Product<C
     @Override
     public int compareTo(Product<C> b) {
         if (!ring.equals(b.ring)) {
-            logger.info("other ring " + b.ring);
+            logger.info("other ring {}", b.ring);
             throw new IllegalArgumentException("rings not comparable " + this);
         }
         SortedMap<Integer, C> v = b.val;

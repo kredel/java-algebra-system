@@ -105,7 +105,7 @@ public class ChannelFactory extends Thread {
             }
         } catch (IOException e) {
             logger.info("IOException {}", e);
-            if (logger.isDebugEnabled()) {
+            if (debug) {
                 e.printStackTrace();
             }
         }

@@ -62,7 +62,7 @@ public final class BigQuaternionRing implements RingFactory<BigQuaternion> {
      */
     public BigQuaternionRing(boolean i) {
         integral = i;
-        logger.info("integral = " + integral);
+        logger.info("integral = {}", integral);
     }
 
 

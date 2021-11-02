@@ -93,7 +93,7 @@ public class ProductRing<C extends RingElem<C>> implements RingFactory<Product<C
             if (0 <= i && i < nCopies) {
                 return ring;
             }
-            logger.info("index: " + i);
+            logger.info("index: {}", i);
             throw new IllegalArgumentException("index out of bound " + this);
         }
         return ringList.get(i);

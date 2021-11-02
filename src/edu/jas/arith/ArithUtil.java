@@ -51,7 +51,7 @@ public class ArithUtil {
             xd = x.subtract(new BigRational(q));
         }
         if (debug) {
-            logger.info("cf = " + cf);
+            logger.info("cf = {}", cf);
         }
         return cf;
     }

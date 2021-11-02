@@ -301,7 +301,7 @@ public final class BigComplex
     public String toString() {
         String s = "" + re;
         int i = im.compareTo(BigRational.ZERO);
-        //logger.info("compareTo "+im+" ? 0 = "+i);
+        //logger.info("compareTo {} ? 0 = {}", im, i);
         if (i == 0)
             return s;
         s += "i" + im;
