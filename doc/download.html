@@ -56,10 +56,8 @@
 </li>
 <li><p>Required libraries: 
     <br />
-    <!--a href="../../lib/log4j.jar">lib/log4j.jar  log4j-api </a> (from Apache Log4j version 1.2), -->
     <a href="../../lib/log4j-api.jar">lib/log4j-api.jar</a>, 
     <a href="../../lib/log4j-core.jar">lib/log4j-core.jar</a> 
-    <!--a href="../../lib/log4j-1.2-api.jar">lib/log4j-1.2-api.jar</a--> 
        (from Apache Log4j version 2.13.2),
     <br />
     <a href="../../lib/junit-4.12.jar">lib/junit-4.12.jar</a>,
@@ -289,6 +287,10 @@ java  -classpath log4j-api-2.13.2.jar:log4j-core-2.13.2.jar:junit.jar:jas.jar:. 
     logs are produced. 
     To obtain more detailed information or store the logs to files, 
     please configure the desired properties in the above file. 
+    </p>
+    <p>This configuration file is no more contained in the binary jars 
+    <code>jas-bin.jar</code> or <code>jas-[version].jar</code> to allow
+    usage of other compatible logging frameworks.
     </p>
     <p>The old configuration of Log4j version 1 via 
     <code>BasicConfigurator.configure()</code> is no more supported. 
@@ -525,7 +527,7 @@ public class mytests {
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Sun Feb 28 19:34:57 CET 2021
+Last modified: Tue Nov  2 10:00:38 CET 2021
 <!-- hhmts end -->
 </p>
 <!--p align="right" >

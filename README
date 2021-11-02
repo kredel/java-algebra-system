@@ -21,8 +21,9 @@ A Java JDK 1.11.
 Documentation see index.html.
 
 Required libraries are log4j-core-2.13.2.jar, log4j-api-2.13.2.jar
-(from Apache Log4j2, or mylog.jar, droidlog.jar) 
-and junit-4.12.jar, hamcrest-core-1.3.jar (from Junit for tests in trc) 
+(from Apache Log4j2, or mylog.jar, nolog.jar, or jars from some other
+compatible logging framework like SLF4J) 
+and junit-4.12.jar, hamcrest-core-1.3.jar (from Junit 4 for tests in trc) 
 
 
 Usage
@@ -70,7 +71,8 @@ Versions and jar files
 
 JAS is distributed in 3 jar files:
 
-jas-<version>-bin.jar:    the Java class files 
+jas-<version>-bin.jar:    or
+jas-<version>.jar:        the Java class files 
 jas-<version>-src.zip:    the java source code
 jas-<version>-doc.zip:    the Java doc, epydoc, jrdoc and more info files
 
@@ -81,6 +83,7 @@ jas-meditor.jar:          the interface to meditor
 jas-jython.jar:           an interface for Java scripting
 jas-mpj.jar:              MPI Java depending code
 mylog.jar:                a substitute for log4j to use Java logging
+nolog.jar:                a substitute for log4j to disable any logging
 droidlog.jar:             a substitute for log4j to use Android logging
 jlinalg_adapter.jar:      an adaptor to parts of JLinAlg
 commons-math_adapter.jar: an adaptor to parts of Apache commons.math
@@ -88,8 +91,8 @@ commons-math_adapter.jar: an adaptor to parts of Apache commons.math
 
 pre packaged JAS versions:
 
-jas-java_<version>-all.deb  a Debian (wheezy) package usable in MathLibre
-ruboto-irb-jas-release.apk  an Android App based on Ruboto
+jas-java_<version>-all.deb  a Debian 10 (buster) package usable in MathLibre
+ruboto-irb-jas-release.apk  an Android App based on Ruboto (defunct)
 
 
 There are GIT repositories for the scource code, which can be cloned with
