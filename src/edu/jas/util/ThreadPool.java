@@ -121,7 +121,7 @@ public class ThreadPool {
                 workers[i] = new PoolThread(this);
                 workers[i].start();
             }
-            logger.info("size = " + size + ", strategy = " + strategy);
+            logger.info("size = {}, strategy = {}", size, strategy);
         }
         if (debug) {
             Thread.dumpStack();
@@ -166,7 +166,7 @@ public class ThreadPool {
         while (hasJobs()) {
             try {
                 Thread.sleep(100);
-                //logger.info("waiting for termination in " + this);
+                //logger.info("waiting for termination in {}", this);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -198,7 +198,7 @@ public class ThreadPool {
         int s = jobstack.size();
         if (hasJobs()) {
             synchronized (this) {
-                logger.info("jobs canceled: " + jobstack);
+                logger.info("jobs canceled: {}", jobstack);
                 jobstack.clear();
                 notifyAll(); // for getJob
             }
@@ -220,7 +220,7 @@ public class ThreadPool {
                     }
                     //re++;
                     //if ( re > 3 * workers.length ) {
-                    //    logger.info("give up on: " + workers[i]);
+                    //    logger.info("give up on: {}", workers[i]);
                     //    break; // give up
                     //}
                     workers[i].join(100);
@@ -386,15 +386,15 @@ class PoolThread extends Thread {
                 running = false;
                 isWorking = false;
             } catch (PreemptingException e) {
-                logger.debug("catched " + e);
+                logger.debug("catched {}", e);
                 //e.printStackTrace();
             } catch (RuntimeException e) {
-                logger.warn("catched " + e);
+                logger.warn("catched {}", e);
                 e.printStackTrace();
             }
         }
         isWorking = false;
-        logger.info("terminated, done " + done + " jobs in " + time + " milliseconds");
+        logger.info("terminated, done {} jobs in {} milliseconds", done, time);
     }
 
 }

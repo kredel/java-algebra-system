@@ -228,7 +228,7 @@ public class Power<C extends RingElem<C>> {
             }
         } while (i > 0);
         if (n > 11 && debug) {
-            logger.info("n  = " + n + ", p  = " + p);
+            logger.info("n  = {}, p  = {} ", n, p);
         }
         return p;
     }
@@ -275,7 +275,7 @@ public class Power<C extends RingElem<C>> {
             }
         } while (i > 0);
         if (n > 11 && debug) {
-            logger.info("n  = " + n + ", p  = " + p);
+            logger.info("n  = {}, p  = {} ", n, p);
         }
         return p;
     }
@@ -326,9 +326,7 @@ public class Power<C extends RingElem<C>> {
                 b = b.multiply(b).remainder(m);
             }
         } while (i.signum() > 0);
-        if (debug) {
-            logger.info("n  = " + n + ", p  = " + p);
-        }
+        logger.debug("n  = {}, p  = {} ", n, p);
         return p;
     }
 
@@ -373,7 +371,7 @@ public class Power<C extends RingElem<C>> {
             }
         } while (i > 0);
         if (n > 11 && debug) {
-            logger.info("n  = " + n + ", p  = " + p);
+            logger.info("n  = {}, p  = {} ", n, p);
         }
         return p;
     }

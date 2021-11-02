@@ -96,15 +96,15 @@ public class ChannelFactory extends Thread {
         try {
             srv = new ServerSocket(port);
             //this.start(); moved to init and getChannel
-            logger.info("server bound to port " + port);
+            logger.info("server bound to port {}", port);
         } catch (BindException e) {
             srv = null;
-            logger.warn("server not started, port used " + port);
+            logger.warn("server not started, port used {}", port);
             if (debug) {
                 e.printStackTrace();
             }
         } catch (IOException e) {
-            logger.debug("IOException " + e);
+            logger.info("IOException {}", e);
             if (logger.isDebugEnabled()) {
                 e.printStackTrace();
             }
@@ -128,7 +128,7 @@ public class ChannelFactory extends Thread {
         if (srv != null && ! srvstart  ) {
             this.start();
             srvstart = true;
-            logger.info("ChannelFactory at " + srv);
+            logger.info("ChannelFactory at {}", srv);
         }
     }
 
@@ -170,7 +170,7 @@ public class ChannelFactory extends Thread {
         SocketChannel c = null;
         int i = 0;
         int delay = 5; // 50
-        logger.debug("connecting to " + h);
+        logger.debug("connecting to {}", h);
         while (c == null) {
             try {
                 c = new SocketChannel(new Socket(h, p));
@@ -180,7 +180,7 @@ public class ChannelFactory extends Thread {
                 i++;
                 if (i % 50 == 0) {
                     delay += delay;
-                    logger.info("Server on " + h + ":" + p + " not ready in " + delay + "ms");
+                    logger.info("Server on {}:{} not ready in {} ms", h, p, delay);
                 }
                 try {
                     Thread.sleep(delay);
@@ -195,7 +195,7 @@ public class ChannelFactory extends Thread {
                 }
             }
         }
-        logger.debug("connected, iter = " + i);
+        logger.debug("connected, iter = {}", i);
         return c;
     }
 
@@ -211,7 +211,7 @@ public class ChannelFactory extends Thread {
         srvrun = true;
         while (true) {
             try {
-                logger.info("waiting for connection on " + srv);
+                logger.info("waiting for connection on {}", srv);
                 Socket s = srv.accept();
                 if (this.isInterrupted()) {
                     //System.out.println("ChannelFactory interrupted");
@@ -221,7 +221,7 @@ public class ChannelFactory extends Thread {
                     }
                     return;
                 }
-                //logger.debug("Socket = " +s);
+                //logger.debug("Socket = {}", s);
                 logger.debug("connection accepted");
                 SocketChannel c = new SocketChannel(s);
                 buf.put(c);
@@ -256,7 +256,6 @@ public class ChannelFactory extends Thread {
             this.interrupt();
             while (!buf.isEmpty()) {
                 logger.debug("closing unused SocketChannel");
-                //((SocketChannel)buf.get()).close();
                 SocketChannel c  = buf.poll();
                 if ( c != null ) {
                     c.close();

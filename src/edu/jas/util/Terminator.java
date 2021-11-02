@@ -45,7 +45,7 @@ public class Terminator {
         fin = new Semaphore(0);
         done = false;
         idler = 0;
-        logger.info("constructor, workers = " + workers);
+        logger.info("constructor, workers = {}", workers);
     }
 
 
@@ -64,7 +64,7 @@ public class Terminator {
      */
     public synchronized void beIdle() {
         idler++;
-        logger.info("beIdle, idler = " + idler);
+        logger.info("beIdle, idler = {}", idler);
         if (idler >= workers) {
             done = true;
             fin.release(); //fin.V();
@@ -79,7 +79,7 @@ public class Terminator {
      */
     public synchronized void initIdle(int i) {
         idler += i;
-        logger.info("initIdle, idler = " + idler);
+        logger.info("initIdle, idler = {}", idler);
         if ( idler > workers ) {
             if (done) {
                 idler = workers;
@@ -97,7 +97,7 @@ public class Terminator {
      */
     public synchronized void beIdle(int i) {
         idler += i;
-        logger.info("beIdle, idler = " + idler);
+        logger.info("beIdle, idler = {}", idler);
         if (idler >= workers) {
             done = true;
             fin.release(); //fin.V();
@@ -122,7 +122,7 @@ public class Terminator {
      */
     public synchronized void notIdle() {
         idler--;
-        logger.info("notIdle, idler = " + idler);
+        logger.info("notIdle, idler = {}", idler);
         if ( idler < 0 ) {
             throw new RuntimeException("idler < 0");
         }
@@ -151,12 +151,12 @@ public class Terminator {
      * Release if possible.
      */
     public synchronized void release() {
-        logger.info("release = " + this);
+        logger.info("release = {}", this);
         if ( idler >= workers ) {
             done = true;
             fin.release(); 
         }
-        //logger.info("release, idler = " + idler);
+        //logger.info("release, idler = {}", idler);
     }
 
 
@@ -169,7 +169,7 @@ public class Terminator {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        logger.info("waitDone " + this);
+        logger.info("waitDone {}", this);
     }
 
 }

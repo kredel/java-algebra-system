@@ -32,7 +32,7 @@ public class ComputerThreads {
     private static final Logger logger = LogManager.getLogger(ComputerThreads.class);
 
 
-    // private static final boolean debug = logger.isInfoEnabled(); //logger.isInfoEnabled();
+    // private static final boolean debug = logger.isInfoEnabled();
 
 
     /**
@@ -114,30 +114,14 @@ public class ComputerThreads {
      */
     public static synchronized ExecutorService getPool() {
         if (pool == null) {
-            // workpile = new ArrayBlockingQueue<Runnable>(Q_CAPACITY);
-            //            pool = Executors.newFixedThreadPool(N_THREADS);
             pool = Executors.newCachedThreadPool();
-            //             pool = new ThreadPoolExecutor(N_CPUS, N_THREADS,
-            //                                           100L, TimeUnit.MILLISECONDS,
-            //                                           workpile, REH);
-            //             pool = new ThreadPoolExecutor(N_CPUS, N_THREADS,
-            //                                           1000L, TimeUnit.MILLISECONDS,
-            //                                           workpile);
         }
         //System.out.println("pool_init = " + pool);
         return pool;
         //return Executors.unconfigurableExecutorService(pool);
 
         /* not useful, is not run from jython
-        final GCDProxy<C> proxy = this;
-        Runtime.getRuntime().addShutdownHook( 
-                         new Thread() {
-                             public void run() {
-                                    logger.info("running shutdown hook");
-                                    proxy.terminate();
-                             }
-                         }
-        );
+        Runtime.getRuntime().addShutdownHook( );
         */
     }
 
@@ -151,22 +135,21 @@ public class ComputerThreads {
         }
         if (pool instanceof ThreadPoolExecutor) {
             ThreadPoolExecutor tpe = (ThreadPoolExecutor) pool;
-            //logger.info("task queue size         " + Q_CAPACITY);
-            //logger.info("reject execution handler" + REH.getClass().getName());
-            logger.info("number of CPUs            " + N_CPUS);
-            logger.info("core number of threads    " + N_THREADS);
-            logger.info("current number of threads " + tpe.getPoolSize());
-            logger.info("maximal number of threads " + tpe.getLargestPoolSize());
+            //logger.info("task queue size         {}", Q_CAPACITY);
+            logger.info("number of CPUs            {}", N_CPUS);
+            logger.info("core number of threads    {}", N_THREADS);
+            logger.info("current number of threads {}", tpe.getPoolSize());
+            logger.info("maximal number of threads {}", tpe.getLargestPoolSize());
             BlockingQueue<Runnable> workpile = tpe.getQueue();
             if (workpile != null) {
-                logger.info("queued tasks              " + workpile.size());
+                logger.info("queued tasks              {}", workpile.size());
             }
             List<Runnable> r = tpe.shutdownNow();
             if (r.size() != 0) {
-                logger.info("unfinished tasks          " + r.size());
+                logger.info("unfinished tasks          {}", r.size());
             }
-            logger.info("number of sheduled tasks  " + tpe.getTaskCount());
-            logger.info("number of completed tasks " + tpe.getCompletedTaskCount());
+            logger.info("number of sheduled tasks  {}", tpe.getTaskCount());
+            logger.info("number of completed tasks {}", tpe.getCompletedTaskCount());
         }
         pool = null;
         //workpile = null;
