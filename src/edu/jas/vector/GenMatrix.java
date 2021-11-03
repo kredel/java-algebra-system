@@ -59,7 +59,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
             ArrayList<C> nr = new ArrayList<C>(row);
             matrix.add(nr);
         }
-        logger.info(ring.rows + " x " + ring.cols + " matrix constructed");
+        logger.info("{} x {} matrix constructed", ring.rows, ring.cols);
     }
 
 
@@ -74,7 +74,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
         }
         ring = r;
         matrix = new ArrayList<ArrayList<C>>(m);
-        logger.info(ring.rows + " x " + ring.cols + " matrix constructed");
+        logger.info("{} x {} matrix constructed", ring.rows, ring.cols);
     }
 
 
@@ -93,7 +93,7 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
             }
             matrix.add(nr);
         }
-        logger.info(ring.rows + " x " + ring.cols + " matrix constructed");
+        logger.info("{} x {} matrix constructed", ring.rows, ring.cols);
     }
 
 

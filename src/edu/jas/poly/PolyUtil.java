@@ -1224,10 +1224,10 @@ public class PolyUtil {
             if (!c.isZERO()) {
                 pv.put(e1, c); // or m1.setValue( c )
             } else {
-                logger.warn("rDiv, P  = " + P);
-                logger.warn("rDiv, c1 = " + c1);
-                logger.warn("rDiv, s  = " + s);
-                logger.warn("rDiv, c  = " + c);
+                logger.warn("rDiv, P  = {}", P);
+                logger.warn("rDiv, c1 = {}", c1);
+                logger.warn("rDiv, s  = {}", s);
+                logger.warn("rDiv, c  = {}", c);
                 throw new RuntimeException("something is wrong");
             }
         }
@@ -1263,10 +1263,10 @@ public class PolyUtil {
             if (!c.isZERO()) {
                 pv.put(e1, c); // or m1.setValue( c )
             } else {
-                logger.warn("rDiv, P  = " + P);
-                logger.warn("rDiv, c1 = " + c1);
-                logger.warn("rDiv, s  = " + s);
-                logger.warn("rDiv, c  = " + c);
+                logger.warn("rDiv, P  = {}", P);
+                logger.warn("rDiv, c1 = {}", c1);
+                logger.warn("rDiv, s  = {}", s);
+                logger.warn("rDiv, c  = {}", c);
                 throw new RuntimeException("something is wrong");
             }
         }
@@ -1302,9 +1302,9 @@ public class PolyUtil {
             if (!c.isZERO()) {
                 pv.put(e1, c); // or m1.setValue( c )
             } else {
-                logger.warn("pu, c1 = " + c1);
-                logger.warn("pu, s  = " + s);
-                logger.warn("pu, c  = " + c);
+                logger.warn("pu, c1 = {}", c1);
+                logger.warn("pu, s  = {}", s);
+                logger.warn("pu, c  = {}", c);
                 throw new RuntimeException("something is wrong");
             }
         }
@@ -1548,12 +1548,12 @@ public class PolyUtil {
             if (debug) {
                 GenPolynomial<C> x = c1.remainder(s);
                 if (!x.isZERO()) {
-                    logger.info("divide x = " + x);
+                    logger.info("divide x = {}", x);
                     throw new ArithmeticException("no exact division: " + c1 + "/" + s);
                 }
             }
             if (c.isZERO()) {
-                //logger.warn("no exact division: " + c1 + "/" + s);
+                //logger.warn("no exact division: {}/{}", c1, s);
                 throw new ArithmeticException("no exact division: " + c1 + "/" + s);
             }
             pv.put(e, c); // or m1.setValue( c )
@@ -1587,12 +1587,12 @@ public class PolyUtil {
             if (debug) {
                 C x = c1.remainder(s);
                 if (!x.isZERO()) {
-                    logger.info("divide x = " + x);
+                    logger.info("divide x = {}", x);
                     throw new ArithmeticException("no exact division: " + c1 + "/" + s);
                 }
             }
             if (c.isZERO()) {
-                //logger.warn("no exact division: " + c1 + "/" + s);
+                //logger.warn("no exact division: {}/{}", c1, s);
                 throw new ArithmeticException("no exact division: " + c1 + "/" + s);
             }
             pv.put(e, c); // or m1.setValue( c )
@@ -2944,9 +2944,7 @@ public class PolyUtil {
         for (GenPolynomial<C> p : F) {
             Map<ExpVector, GenPolynomial<C>> m = null;
             m = p.contract(R);
-            if (logger.isDebugEnabled()) {
-                logger.debug("intersect contract m = " + m);
-            }
+            logger.debug("intersect contract m = {}", m);
             if (m.size() == 1) { // contains one power of variables
                 for (Map.Entry<ExpVector, GenPolynomial<C>> me : m.entrySet()) {
                     ExpVector e = me.getKey();
@@ -3007,9 +3005,7 @@ public class PolyUtil {
                 continue;
             }
             GenWordPolynomial<C> m = p.contract(R);
-            if (logger.isDebugEnabled()) {
-                logger.debug("intersect contract m = " + m);
-            }
+            logger.debug("intersect contract m = {}", m);
             if (!m.isZERO()) {
                 H.add(m);
             }

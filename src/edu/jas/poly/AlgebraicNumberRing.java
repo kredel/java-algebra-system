@@ -582,9 +582,7 @@ class AlgebraicNumberIterator<C extends RingElem<C>> implements Iterator<Algebra
             CartesianProductInfinite<C> tuples = new CartesianProductInfinite<C>(comps);
             iter = tuples.iterator();
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("iterator for degree " + d + ", finite = " + cf.isFinite());
-        }
+        logger.info("iterator for degree {}, finite = {}", d, cf.isFinite());
     }
 
 

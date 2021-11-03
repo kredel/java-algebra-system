@@ -117,8 +117,8 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
             }
         }
         ONE = new GenMatrix<C>(this, m);
-        logger.info(rows + " x " + cols + " with blocksize " + blocksize + " matrix ring over "
-                        + coFac.toScript() + " constructed");
+        logger.info("{} x {} matrix ring with blocksize {} over {} constructed",
+                    rows, cols, blocksize, coFac);
     }
 
 

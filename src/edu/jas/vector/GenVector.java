@@ -51,7 +51,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
         }
         modul = m;
         val = v;
-        logger.debug(modul.cols + " vector constructed");
+        logger.debug("{} vector constructed", modul.cols);
     }
 
 
@@ -67,7 +67,7 @@ public class GenVector<C extends RingElem<C>> implements ModulElem<GenVector<C>,
         for (int i = 0; i < v.length; i++) {
             val.add(v[i]);
         }
-        logger.debug(modul.cols + " vector constructed");
+        logger.debug("{} vector constructed", modul.cols);
     }
 
 

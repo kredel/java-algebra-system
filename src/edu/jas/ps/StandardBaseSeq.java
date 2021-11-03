@@ -161,21 +161,21 @@ public class StandardBaseSeq<C extends RingElem<C>>
         }
         OrderedPairlist<C> pairlist = new OrderedPairlist<C>(modv, ring); //strategy.create( modv, ring ); 
         pairlist.put(G);
-        logger.info("start " + pairlist);
+        logger.info("start {}", pairlist);
 
         Pair<C> pair;
         MultiVarPowerSeries<C> pi, pj, S, H;
         while (pairlist.hasNext()) {
             pair = pairlist.removeNext();
-            //logger.debug("pair = " + pair);
+            //logger.debug("pair = {}", pair);
             if (pair == null) {
                 continue;
             }
             pi = pair.pi;
             pj = pair.pj;
             if ( /*false &&*/debug) {
-                logger.debug("pi    = " + pi);
-                logger.debug("pj    = " + pj);
+                logger.debug("pi    = {}", pi);
+                logger.debug("pj    = {}", pj);
             }
 
             S = red.SPolynomial(pi, pj);
@@ -208,8 +208,8 @@ public class StandardBaseSeq<C extends RingElem<C>>
                 G.add(H);
                 return G; // since no threads are activated
             }
-            if (logger.isDebugEnabled()) {
-                logger.info("H = " + H);
+            if (debug) {
+                logger.info("H = {}", H);
             }
             //if (!H.isZERO()) {
             //l++;
@@ -217,9 +217,9 @@ public class StandardBaseSeq<C extends RingElem<C>>
             pairlist.put(H);
             //}
         }
-        logger.debug("#sequential list = " + G.size());
+        logger.debug("#sequential list = {}", G.size());
         G = minimalSTD(G);
-        logger.info("" + pairlist);
+        logger.info("end {}", pairlist);
         return G;
     }
 

@@ -79,7 +79,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 }
             }
             if (maxA.isZERO()) {
-                logger.warn("matrix is degenerate at col " + i);
+                logger.warn("matrix is degenerate at col {}", i);
                 mat.get(i).set(i, ring.coFac.getZERO()); // already zero
                 //continue;
                 P.clear();
@@ -290,7 +290,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                     imax = k;
                 }
             }
-            logger.info("pivot: " + imax + ", i = " + i + ", maxA = " + maxA);
+            logger.info("pivot: {}, i = {}, maxA = {}", imax, i, maxA);
             if (maxA.isZERO()) {
                 // check for complete zero row or left pivot
                 int imaxl = i;
@@ -310,7 +310,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                         }
                         if (iszero) { // left pivot okay
                             imax = imaxl;
-                            logger.info("pivot*: " + imax + ", i = " + i + ", absA = " + absA);
+                            logger.info("pivot*: {}, i = {}, absA = {}", imax, i, absA);
                             maxA = ring.coFac.getONE();
                         }
                     }
@@ -601,7 +601,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
                 }
             }
             if (maxA.isZERO()) {
-                logger.warn("matrix is degenerate at col " + i);
+                logger.warn("matrix is degenerate at col {}", i);
                 mat.get(i).set(i, ring.coFac.getZERO()); //already zero
                 //continue;
                 P.clear();

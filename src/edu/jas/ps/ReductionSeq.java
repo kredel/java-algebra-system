@@ -87,7 +87,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
     public boolean criterion4(MultiVarPowerSeries<C> A, MultiVarPowerSeries<C> B, ExpVector e) {
         if (logger.isInfoEnabled()) {
             if (!A.ring.equals(B.ring)) {
-                logger.error("rings not equal " + A.ring + ", " + B.ring);
+                logger.error("rings not equal: {} != {}", A.ring, B.ring);
             }
             if (!A.ring.isCommutative()) {
                 logger.error("GBCriterion4 not applicabable to non-commutative power series");
@@ -122,7 +122,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
         }
         if (debug) {
             if (!A.ring.equals(B.ring)) {
-                logger.error("rings not equal " + A.ring + ", " + B.ring);
+                logger.error("rings not equal: {} != {}", A.ring, B.ring);
             }
         }
         Map.Entry<ExpVector, C> ma = A.orderMonomial();

@@ -75,7 +75,7 @@ public class GenVectorModul<C extends RingElem<C>> implements ModulFactory<GenVe
                 BASIS.add(new GenVector<C>(this, v));
             }
         }
-        logger.info(cols + " module over " + coFac + "constructed");
+        logger.info("{} module over {} constructed", cols, coFac);
     }
 
 

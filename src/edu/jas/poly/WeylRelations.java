@@ -98,20 +98,18 @@ public class WeylRelations<C extends RingElem<C>> implements RelationGenerator<C
             GenSolvablePolynomial<C> rel = (GenSolvablePolynomial<C>) b.sum(one);
             //  = (GenSolvablePolynomial<C>)b.subtract(one);
             if (rel.isZERO()) {
-                logger.info("ring = " + ring);
-                logger.info("one  = " + one);
-                logger.info("zero = " + zero);
-                logger.info("b    = " + b);
-                logger.info("rel  = " + rel);
+                logger.info("ring = {}", ring);
+                logger.info("one  = {}", one);
+                logger.info("zero = {}", zero);
+                logger.info("b    = {}", b);
+                logger.info("rel  = {}", rel);
                 //System.exit(1);
                 throw new RuntimeException("rel.isZERO()");
             }
             //System.out.println("rel = " + rel.toString(ring.vars));
             table.update(e, f, rel);
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("\nWeyl relations = " + table);
-        }
+        logger.debug("\nWeyl relations = {}", table);
         return;
     }
 
