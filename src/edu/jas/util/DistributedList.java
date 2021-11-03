@@ -72,7 +72,7 @@ public class DistributedList /* implements List not jet */ {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        logger.debug("dl channel = " + channel);
+        logger.debug("dl channel = {}", channel);
         theList = new TreeMap<Counter,Object>();
     }
 
@@ -103,7 +103,7 @@ public class DistributedList /* implements List not jet */ {
     public void terminate() {
         if ( cf != null ) {
             cf.terminate();
-            //logger.warn("terminating " + cf);
+            //logger.warn("terminating {}", cf);
         }
         if ( channel != null ) {
             channel.close();
@@ -112,7 +112,7 @@ public class DistributedList /* implements List not jet */ {
         if ( listener == null ) { 
             return;
         }
-        logger.debug("terminate " + listener);
+        logger.debug("terminate {}", listener);
         listener.setDone(); 
         try { 
             while ( listener.isAlive() ) {

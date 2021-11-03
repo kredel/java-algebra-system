@@ -145,7 +145,7 @@ public class DistThreadPool /*extends ThreadPool*/{
             throw new IllegalArgumentException("DistThreadPool " + e);
         }
         if (debug) {
-            logger.info("ec = " + ec);
+            logger.info("ec = {}", ec);
         }
         try {
             ec.open(threads);
@@ -154,7 +154,7 @@ public class DistThreadPool /*extends ThreadPool*/{
             throw new IllegalArgumentException("DistThreadPool " + e);
         }
         if (debug) {
-            logger.info("ec = " + ec);
+            logger.info("ec = {}", ec);
         }
         workers = new DistPoolThread[0];
     }
@@ -185,7 +185,7 @@ public class DistThreadPool /*extends ThreadPool*/{
                 workers[i] = new DistPoolThread(this, ec, i);
                 workers[i].start();
             }
-            logger.info("init: " + this.toString());
+            logger.info("init: {}", this);
         }
     }
 
@@ -224,7 +224,7 @@ public class DistThreadPool /*extends ThreadPool*/{
      */
     public void terminate(boolean shutDown) {
         if (shutDown) {
-            logger.info("shutdown = " + this);
+            logger.info("shutdown = {}", this);
             ShutdownRequest sdr = new ShutdownRequest();
             for (int i = 0; i < workers.length; i++) {
                 addJob(sdr);
@@ -234,7 +234,7 @@ public class DistThreadPool /*extends ThreadPool*/{
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            logger.info("remaining jobs = " + jobstack.size());
+            logger.info("remaining jobs = {}", jobstack.size());
             try {
                 for (int i = 0; i < workers.length; i++) {
                     while (workers[i].isAlive()) {
@@ -249,7 +249,7 @@ public class DistThreadPool /*extends ThreadPool*/{
         } else {
             terminate();
         }
-        logger.info("terminated = " + this);
+        logger.info("terminated = {}", this);
     }
 
 
@@ -257,7 +257,7 @@ public class DistThreadPool /*extends ThreadPool*/{
      * Terminates the threads.
      */
     public void terminate() {
-        logger.info("terminate = " + this);
+        logger.info("terminate = {}", this);
         while (hasJobs()) {
             try {
                 Thread.sleep(100);
@@ -276,7 +276,7 @@ public class DistThreadPool /*extends ThreadPool*/{
             }
         }
         ec.close();
-        logger.info("terminated = " + this);
+        logger.info("terminated = {}", this);
     }
 
 
@@ -423,7 +423,7 @@ class DistPoolThread extends Thread {
      */
     @Override
     public void run() {
-        logger.info("ready, myId = " + myId);
+        logger.info("ready, myId = {}", myId);
         Runnable job;
         int done = 0;
         long time = 0;
@@ -435,7 +435,7 @@ class DistPoolThread extends Thread {
                 job = pool.getJob();
                 working = true;
                 if (debug) {
-                    logger.info("working " + myId + " on " + job);
+                    logger.info("working {} on {}", myId, job);
                 }
                 t = System.currentTimeMillis();
                 // send and wait, like rmi
@@ -446,49 +446,49 @@ class DistPoolThread extends Thread {
                         ec.send(myId, job);
                     }
                     if (debug) {
-                        logger.info("send " + myId + " at " + ec + " send job " + job);
+                        logger.info("send {} at {} send job {}", myId, ec, job);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    logger.info("error send " + myId + " at " + ec + " e = " + e);
+                    logger.info("error send {} at {} e = {}", myId, ec, e);
                     working = false;
                 }
                 // remote: job.run(); 
                 Object o = null;
                 try {
                     if (working) {
-                        logger.info("waiting " + myId + " on " + job);
+                        logger.info("waiting {} on {}", myId, job);
                         o = ec.receive(myId);
                         if (debug) {
-                            logger.info("receive " + myId + " at " + ec + " send job " + job + " received " + o);
+                            logger.info("receive {} at {} send job {} received {}", myId, ec, job, o);
                         }
                     }
                 } catch (IOException e) {
-                    logger.info("receive exception " + myId + " send job " + job + ", " + e);
+                    logger.info("receive exception {} send job {}, e = {}", myId, job, e);
                     //e.printStackTrace();
                     running = false;
                 } catch (ClassNotFoundException e) {
-                    logger.info("receive exception " + myId + " send job " + job + ", " + e);
+                    logger.info("receive exception {} send job {}, e = {}", myId, job, e);
                     //e.printStackTrace();
                     running = false;
                 } finally {
                     if (debug) {
-                        logger.info("receive finally " + myId + " at " + ec + " send job " + job + " received "
-                                    + o + " running " + running);
+                        logger.info("receive finally {} at {} send job {} received {} running {}",
+                                    myId, ec, job, o, running);
                     }
                 }
                 working = false;
                 time += System.currentTimeMillis() - t;
                 done++;
                 if (debug) {
-                    logger.info("done " + myId + " with " + o);
+                    logger.info("done {} with {}", myId, o);
                 }
             } catch (InterruptedException e) {
                 running = false;
                 Thread.currentThread().interrupt();
             }
         }
-        logger.info("terminated " + myId + " , done " + done + " jobs in " + time + " milliseconds");
+        logger.info("terminated {}, done {} jobs in {} milliseconds", myId, done, time);
     }
 
 }

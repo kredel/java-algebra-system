@@ -118,13 +118,13 @@ public class DistributedListServer extends Thread {
         Object n;
         Object o;
         while (goon) {
-            // logger.debug("list server " + this + " go on");
+            // logger.debug("list server {} go on", this);
             try {
                 channel = cf.getChannel();
-                logger.debug("dls channel = "+channel);
+                logger.debug("dls channel = {}", channel);
                 if ( mythread.isInterrupted() ) {
                     goon = false;
-                    //logger.info("list server " + this + " interrupted");
+                    //logger.info("list server {} interrupted", this);
                 } else {
                     s = new Broadcaster(channel,servers,listElem,theList);
                     int ls = 0;
@@ -133,9 +133,9 @@ public class DistributedListServer extends Thread {
                         ls = theList.size();
                         s.start();
                     }
-                    //logger.debug("server " + s + " started");
+                    //logger.debug("server {} started", s);
                     if ( ls > 0 ) {
-                        logger.info("sending " + ls + " list elements");
+                        logger.info("sending {} list elements", ls);
                         synchronized (theList) {
                             Iterator it = theList.entrySet().iterator();
                             for ( int i = 0; i < ls; i++ ) {
@@ -156,7 +156,7 @@ public class DistributedListServer extends Thread {
                 Thread.currentThread().interrupt();
             }
         }
-        //logger.debug("listserver " + this + " terminated");
+        //logger.debug("listserver {} terminated", this);
     }
 
 
@@ -178,7 +178,7 @@ public class DistributedListServer extends Thread {
                         br.interrupt(); 
                         br.join(100);
                     }
-                    //logger.debug("server " + br + " terminated");
+                    //logger.debug("server {} terminated", br);
                 } catch (InterruptedException e) { 
                     Thread.currentThread().interrupt();
                 }
@@ -193,7 +193,7 @@ public class DistributedListServer extends Thread {
                 mythread.interrupt(); 
                 mythread.join(100);
             }
-            //logger.debug("server " + mythread + " terminated");
+            //logger.debug("server {} terminated", mythread);
         } catch (InterruptedException e) { 
             Thread.currentThread().interrupt();
         }
@@ -320,9 +320,13 @@ class Counter implements Serializable, Comparable<Counter> {
 class Broadcaster extends Thread /*implements Runnable*/ {
 
     private static final Logger logger = LogManager.getLogger(Broadcaster.class);
+
     private final SocketChannel channel;
+
     private final List bcaster;
+
     private Counter listElem;
+
     private final SortedMap<Counter,Object> theList;
 
 
@@ -423,7 +427,7 @@ class Broadcaster extends Thread /*implements Runnable*/ {
 
             }
         }
-        logger.debug("broadcaster terminated "+this);
+        logger.debug("broadcaster terminated {}", this);
         channel.close();
     }
 

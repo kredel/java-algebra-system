@@ -82,7 +82,7 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
             throw new RuntimeException(e);
         }
         if (debug) {
-            logger.debug("dl channel = " + channel);
+            logger.debug("dl channel = {}", channel);
         }
         //theList = new ConcurrentSkipListMap<K, V>(); // Java 1.6
         theList = new TreeMap<K, V>();
@@ -268,10 +268,10 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
             channel.send(tc);
             //System.out.println("send: "+tc+" @ "+listener);
         } catch (IOException e) {
-            logger.info("send, exception " + e);
+            logger.info("send, exception {}", e);
             e.printStackTrace();
         } catch (Exception e) {
-            logger.info("send, exception " + e);
+            logger.info("send, exception {}", e);
             e.printStackTrace();
         }
         return null;
@@ -334,10 +334,10 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
             channel.send(tc);
             //System.out.println("send: "+tc+" @ "+listener);
         } catch (IOException e) {
-            logger.info("send, exception " + e);
+            logger.info("send, exception {}", e);
             e.printStackTrace();
         } catch (Exception e) {
-            logger.info("send, exception " + e);
+            logger.info("send, exception {}", e);
             e.printStackTrace();
         }
     }
@@ -354,7 +354,7 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
             return;
         }
         if (debug) {
-            logger.debug("initialize " + listener);
+            logger.debug("initialize {}", listener);
         }
         synchronized (theList) {
             listener.start();
@@ -377,7 +377,7 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
             return;
         }
         if (debug) {
-            logger.debug("terminate " + listener);
+            logger.debug("terminate {}", listener);
         }
         listener.setDone();
         try {
@@ -449,7 +449,7 @@ class DHTListener<K, V> extends Thread {
             try {
                 o = channel.receive();
                 if (debug) {
-                    logger.debug("receive(" + o + ")");
+                    logger.debug("receive({})", o);
                 }
                 if (this.isInterrupted()) {
                     goon = false;
@@ -471,7 +471,7 @@ class DHTListener<K, V> extends Thread {
                     tc = (DHTTransport<K, V>) o;
                     K key = tc.key();
                     if (key != null) {
-                        logger.info("receive, put(key=" + key + ")");
+                        logger.info("receive, put(key={})", key);
                         V val = tc.value();
                         synchronized (theList) {
                             theList.put(key, val);
@@ -481,15 +481,15 @@ class DHTListener<K, V> extends Thread {
                 }
             } catch (IOException e) {
                 goon = false;
-                logger.info("receive, IO exception " + e);
+                logger.info("receive, IO exception {}", e);
                 //e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 goon = false;
-                logger.info("receive, CNF exception " + e);
+                logger.info("receive, CNF exception {}", e);
                 e.printStackTrace();
             } catch (Exception e) {
                 goon = false;
-                logger.info("receive, exception " + e);
+                logger.info("receive, exception {}", e);
                 e.printStackTrace();
             }
         }

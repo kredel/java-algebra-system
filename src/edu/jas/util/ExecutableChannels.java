@@ -125,7 +125,7 @@ public class ExecutableChannels {
             } catch (IOException ignore) {
             }
         }
-        logger.debug("list.size() in " + mfile + " = " + list.size());
+        logger.debug("list.size() in {} = {}", mfile, list.size());
         if (list.size() == 0) {
             return;
         }
@@ -233,7 +233,7 @@ public class ExecutableChannels {
      * @throws IOException.
      */
     public void open() throws IOException {
-        logger.debug("opening " + servers.length + " channels");
+        logger.debug("opening {} channels", servers.length);
         if (servers.length <= 1) {
             throw new IOException("to few servers");
         }
@@ -251,7 +251,7 @@ public class ExecutableChannels {
      * @throws IOException.
      */
     public void open(int nc) throws IOException {
-        logger.debug("opening " + nc + " channels");
+        logger.debug("opening {} channels", nc);
         if (servers.length <= 1) {
             throw new IOException("to few servers");
         }

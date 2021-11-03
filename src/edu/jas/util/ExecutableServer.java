@@ -106,7 +106,7 @@ public class ExecutableServer extends Thread {
             } catch (NumberFormatException e) {
             }
         }
-        //logger.info("ExecutableServer at port " + port);
+        //logger.info("ExecutableServer at port {}", port);
         ExecutableServer es = new ExecutableServer(port);
         es.init();
         es.join(); // do not use terminate()
@@ -119,7 +119,7 @@ public class ExecutableServer extends Thread {
      */
     public void init() {
         this.start();
-        logger.info("ExecutableServer at " + cf);
+        logger.info("ExecutableServer at {}", cf);
     }
 
 
@@ -144,21 +144,21 @@ public class ExecutableServer extends Thread {
         mythread = Thread.currentThread();
         while (goon) {
             if (debug) {
-                logger.info("server " + this + " go on");
+                logger.info("server {} go on", this);
             }
             try {
                 channel = cf.getChannel();
-                logger.info("channel = " + channel);
+                logger.info("channel = {}", channel);
                 if (mythread.isInterrupted()) {
                     goon = false;
-                    logger.debug("execute server " + this + " interrupted");
+                    logger.debug("execute server {} interrupted", this);
                     channel.close();
                 } else {
                     s = new Executor(channel); // ---,servers);
                     if (goon) { // better synchronize with terminate
                         servers.add(s);
                         s.start();
-                        logger.debug("server " + s + " started");
+                        logger.debug("server {} started", s);
                     } else {
                         s = null;
                         channel.close();
@@ -173,7 +173,7 @@ public class ExecutableServer extends Thread {
             }
         }
         if (debug) {
-            logger.info("server " + this + " terminated");
+            logger.info("server {} terminated", this);
         }
     }
 
@@ -199,7 +199,7 @@ public class ExecutableServer extends Thread {
                         x.interrupt();
                         x.join(100);
                     }
-                    logger.debug("server " + x + " terminated");
+                    logger.debug("server {} terminated", x);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
@@ -215,7 +215,7 @@ public class ExecutableServer extends Thread {
                 mythread.interrupt();
                 mythread.join(100);
             }
-            //logger.debug("server " + mythread + " terminated");
+            //logger.debug("server {} terminated", mythread);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
@@ -267,16 +267,16 @@ class Executor extends Thread /*implements Runnable*/{
         RemoteExecutable re = null;
         String d;
         boolean goon = true;
-        logger.debug("executor started " + this);
+        logger.debug("executor started {}", this);
         while (goon) {
             try {
                 o = channel.receive();
-                logger.info("receive: " + o + " from " + channel);
+                logger.info("receive: {} from {}", o, channel);
                 if (this.isInterrupted()) {
                     goon = false;
                 } else {
                     if (debug) {
-                        logger.debug("receive: " + o + " from " + channel);
+                        logger.debug("receive: {} from {}", o, channel);
                     }
                     if (o instanceof String) {
                         d = (String) o;
@@ -284,7 +284,7 @@ class Executor extends Thread /*implements Runnable*/{
                             goon = false; // stop this thread
                             channel.send(ExecutableServer.DONE);
                         } else {
-                            logger.warn("invalid/unknown String: " + d + " from " + channel);
+                            logger.warn("invalid/unknown String: {} from {}", d, channel);
                             goon = false; // stop this thread ?
                             channel.send(ExecutableServer.DONE);
                         }
@@ -293,46 +293,46 @@ class Executor extends Thread /*implements Runnable*/{
                     if (o instanceof RemoteExecutable) {
                         re = (RemoteExecutable) o;
                         if (debug) {
-                            logger.info("running " + re);
+                            logger.info("running {}", re);
                         }
                         try {
                             re.run();
                         } catch(Exception e) {
-                            logger.info("Exception on re.run()" + e);
+                            logger.info("Exception on re.run() {}", e);
                             if (logger.isInfoEnabled()) {
                                 e.printStackTrace();
                             }
                         } finally {
-                            logger.info("finally re.run() " + re);
+                            logger.info("finally re.run() {}", re);
                         }
                         if (debug) {
-                            logger.info("finished " + re);
+                            logger.info("finished {}", re);
                         }
                         if (this.isInterrupted()) {
                             goon = false;
                         } else {
                             channel.send(ExecutableServer.DONE);
-                            logger.info("finished send " + ExecutableServer.DONE);
+                            logger.info("finished send {}", ExecutableServer.DONE);
                             //goon = false; // stop this thread
                         }
                     }
                 }
             } catch (IOException e) {
                 goon = false;
-                logger.info("IOException " + e);
+                logger.info("IOException {}", e);
                 if (debug) {
                     e.printStackTrace();
                 }
             } catch (ClassNotFoundException e) {
                 goon = false;
-                logger.info("ClassNotFoundException " + e);
+                logger.info("ClassNotFoundException {}", e);
                 e.printStackTrace();
             } finally {
-                logger.info("finally " + this);
+                logger.info("finally {}", this);
             }
         }
         channel.close();
-        logger.info("terminated " + this);
+        logger.info("terminated {}", this);
     }
 
 }
