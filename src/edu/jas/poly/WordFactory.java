@@ -125,7 +125,7 @@ public final class WordFactory implements MonoidFactory<Word> {
         translation = null;
         Map<String, Integer> hist = Word.histogram(alp);
         if (hist.size() != alp.length()) {
-            logger.warn("multiple characters in String: " + hist);
+            logger.warn("multiple characters in String: {}", hist);
             //Set<String> k = hist.keySet();
             String[] ka = hist.keySet().toArray(new String[hist.size()]);
             alphabet = concat(ka);
@@ -149,7 +149,7 @@ public final class WordFactory implements MonoidFactory<Word> {
         } else {
             alphabet = transRef.substring(0, V.length);
             translation = V;
-            logger.info("alphabet = " + alphabet + ", translation = " + Arrays.toString(translation));
+            logger.info("alphabet = {}, translation = {}", alphabet, Arrays.toString(translation));
         }
         ONE = new Word(this, "", false);
     }
@@ -592,7 +592,7 @@ public final class WordFactory implements MonoidFactory<Word> {
         for (int i = 0; i < v.length; i++) {
             t[i] = cleanSpace(v[i]);
             if (t[i].length() == 0) {
-                logger.error("empty v[i]: '" + v[i] + "'");
+                logger.error("empty v[i]: '{}'", v[i]);
             }
             //System.out.println("clean all: " + v[i] + " --> " + t[i]);
         }
@@ -627,7 +627,7 @@ public final class WordFactory implements MonoidFactory<Word> {
         for (int i = 0; i < v.length; i++) {
             t[i] = v[i].trim();
             if (t[i].length() == 0) {
-                logger.error("empty v[i]: '" + v[i] + "'");
+                logger.error("empty v[i]: '{}'", v[i]);
             }
         }
         return t;
@@ -678,7 +678,7 @@ public final class WordFactory implements MonoidFactory<Word> {
             if (k < 0) {
                 System.out.println("t = " + Arrays.toString(translation));
                 System.out.println("v = " + Arrays.toString(v));
-                logger.error("v[i] not found in t: " + a);
+                logger.error("v[i] not found in t: {}", a);
                 //continue;
                 throw new IllegalArgumentException("v[i] not found in t: " + a);
             }

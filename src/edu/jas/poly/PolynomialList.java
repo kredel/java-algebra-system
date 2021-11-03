@@ -255,7 +255,7 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
     @SuppressWarnings("unchecked")
     public ModuleList<C> getModuleList(int i) {
         GenPolynomialRing<C> pfac = ring.contract(i);
-        logger.debug("contracted ring = " + pfac);
+        logger.debug("contracted ring = {}", pfac);
         //System.out.println("contracted ring = " + pfac);
 
         List<List<GenPolynomial<C>>> vecs = null;

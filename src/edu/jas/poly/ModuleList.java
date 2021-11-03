@@ -356,7 +356,7 @@ public class ModuleList<C extends RingElem<C>> implements Serializable {
      */
     public PolynomialList<C> getPolynomialList(boolean top) {
         GenPolynomialRing<C> pfac = ring.extend(cols, top);
-        logger.debug("extended ring = " + pfac);
+        logger.debug("extended ring = {}", pfac);
         //System.out.println("extended ring = " + pfac);
         return getPolynomialList(pfac);
     }

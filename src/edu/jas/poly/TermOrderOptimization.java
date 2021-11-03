@@ -181,7 +181,7 @@ public class TermOrderOptimization {
         List<List<Integer>> V = new ArrayList<List<Integer>>(map.values());
         //System.out.println("V = " + V);
         if (debug) {
-            logger.info("V,opt = {}" + V);
+            logger.info("V,opt = {}", V);
         }
         //for ( int j = V.size()-1; j >= 0; j-- ) {
         for (int j = 0; j < V.size(); j++) {

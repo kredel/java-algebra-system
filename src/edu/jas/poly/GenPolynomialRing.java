@@ -1312,8 +1312,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
         if (coFac.isFinite()) {
             return new GenPolynomialIterator<C>(this);
         }
-        logger.warn("ring of coefficients " + coFac
-                        + " is infinite, constructing iterator only over monomials");
+        logger.warn("ring of coefficients {} is infinite, constructing iterator only over monomials", coFac);
         return new GenPolynomialMonomialIterator<C>(this);
         //throw new IllegalArgumentException("only for finite iterable coefficients implemented");
     }
