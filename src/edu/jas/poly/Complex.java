@@ -112,7 +112,6 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
             im = ring.ring.getZERO();
             return;
         }
-        //logger.warn("String constructor not done");
         String sr = "";
         if (i > 0) {
             sr = s.substring(0, i);
@@ -121,7 +120,6 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
         if (i < s.length()) {
             si = s.substring(i + 1, s.length());
         }
-        //int j = sr.indexOf("+");
         re = ring.ring.parse(sr.trim());
         im = ring.ring.parse(si.trim());
     }
@@ -171,7 +169,6 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
     @Override
     public String toString() {
         String s = re.toString();
-        //logger.info("compareTo "+im+" ? 0 = "+i);
         if (im.isZERO()) {
             return s;
         }
@@ -552,7 +549,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
         }
         while (!b.isZERO()) {
             if (debug) {
-                logger.info("norm(b), a, b = " + b.norm() + ", " + a + ", " + b);
+                logger.info("norm(b), a, b = {}, {}, {}", b.norm(), a, b);
             }
             Complex<C>[] qr = a.quotientRemainder(b);
             if (qr[0].isZERO()) {
@@ -605,7 +602,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
         Complex<C> x2;
         while (!r.isZERO()) {
             if (debug) {
-                logger.info("norm(r), q, r = " + r.norm() + ", " + q + ", " + r);
+                logger.info("norm(r), q, r = {}, {}, {}", r.norm(), q, r);
             }
             qr = q.quotientRemainder(r);
             q = qr[0];

@@ -226,7 +226,7 @@ public class GenPolynomial<C extends RingElem<C>>
         if (debug) {
             C a = val.get(e);
             if (a != null) {
-                logger.error("map entry exists " + e + " to " + a + " new " + c);
+                logger.error("map entry exists {} to {} new {}", e, a, c);
             }
             hash = -1;
             blen = -1;
@@ -254,7 +254,7 @@ public class GenPolynomial<C extends RingElem<C>>
                 return;
             }
             if (!c.equals(b)) {
-                logger.error("map entry wrong " + e + " to " + c + " old " + b);
+                logger.error("map entry wrong {} to {} old {}", e, c, b);
                 throw new RuntimeException("c != b");
             }
         }
@@ -274,7 +274,7 @@ public class GenPolynomial<C extends RingElem<C>>
             if (debug) {
                 C a = val.get(e);
                 if (a != null) {
-                    logger.error("map entry exists " + e + " to " + a + " new " + me.getValue());
+                    logger.error("map entry exists {} to {} new {}", e, a, me.getValue());
                 }
                 hash = -1;
                 blen = -1;
@@ -905,8 +905,10 @@ public class GenPolynomial<C extends RingElem<C>>
                     long b = uv.weightDeg(normal); //scalarProduct(uv, uv);
                     if (ab * ab == a * b) { // cos == 1
                         fp.val.put(e, m.getValue());
-                        logger.info("ab = " + ab + ", a = " + a + ", b = " + b + ", u = " + u + ", e = " + e
+                        if (logger.isInfoEnabled()) {
+                            logger.info("ab = " + ab + ", a = " + a + ", b = " + b + ", u = " + u + ", e = " + e
                                         + ", v = " + v);
+                        }
                     }
                 }
             }
@@ -1799,7 +1801,7 @@ public class GenPolynomial<C extends RingElem<C>>
             if (debug) {
                 C x = c1.remainder(s);
                 if (!x.isZERO()) {
-                    logger.info("divide x = " + x);
+                    logger.info("divide x = {}", x);
                     throw new ArithmeticException("no exact division: " + c1 + "/" + s);
                 }
             }
@@ -1836,7 +1838,7 @@ public class GenPolynomial<C extends RingElem<C>>
             if (debug) {
                 C x = c1.rightRemainder(s);
                 if (!x.isZERO()) {
-                    logger.info("divide x = " + x);
+                    logger.info("divide x = {}", x);
                     throw new ArithmeticException("no exact division: " + c1 + "/" + s);
                 }
             }
@@ -1873,7 +1875,7 @@ public class GenPolynomial<C extends RingElem<C>>
             if (debug) {
                 C x = c1.leftRemainder(s);
                 if (!x.isZERO()) {
-                    logger.info("divide x = " + x);
+                    logger.info("divide x = {}", x);
                     throw new ArithmeticException("no exact division: " + c1 + "/" + s);
                 }
             }
@@ -1984,7 +1986,7 @@ public class GenPolynomial<C extends RingElem<C>>
             if (f.multipleOf(e)) {
                 C a = r.leadingBaseCoefficient();
                 ExpVector g = f.subtract(e);
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 a = a.multiply(ci);
                 h = S.multiply(a, g);
                 r = r.subtract(h);
@@ -2496,7 +2498,7 @@ public class GenPolynomial<C extends RingElem<C>>
         GenPolynomial<C> n = ring.getZERO().copy();
         SortedMap<ExpVector, C> nv = n.val;
         for (Map.Entry<ExpVector, C> m : this.val.entrySet()) {
-            //logger.info("m = " + m);
+            //logger.info("m = {}", m);
             C c = f.eval(m.getValue());
             if (c != null && !c.isZERO()) {
                 nv.put(m.getKey(), c);
@@ -2515,7 +2517,7 @@ public class GenPolynomial<C extends RingElem<C>>
         GenPolynomial<C> n = this.copy();
         SortedMap<ExpVector, C> nv = n.val;
         for (Map.Entry<ExpVector, C> m : nv.entrySet()) {
-            //logger.info("m = " + m);
+            //logger.info("m = {}", m);
             C c = f.eval(m.getValue());
             if (c != null && !c.isZERO()) {
                 m.setValue(c); // not okay
@@ -2576,13 +2578,13 @@ public class GenPolynomial<C extends RingElem<C>>
                     Method method = m.c.getClass().getMethod("bitLength", (Class<?>[]) null);
                     n += (Long) method.invoke(m.c, (Object[]) null);
                 } catch (NoSuchMethodException e) {
-                    logger.error("Exception, class: " + m.c.getClass());
+                    logger.error("Exception, class: {}", m.c.getClass());
                     throw new RuntimeException(e);
                 } catch (IllegalAccessException e) {
-                    logger.error("Exception, class: " + m.c.getClass());
+                    logger.error("Exception, class: {}", m.c.getClass());
                     throw new RuntimeException(e);
                 } catch (InvocationTargetException e) {
-                    logger.error("Exception, class: " + m.c.getClass());
+                    logger.error("Exception, class: {}", m.c.getClass());
                     throw new RuntimeException(e);
                 }
             }

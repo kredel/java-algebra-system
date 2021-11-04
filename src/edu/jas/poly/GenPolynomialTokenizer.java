@@ -480,7 +480,7 @@ public class GenPolynomialTokenizer {
                         }
                         logger.info("coeff {}", r);
                         //if (r.isONE() || r.isZERO()) {
-                        //logger.error("Unknown varibable " + tok.sval);
+                        //logger.error("Unknown varibable {}", tok.sval);
                         //break;
                         //throw new InvalidExpressionException("recursively unknown variable " + tok.sval);
                         //}

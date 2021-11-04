@@ -383,7 +383,7 @@ public class TermOrderByName {
             break;
         default:
         }
-        logger.info("to = " + to + ", k = " + k);
+        logger.info("to = {}, k = {}", to, k);
         long[][] w = new long[k][];
         long[] wi;
         switch (to) {
@@ -467,8 +467,7 @@ public class TermOrderByName {
             break;
         default:
         }
-        logger.info("to = " + to + ", k = " + k);
-        //System.out.println("to = " + to + ", k = " + k);
+        logger.info("to = {}, k = {}", to, k);
         long[][] w = new long[k + n][];
         boolean done = true;
         switch (to) {

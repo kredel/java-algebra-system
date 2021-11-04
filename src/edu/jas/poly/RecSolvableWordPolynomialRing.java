@@ -60,7 +60,7 @@ public class RecSolvableWordPolynomialRing<C extends RingElem<C>> extends
     private static final Logger logger = LogManager.getLogger(RecSolvableWordPolynomialRing.class);
 
 
-    private static final boolean debug = logger.isDebugEnabled();
+    //private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -346,8 +346,8 @@ public class RecSolvableWordPolynomialRing<C extends RingElem<C>> extends
                         if (!p.equals(q)) {
                             if (logger.isInfoEnabled()) {
                                 logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
-                                logger.info("p = ( Xk * Xj ) * Xi = " + p);
-                                logger.info("q = Xk * ( Xj * Xi ) = " + q);
+                                logger.info("p = ( Xk * Xj ) * Xi = {}", p);
+                                logger.info("q = Xk * ( Xj * Xi ) = {}", q);
                             }
                             return false;
                         }
@@ -524,7 +524,7 @@ public class RecSolvableWordPolynomialRing<C extends RingElem<C>> extends
             GenSolvablePolynomial<GenWordPolynomial<C>> s = pt.nextSolvablePolynomial();
             p = new RecSolvableWordPolynomial<C>(this, s);
         } catch (IOException e) {
-            logger.error(e.toString() + " parse " + this);
+            logger.error("{} parse {}", e, this);
             p = ZERO;
         }
         return p;

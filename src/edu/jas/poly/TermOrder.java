@@ -2034,7 +2034,7 @@ public final class TermOrder implements Serializable {
                 w[i] = wj;
             }
             t = new TermOrder(w);
-            logger.info("reverse = " + t + ", from = " + this);
+            logger.info("reverse = {}, from = {}", t, this);
             return t;
         }
         if (evord2 == 0) {
@@ -2046,7 +2046,7 @@ public final class TermOrder implements Serializable {
         } else {
             t = new TermOrder(revert(evord2), revert(evord), evend2, evend2 - evbeg2);
         }
-        logger.info("reverse = " + t + ", from = " + this);
+        logger.info("reverse = {}, from = {}", t, this);
         return t;
     }
 
@@ -2084,7 +2084,7 @@ public final class TermOrder implements Serializable {
             i = IGRLEX;
             break;
         default: // REVITDEG, ITDEGLEX
-            logger.error("can not revert " + evord);
+            logger.error("can not revert {}", evord);
             break;
         }
         return i;
@@ -2121,8 +2121,7 @@ public final class TermOrder implements Serializable {
         if (getEvord2() != 0) {
             //throw new IllegalArgumentException("split term orders not permutable");
             tord = new TermOrder(getEvord2());
-            logger.warn("split term order '" + this + "' not permutable, resetting to most base term order "
-                            + tord);
+            logger.warn("split term order '{}' not permutable, resetting to most base term order {}", this, tord);
         }
         long[][] weight = getWeight();
         if (weight != null) {

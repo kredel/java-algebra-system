@@ -259,7 +259,7 @@ public class AlgebraicNumberRing<C extends RingElem<C>>
             b = q;
         } while (!b.equals(java.math.BigInteger.ZERO));
         AlgebraicNumber<C> an = new AlgebraicNumber<C>(this, v);
-        logger.info("fill(" + a + ") = " + v + ", mod: " + an);
+        logger.info("fill({}) = {}, mod: {}", a, v, an);
         //RuntimeException e = new RuntimeException("hihihi");
         //e.printStackTrace();
         return an;

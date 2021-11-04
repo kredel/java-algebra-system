@@ -59,7 +59,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
     private static final Logger logger = LogManager.getLogger(GenSolvablePolynomialRing.class);
 
 
-    private static final boolean debug = logger.isDebugEnabled();
+    //private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -356,8 +356,8 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
                     if (!p.equals(q)) {
                         if (logger.isInfoEnabled()) {
                             logger.info("Xi = " + Xi + ", Xj = " + Xj + ", Xk = " + Xk);
-                            logger.info("p = ( Xk * Xj ) * Xi = " + p);
-                            logger.info("q = Xk * ( Xj * Xi ) = " + q);
+                            logger.info("p = ( Xk * Xj ) * Xi = {}", p);
+                            logger.info("q = Xk * ( Xj * Xi ) = {}", q);
                         }
                         return false;
                     }
@@ -531,7 +531,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
         try {
             p = (GenSolvablePolynomial<C>) pt.nextSolvablePolynomial();
         } catch (IOException e) {
-            logger.error(e.toString() + " parse " + this);
+            logger.error("{} parse {}", e, this);
             p = ZERO;
         }
         return p;

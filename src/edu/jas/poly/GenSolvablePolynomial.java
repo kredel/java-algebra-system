@@ -37,7 +37,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
     private static final Logger logger = LogManager.getLogger(GenSolvablePolynomial.class);
 
 
-    private static final boolean debug = false; //logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -153,9 +153,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
             return this;
         }
         assert (ring.nvar == Bp.ring.nvar);
-        if (debug) {
-            logger.debug("ring = " + ring);
-        }
+        logger.debug("ring = {}", ring);
         if (this instanceof RecSolvablePolynomial && Bp instanceof RecSolvablePolynomial) {
             //throw new RuntimeException("wrong method dispatch in JRE ");
             logger.info("warn: wrong method dispatch in JRE Rec.multiply(Rec Bp) - trying to fix");
@@ -182,8 +180,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
         for (Map.Entry<ExpVector, C> y : A.entrySet()) {
             C a = y.getValue();
             ExpVector e = y.getKey();
-            if (debug)
-                logger.debug("e = " + e);
+            logger.debug("e = {}", e);
             int[] ep = e.dependencyOnVariables();
             int el1 = ring.nvar + 1;
             if (ep.length > 0) {
@@ -193,17 +190,14 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
             for (Map.Entry<ExpVector, C> x : Bk) {
                 C b = x.getValue();
                 ExpVector f = x.getKey();
-                if (debug)
-                    logger.debug("f = " + f);
+                logger.debug("f = {}", f);
                 int[] fp = f.dependencyOnVariables();
                 int fl1 = 0;
                 if (fp.length > 0) {
                     fl1 = fp[fp.length - 1];
                 }
                 int fl1s = ring.nvar + 1 - fl1;
-                if (debug) {
-                    logger.debug("el1s = " + el1s + " fl1s = " + fl1s);
-                }
+                logger.debug("el1s = {} fl1s = {}", el1s, fl1s);
                 GenSolvablePolynomial<C> Cs = null;
                 if (commute || el1s <= fl1s) { // symmetric
                     ExpVector g = e.sum(f);
@@ -218,7 +212,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
                     ExpVector f1 = f.subst(fl1, 0);
                     ExpVector f2 = Z.subst(fl1, f.getVal(fl1));
                     TableRelation<C> rel = ring.table.lookup(e2, f2);
-                    //logger.info("relation = " + rel);
+                    //logger.info("relation = {}", rel);
                     Cs = rel.p; // do not clone() 
                     if (rel.f != null) {
                         C2 = ring.valueOf(rel.f);
@@ -774,7 +768,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
             //System.out.println("lm = "+lm);
             return (GenSolvablePolynomial<C>) multiplyLeft(lm).abs();
         } catch (NotInvertibleException e) {
-            logger.info("monic not invertible " + lc);
+            logger.info("monic not invertible {}", lc);
             //e.printStackTrace();
         }
         return this;

@@ -781,7 +781,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
         try {
             p = (GenPolynomial<C>) pt.nextPolynomial();
         } catch (IOException e) {
-            logger.error(e.toString() + " parse " + this);
+            logger.error("{} parse {}", e, this);
             p = ZERO;
         }
         return p;

@@ -599,7 +599,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
             try {
                 p = pt.nextPolynomial();
             } catch (IOException e) {
-                logger.error(e.toString() + " parse " + this);
+                logger.error("{} parse {}", e, this);
             }
             GenWordPolynomial<C> wp = this.valueOf(p);
             return wp;
@@ -611,7 +611,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
         } catch (IOException e) {
             a = null;
             e.printStackTrace();
-            logger.error(e.toString() + " parse " + this);
+            logger.error("{} parse {}", e, this);
         }
         return a;
         //throw new UnsupportedOperationException("not implemented");

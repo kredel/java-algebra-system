@@ -198,7 +198,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
         if (debug) {
             C a = val.get(e);
             if (a != null) {
-                logger.error("map entry exists " + e + " to " + a + " new " + c);
+                logger.error("map entry exists {} to {} new {}", e, a, c);
             }
         }
         if (!c.isZERO()) {
@@ -222,7 +222,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
                 return;
             }
             if (!c.equals(b)) {
-                logger.error("map entry wrong " + e + " to " + c + " old " + b);
+                logger.error("map entry wrong {} to {} old {}", e, c, b);
             }
         }
     }
@@ -241,7 +241,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
             if (debug) {
                 C a = val.get(e);
                 if (a != null) {
-                    logger.error("map entry exists " + e + " to " + a + " new " + me.getValue());
+                    logger.error("map entry exists {} to {} new {}", e, a, me.getValue());
                 }
             }
             C c = me.getValue();
@@ -1202,7 +1202,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
             if (debug) {
                 C x = c1.remainder(s);
                 if (!x.isZERO()) {
-                    logger.info("divide x = " + x);
+                    logger.info("divide x = {}", x);
                     throw new ArithmeticException(
                                     this.getClass().getName() + " no exact division: " + c1 + "/" + s);
                 }
@@ -1249,7 +1249,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
             if (f.multipleOf(e)) {
                 C a = r.leadingBaseCoefficient();
                 Word[] g = f.divideWord(e); // divide not sufficient
-                //logger.info("div: f = " + f + ", e = " + e + ", g = " + g[0] + ", " + g[1]);
+                //logger.info("div: f = {}, e = {}, g = {}, {}", f, e, g[0], g[1]);
                 a = a.multiply(ci);
                 q = q.sum(a, g[0].multiply(g[1]));
                 h = S.multiply(a, g[0], one, g[1]);
@@ -1312,7 +1312,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
             if (f.multipleOf(e)) {
                 C a = r.leadingBaseCoefficient();
                 Word[] g = f.divideWord(e); // divide not sufficient
-                //logger.info("rem: f = " + f + ", e = " + e + ", g = " + g[0] + ", " + g[1]);
+                //logger.info("rem: f = {}, e = {}, g = {}, {}", f, e, g[0], g[1]);
                 a = a.multiply(ci);
                 h = S.multiply(a, g[0], one, g[1]);
                 r = r.subtract(h);
@@ -1555,7 +1555,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
         GenWordPolynomial<C> n = ring.getZERO().copy();
         SortedMap<Word, C> nv = n.val;
         for (WordMonomial<C> m : this) {
-            //logger.info("m = " + m);
+            //logger.info("m = {}", m);
             C c = f.eval(m.c);
             if (c != null && !c.isZERO()) {
                 nv.put(m.e, c);

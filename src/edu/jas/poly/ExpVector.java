@@ -326,7 +326,6 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector> {
         boolean pit;
         int r = length();
         if (r != vars.length) {
-            //logger.warn("length mismatch " + r + " <> " + vars.length);
             return toString();
         }
         if (r == 0) {
