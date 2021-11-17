@@ -284,7 +284,7 @@ public class QuotientRing<C extends RingElem<C>> implements RingFactory<Quotient
     public Quotient<C> parse(Reader r) {
         C x = ring.parse(r);
         if (debug) {
-            logger.debug("x = " + x);
+            logger.debug("x = {}", x);
         }
         return new Quotient<C>(this, x);
     }

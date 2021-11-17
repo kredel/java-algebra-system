@@ -165,7 +165,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
         }
         assert (ring.nvar == Bp.ring.nvar);
         if (debug) {
-            logger.debug("ring = " + ring);
+            logger.debug("ring = {}", ring);
         }
         //System.out.println("this = " + this + ", Bp = " + Bp);
         ExpVector Z = ring.evzero;
@@ -180,7 +180,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
             C a = y.getValue();
             ExpVector e = y.getKey();
             if (debug)
-                logger.info("e = " + e + ", a = " + a);
+                logger.info("e = {}, a = {}", e, a);
             //int[] ep = e.dependencyOnVariables();
             //int el1 = ring.nvar + 1;
             //if (ep.length > 0) {
@@ -191,7 +191,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                 C b = x.getValue();
                 ExpVector f = x.getKey();
                 if (debug)
-                    logger.info("f = " + f + ", b = " + b);
+                    logger.info("f = {}, b = {}", f, b);
                 int[] fp = f.dependencyOnVariables();
                 int fl1 = 0;
                 if (fp.length > 0) {
@@ -205,10 +205,10 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                 if (ring.polCoeff.isCommutative() || b.isConstant() || e.isZERO()) { // symmetric
                     Cps = new QLRSolvablePolynomial<C, D>(ring, b, e);
                     if (debug)
-                        logger.info("symmetric coeff: b = " + b + ", e = " + e);
+                        logger.info("symmetric coeff: b = {}, e = {}", b, e);
                 } else { // unsymmetric
                     if (debug)
-                        logger.info("unsymmetric coeff: b = " + b + ", e = " + e);
+                        logger.info("unsymmetric coeff: b = {}, e = {}", b, e);
                     // compute e * b as ( e * 1/b.den ) * b.num
                     if (b.denominator().isONE()) { // recursion base
                         // recursive polynomial coefficient multiplication : e * b.num
@@ -220,8 +220,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                         Cps = rsp;
                     } else { // b.denominator() != 1
                         if (debug)
-                            logger.info("coeff-num: Cps = " + Cps + ", num = " + b.numerator() + ", den = "
-                                            + b.denominator());
+                            logger.info("coeff-num: Cps = {}, num = {}, den = {}", Cps, b.numerator(), b.denominator());
                         RingFactory<C> bfq = (RingFactory<C>) b.factory();
                         Cps = new QLRSolvablePolynomial<C, D>(ring, bfq.getONE(), e);
 
@@ -257,14 +256,14 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                     }
                 } // end coeff
                 if (debug)
-                    logger.info("coeff-den: Cps = " + Cps);
+                    logger.info("coeff-den: Cps = {}", Cps);
                 // polynomial multiplication 
                 QLRSolvablePolynomial<C, D> Dps = ring.getZERO().copy();
                 QLRSolvablePolynomial<C, D> Ds = null;
                 QLRSolvablePolynomial<C, D> D1, D2;
                 if (ring.isCommutative() || Cps.isConstant() || f.isZERO()) { // symmetric
                     if (debug)
-                        logger.info("symmetric poly: b = " + b + ", e = " + e);
+                        logger.info("symmetric poly: b = {}, e = {}", b, e);
                     if (Cps.isConstant()) {
                         ExpVector g = e.sum(f);
                         Ds = new QLRSolvablePolynomial<C, D>(ring, Cps.leadingBaseCoefficient(), g); // symmetric!
@@ -273,13 +272,13 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                     }
                 } else { // eventually unsymmetric
                     if (debug)
-                        logger.info("unsymmetric poly: Cps = " + Cps + ", f = " + f);
+                        logger.info("unsymmetric poly: Cps = {}, f = {}", Cps, f);
                     for (Map.Entry<ExpVector, C> z : Cps.val.entrySet()) {
                         // split g = g1 * g2, f = f1 * f2
                         C c = z.getValue();
                         ExpVector g = z.getKey();
                         if (debug)
-                            logger.info("g = " + g + ", c = " + c);
+                            logger.info("g = {}, c = {}", g, c);
                         int[] gp = g.dependencyOnVariables();
                         int gl1 = ring.nvar + 1;
                         if (gp.length > 0) {
@@ -289,7 +288,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                         if (gl1s <= fl1s) { // symmetric
                             ExpVector h = g.sum(f);
                             if (debug)
-                                logger.info("disjoint poly: g = " + g + ", f = " + f + ", h = " + h);
+                                logger.info("disjoint poly: g = {}, f = {}, h = {}", g, f, h);
                             Ds = (QLRSolvablePolynomial<C, D>) zero.sum(one, h); // symmetric!
                         } else {
                             ExpVector g1 = g.subst(gl1, 0);
@@ -298,12 +297,12 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                             ExpVector f1 = f.subst(fl1, 0);
                             ExpVector f2 = Z.subst(fl1, f.getVal(fl1));
                             if (debug) {
-                                logger.info("poly, g1 = " + g1 + ", f1 = " + f1 + ", Dps = " + Dps);
-                                logger.info("poly, g2 = " + g2 + ", f2 = " + f2);
+                                logger.info("poly, g1 = {}, f1 = {}, Dps = {}", g1, f1, Dps);
+                                logger.info("poly, g2 = {}, f2 = {}", g2, f2);
                             }
                             TableRelation<C> rel = ring.table.lookup(g2, f2);
                             if (debug)
-                                logger.info("poly, g  = " + g + ", f  = " + f + ", rel = " + rel);
+                                logger.info("poly, g  = {}, f = {}, rel = {}", g, f, rel);
                             Ds = new QLRSolvablePolynomial<C, D>(ring, rel.p); //ring.copy(rel.p);
                             if (rel.f != null) {
                                 D2 = new QLRSolvablePolynomial<C, D>(ring, one, rel.f);
@@ -339,7 +338,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                 }
                 Ds = Ds.multiplyLeft(a); // multiply(a,b); // non-symmetric 
                 if (debug)
-                    logger.debug("Ds = " + Ds);
+                    logger.debug("Ds = {}", Ds);
                 //Dp = (QLRSolvablePolynomial<C, D>) Dp.sum(Ds);
                 Dp.doAddTo(Ds);
             } // end B loop

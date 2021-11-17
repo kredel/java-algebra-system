@@ -168,7 +168,7 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends
         }
         assert (ring.nvar == Bp.ring.nvar);
         if (debug) {
-            logger.info("ring = " + ring.toScript());
+            logger.info("ring = {}", ring.toScript());
         }
         final boolean commute = ring.table.isEmpty();
         final boolean commuteCoeff = ring.coeffTable.isEmpty();
@@ -185,12 +185,12 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends
         Map<ExpVector, GenWordPolynomial<C>> B = Bp.val;
         Set<Map.Entry<ExpVector, GenWordPolynomial<C>>> Bk = B.entrySet();
         if (debug)
-            logger.info("input A = " + this);
+            logger.info("input A = {}", this);
         for (Map.Entry<ExpVector, GenWordPolynomial<C>> y : A.entrySet()) {
             GenWordPolynomial<C> a = y.getValue();
             ExpVector e = y.getKey();
             if (debug)
-                logger.info("e = " + e + ", a = " + a);
+                logger.info("e = {}, a = ", e, a);
             int[] ep = e.dependencyOnVariables();
             int el1 = ring.nvar + 1;
             if (ep.length > 0) {
@@ -198,12 +198,12 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends
             }
             //int el1s = ring.nvar + 1 - el1;
             if (debug)
-                logger.info("input B = " + Bp);
+                logger.info("input B = {}", Bp);
             for (Map.Entry<ExpVector, GenWordPolynomial<C>> x : Bk) {
                 GenWordPolynomial<C> b = x.getValue();
                 ExpVector f = x.getKey();
                 if (debug)
-                    logger.info("f = " + f + ", b = " + b);
+                    logger.info("f = {}, b = {}", f, b);
                 int[] fp = f.dependencyOnVariables();
                 int fl1 = 0;
                 if (fp.length > 0) {
@@ -217,16 +217,16 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends
                     //Cps = (RecSolvableWordPolynomial<C>) zero.sum(b, e);
                     Cps.doAddTo(b, e);
                     if (debug)
-                        logger.info("symmetric coeff, e*b: b = " + b + ", e = " + e);
+                        logger.info("symmetric coeff, e*b: b = {}, e = {}", b, e);
                 } else { // unsymmetric
                     if (debug)
-                        logger.info("unsymmetric coeff, e*b: b = " + b + ", e = " + e);
+                        logger.info("unsymmetric coeff, e*b: b = {}, e = {}", b, e);
                     for (Map.Entry<Word, C> z : b.val.entrySet()) {
                         C c = z.getValue();
                         GenWordPolynomial<C> cc = b.ring.getONE().multiply(c);
                         Word g = z.getKey();
                         if (debug)
-                            logger.info("g = " + g + ", c = " + c);
+                            logger.info("g = {}, c = {}", g, c);
                         // split e = e1 * e2, g = g2 * g1
                         ExpVector g2 = g.leadingExpVector();
                         Word g1 = g.reductum();
@@ -239,12 +239,12 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends
                             e2 = Z.subst(el1, e.getVal(el1));
                         }
                         if (debug) {
-                            logger.info("coeff, e1 = " + e1 + ", e2 = " + e2 + ", Cps = " + Cps);
-                            logger.info("coeff, g2 = " + g2 + ", g1 = " + g1);
+                            logger.info("coeff, e1 = {}, e2 = {}, Cps = {}", e1, e2, Cps);
+                            logger.info("coeff, g2 = {}, g2 = {}", g2, g1);
                         }
                         TableRelation<GenWordPolynomial<C>> crel = ring.coeffTable.lookup(e2, g2);
                         if (debug)
-                            logger.info("coeff, crel = " + crel.p);
+                            logger.info("coeff, crel = {}", crel.p);
                         //System.out.println("coeff, e  = " + e + ", g = " + g + ", crel = " + crel);
                         Cs = new RecSolvableWordPolynomial<C>(ring, crel.p);
                         // rest of multiplication and update relations
@@ -282,18 +282,18 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends
                         Cps.doAddTo(Cs);
                     } // end b loop 
                     if (debug)
-                        logger.info("coeff, Cs = " + Cs + ", Cps = " + Cps);
+                        logger.info("coeff, Cs = {}, Cps = {}", Cs, Cps);
                     //System.out.println("coeff loop end, Cs = " + Cs + ", Cps = " + Cps);
                 }
                 if (debug)
-                    logger.info("coeff-poly: Cps = " + Cps);
+                    logger.info("coeff-poly: Cps = {}", Cps);
                 // polynomial multiplication P_eb*f, for a*(P_eb*f)
                 RecSolvableWordPolynomial<C> Dps = ring.getZERO().copy();
                 RecSolvableWordPolynomial<C> Ds = null;
                 RecSolvableWordPolynomial<C> D1, D2;
                 if (commute || Cps.isConstant() || f.isZERO()) { // symmetric
                     if (debug)
-                        logger.info("symmetric poly, P_eb*f: Cps = " + Cps + ", f = " + f);
+                        logger.info("symmetric poly, P_eb*f: Cps = {}, f = {}", Cps, f);
                     ExpVector g = e.sum(f);
                     if (Cps.isConstant()) {
                         Ds = ring.valueOf(Cps.leadingBaseCoefficient(), g); //new RecSolvableWordPolynomial<C>(ring, Cps.leadingBaseCoefficient(), g); // symmetric!
@@ -302,13 +302,13 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends
                     }
                 } else { // eventually unsymmetric
                     if (debug)
-                        logger.info("unsymmetric poly, P_eb*f: Cps = " + Cps + ", f = " + f);
+                        logger.info("unsymmetric poly, P_eb*f: Cps = {}, f = {}", Cps, f);
                     for (Map.Entry<ExpVector, GenWordPolynomial<C>> z : Cps.val.entrySet()) {
                         // split g = g1 * g2, f = f1 * f2
                         GenWordPolynomial<C> c = z.getValue();
                         ExpVector g = z.getKey();
                         if (debug)
-                            logger.info("g = " + g + ", c = " + c);
+                            logger.info("g = {}, c = {}", g, c);
                         int[] gp = g.dependencyOnVariables();
                         int gl1 = ring.nvar + 1;
                         if (gp.length > 0) {
@@ -318,7 +318,7 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends
                         if (gl1s <= fl1s) { // symmetric
                             ExpVector h = g.sum(f);
                             if (debug)
-                                logger.info("disjoint poly: g = " + g + ", f = " + f + ", h = " + h);
+                                logger.info("disjoint poly: g = {}, f = {}, h = {}", g, f, h);
                             Ds = (RecSolvableWordPolynomial<C>) zero.sum(one, h); // symmetric!
                         } else {
                             ExpVector g1 = g.subst(gl1, 0);
@@ -327,12 +327,12 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends
                             ExpVector f1 = f.subst(fl1, 0);
                             ExpVector f2 = Z.subst(fl1, f.getVal(fl1));
                             if (debug) {
-                                logger.info("poly, g1 = " + g1 + ", f1 = " + f1 + ", Dps = " + Dps);
-                                logger.info("poly, g2 = " + g2 + ", f2 = " + f2);
+                                logger.info("poly, g1 = {}, f1 = {}, Dps = {}", g1, f1, Dps);
+                                logger.info("poly, g2 = {}, f2 = {}", g2, f2);
                             }
                             TableRelation<GenWordPolynomial<C>> rel = ring.table.lookup(g2, f2);
                             if (debug)
-                                logger.info("poly, g  = " + g + ", f  = " + f + ", rel = " + rel);
+                                logger.info("poly, g  = {}, f = {}, rel = {}", g, f, rel);
                             Ds = new RecSolvableWordPolynomial<C>(ring, rel.p); //ring.copy(rel.p);
                             if (rel.f != null) {
                                 D2 = ring.valueOf(rel.f); //new RecSolvableWordPolynomial<C>(ring, one, rel.f);
@@ -368,20 +368,20 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends
                     Ds = Dps;
                 }
                 if (debug) {
-                    logger.info("recursion+: Ds = " + Ds + ", a = " + a);
+                    logger.info("recursion+: Ds = {}, a = {}", Ds, a);
                 }
                 // polynomial coefficient multiplication a*(P_eb*f) = a*Ds
                 //System.out.println("main loop, Ds = " + Ds + ", a = " + a);
                 Ds = Ds.multiplyLeft(a); // multiply(a,b); // non-symmetric 
                 if (debug)
-                    logger.info("recursion-: Ds = " + Ds);
+                    logger.info("recursion-: Ds = {}", Ds);
                 //Dp = (RecSolvableWordPolynomial<C>) Dp.sum(Ds);
                 Dp.doAddTo(Ds);
                 if (debug)
-                    logger.info("end B loop: Dp = " + Dp);
+                    logger.info("end B loop: Dp = {}", Dp);
             } // end B loop
             if (debug)
-                logger.info("end A loop: Dp = " + Dp);
+                logger.info("end A loop: Dp = {}", Dp);
         } // end A loop
         return Dp;
     }

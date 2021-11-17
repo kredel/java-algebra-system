@@ -106,7 +106,7 @@ public class Quotient<C extends RingElem<C>> implements RingElem<Quotient<C>>, Q
             GcdRingElem dg = (GcdRingElem) d;
             C gcd = (C) ng.gcd(dg);
             if (debug) {
-                logger.info("gcd = " + gcd);
+                logger.info("gcd = {}", gcd);
             }
             //RingElem<C> gcd = ring.ring.getONE();
             if (gcd.isONE()) {
@@ -118,7 +118,7 @@ public class Quotient<C extends RingElem<C>> implements RingElem<Quotient<C>>, Q
             }
             // } else { // univariate polynomial?
         } else {
-            logger.warn("gcd = ????: " + n.getClass() + ", " + d.getClass());
+            logger.warn("gcd = ????: {}, {}", n.getClass(), d.getClass());
             num = n;
             den = d;
         }

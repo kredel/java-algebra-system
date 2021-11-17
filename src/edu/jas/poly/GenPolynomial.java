@@ -906,8 +906,7 @@ public class GenPolynomial<C extends RingElem<C>>
                     if (ab * ab == a * b) { // cos == 1
                         fp.val.put(e, m.getValue());
                         if (logger.isInfoEnabled()) {
-                            logger.info("ab = " + ab + ", a = " + a + ", b = " + b + ", u = " + u + ", e = " + e
-                                        + ", v = " + v);
+                            logger.info("ab = {}, a = {}, b = {}, u = {}, e = {}, v = {}", ab, a, b, u, e, v);
                         }
                     }
                 }

@@ -421,10 +421,10 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
                     if (!p.equals(q)) {
                         if (logger.isInfoEnabled()) {
                             //System.out.println("qlr assoc: Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
-                            logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
-                            logger.info("p = ( Xk * Xj ) * Xi = " + p);
-                            logger.info("q = Xk * ( Xj * Xi ) = " + q);
-                            logger.info("q-p = " + p.subtract(q));
+                            logger.info("Xi = {}, Xj = {}, Xk = {}", Xi, Xj, Xk);
+                            logger.info("p = ( Xk * Xj ) * Xi = {}", p);
+                            logger.info("q = Xk * ( Xj * Xi ) = {}", q);
+                            logger.info("q-p = {}", p.subtract(q));
                         }
                         return false;
                     }
@@ -562,7 +562,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
             GenSolvablePolynomial<C> s = pt.nextSolvablePolynomial();
             p = new QLRSolvablePolynomial<C,D>(this, s);
         } catch (IOException e) {
-            logger.error(e.toString() + " parse " + this);
+            logger.error("{} parse {}", e, this);
             p = ZERO;
         }
         return p;

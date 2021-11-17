@@ -157,7 +157,7 @@ public class Residue<C extends RingElem<C>> implements RingElem<Residue<C>> {
             GcdRingElem m = (GcdRingElem) ring.modul;
             C gcd = (C) v.gcd(m);
             if (debug) {
-                logger.info("gcd = " + gcd);
+                logger.info("gcd = {}", gcd);
             }
             boolean u = gcd.isONE();
             if (u) {
@@ -330,7 +330,7 @@ public class Residue<C extends RingElem<C>> implements RingElem<Residue<C>> {
             GcdRingElem m = (GcdRingElem) ring.modul;
             C[] egcd = (C[]) v.egcd(m);
             if (debug) {
-                logger.info("egcd = " + egcd[0] + ", f = " + egcd[1]);
+                logger.info("egcd = {}, f = {}", egcd[0], egcd[1]);
             }
             if (!egcd[0].isONE()) {
                 isunit = 0;

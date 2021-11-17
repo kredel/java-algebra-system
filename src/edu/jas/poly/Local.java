@@ -117,7 +117,7 @@ public class Local<C extends RingElem<C>> implements RingElem<Local<C>>, QuotPai
             GcdRingElem dg = (GcdRingElem) d;
             C gcd = (C) ng.gcd(dg);
             if (debug) {
-                logger.info("gcd = " + gcd);
+                logger.info("gcd = {}", gcd);
             }
             //RingElem<C> gcd = ring.ring.getONE();
             if (gcd.isONE()) {
@@ -129,7 +129,7 @@ public class Local<C extends RingElem<C>> implements RingElem<Local<C>>, QuotPai
             }
             // } else { // univariate polynomial?
         } else {
-            logger.warn("gcd = ????: " + n.getClass() + ", " + d.getClass());
+            logger.warn("gcd = ????: {}, {}", n.getClass(), d.getClass());
             num = n;
             den = d;
         }

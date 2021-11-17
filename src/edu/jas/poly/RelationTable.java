@@ -413,16 +413,15 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
         }
         GenSolvablePolynomialRing<C> sring = p.ring;
         if (debug) {
-            logger.info("new relation = " + sring.toScript(e) + " .*. " + sring.toScript(f) + " = "
-                            + p.toScript());
+            logger.info("new relation = {} .*. {} = {}", sring.toScript(e), sring.toScript(f), p.toScript());
         }
         // test equal HTs for left and right side
         if (!coeffTable) { // old case
             int[] de = e.dependencyOnVariables();
             int[] df = f.dependencyOnVariables();
             if (debug) {
-                logger.info("update e ? f " + Arrays.toString(de) + "   " + Arrays.toString(df) + " : "
-                                + sring.toScript(e) + " ? " + sring.toScript(f));
+                logger.info("update e ? f {}  {} : {} ? {}", Arrays.toString(de), Arrays.toString(df),
+                                sring.toScript(e), sring.toScript(f));
             }
             if (de.length != 1 || df.length != 1) { // can this be relaxed?
                 throw new IllegalArgumentException("RelationTable no univariate relations");
@@ -465,8 +464,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 lp = ((GenPolynomial<C>) (Object) p.leadingBaseCoefficient()).leadingExpVector();
                 if (!f.equals(lp)) { // check for suitable term order
                     logger.error("relation term order = {}", ring.tord);
-                    logger.error("Coefficient RelationTable update f != lt(lfcd(p)): " + sring.toScript(e)
-                                    + ", f = " + f + ", p = " + p.toScript());
+                    logger.error("Coefficient RelationTable update f != lt(lfcd(p)): {}, f = {}, p = {}",
+				 sring.toScript(e), f, p.toScript());
                     throw new IllegalArgumentException("Coefficient RelationTable update f != lt(lfcd(p)): "
                                     + e + ", f = " + f + ", p = " + p);
                 }
@@ -475,8 +474,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                                 .leadingExpVector();
                 if (!f.equals(lp)) { // check for suitable term order and word structure
                     logger.error("relation term order = {}", ring.tord);
-                    logger.error("Coefficient RelationTable update f != lt(lfcd(p)): " + sring.toScript(e)
-                                    + ", f = " + f + ", p = " + p.toScript());
+                    logger.error("Coefficient RelationTable update f != lt(lfcd(p)): {}, f = {}, p = {}",
+                                    sring.toScript(e), f, p.toScript());
                     throw new IllegalArgumentException("Coefficient RelationTable update f != lt(lfcd(p)): "
                                     + e + ", f = " + f + ", p = " + p);
                 }
@@ -646,8 +645,8 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                     }
                     if (debug) {
                         if (p != null && p.ring.vars != null) {
-                            logger.info("found relation = " + e.toString(p.ring.vars) + " .*. "
-                                            + f.toString(p.ring.vars) + " = " + p);
+                            logger.info("found relation = {} .*. {} = {}", e.toString(p.ring.vars),
+                                        f.toString(p.ring.vars), p);
                         } else {
                             logger.info("found relation = {} .*. {} = {}", e, f, p);
                         }

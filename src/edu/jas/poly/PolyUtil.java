@@ -1832,7 +1832,7 @@ public class PolyUtil {
             BigDecimalComplex b = (BigDecimalComplex) a;
             a = (C) Roots.sqrt(b);
         } else {
-            logger.error("no square root implemented for " + a.toScriptFactory());
+            logger.error("no square root implemented for {}", a.toScriptFactory());
         }
         return a;
     }
@@ -2958,8 +2958,7 @@ public class PolyUtil {
         if (tfac.equals(R)) { // check 
             return H;
         }
-        logger.warn("tfac != R: tfac = " + tfac.toScript() + ", R = " + R.toScript() + ", pfac = "
-                        + pfac.toScript());
+        logger.warn("tfac != R: tfac = {}, R = {}, pdac = {}", tfac.toScript(), R.toScript(), pfac.toScript());
         // throw new RuntimeException("contract(pfac) != R");
         return H;
     }
@@ -3043,7 +3042,7 @@ public class PolyUtil {
         GenPolynomialRing<C> facr = fac.contract(n);
         Map<ExpVector, GenPolynomial<C>> mpr = p.contract(facr);
         if (mpr.size() != 1) {
-            logger.warn("upper ex, l = " + l + ", r = " + r + ", p = " + p + ", fac = " + fac.toScript());
+            logger.warn("upper ex, l = {}, r = {}, p = {}, fac = {}", l, r, p, fac.toScript());
             throw new RuntimeException("this should not happen " + mpr);
         }
         GenPolynomial<C> pr = mpr.values().iterator().next();
@@ -3083,7 +3082,7 @@ public class PolyUtil {
         GenPolynomialRing<GenPolynomial<C>> rfac = fac.recursive(n);
         GenPolynomial<GenPolynomial<C>> mpr = recursive(rfac, p);
         if (mpr.length() != p.length()) {
-            logger.warn("lower ex, l = " + l + ", r = " + r + ", p = " + p + ", fac = " + fac.toScript());
+            logger.warn("lower ex, l = {}, r = {}, p = {}, fac = {}", l, r, p, fac.toScript());
             throw new RuntimeException("this should not happen " + mpr);
         }
         RingFactory<C> cf = fac.coFac;
