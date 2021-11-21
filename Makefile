@@ -477,12 +477,12 @@ export:
 	cd ~/jas-versions/$(VERSION)/mpj; make all doc > ~/jas-versions/$(VERSION)/make_mpj.out
 	cd ~/jas-versions/$(VERSION)/meditor; jas_dosed $(VERSION) $(GITREV) manifest.mf
 	cd ~/jas-versions/$(VERSION)/meditor; make > ~/jas-versions/$(VERSION)/make_meditor.out
-	cd ~/jas-versions/log4j_adapter; make > ~/jas-versions/$(VERSION)/make_mylog.out
-	cp ~/java/lib/mylog.jar ~/jas-versions/$(VERSION)/
-	cd ~/jas-versions/log4j_droid_adapter; make > ~/jas-versions/$(VERSION)/make_droidlog.out
-	cp ~/java/lib/droidlog.jar ~/jas-versions/$(VERSION)/
-	cd ~/jas-versions/log4j_null_adapter; make > ~/jas-versions/$(VERSION)/make_nolog.out
-	cp ~/java/lib/nolog.jar ~/jas-versions/$(VERSION)/
+	#cd ~/jas-versions/log4j_adapter; make > ~/jas-versions/$(VERSION)/make_mylog.out
+	#cp ~/java/lib/mylog.jar ~/jas-versions/$(VERSION)/
+	#cd ~/jas-versions/log4j_droid_adapter; make > ~/jas-versions/$(VERSION)/make_droidlog.out
+	#cp ~/java/lib/droidlog.jar ~/jas-versions/$(VERSION)/
+	#cd ~/jas-versions/log4j_null_adapter; make > ~/jas-versions/$(VERSION)/make_nolog.out
+	#cp ~/java/lib/nolog.jar ~/jas-versions/$(VERSION)/
 	cd ~/jas-versions/$(VERSION)/jlinalg_adapter; make all doc > ~/jas-versions/$(VERSION)/make_jlinalg.out
 	cd ~/jas-versions/$(VERSION)/commons-math_adapter; make all doc > ~/jas-versions/$(VERSION)/make_commons-math.out
 	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).$(GITREV)-doc.zip doc/ images/ *.html doc/*.html *.css doc/*.css

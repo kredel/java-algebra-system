@@ -72,20 +72,27 @@ You must include the Log4j classes in the classpath. e.g.
 
 <h4><a name="no005">I can not use Apache log4j in my project for some reason.</a></h4>
 <p>
-We provide an adapter package for Java logging with <a href="mylog.jar">mylog.jar</a>. 
-The package contians classes which delegate all logging calls to <code>java.util.logging</code> 
-classes. Java logging must be configured to your needs - we do not provide sample configurations.
-You use it inplace of <code>log4j.jar</code>, for example  
+Please use SLF4J for interfacing to another logging system.
+<br /p>
+The old adapter package for Java logging with <a nohref="mylog.jar">mylog.jar</a> is
+discontinued.
+<!--
+The package contians classes which delegate all logging calls to <code>java.util.logging</code>
+classes. Java logging must be configured to your needs - we do not provide sample
+configurations.
+You use it inplace of <code>log4j.jar</code>, for example
 <br />
 <code>java -cp mylog.jar:. mysample</code>
+-->
 </p>
 
 <h4><a name="no006">I want to use JAS on Android.</a></h4>
 <p>
-JAS should still compile with Java 1.6, so JAS can be compiled and dexed for Android.
+JAS is no more compiling with Java 1.6, so JAS can at the moment not compiled and
+dexed for Android.
 <br />
-For logging there is the adaptor package <a href="../droidlog.jar">droidlog.jar</a> 
-which delegates all JAS logging calls to native Android logging.
+<!-- For logging there is the adaptor package <a href="../droidlog.jar">droidlog.jar</a>
+which delegates all JAS logging calls to native Android logging.-->
 </p>
 
 <h4><a name="no007">I do not want to compile JAS and install all dependencies myself.</a></h4>
@@ -109,7 +116,7 @@ must be installed by yourself.
 <p>
 <!-- Created: Sun Nov 11 15:56:30 CET 2007 -->
 <!-- hhmts start -->
-Last modified: Sun Jul  5 17:56:39 CEST 2015
+Last modified: Sun Nov 21 21:42:01 CET 2021
 <!-- hhmts end -->
 </p>
 <!--
