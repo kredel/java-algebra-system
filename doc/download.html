@@ -76,13 +76,8 @@
 <li><p>Optional libraries and files: 
     </p>
     <ul>
-    <li>Android JAS App 
-        <a href="http://krum.rz.uni-mannheim.de/ruboto-irb-jas-release.apk">Ruboto-IRB_with_JAS</a>.
-        <br />
-        You must allow &quot;installation from untrusted sources&quot;.
-        <br />
-        The JAS App uses its JRuby scripting interface and runs within the Ruby IRB Android App 
-        <a href="http://ruboto.org/">Ruboto</a>.
+    <li>There is a <a href="http://www.docker.com" target="deb">docker</a> specification to create
+        a docker image containing a runnable JAS in <a href="Dockerfile">Dockerfile</a>.
     </li>
     <li>A Debian package <a href="http://packages.debian.org/de/sid/libjas-java" target="deb">libjas-java</a>, 
         <br />
@@ -92,9 +87,6 @@
         and an Ubuntu package 
         <a href="http://packages.ubuntu.com/search?keywords=libjas-java" target="deb">libjas-java</a>
         are also avalilable.
-    </li>
-    <li>There is a <a href="http://www.docker.com" target="deb">docker</a> specification to create 
-        a docker image containing a runnable JAS in <a href="Dockerfile">Dockerfile</a>.
     </li>
     <li><a href="../jas-mpj.jar">jas-mpj.jar</a> <br /> This JAR contains
         implementations of distributed Gr&ouml;bner bases using the 
@@ -138,6 +130,14 @@
         This JAR contains a scripting interface to use the 
         <a href="http://www.jython.org/" target="rela">jython</a> 
         interpreter with JAS.
+    </li>
+    <li>Android JAS App
+        <a href="http://krum.rz.uni-mannheim.de/ruboto-irb-jas-release.apk">Ruboto-IRB_with_JAS</a>.
+        <br />
+        You must allow &quot;installation from untrusted sources&quot;.
+        <br />
+        The JAS App uses its JRuby scripting interface and runs within the Ruby IRB Android App
+        <a href="http://ruboto.org/">Ruboto</a>.
     </li>
     </ul>
     <p>&nbsp;</p>
@@ -527,7 +527,7 @@ public class mytests {
 <p>
 <!-- Created: Sat Mar 19 21:44:14 CET 2005 -->
 <!-- hhmts start -->
-Last modified: Tue Nov  2 10:00:38 CET 2021
+Last modified: Sun Nov 21 21:48:00 CET 2021
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
