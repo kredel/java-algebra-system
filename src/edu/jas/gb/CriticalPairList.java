@@ -173,7 +173,7 @@ public class CriticalPairList<C extends RingElem<C>> extends OrderedPairlist<C> 
                continue;
            }
            if ( logger.isInfoEnabled() ) {
-              logger.info("" + pair);
+              logger.info("{}", pair);
            }
            if ( useCriterion4 ) {
               c = reduction.criterion4( pair.pi, pair.pj, pair.e ); 

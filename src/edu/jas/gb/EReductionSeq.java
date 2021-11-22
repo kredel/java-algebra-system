@@ -192,7 +192,7 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
                 mt = e.multipleOf(htl[i]);
                 if (mt) {
                     f = e.subtract(htl[i]);
-                    //logger.info("red div = " + f);
+                    //logger.info("red div = {}", f);
                     r = a.remainder(lbc[i]);
                     b = a.divide(lbc[i]);
                     if (f == null) { // compiler produced this case
@@ -300,7 +300,7 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
                 // System.out.println(" S = " + S);
             } else { 
                 e =  e.subtract( htl[i] );
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 C c = (C)lbc[i];
                 a = a.divide( c );
                 Q = p[i].multiply( a, e );

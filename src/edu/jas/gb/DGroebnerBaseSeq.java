@@ -155,8 +155,8 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
             pi = pair.pi;
             pj = pair.pj;
             if (debug) {
-                logger.debug("pi    = " + pi);
-                logger.debug("pj    = " + pj);
+                logger.debug("pi    = {}", pi);
+                logger.debug("pj    = {}", pj);
             }
 
             // D-polynomial case ----------------------
@@ -170,7 +170,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                     return G; // since no threads are activated
                 }
                 if (!H.isZERO()) {
-                    logger.info("Dred = " + H);
+                    logger.info("Dred = {}", H);
                     //l++;
                     G.add(H);
                     pairlist.put(H);
@@ -186,7 +186,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                     continue;
                 }
                 if (logger.isDebugEnabled()) {
-                    logger.debug("ht(S) = " + S.leadingExpVector());
+                    logger.debug("ht(S) = {}", S.leadingExpVector());
                 }
 
                 H = red.normalform(G, S);
@@ -195,7 +195,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                     continue;
                 }
                 if (logger.isDebugEnabled()) {
-                    logger.debug("ht(H) = " + H.leadingExpVector());
+                    logger.debug("ht(H) = {}", H.leadingExpVector());
                 }
 
                 if (H.isONE()) {
@@ -204,10 +204,10 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                     return G; // since no threads are activated
                 }
                 if (logger.isDebugEnabled()) {
-                    logger.debug("H = " + H);
+                    logger.debug("H = {}", H);
                 }
                 if (!H.isZERO()) {
-                    logger.info("Sred = " + H);
+                    logger.info("Sred = {}", H);
                     //len = G.size();
                     //l++;
                     G.add(H);
@@ -215,9 +215,9 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                 }
             }
         }
-        logger.debug("#sequential list = " + G.size());
+        logger.debug("#sequential list = {}", G.size());
         G = minimalGB(G);
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         return G;
     }
 

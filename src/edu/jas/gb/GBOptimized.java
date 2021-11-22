@@ -111,10 +111,10 @@ public class GBOptimized<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<
         OptimizedPolynomialList<C> opt = TermOrderOptimization.<C> optimizeTermOrder(pfac, F);
         List<GenPolynomial<C>> P = opt.list;
         if (debug) {
-            logger.info("optimized polynomials: " + P);
+            logger.info("optimized polynomials: {}", P);
         }
         List<Integer> iperm = TermOrderOptimization.inversePermutation(opt.perm);
-        logger.info("optimize perm: " + opt.perm + ", de-optimize perm: " + iperm);
+        logger.info("optimize perm: {}, de-optimize perm: {}", opt.perm, iperm);
 
         // compute GB with backing engine
         List<GenPolynomial<C>> G = e1.GB(modv, P);
@@ -123,7 +123,7 @@ public class GBOptimized<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<
         }
         List<GenPolynomial<C>> iopt = TermOrderOptimization.<C> permutation(iperm, pfac, G);
         if (debug) {
-            logger.info("de-optimized polynomials: " + iopt);
+            logger.info("de-optimized polynomials: {}", iopt);
         }
         if (iopt.size() == 1) {
             return iopt;

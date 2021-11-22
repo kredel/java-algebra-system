@@ -204,7 +204,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
                 S = S.reductum();
                 //System.out.println(" S = " + S);
             } else {
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 ExpVector f = e.subtract(htl[i]);
                 C b = a.divide(lbc[i]);
                 R = R.sum(r, e);

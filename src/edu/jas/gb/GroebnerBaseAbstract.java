@@ -232,8 +232,8 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
                 //System.out.println("i, j = " + i + ", " + j); 
                 h = red.normalform(F, s);
                 if (!h.isZERO()) {
-                    logger.info("no GB: pi = " + pi + ", pj = " + pj);
-                    logger.info("s  = " + s + ", h = " + h);
+                    logger.info("no GB: pi = {}, pj = {}", pi, pj);
+                    logger.info("s  = {}, h = {}", s, h);
                     return false;
                 }
             }
@@ -499,7 +499,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
         for (GenPolynomial<C> a : Gp) {
             if (a == null || a.isZERO()) {
                 if (debug) {
-                    logger.debug("zero polynomial " + a);
+                    logger.debug("zero polynomial {}", a);
                 }
                 return false;
             }
@@ -511,7 +511,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             GenPolynomial<C> a = G.remove(0);
             if (red.isTopReducible(G, a) || red.isTopReducible(F, a)) {
                 if (debug) {
-                    logger.debug("top reducible polynomial " + a);
+                    logger.debug("top reducible polynomial {}", a);
                 }
                 return false;
             }
@@ -528,7 +528,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             GenPolynomial<C> a = G.remove(0);
             if (!red.isNormalform(G, a)) {
                 if (debug) {
-                    logger.debug("reducible polynomial " + a);
+                    logger.debug("reducible polynomial {}", a);
                 }
                 return false;
             }
@@ -568,7 +568,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
         for (List<GenPolynomial<C>> row : Mg) {
             boolean t = red.isReductionNF(row, F, G.get(k), null);
             if (!t) {
-                logger.error("F isReductionMatrix s, k = " + F.size() + ", " + k);
+                logger.error("F isReductionMatrix s, k = {}, {}", F.size(), k);
                 return false;
             }
             k++;
@@ -578,7 +578,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
         for (List<GenPolynomial<C>> row : Mf) {
             boolean t = red.isReductionNF(row, G, F.get(k), null);
             if (!t) {
-                logger.error("G isReductionMatrix s, k = " + G.size() + ", " + k);
+                logger.error("G isReductionMatrix s, k = {}, {}", G.size(), k);
                 return false;
             }
             k++;
@@ -617,7 +617,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
         for (int i = 0; i < N.size(); i++) { // 0
             List<GenPolynomial<C>> row = N.get(i);
             if (debug) {
-                logger.info("row = " + row);
+                logger.info("row = {}", row);
             }
             K.add(row);
             if (i < flen) { // skip identity part
@@ -726,7 +726,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             k++;
         }
         if (debug) {
-            logger.debug("ix, #M, jx = " + ix + ", " + Mg.size() + ", " + jx);
+            logger.debug("ix, #M, jx = {}, {}, {}", ix, Mg.size(), jx);
         }
         int fix = -1; // copied polys
         // copy Mg to Mf as indicated by ix
@@ -828,12 +828,12 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
         if (G == null || G.size() == 0) {
             throw new IllegalArgumentException("G may not be null or empty");
         }
-        //logger.info("G in  = " + G);
+        //logger.info("G in  = {}", G);
         //Collections.reverse(G); // test
         G = OrderedPolynomialList.<C> sort(G); // better performance
         List<Long> ud = univariateDegrees(G);
         if (ud.size() <= i) {
-            //logger.info("univ pol, ud = " + ud);
+            //logger.info("univ pol, ud = {}", ud);
             throw new IllegalArgumentException("ideal(G) not zero dimensional " + ud);
         }
         int ll = 0;
@@ -849,7 +849,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
                 vsdim *= d;
             }
         }
-        logger.info("univariate construction, deg = " + ll + ", vsdim = " + vsdim);
+        logger.info("univariate construction, deg = {}, vsdim = {}", ll, vsdim);
         GenPolynomialRing<C> pfac = G.get(0).ring;
         RingFactory<C> cfac = pfac.coFac;
         String var = pfac.getVars()[pfac.nvar - 1 - i];
@@ -866,8 +866,8 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             P = P.sum(Pp);
         }
         if (debug) {
-            logger.info("univariate construction, P = " + P);
-            logger.info("univariate construction, deg_*(G) = " + ud);
+            logger.info("univariate construction, P = {}", P);
+            logger.info("univariate construction, deg_*(G) = {}", ud);
             //throw new RuntimeException("check");
         }
         GenPolynomial<C> X;
@@ -884,7 +884,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             X = pfac.univariate(i, ll);
             XP = red.normalform(G, X);
             if (debug) {
-                logger.info("XP = " + XP);
+                logger.info("XP = {}", XP);
             }
             GenPolynomial<GenPolynomial<C>> XPp = PolyUtil.<C> toRecursive(rfac, XP);
             GenPolynomial<GenPolynomial<C>> XPs = XPp.sum(P);
@@ -895,9 +895,9 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             if (z != 0) {
                 ll++;
                 if (ll > vsdim) {
-                    logger.info("univariate construction, P = " + P);
-                    logger.info("univariate construction, nf(P) = " + XP);
-                    logger.info("G = " + G);
+                    logger.info("univariate construction, P = {}", P);
+                    logger.info("univariate construction, nf(P) = {}", XP);
+                    logger.info("G = {}", G);
                     throw new ArithmeticException(
                                     "univariate polynomial degree greater than vector space dimansion");
                 }
@@ -931,7 +931,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             pol = pol.sum(pi);
         }
         if (logger.isInfoEnabled()) {
-            logger.info("univariate construction, pol = " + pol);
+            logger.info("univariate construction, pol = {}", pol);
         }
         return pol;
     }

@@ -140,7 +140,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
         this.pool = pool;
         int s = ((ThreadPoolExecutor) pool).getCorePoolSize();
         if (threads != s) {
-            logger.warn("#threads(" + threads + ") and number of pool threads(" + s + ") differ:");
+            logger.warn("#threads({}) and number of pool threads({}) differ:", threads, s);
         }
     }
 
@@ -162,7 +162,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        logger.info(pool.toString());
+        logger.info("{}", pool);
     }
 
 
@@ -175,7 +175,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
             return 0;
         }
         int s = pool.shutdownNow().size();
-        logger.info(pool.toString());
+        logger.info("{}", pool);
         return s;
     }
 
@@ -198,7 +198,7 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
         }
         PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(G);
-        logger.info("start " + pairlist);
+        logger.info("start {}", pairlist);
 
         Terminator fin = new Terminator(threads);
         for (int i = 0; i < threads; i++) {
@@ -209,10 +209,10 @@ public class GroebnerBaseParallel<C extends RingElem<C>> extends GroebnerBaseAbs
         if (Thread.currentThread().isInterrupted()) {
             throw new RuntimeException("interrupt before minimalGB");
         }
-        logger.debug("#parallel list = " + G.size());
+        logger.debug("#parallel list = {}", G.size());
         G = minimalGB(G);
         // not in this context // pool.terminate();
-        logger.info("end   " + pairlist);
+        logger.info("end   {}", pairlist);
         return G;
     }
 
@@ -360,14 +360,14 @@ class Reducer<C extends RingElem<C>> implements Runnable {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     fin.allIdle();
-                    logger.info("shutdown " + fin + " after: " + e);
+                    logger.info("shutdown {} after: {}", fin, e);
                     //throw new RuntimeException("interrupt 1 in pairlist.hasNext loop");
                     break;
                 }
                 if (Thread.currentThread().isInterrupted()) {
                     //fin.initIdle(1);
                     fin.allIdle();
-                    logger.info("shutdown after .isInterrupted(): " + fin);
+                    logger.info("shutdown after .isInterrupted(): {}", fin);
                     //throw new RuntimeException("interrupt 2 in pairlist.hasNext loop");
                     break;
                 }
@@ -396,8 +396,8 @@ class Reducer<C extends RingElem<C>> implements Runnable {
             pi = pair.pi;
             pj = pair.pj;
             if (logger.isDebugEnabled()) {
-                logger.debug("pi    = " + pi);
-                logger.debug("pj    = " + pj);
+                logger.debug("pi    = {}", pi);
+                logger.debug("pj    = {}", pj);
             }
 
             S = red.SPolynomial(pi, pj);
@@ -407,7 +407,7 @@ class Reducer<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+                logger.debug("ht(S) = {}", S.leadingExpVector());
             }
 
             H = red.normalform(G, S); //mod
@@ -418,7 +418,7 @@ class Reducer<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (logger.isDebugEnabled()) {
-                logger.info("ht(H) = " + H.leadingExpVector());
+                logger.info("ht(H) = {}", H.leadingExpVector());
             }
 
             H = H.monic();
@@ -434,7 +434,7 @@ class Reducer<C extends RingElem<C>> implements Runnable {
                 return;
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("H = " + H);
+                logger.debug("H = {}", H);
             }
             synchronized (G) {
                 G.add(H);
@@ -443,7 +443,7 @@ class Reducer<C extends RingElem<C>> implements Runnable {
             fin.initIdle(1);
         }
         fin.allIdle();
-        logger.info("terminated, done " + reduction + " reductions");
+        logger.info("terminated, done {} reductions", reduction);
     }
 }
 
@@ -501,7 +501,7 @@ class MiReducer<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         try {
             H = red.normalform(G, H); //mod
@@ -511,7 +511,7 @@ class MiReducer<C extends RingElem<C>> implements Runnable {
             //throw new RuntimeException("interrupt in getNF");
         }
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         // H = H.monic();
     }

@@ -115,7 +115,7 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
                     //System.out.println("starting e1 " + e1.getClass().getName());
                     List<GenPolynomial<C>> G = e1.GB(modv, F);
                     if (debug) {
-                        logger.info("GBProxy done e1 " + e1.getClass().getName());
+                        logger.info("GBProxy done e1 {}", e1.getClass().getName());
                     }
                     return G;
                 } catch (PreemptingException e) {
@@ -123,8 +123,8 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GBProxy e1 " + e);
-                    logger.info("Exception GBProxy F = " + F);
+                    logger.info("GBProxy e1 {}", e);
+                    logger.info("Exception GBProxy F = {}", F);
                     throw new RuntimeException("GBProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -138,7 +138,7 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
                     //System.out.println("starting e2 " + e2.getClass().getName());
                     List<GenPolynomial<C>> G = e2.GB(modv, F);
                     if (debug) {
-                        logger.info("GBProxy done e2 " + e2.getClass().getName());
+                        logger.info("GBProxy done e2 {}", e2.getClass().getName());
                     }
                     return G;
                 } catch (PreemptingException e) {
@@ -146,8 +146,8 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GBProxy e2 " + e);
-                    logger.info("Exception GBProxy F = " + F);
+                    logger.info("GBProxy e2 {}", e);
+                    logger.info("Exception GBProxy F = {}", F);
                     throw new RuntimeException("GBProxy e2 " + e);
                     //return P.ring.getONE();
                 }
