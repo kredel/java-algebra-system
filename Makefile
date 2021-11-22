@@ -447,6 +447,7 @@ findbugs-low:
 SVNREV=90
 GITREV=$(SVNREV)
 GITSINCE=2019-01-01
+#GITSINCE=2016-03-26
 
 # git archive --format=tar --prefix=$(VERSION)/ HEAD | (cd ~/jas-versions/ && tar -xf -)
 #svn export --quiet file:///$(SVNREPO)/jas/trunk ~/jas-versions/$(VERSION)
@@ -534,6 +535,10 @@ subst:
 
 svn-logs:
 	svn log -v -r HEAD:$(SVNSRT) file:///$(SVNREPO)/jas/trunk src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > doc/svn_change.log
+
+git-logs:
+	git log -r --since $(GITSINCE) --name-status --date=iso . src trc examples jython mpj mpi jlinalg_adapter commons-math_adapter > doc/git_change.log
+
 
 # lines of code and number of classes
 loc: young
