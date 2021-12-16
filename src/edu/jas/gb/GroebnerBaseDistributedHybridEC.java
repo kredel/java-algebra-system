@@ -242,18 +242,18 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         this.threadsPerNode = threadsPerNode;
         if (pool == null) {
             pool = Executors.newFixedThreadPool(threads);
-            logger.error("pool must not be null: " + pool);
+            logger.error("pool must not be null: {}", pool);
             //throw new IllegalArgumentException("pool must not be null");
         }
         this.pool = pool;
         this.port = port;
-        logger.info("machine file " + mfile + ", port = " + port + ", pool = " + pool);
+        logger.info("machine file {}, port = {}, pool = {}", mfile, port, pool);
         this.dtp = new DistThreadPool(this.threads, this.mfile);
-        logger.info("running " + dtp);
+        logger.info("running {}", dtp);
         this.DHT_PORT = this.dtp.getEC().getMasterPort() + 100;
         this.dhts = new DistHashTableServer<Integer>(this.DHT_PORT);
         this.dhts.init();
-        logger.info("running " + dhts);
+        logger.info("running {}", dhts);
     }
 
 
@@ -340,7 +340,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         GenPolynomialRing<C> ring = G.get(0).ring;
         PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(G);
-        logger.info("start " + pairlist);
+        logger.info("start {}", pairlist);
         DistHashTable<Integer, GenPolynomial<C>> theList = new DistHashTable<Integer, GenPolynomial<C>>(
                         "localhost", DHT_PORT);
         theList.init();
@@ -350,36 +350,36 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
             GenPolynomial<C> nn = null;
             theList.putWait(Integer.valueOf(i), al.get(i));
             if (nn != null) {
-                logger.info("double polynomials " + i + ", nn = " + nn + ", al(i) = " + al.get(i));
+                logger.info("double polynomials {}, nn = {}, al(i) = {}", i, nn, al.get(i));
             }
         }
 
         Terminator finner = new Terminator(threads * threadsPerNode);
         HybridReducerServerEC<C> R;
-        logger.info("using pool = " + pool);
+        logger.info("using pool = {}", pool);
         for (int i = 0; i < threads; i++) {
             R = new HybridReducerServerEC<C>(threadsPerNode, finner, cf, theList, pairlist);
             pool.execute(R);
-            //logger.info("server submitted " + R);
+            //logger.info("server submitted {}", R);
         }
         try {
             Thread.currentThread().sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        logger.info("main loop waiting " + finner);
+        logger.info("main loop waiting {}", finner);
         finner.waitDone();
         int ps = theList.size();
-        logger.info("#distributed list = " + ps);
+        logger.info("#distributed list = {}", ps);
         // make sure all polynomials arrived: not needed in master
         // G = (ArrayList)theList.values();
         G = pairlist.getList();
         if (ps != G.size()) {
-            logger.info("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
+            logger.info("#distributed list = {}, #pairlist list = {}", theList.size(), G.size());
         }
         for (GenPolynomial<C> q : theList.getValueList()) {
             if (debug && q != null && !q.isZERO()) {
-                logger.debug("final q = " + q.leadingExpVector());
+                logger.debug("final q = {}", q.leadingExpVector());
             }
         }
         logger.debug("distributed list end");
@@ -387,15 +387,15 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
         List<GenPolynomial<C>> Gp;
         Gp = minimalGB(G); // not jet distributed but threaded
         time = System.currentTimeMillis() - time;
-        logger.debug("parallel gbmi time = " + time);
+        logger.debug("parallel gbmi time = {}", time);
         G = Gp;
         logger.debug("server cf.terminate()");
         cf.terminate();
-        logger.debug("server theList.terminate() " + theList.size());
+        logger.debug("server theList.terminate() {}", theList.size());
         theList.clear();
         theList.terminate();
         t = System.currentTimeMillis() - t;
-        logger.info("server GB end, time = " + t + ", " + pairlist.toString());
+        logger.info("server GB end, time = {} with {}", t, pairlist.toString());
         return G;
     }
 
@@ -411,7 +411,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
                     int dhtport) throws IOException {
         ChannelFactory cf = new ChannelFactory(port + 10); // != port for localhost
         cf.init();
-        logger.info("clientPart connecting to " + host + ", port = " + port + ", dhtport = " + dhtport);
+        logger.info("clientPart connecting to {}, port = {}, dhtport = {}", host, port, dhtport);
         SocketChannel channel = cf.getChannel(host, port);
         TaggedSocketChannel pairChannel = new TaggedSocketChannel(channel);
         pairChannel.init();
@@ -422,7 +422,7 @@ public class GroebnerBaseDistributedHybridEC<C extends RingElem<C>> extends Groe
 
         ExecutorService pool = Executors.newFixedThreadPool(threadsPerNode);
         //ThreadPool pool = new ThreadPool(threadsPerNode);
-        logger.info("client using pool = " + pool);
+        logger.info("client using pool = {}", pool);
         for (int i = 0; i < threadsPerNode; i++) {
             HybridReducerClientEC<C> Rr = new HybridReducerClientEC<C>(/*threadsPerNode,*/pairChannel, /*i,*/
             theList);
@@ -605,7 +605,7 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
         this.cf = cf;
         theList = dl;
         pairlist = L;
-        //logger.info("reducer server created " + this);
+        //logger.info("reducer server created {}", this);
     }
 
 
@@ -615,7 +615,7 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
      */
     @Override
     public void run() {
-        logger.debug("reducer server running with " + cf);
+        logger.debug("reducer server running with {}", cf);
         SocketChannel channel = null;
         try {
             channel = cf.getChannel();
@@ -627,7 +627,7 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
             return;
         }
         if (logger.isInfoEnabled()) {
-            logger.info("pairChannel   = " + pairChannel);
+            logger.info("pairChannel   = {}", pairChannel);
         }
         // record idle remote workers (minus one?)
         //finner.beIdle(threadsPerNode-1);
@@ -663,7 +663,7 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
                 goon = false;
                 e.printStackTrace();
             }
-            logger.info("received request, req = " + req);
+            logger.info("received request, req = {}", req);
             if (req == null) {
                 goon = false;
                 break;
@@ -683,7 +683,7 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
                 try {
                     sleeps++;
                     if (sleeps % 3 == 0) {
-                        logger.info("waiting for reducers, remaining = " + finner);
+                        logger.info("waiting for reducers, remaining = {}", finner);
                     }
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -704,8 +704,8 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
             pair = pairlist.removeNext();
             // send pair to client, even if null
             if (logger.isInfoEnabled()) {
-                logger.info("active count = " + active.get());
-                logger.info("send pair = " + pair);
+                logger.info("active count = {}", active.get());
+                logger.info("send pair = {}", pair);
             }
             GBTransportMess msg = null;
             if (pair != null) {
@@ -724,9 +724,9 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
                 goon = false;
                 break;
             }
-            //logger.debug("#distributed list = " + theList.size());
+            //logger.debug("#distributed list = {}", theList.size());
         }
-        logger.info("terminated, send " + red + " reduction pairs");
+        logger.info("terminated, send {} reduction pairs", red);
 
         /*
          * send end mark to clients
@@ -749,9 +749,9 @@ class HybridReducerServerEC<C extends RingElem<C>> implements Runnable {
 
         int d = active.get();
         if (d > 0) {
-            logger.info("remaining active tasks = " + d);
+            logger.info("remaining active tasks = {}", d);
         }
-        //logger.info("terminated, send " + red + " reduction pairs");
+        //logger.info("terminated, send {} reduction pairs", red);
         pairChannel.close();
         logger.debug("redServ pairChannel.close()");
         finner.release();
@@ -832,7 +832,7 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
         theList = dl;
         pairlist = L;
         goon = true;
-        //logger.info("reducer server created " + this);
+        //logger.info("reducer server created {}", this);
     }
 
 
@@ -874,7 +874,7 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
                 finner.initIdle(1);
                 break;
             }
-            logger.info("received H polynomial " + rh);
+            logger.info("received H polynomial {}", rh);
             if (rh == null) {
                 if (this.isInterrupted()) {
                     goon = false;
@@ -896,7 +896,7 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
                 //senderId = mpi.threadId;
                 if (H != null) {
                     if (logger.isInfoEnabled()) {
-                        logger.info("H = " + H.leadingExpVector());
+                        logger.info("H = {}", H.leadingExpVector());
                     }
                     if (!H.isZERO()) {
                         if (H.isONE()) {
@@ -927,7 +927,7 @@ class HybridReducerReceiverEC<C extends RingElem<C>> extends Thread {
             }
         } // end while
         goon = false;
-        logger.info("terminated, received " + red + " reductions");
+        logger.info("terminated, received {} reductions", red);
     }
 
 
@@ -1020,7 +1020,7 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
     @Override
     public void run() {
         if (logger.isInfoEnabled()) {
-            logger.info("pairChannel   = " + pairChannel + " reducer client running");
+            logger.info("pairChannel   = {} reducer client running", pairChannel);
         }
         Pair<C> pair = null;
         GenPolynomial<C> pi, pj, ps;
@@ -1050,7 +1050,7 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
                 logger.info("receive pair, IOexception ");
                 break;
             }
-            logger.info("receive on pairTag, goon = " + goon);
+            logger.info("receive on pairTag, goon = {}", goon);
             doEnd = true;
             Object pp = null;
             try {
@@ -1069,7 +1069,7 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
                 e.printStackTrace();
             }
             if (logger.isInfoEnabled()) {
-                logger.info("received pair = " + pp);
+                logger.info("received pair = {}", pp);
             }
             H = null;
             if (pp == null) { // should not happen
@@ -1089,8 +1089,7 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
                     if (pair != null) {
                         pi = pair.pi;
                         pj = pair.pj;
-                        //logger.debug("pair: pix = " + pair.i 
-                        //               + ", pjx = " + pair.j);
+                        //logger.debug("pair: pix = {}, pjx = {}", pair.i, pair.j);
                     }
                 }
                 if (pp instanceof GBTransportMessPairIndex) {
@@ -1101,31 +1100,31 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
                     pi = theList.getWait(pix);
                     pj = theList.getWait(pjx);
                     ps = theList.getWait(psx);
-                    //logger.info("pix = " + pix + ", pjx = " + pjx + ", psx = " + psx);
+                    //logger.info("pix = {}, pjx = {}, psx = {}", pix, pjx, psx);
                 }
                 if (pi != null && pj != null) {
                     S = red.SPolynomial(pi, pj);
-                    //logger.info("ht(S) = " + S.leadingExpVector());
+                    //logger.info("ht(S) = {}", S.leadingExpVector());
                     if (S.isZERO()) {
                         // pair.setZero(); does not work in dist
                     } else {
                         if (logger.isDebugEnabled()) {
-                            logger.debug("ht(S) = " + S.leadingExpVector());
+                            logger.debug("ht(S) = {}", S.leadingExpVector());
                         }
                         H = red.normalform(theList, S);
-                        //logger.info("ht(H) = " + H.leadingExpVector());
+                        //logger.info("ht(H) = {}", H.leadingExpVector());
                         reduction++;
                         if (H.isZERO()) {
                             // pair.setZero(); does not work in dist
                         } else {
                             H = H.monic();
                             if (logger.isInfoEnabled()) {
-                                logger.info("ht(H) = " + H.leadingExpVector());
+                                logger.info("ht(H) = {}", H.leadingExpVector());
                             }
                         }
                     }
                 } else {
-                    logger.info("pi = " + pi + ", pj = " + pj + ", ps = " + ps);
+                    logger.info("pi = {}, pj = {}, ps = {}", pi, pj, ps);
                 }
             }
             if (pp instanceof GBTransportMess) {
@@ -1134,8 +1133,8 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
 
             // send H or must send null, if not at end
             if (logger.isDebugEnabled()) {
-                logger.debug("#distributed list = " + theList.size());
-                logger.debug("send H polynomial = " + H);
+                logger.debug("#distributed list = {}", theList.size());
+                logger.debug("send H polynomial = {}", H);
             }
             try {
                 pairChannel.send(resultTag, new GBTransportMessPoly<C>(H)); //,threadId));
@@ -1144,7 +1143,7 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
                 goon = false;
                 e.printStackTrace();
             }
-            //logger.info("done send poly message of " + pp);
+            //logger.info("done send poly message of {}", pp);
             try {
                 //pp = pairChannel.receive(threadId);
                 pp = pairChannel.receive(ackTag);
@@ -1162,11 +1161,11 @@ class HybridReducerClientEC<C extends RingElem<C>> implements Runnable {
                 e.printStackTrace();
             }
             if (!(pp instanceof GBTransportMess)) {
-                logger.error("invalid acknowledgement " + pp);
+                logger.error("invalid acknowledgement {}", pp);
             }
             logger.info("received acknowledgment ");
         }
-        logger.info("terminated, " + reduction + " reductions, " + theList.size() + " polynomials");
+        logger.info("terminated, {} reductions, {} polynomials", reduction, theList.size());
         if (doEnd) {
             try {
                 pairChannel.send(resultTag, new GBTransportMessEnd());

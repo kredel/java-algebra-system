@@ -150,7 +150,7 @@ public class GroebnerBaseF5zSigSeqIter<C extends RingElem<C>> extends GroebnerBa
                 continue;
             }
             res.add(p);
-            logger.debug("added p = " + p.sigma);
+            logger.debug("added p = {}", p.sigma);
         }
         return res;
     }
@@ -184,7 +184,7 @@ public class GroebnerBaseF5zSigSeqIter<C extends RingElem<C>> extends GroebnerBa
     @Override
     void updateSyz(List<ExpVector> syz, SigPoly<C> r) {
         if (r.poly.isZERO() && !r.sigma.isZERO()) {
-            //logger.info("update_syz, sigma = " + r.sigma);
+            //logger.info("update_syz, sigma = {}", r.sigma);
             syz.add(r.sigma.leadingExpVector());
         }
         return;
