@@ -21,10 +21,10 @@
     <artifact name="jas-doc" type="zip" ext="zip" conf="docs" m:classifier="javadoc"/-->
   </publications>
   <dependencies>
-    <dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.13.2" conf="runtime-&gt;default">
+    <dependency org="org.apache.logging.log4j" name="log4j-api" rev="2.16.0" conf="runtime-&gt;default">
       <artifact name="log4j-api" type="jar" ext="jar"/>
     </dependency>
-    <dependency org="org.apache.logging.log4j" name="log4j-core" rev="2.13.2" conf="runtime-&gt;default">
+    <dependency org="org.apache.logging.log4j" name="log4j-core" rev="2.16.0" conf="runtime-&gt;default">
       <artifact name="log4j-core" type="jar" ext="jar"/>
     </dependency>
     <dependency org="junit" name="junit" rev="4.13.1" conf="runtime-&gt;default">
