@@ -2,7 +2,7 @@
 # run some rb files
 
 #OPTS="-J-cp ../lib/log4j.jar:../lib/junit.jar:."
-OPTS="-J-cp ../lib/log4j-core-2.13.2.jar:../lib/log4j-api-2.13.2.jar:../lib/junit.jar-4.13.1.jar:../lib/hamcrest-core-1.3.jar:. -I."
+OPTS="-J-cp ../lib/log4j-core-2.16.0.jar:../lib/log4j-api-2.16.0.jar:../lib/junit.jar-4.13.1.jar:../lib/hamcrest-core-1.3.jar:. -I."
 
 echo jruby $OPTS -J-verbose:gc examples/all_rings.rb
 time jruby $OPTS -J-verbose:gc examples/all_rings.rb
