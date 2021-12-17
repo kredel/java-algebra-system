@@ -20,7 +20,7 @@ A Java JDK 1.11.
 
 Documentation see index.html.
 
-Required libraries are log4j-core-2.13.2.jar, log4j-api-2.13.2.jar
+Required libraries are log4j-core-2.16.0.jar, log4j-api-2.16.0.jar
 (from Apache Log4j2, or mylog.jar, nolog.jar, or jars from some other
 compatible logging framework like SLF4J) 
 and junit-4.12.jar, hamcrest-core-1.3.jar (from Junit 4 for tests in trc) 
@@ -32,7 +32,7 @@ Usage
 > java  -cp {other_jar_files}:jas-<version>-bin.jar:. <sample class>
 
 for example
-> java -cp ../lib/log4j-core-2.13.2.jar:../lib/log4j-api-2.13.2.jar:jas-2.6.5428-bin.jar edu.jas.application.RunGB seq examples/trinks7.jas
+> java -cp ../lib/log4j-core-2.16.0.jar:../lib/log4j-api-2.16.0.jar:jas-2.6.5428-bin.jar edu.jas.application.RunGB seq examples/trinks7.jas
 
 or
 
