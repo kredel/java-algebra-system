@@ -11,7 +11,7 @@ LIBPATH=$(HOME)/java/lib
 
 #MPILIB=$(MPI_HOME)/lib/mpi.jar
 MPILIB=$(LIBPATH)/mpi.jar
-CLASSPATH=$(LIBPATH)/log4j-core-2.13.2.jar:$(LIBPATH)/log4j-api-2.13.2.jar:$(LIBPATH)/junit.jar:$(MPILIB):$(JASPATH)
+CLASSPATH=$(LIBPATH)/log4j-core-2.16.0.jar:$(LIBPATH)/log4j-api-2.16.0.jar:$(LIBPATH)/junit.jar:$(MPILIB):$(JASPATH)
 #$(LIBPATH)/jas.jar
 #LOG4JPATH=$(LIBPATH)/log4j-core-2.13.2.jar:$(LIBPATH)/log4j-api-2.13.2.jar
 
