@@ -113,10 +113,10 @@ The version is specified by a two digit major.minor number and a
 revision number. The revision number was the subversion revision
 number, but with git it is just a consecutive number. For example in
 
-jas-2.5.5380-bin.jar
+jas-2.7.80-bin.jar
 
-"2.5"  is the JAS version number and
-"5380" is the subversion revision number
+"2.7"  is the JAS version number and
+"80" is the git revision number
 
 The jas-*-bin.jar and jas-*-doc.jar can be generated from jas-*-src.jar.
 The fastest way to get a complete JAS install, is 
