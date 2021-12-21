@@ -63,7 +63,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         }
         if (debug) {
             if (!A.ring.equals(B.ring)) {
-                logger.error("rings not equal " + A.ring + ", " + B.ring);
+                logger.error("rings not equal {}, {}", A.ring, B.ring);
             }
         }
         Map.Entry<ExpVector, C> ma = A.leadingMonomial();
@@ -107,7 +107,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
                 throw new ArithmeticException("Spol A is zero");
             }
             if (!A.ring.equals(B.ring)) {
-                logger.error("rings not equal " + A.ring + ", " + B.ring);
+                logger.error("rings not equal {}, {}", A.ring, B.ring);
             }
         }
         Map.Entry<ExpVector, C> ma = A.leadingMonomial();
@@ -182,7 +182,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
     public boolean criterion4(GenPolynomial<C> A, GenPolynomial<C> B, ExpVector e) {
         if (logger.isInfoEnabled()) {
             if (!A.ring.equals(B.ring)) {
-                logger.error("rings not equal " + A.ring + ", " + B.ring);
+                logger.error("rings not equal {}, {}", A.ring, B.ring);
             }
             if (!A.ring.isCommutative()) { //B instanceof GenSolvablePolynomial ) {
                 logger.error("GBCriterion4 not applicabable to non-commutative polynomials");
@@ -292,7 +292,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         }
         int modv = Pp.cols;
         GenPolynomialRing<C> pfac = Pp.ring.extend(modv, top);
-        logger.debug("extended ring = " + pfac);
+        logger.debug("extended ring = {}", pfac);
         //System.out.println("extended ring = " + pfac);
         PolynomialList<C> P = Pp.getPolynomialList(pfac);
         PolynomialList<C> A = Ap.getPolynomialList(pfac);
@@ -526,9 +526,9 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         r = t.subtract(Ap);
         boolean z = r.isZERO();
         if (!z) {
-            logger.info("t = " + t);
-            logger.info("a = " + Ap);
-            logger.info("t-a = " + r);
+            logger.info("t = {}", t);
+            logger.info("a = {}", Ap);
+            logger.info("t-a = {}", r);
         }
         return z;
     }

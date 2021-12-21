@@ -259,7 +259,7 @@ public class OrderedSyzPairlist<C extends RingElem<C>> extends OrderedPairlist<C
             ExpVector g = me.getKey();
             LinkedList<Pair<C>> xl = me.getValue();
             if (logger.isInfoEnabled())
-                logger.info("g  = " + g);
+                logger.info("g  = {}", g);
             pair = null;
             while (xl.size() > 0) {
                 pair = xl.removeFirst(); // xl is also modified in pairlist 
@@ -267,7 +267,7 @@ public class OrderedSyzPairlist<C extends RingElem<C>> extends OrderedPairlist<C
                 j = pair.j;
                 //System.out.println("pair.remove = " + pair );
                 if (!red.get(j).get(i)) { // should not happen
-                    System.out.println("c_red.get(" + j + ").get(" + i + ") = " + g);
+                    logger.warn("c_red.get({}).get({}) = {}", j, i, g);
                     pair = null;
                     continue;
                 }
@@ -285,7 +285,7 @@ public class OrderedSyzPairlist<C extends RingElem<C>> extends OrderedPairlist<C
             pair.maxIndex(P.size() - 1);
             remCount++; // count only real pairs
             if (logger.isDebugEnabled()) {
-                logger.info("pair(" + pair.j + "," + pair.i + ")");
+                logger.info("pair({},{})", pair.j, pair.i);
             }
         }
         return pair;

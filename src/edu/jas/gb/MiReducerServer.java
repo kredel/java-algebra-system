@@ -58,12 +58,12 @@ class MiReducerServer<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         H = red.normalform(G, H); //mod
         done.release(); //done.V();
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         // H = H.monic();
     }
@@ -116,12 +116,12 @@ class MiReducerClient<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(S) = " + H.leadingExpVector());
+            logger.debug("ht(S) = {}", H.leadingExpVector());
         }
         H = red.normalform(G, H); //mod
         done.release(); //done.V();
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         // H = H.monic();
     }

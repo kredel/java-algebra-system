@@ -129,7 +129,7 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        logger.info(pool.toString());
+        logger.info("{}", pool);
     }
 
 
@@ -142,7 +142,7 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
             return 0;
         }
         int s = pool.shutdownNow().size();
-        logger.info(pool.toString());
+        logger.info("{}", pool);
         return s;
     }
 
@@ -193,10 +193,10 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
             pool.execute(R);
         }
         fin.waitDone();
-        logger.debug("#parallel list = " + G.size());
+        logger.debug("#parallel list = {}", G.size());
         G = leftMinimalGB(G);
         // not in this context // pool.terminate();
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         return G;
     }
 
@@ -308,7 +308,7 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
         // add also coefficient generators
         List<GenSolvablePolynomial<C>> X;
         X = PolynomialList.castToSolvableList(ring.generators(modv)); 
-        logger.info("right multipliers = " + X);
+        logger.info("right multipliers = {}", X);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(Fp.size() * (1 + X.size()));
         F.addAll(Fp);
         GenSolvablePolynomial<C> p, x, q;
@@ -364,10 +364,10 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
             pool.execute(R);
         }
         fin.waitDone();
-        logger.debug("#parallel list = " + G.size());
+        logger.debug("#parallel list = {}", G.size());
         G = leftMinimalGB(G);
         // not in this context // pool.terminate();
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         return G;
     }
 
@@ -449,8 +449,8 @@ class LeftSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (debug) {
-                logger.debug("pi = " + pair.pi);
-                logger.debug("pj = " + pair.pj);
+                logger.debug("pi = {}", pair.pi);
+                logger.debug("pj = {}", pair.pj);
             }
             S = sred.leftSPolynomial((GenSolvablePolynomial<C>) pair.pi, (GenSolvablePolynomial<C>) pair.pj);
             if (S.isZERO()) {
@@ -458,7 +458,7 @@ class LeftSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (debug) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+                logger.debug("ht(S) = {}", S.leadingExpVector());
             }
             H = sred.leftNormalform(G, S); //mod
             reduction++;
@@ -467,7 +467,7 @@ class LeftSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (debug) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
+                logger.debug("ht(H) = {}", H.leadingExpVector());
             }
             H = H.monic();
             // System.out.println("H   = " + H);
@@ -482,7 +482,7 @@ class LeftSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable {
                 return;
             }
             if (debug) {
-                logger.debug("H = " + H);
+                logger.debug("H = {}", H);
             }
             synchronized (G) {
                 G.add(H);
@@ -491,7 +491,7 @@ class LeftSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable {
             //pairlist.record( pair, H );
             //pairlist.update();
         }
-        logger.info("terminated, done " + reduction + " reductions");
+        logger.info("terminated, done {} reductions", reduction);
     }
 }
 
@@ -576,8 +576,8 @@ class TwosidedSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable 
                 continue;
             }
             if (debug) {
-                logger.debug("pi = " + pair.pi);
-                logger.debug("pj = " + pair.pj);
+                logger.debug("pi = {}", pair.pi);
+                logger.debug("pj = {}", pair.pj);
             }
             S = sred.leftSPolynomial((GenSolvablePolynomial<C>) pair.pi, (GenSolvablePolynomial<C>) pair.pj);
             if (S.isZERO()) {
@@ -585,7 +585,7 @@ class TwosidedSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable 
                 continue;
             }
             if (debug) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+                logger.debug("ht(S) = {}", S.leadingExpVector());
             }
             H = sred.leftNormalform(G, S); //mod
             reduction++;
@@ -594,7 +594,7 @@ class TwosidedSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable 
                 continue;
             }
             if (debug) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
+                logger.debug("ht(H) = {}", H.leadingExpVector());
             }
             H = H.monic();
             // System.out.println("H   = " + H);
@@ -609,7 +609,7 @@ class TwosidedSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable 
                 return;
             }
             if (debug) {
-                logger.debug("H = " + H);
+                logger.debug("H = {}", H);
             }
             synchronized (G) {
                 G.add(H);
@@ -639,7 +639,7 @@ class TwosidedSolvableReducerSeqPair<C extends RingElem<C>> implements Runnable 
                 }
             }
         }
-        logger.info("terminated, done " + reduction + " reductions");
+        logger.info("terminated, done {} reductions", reduction);
     }
 }
 
@@ -691,12 +691,12 @@ class SolvableMiReducerSeqPair<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         if (debug) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         H = sred.leftNormalform(G, H); //mod
         done.release(); //done.V();
         if (debug) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         // H = H.monic();
     }

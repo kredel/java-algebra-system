@@ -290,11 +290,11 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                     if (sp == null) {
                         sp = ring.evzero;
                     }
-                    //logger.info("sigup, sigma  = " + sigup + ", " + sigma);
+                    //logger.info("sigup, sigma  = {}, {}", sigup, sigma);
                     boolean sigeq = (sigup.compareTo(sigma) < 0)
                                     || ((sp.compareTo(se) == 0 && (sigup.leadingBaseCoefficient()
                                                     .compareTo(sigma.leadingBaseCoefficient()) != 0)));
-                    //logger.info("sigup < sigma = " + sigup.compareTo(sigma));
+                    //logger.info("sigup < sigma = {}", sigup.compareTo(sigma));
                     if (sigeq) {
                         reduced = true;
                         a = a.subtractMultiple(sc, g, p.poly);
@@ -306,7 +306,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                         }
                         e = a.leadingExpVector();
                     } else {
-                        //logger.info("not reduced: a = " + a + ", p = " + p.poly);
+                        //logger.info("not reduced: a = {}, p = {}", a, p.poly);
                     }
                 }
             }
@@ -374,7 +374,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                     //wrong: boolean sigeq = (sigup.compareTo(sigma) < 0);
                     boolean sigeq = (eup.compareTo(esig) < 0);
                     if (sigeq) {
-                        //logger.info("reduced: sigup = " + sigup + ", sigma = " + sigma);
+                        //logger.info("reduced: sigup = {}, sigma = {}", sigup, sigma);
                         reduced = true;
                         a = a.subtractMultiple(sc, g, p.poly);
                         if (a.isZERO()) {
@@ -382,7 +382,7 @@ public class SigReductionSeq<C extends RingElem<C>> implements SigReduction<C> {
                         }
                         e = a.leadingExpVector();
                     } else {
-                        //logger.info("not reduced: a = " + a + ", p = " + p.poly);
+                        //logger.info("not reduced: a = {}, p = {}", a, p.poly);
                     }
                 }
             }

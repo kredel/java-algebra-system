@@ -85,9 +85,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
         while (S.length() > 0) {
             m = S.leadingMonomial();
             e = m.getKey();
-            if (logger.isDebugEnabled()) {
-                logger.debug("red, e = " + e);
-            }
+            logger.debug("red, e = {}", e);
             a = m.getValue();
             for (i = 0; i < l; i++) {
                 mt = e.multipleOf(htl[i]);
@@ -104,7 +102,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
             } else {
                 //f = e;
                 e = e.subtract(htl[i]);
-                //logger.debug("red div = " + e);
+                //logger.debug("red div = {}", e);
                 Q = p[i].multiplyLeft(e);
                 b = a;
                 a = a.divide(Q.leadingBaseCoefficient());
@@ -116,13 +114,13 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 //S = S.subtractMultiple(a, e, p[i]);
                 ExpVector g2 = S.leadingExpVector();
                 if (g1.equals(g2)) {
-                    logger.info("g1.equals(g2): Pp       = " + Pp);
-                    logger.info("g1.equals(g2): Ap       = " + Ap);
-                    logger.info("g1.equals(g2): p[i]     = " + p[i]);
-                    logger.info("g1.equals(g2): Q        = " + Q);
-                    logger.info("g1.equals(g2): R        = " + R);
-                    logger.info("g1.equals(g2): Sp       = " + Sp);
-                    logger.info("g1.equals(g2): S        = " + S);
+                    logger.info("g1.equals(g2): Pp       = {}", Pp);
+                    logger.info("g1.equals(g2): Ap       = {}", Ap);
+                    logger.info("g1.equals(g2): p[i]     = {}", p[i]);
+                    logger.info("g1.equals(g2): Q        = {}", Q);
+                    logger.info("g1.equals(g2): R        = {}", R);
+                    logger.info("g1.equals(g2): Sp       = {}", Sp);
+                    logger.info("g1.equals(g2): S        = {}", S);
                     throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", b = " + b);
                 }
             }
@@ -196,7 +194,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 // System.out.println(" S = " + S);
             } else {
                 e = e.subtract(htl[i]);
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 //a = a.divide( (C)lbc[i] );
                 //Q = p[i].multiplyLeft( a, e );
                 Q = p[i].multiplyLeft(e);
@@ -278,7 +276,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
         while (S.length() > 0) {
             m = S.leadingMonomial();
             e = m.getKey();
-            //logger.info("red = " + e);
+            //logger.info("red = {}", e);
             a = m.getValue();
             for (i = 0; i < l; i++) {
                 mt = e.multipleOf(htl[i]);
@@ -381,7 +379,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 S.doRemoveFromMap(e, a);
             } else {
                 e = e.subtract(htl[i]);
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 //a = a.divide( (C)lbc[i] );
                 //Q = p[i].multiply( a, e );
                 Q = p[i].multiply(e); // p_i * (a e) TODO

@@ -80,7 +80,7 @@ public class ReductionPar<C extends RingElem<C>> extends ReductionAbstract<C> {
                     }
                 }
                 //t = System.currentTimeMillis()-t;
-                //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
+                //logger.info("Pp.toArray() = {} ms, size() = {}", t, l);
                 S = Ap.copy(); // S.add(R)? // restart reduction ?
                 R = Rz.copy();
             }
@@ -175,8 +175,8 @@ public class ReductionPar<C extends RingElem<C>> extends ReductionAbstract<C> {
                 l = P.length;
                 //}
                 //t = System.currentTimeMillis()-t;
-                //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
-                //logger.info("Pp.toArray() size() = " + l);
+                //logger.info("Pp.toArray() = {} ms, size() = {}", t, l);
+                //logger.info("Pp.toArray() size() = {}", l);
                 S = Ap.copy(); // S.add(R)? // restart reduction ?
                 R = Rz.copy();
             }

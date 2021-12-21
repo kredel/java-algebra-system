@@ -83,7 +83,7 @@ public class SolvableReductionPar<C extends RingElem<C>> extends SolvableReducti
                     }
                 }
                 //t = System.currentTimeMillis()-t;
-                //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
+                //logger.info("Pp.toArray() = {} ms, size() = {}", t, l);
                 S = Ap.copy(); // S.add(R)? // restart reduction ?
                 R = Rz.copy();
             }
@@ -181,7 +181,7 @@ public class SolvableReductionPar<C extends RingElem<C>> extends SolvableReducti
                     }
                 }
                 //t = System.currentTimeMillis()-t;
-                //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
+                //logger.info("Pp.toArray() = {} ms, size() = {}", t, l);
                 S = Ap.copy(); // S.add(R)? // restart reduction ?
                 R = Rz.copy();
             }

@@ -214,8 +214,8 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                 }
                 h = sred.leftNormalform(F, s);
                 if (!h.isZERO()) {
-                    logger.info("no left GB: pi = " + pi + ", pj = " + pj);
-                    logger.info("s  = " + s + ", h = " + h);
+                    logger.info("no left GB: pi = {}, pj = {}", pi, pj);
+                    logger.info("s  = {}, h = {}", s, h);
                     return false;
                 }
             }
@@ -269,7 +269,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         // add also coefficient generators
         List<GenSolvablePolynomial<C>> X;
         X = PolynomialList.castToSolvableList(ring.generators(modv)); 
-        logger.info("right multipliers = " + X);
+        logger.info("right multipliers = {}", X);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(Fp.size() * (1 + X.size()));
         F.addAll(Fp);
         GenSolvablePolynomial<C> p, q, x, pi, pj, s, h;
@@ -304,7 +304,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                 }
                 h = sred.leftNormalform(F, s);
                 if (!h.isZERO()) {
-                    logger.info("is not TwosidedGB: " + h);
+                    logger.info("is not TwosidedGB: {}", h);
                     return false;
                 }
             }
@@ -376,11 +376,11 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                 //System.out.println("s right = " + s);
                 h = sred.rightNormalform(F, s);
                 if (!h.isZERO()) {
-                    logger.info("isRightGB non zero h = " + h + " :: " + h.ring);
-                    logger.info("p" + i + " = " + pi + ", p" + j + " = " + pj);
+                    logger.info("isRightGB non zero h = {} :: {}", h, h.ring);
+                    logger.info("p{} = {}, p{} = {}", i, pi, j, pj);
                     return false;
                     //} else {
-                    //logger.info("isRightGB zero h = " + h);
+                    //logger.info("isRightGB zero h = {}", h);
                 }
             }
         }
@@ -623,16 +623,16 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         }
         if (logger.isInfoEnabled()) {
             PolynomialList<C> pl = new PolynomialList<C>(rring, rF);
-            logger.info("reversed problem = " + pl.toScript());
+            logger.info("reversed problem = {}", pl.toScript());
         }
         List<GenSolvablePolynomial<C>> rG = leftGB(modv, rF);
         if (debug) {
             //PolynomialList<C> pl = new PolynomialList<C>(rring,rG);
-            //logger.info("reversed GB = " + pl);
+            //logger.info("reversed GB = {}", pl);
             long t = System.currentTimeMillis();
             boolean isit = isLeftGB(rG);
             t = System.currentTimeMillis() - t;
-            logger.info("is left GB = " + isit + ", in " + t + " milliseconds");
+            logger.info("is left GB = {}, in {} milliseconds", isit, t);
         }
         //System.out.println("reversed left GB = " + rG);
         ring = rring.reverse(true); // true
@@ -645,11 +645,11 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         }
         if (debug) {
             //PolynomialList<C> pl = new PolynomialList<C>(ring,G);
-            //logger.info("GB = " + pl);
+            //logger.info("GB = {}", pl);
             long t = System.currentTimeMillis();
             boolean isit = isRightGB(G);
             t = System.currentTimeMillis() - t;
-            logger.info("is right GB = " + isit + ", in " + t + " milliseconds");
+            logger.info("is right GB = {}, in {} milliseconds", isit, t);
         }
         return G;
     }
@@ -711,14 +711,14 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         }
         PolynomialList<C> F = M.getPolynomialList(top);
         if (debug) {
-            logger.info("F left +++++++++++++++++++ \n" + F);
+            logger.info("F left +++++++++++++++++++ \n{}", F);
         }
         GenSolvablePolynomialRing<C> sring = (GenSolvablePolynomialRing<C>) F.ring;
         int modv = M.cols;
         List<GenSolvablePolynomial<C>> G = leftGB(modv, F.castToSolvableList());
         F = new PolynomialList<C>(sring, G);
         if (debug) {
-            logger.info("G left +++++++++++++++++++ \n" + F);
+            logger.info("G left +++++++++++++++++++ \n{}", F);
         }
         N = F.getModuleList(modv);
         return N;
@@ -837,7 +837,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
             return N;
         }
         if (debug) {
-            logger.info("M ====================== \n" + M);
+            logger.info("M ====================== \n{}", M);
         }
         TermOrder to = M.ring.tord;
         if (to.getSplit() <= M.ring.nvar) {
@@ -859,12 +859,12 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         }
         ModuleList<C> rM = new ModuleList<C>(rring, nlist);
         if (debug) {
-            logger.info("rM -------------------- \n" + rM);
+            logger.info("rM -------------------- \n{}", rM);
         }
         ModuleList<C> rMg = leftGB(rM); // top ?
         if (debug) {
-            logger.info("rMg -------------------- \n" + rMg);
-            logger.info("isLeftGB(rMg) ---------- " + isLeftGB(rMg));
+            logger.info("rMg -------------------- \n{}", rMg);
+            logger.info("isLeftGB(rMg) ---------- {}", isLeftGB(rMg));
         }
         mlist = rMg.castToSolvableList();
         nlist = new ArrayList<List<GenSolvablePolynomial<C>>>(rMg.rows);
@@ -878,8 +878,8 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         }
         ModuleList<C> Mg = new ModuleList<C>(sring, nlist);
         if (debug) {
-            logger.info("Mg -------------------- \n" + Mg);
-            logger.info("isRightGB(Mg) --------- " + isRightGB(Mg));
+            logger.info("Mg -------------------- \n{}", Mg);
+            logger.info("isRightGB(Mg) --------- {}", isRightGB(Mg));
         }
         return Mg;
     }
@@ -917,7 +917,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                 System.out.println("row = " + row);
                 System.out.println("F   = " + F);
                 System.out.println("Gk  = " + G.get(k));
-                logger.info("F isLeftReductionMatrix s, k = " + F.size() + ", " + k);
+                logger.info("F isLeftReductionMatrix s, k = {}, {}", F.size(), k);
                 return false;
             }
             k++;
@@ -927,7 +927,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         for (List<GenSolvablePolynomial<C>> row : Mf) {
             boolean t = sred.isLeftReductionNF(row, G, F.get(k), null);
             if (!t) {
-                logger.error("G isLeftReductionMatrix s, k = " + G.size() + ", " + k);
+                logger.error("G isLeftReductionMatrix s, k = {}, {}", G.size(), k);
                 return false;
             }
             k++;
@@ -972,7 +972,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         }
         List<Long> ud = univariateDegrees(G);
         if (ud.size() <= i) {
-            //logger.info("univ pol, ud = " + ud);
+            //logger.info("univ pol, ud = {}", ud);
             throw new IllegalArgumentException("ideal(G) not zero dimensional " + ud);
         }
         int ll = 0;
@@ -988,7 +988,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                 vsdim *= d;
             }
         }
-        logger.info("univariate construction, deg = " + ll + ", vsdim = " + vsdim);
+        logger.info("univariate construction, deg = {}, vsdim = {}", ll, vsdim);
         GenSolvablePolynomialRing<C> pfac = G.get(0).ring;
         RingFactory<C> cfac = pfac.coFac;
 
@@ -1003,8 +1003,8 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
             P = (GenSolvablePolynomial<GenPolynomial<C>>) P.sum(Pp);
         }
         if (debug) {
-            logger.info("univariate construction, P = " + P);
-            logger.info("univariate construction, deg_*(G) = " + ud);
+            logger.info("univariate construction, P = {}", P);
+            logger.info("univariate construction, deg_*(G) = {}", ud);
             //throw new RuntimeException("check");
         }
         GroebnerBaseAbstract<C> bbc = new GroebnerBaseSeq<C>();
@@ -1032,9 +1032,9 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
             if (z != 0) {
                 ll++;
                 if (ll > vsdim) {
-                    logger.info("univariate construction, P = " + P);
-                    logger.info("univariate construction, nf(P) = " + XP);
-                    logger.info("G = " + G);
+                    logger.info("univariate construction, P = {}", P);
+                    logger.info("univariate construction, nf(P) = {}", XP);
+                    logger.info("G = {}", G);
                     throw new ArithmeticException(
                                     "univariate polynomial degree greater than vector space dimansion");
                 }
@@ -1067,7 +1067,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
             pol = (GenSolvablePolynomial<C>) pol.sum(pi);
         }
         if (logger.isInfoEnabled()) {
-            logger.info("univariate construction, pol = " + pol);
+            logger.info("univariate construction, pol = {}", pol);
         }
         return pol;
     }

@@ -116,7 +116,7 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
                     //System.out.println("starting e1 " + e1.getClass().getName());
                     List<GenSolvablePolynomial<C>> G = e1.leftGB(modv, F);
                     if (debug) {
-                        logger.info("SGBProxy done e1 " + e1.getClass().getName());
+                        logger.info("SGBProxy done e1 {}", e1.getClass().getName());
                     }
                     return G;
                 } catch (PreemptingException e) {
@@ -124,8 +124,8 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGBProxy e1 " + e);
-                    logger.info("Exception SGBProxy F = " + F);
+                    logger.info("SGBProxy e1 {}", e);
+                    logger.info("Exception SGBProxy F = {}", F);
                     throw new RuntimeException("SGBProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -139,7 +139,7 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
                     //System.out.println("starting e2 " + e2.getClass().getName());
                     List<GenSolvablePolynomial<C>> G = e2.leftGB(modv, F);
                     if (debug) {
-                        logger.info("SGBProxy done e2 " + e2.getClass().getName());
+                        logger.info("SGBProxy done e2 {}", e2.getClass().getName());
                     }
                     return G;
                 } catch (PreemptingException e) {
@@ -147,8 +147,8 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGBProxy e2 " + e);
-                    logger.info("Exception SGBProxy F = " + F);
+                    logger.info("SGBProxy e2 {}", e);
+                    logger.info("Exception SGBProxy F = {}", F);
                     throw new RuntimeException("SGBProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -157,10 +157,10 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
         try {
             G = pool.invokeAny(cs);
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         }
         return G;
@@ -190,7 +190,7 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
                     //System.out.println("starting e1 " + e1.getClass().getName());
                     List<GenSolvablePolynomial<C>> G = e1.rightGB(modv, F);
                     if (debug) {
-                        logger.info("SGBProxy done e1 " + e1.getClass().getName());
+                        logger.info("SGBProxy done e1 {}", e1.getClass().getName());
                     }
                     return G;
                 } catch (PreemptingException e) {
@@ -198,8 +198,8 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGBProxy e1 " + e);
-                    logger.info("Exception SGBProxy F = " + F);
+                    logger.info("SGBProxy e1 {}", e);
+                    logger.info("Exception SGBProxy F = {}", F);
                     throw new RuntimeException("SGBProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -213,7 +213,7 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
                     //System.out.println("starting e2 " + e2.getClass().getName());
                     List<GenSolvablePolynomial<C>> G = e2.rightGB(modv, F);
                     if (debug) {
-                        logger.info("SGBProxy done e2 " + e2.getClass().getName());
+                        logger.info("SGBProxy done e2 {}", e2.getClass().getName());
                     }
                     return G;
                 } catch (PreemptingException e) {
@@ -221,8 +221,8 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGBProxy e2 " + e);
-                    logger.info("Exception SGBProxy F = " + F);
+                    logger.info("SGBProxy e2 {}", e);
+                    logger.info("Exception SGBProxy F = {}", F);
                     throw new RuntimeException("SGBProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -231,10 +231,10 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
         try {
             G = pool.invokeAny(cs);
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         }
         return G;
@@ -264,7 +264,7 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
                     //System.out.println("starting e1 " + e1.getClass().getName());
                     List<GenSolvablePolynomial<C>> G = e1.twosidedGB(modv, F);
                     if (debug) {
-                        logger.info("SGBProxy done e1 " + e1.getClass().getName());
+                        logger.info("SGBProxy done e1 {}", e1.getClass().getName());
                     }
                     return G;
                 } catch (PreemptingException e) {
@@ -272,8 +272,8 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGBProxy e1 " + e);
-                    logger.info("Exception SGBProxy F = " + F);
+                    logger.info("SGBProxy e1 {}", e);
+                    logger.info("Exception SGBProxy F = {}", F);
                     throw new RuntimeException("SGBProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -287,7 +287,7 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
                     //System.out.println("starting e2 " + e2.getClass().getName());
                     List<GenSolvablePolynomial<C>> G = e2.twosidedGB(modv, F);
                     if (debug) {
-                        logger.info("SGBProxy done e2 " + e2.getClass().getName());
+                        logger.info("SGBProxy done e2 {}", e2.getClass().getName());
                     }
                     return G;
                 } catch (PreemptingException e) {
@@ -295,8 +295,8 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGBProxy e2 " + e);
-                    logger.info("Exception SGBProxy F = " + F);
+                    logger.info("SGBProxy e2 {}", e);
+                    logger.info("Exception SGBProxy F = {}", F);
                     throw new RuntimeException("SGBProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -305,10 +305,10 @@ public class SGBProxy<C extends GcdRingElem<C>> extends SolvableGroebnerBaseAbst
         try {
             G = pool.invokeAny(cs);
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         }
         return G;

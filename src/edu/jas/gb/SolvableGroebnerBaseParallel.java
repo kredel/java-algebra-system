@@ -161,7 +161,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        logger.info(pool.toString());
+        logger.info("{}", pool);
     }
 
 
@@ -174,7 +174,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
             return 0;
         }
         int s = pool.shutdownNow().size();
-        logger.info(pool.toString());
+        logger.info("{}", pool);
         return s;
     }
 
@@ -198,7 +198,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
         }
         PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(PolynomialList.castToList(G));
-        logger.info("start " + pairlist);
+        logger.info("start {}", pairlist);
 
         Terminator fin = new Terminator(threads);
         LeftSolvableReducer<C> R;
@@ -207,10 +207,10 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
             pool.execute(R);
         }
         fin.waitDone();
-        logger.debug("#parallel list = " + G.size());
+        logger.debug("#parallel list = {}", G.size());
         G = leftMinimalGB(G);
         // not in this context // pool.terminate();
-        logger.info("end   " + pairlist);
+        logger.info("end   {}", pairlist);
         return G;
     }
 
@@ -333,7 +333,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
         // add also coefficient generators
         List<GenSolvablePolynomial<C>> X;
         X = PolynomialList.castToSolvableList(ring.generators(modv)); 
-        logger.info("right multipliers = " + X);
+        logger.info("right multipliers = {}", X);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(G.size() * (1 + X.size()));
         F.addAll(G); 
         GenSolvablePolynomial<C> p, x, q;
@@ -364,7 +364,7 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
         }
         PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(PolynomialList.castToList(G));
-        logger.info("start " + pairlist);
+        logger.info("start {}", pairlist);
 
         Terminator fin = new Terminator(threads);
         TwosidedSolvableReducer<C> R;
@@ -373,10 +373,10 @@ public class SolvableGroebnerBaseParallel<C extends RingElem<C>> extends Solvabl
             pool.execute(R);
         }
         fin.waitDone();
-        logger.debug("#parallel list = " + G.size());
+        logger.debug("#parallel list = {}", G.size());
         G = leftMinimalGB(G);
         // not in this context // pool.terminate();
-        logger.info("end   " + pairlist);
+        logger.info("end   {}", pairlist);
         return G;
     }
 
@@ -439,14 +439,14 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     pool.allIdle();
-                    logger.info("shutdown " + pool + " after: " + e);
+                    logger.info("shutdown {} after: {}", pool, e);
                     //throw new RuntimeException("interrupt 1 in pairlist.hasNext loop");
                     break;
                 }
                 if (Thread.currentThread().isInterrupted()) {
                     //pool.initIdle(1);
                     pool.allIdle();
-                    logger.info("shutdown after .isInterrupted(): " + pool);
+                    logger.info("shutdown after .isInterrupted(): {}", pool);
                     //throw new RuntimeException("interrupt 2 in pairlist.hasNext loop");
                     break;
                 }
@@ -466,15 +466,15 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (debug) {
-                logger.debug("pi = " + pair.pi);
-                logger.debug("pj = " + pair.pj);
+                logger.debug("pi = {}", pair.pi);
+                logger.debug("pj = {}", pair.pj);
             }
             S = sred.leftSPolynomial((GenSolvablePolynomial<C>) pair.pi, (GenSolvablePolynomial<C>) pair.pj);
             if (S.isZERO()) {
                 continue;
             }
             if (debug) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+                logger.debug("ht(S) = {}", S.leadingExpVector());
             }
             H = sred.leftNormalform(G, S); //mod
             reduction++;
@@ -482,7 +482,7 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (debug) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
+                logger.debug("ht(H) = {}", H.leadingExpVector());
             }
             H = H.monic();
             // System.out.println("H   = " + H);
@@ -496,14 +496,14 @@ class LeftSolvableReducer<C extends RingElem<C>> implements Runnable {
                 return;
             }
             if (debug) {
-                logger.debug("H = " + H);
+                logger.debug("H = {}", H);
             }
             synchronized (G) {
                 G.add(H);
             }
             pairlist.put(H);
         }
-        logger.info("terminated, done " + reduction + " reductions");
+        logger.info("terminated, done {} reductions", reduction);
     }
 }
 
@@ -556,7 +556,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
         boolean set = false;
         int reduction = 0;
         int sleeps = 0;
-        logger.debug("modv = " + modv); // avoid "unused"
+        logger.debug("modv = {}", modv); // avoid "unused"
         while (pairlist.hasNext() || pool.hasJobs()) {
             while (!pairlist.hasNext()) {
                 // wait
@@ -589,15 +589,15 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (debug) {
-                logger.debug("pi = " + pair.pi);
-                logger.debug("pj = " + pair.pj);
+                logger.debug("pi = {}", pair.pi);
+                logger.debug("pj = {}", pair.pj);
             }
             S = sred.leftSPolynomial((GenSolvablePolynomial<C>) pair.pi, (GenSolvablePolynomial<C>) pair.pj);
             if (S.isZERO()) {
                 continue;
             }
             if (debug) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+                logger.debug("ht(S) = {}", S.leadingExpVector());
             }
             H = sred.leftNormalform(G, S); //mod
             reduction++;
@@ -605,7 +605,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (debug) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
+                logger.debug("ht(H) = {}", H.leadingExpVector());
             }
             H = H.monic();
             // System.out.println("H   = " + H);
@@ -619,7 +619,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
                 return;
             }
             if (debug) {
-                logger.debug("H = " + H);
+                logger.debug("H = {}", H);
             }
             synchronized (G) {
                 G.add(H);
@@ -646,7 +646,7 @@ class TwosidedSolvableReducer<C extends RingElem<C>> implements Runnable {
                 }
             }
         }
-        logger.info("terminated, done " + reduction + " reductions");
+        logger.info("terminated, done {} reductions", reduction);
     }
 }
 
@@ -698,12 +698,12 @@ class SolvableMiReducer<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         if (debug) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         H = sred.leftNormalform(G, H); //mod
         done.release(); //done.V();
         if (debug) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         // H = H.monic();
     }

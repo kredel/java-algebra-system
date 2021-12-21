@@ -218,7 +218,7 @@ public class OrderedWordPairlist<C extends RingElem<C>> implements WordPairList<
             Word g = me.getKey();
             LinkedList<WordPair<C>> xl = me.getValue();
             if (logger.isInfoEnabled()) {
-                logger.info("g  = " + g);
+                logger.info("g  = {}", g);
             }
             pair = null;
             //while (!c && xl.size() > 0) {
@@ -321,7 +321,7 @@ public class OrderedWordPairlist<C extends RingElem<C>> implements WordPairList<
     public boolean criterion3(int i, int j, Word eij) {
         boolean s = red.get(j).get(i);
         //if (s) {
-        //   logger.warn("c3.s true for " + i + " " + j);
+        //   logger.warn("c3.s true for j, i = {} {}", j, i);
         //   //return s;
         //}
         for (int k = 0; k < P.size(); k++) {

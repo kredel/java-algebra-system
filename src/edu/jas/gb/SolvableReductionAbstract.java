@@ -184,7 +184,7 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
         GenSolvablePolynomialRing<C> sring = (GenSolvablePolynomialRing<C>) Pp.ring;
         int modv = Pp.cols;
         GenSolvablePolynomialRing<C> pfac = sring.extend(modv, top);
-        logger.debug("extended ring = " + pfac.toScript());
+        logger.debug("extended ring = {}", pfac.toScript());
         //System.out.println("extended ring = " + pfac.toScript());
         PolynomialList<C> P = Pp.getPolynomialList(pfac);
         PolynomialList<C> A = Ap.getPolynomialList(pfac);
@@ -293,8 +293,8 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
             //System.out.println("p = " + p );
         }
         if (debug) {
-            logger.info("t = " + t);
-            logger.info("a = " + Ap);
+            logger.info("t = {}", t);
+            logger.info("a = {}", Ap);
         }
         if (t == null) {
             if (Ap == null) {

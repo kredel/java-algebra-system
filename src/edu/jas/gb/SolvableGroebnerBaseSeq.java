@@ -93,7 +93,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
         }
         PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(PolynomialList.castToList(G));
-        logger.info("start " + pairlist);
+        logger.info("start {}", pairlist);
 
         GenSolvablePolynomial<C> pi, pj, S, H;
         Pair<C> pair;
@@ -105,8 +105,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             pi = (GenSolvablePolynomial<C>) pair.pi;
             pj = (GenSolvablePolynomial<C>) pair.pj;
             if (debug) {
-                logger.info("pi    = " + pi.leadingExpVector());
-                logger.info("pj    = " + pj.leadingExpVector());
+                logger.info("pi    = {}", pi.leadingExpVector());
+                logger.info("pj    = {}", pj.leadingExpVector());
             }
 
             S = sred.leftSPolynomial(pi, pj);
@@ -115,7 +115,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 continue;
             }
             if (debug) {
-                logger.info("ht(S) = " + S.leadingExpVector());
+                logger.info("ht(S) = {}", S.leadingExpVector());
             }
 
             H = sred.leftNormalform(G, S);
@@ -124,8 +124,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 continue;
             }
             if (debug) {
-                logger.info("ht(H) = " + H.leadingExpVector());
-                //logger.info("ht(H) = " + H.leadingExpVector() + ", lc(H) = " + H.leadingBaseCoefficient().toScript());
+                logger.info("ht(H) = {}", H.leadingExpVector());
+                //logger.info("ht(H) = {}, lc(H) = {}", H.leadingExpVector(), H.leadingBaseCoefficient().toScript());
             }
 
             H = H.monic();
@@ -135,8 +135,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 return G; // since no threads are activated
             }
             if (debug) {
-                // logger.info("H = " + H);
-                logger.info("#monic(H) = " + H.length());
+                // logger.info("H = {}", H);
+                logger.info("#monic(H) = {}", H.length());
             }
             if (H.length() > 0) {
                 //l++;
@@ -144,9 +144,9 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 pairlist.put(H);
             }
         }
-        logger.debug("#sequential list = " + G.size());
+        logger.debug("#sequential list = {}", G.size());
         G = leftMinimalGB(G);
-        logger.info("end " + pairlist);
+        logger.info("end {}", pairlist);
         return G;
     }
 
@@ -230,7 +230,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 }
                 H = sred.leftNormalform(row, G, f);
                 if (!H.isZERO()) {
-                    logger.error("nonzero H = " + H);
+                    logger.error("nonzero H = {}", H);
                 }
                 F2G.add(row);
             }
@@ -238,7 +238,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             //System.out.println("exgb 1 = " + exgb);
             return exgb;
         }
-        logger.info("start " + pairlist);
+        logger.info("start {}", pairlist);
 
         Pair<C> pair;
         int i, j;
@@ -255,8 +255,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             pi = (GenSolvablePolynomial<C>) pair.pi;
             pj = (GenSolvablePolynomial<C>) pair.pj;
             if (debug) {
-                logger.info("i, pi    = " + i + ", " + pi);
-                logger.info("j, pj    = " + j + ", " + pj);
+                logger.info("i, pi    = {}, {}", i, pi);
+                logger.info("j, pj    = {}, {}", j, pj);
             }
 
             rows = new ArrayList<GenSolvablePolynomial<C>>(G.size());
@@ -265,7 +265,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             }
             S = sred.leftSPolynomial(rows, i, pi, j, pj);
             if (debug) {
-                logger.debug("is reduction S = " + sred.isLeftReductionNF(rows, G, ring.getZERO(), S));
+                logger.debug("is reduction S = {}", sred.isLeftReductionNF(rows, G, ring.getZERO(), S));
             }
             if (S.isZERO()) {
                 pair.setZero();
@@ -274,7 +274,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 continue;
             }
             if (debug) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+                logger.debug("ht(S) = {}", S.leadingExpVector());
             }
 
             rowh = new ArrayList<GenSolvablePolynomial<C>>(G.size());
@@ -284,7 +284,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             H = sred.leftNormalform(rowh, G, S);
             if (debug) {
                 //System.out.println("H = " + H);
-                logger.debug("is reduction H = " + sred.isLeftReductionNF(rowh, G, S, H));
+                logger.debug("is reduction H = {}", sred.isLeftReductionNF(rowh, G, S, H));
             }
             if (H.isZERO()) {
                 pair.setZero();
@@ -293,7 +293,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 continue;
             }
             if (debug) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
+                logger.debug("ht(H) = {}", H.leadingExpVector());
             }
 
             row = new ArrayList<GenSolvablePolynomial<C>>(G.size() + 1);
@@ -339,7 +339,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 break;
             }
             if (debug) {
-                logger.debug("H = " + H);
+                logger.debug("H = {}", H);
             }
             G.add(H);
             //pairlist.update( pair, H );
@@ -348,20 +348,20 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
         }
         if (debug) {
             exgb = new SolvableExtendedGB<C>(F, G, F2G, G2F);
-            logger.info("exgb unnorm = " + exgb);
+            logger.info("exgb unnorm = {}", exgb);
         }
         G2F = normalizeMatrix(F.size(), G2F);
         if (debug) {
             exgb = new SolvableExtendedGB<C>(F, G, F2G, G2F);
-            logger.info("exgb nonmin = " + exgb);
+            logger.info("exgb nonmin = {}", exgb);
             boolean t2 = isLeftReductionMatrix(exgb);
-            logger.debug("exgb t2 = " + t2);
+            logger.debug("exgb t2 = {}", t2);
         }
         exgb = minimalSolvableExtendedGB(F.size(), G, G2F);
         G = exgb.G;
         G2F = exgb.G2F;
-        logger.debug("#sequential list = " + G.size());
-        logger.info("end " + pairlist);
+        logger.debug("#sequential list = {}", G.size());
+        logger.info("end {}", pairlist);
         // setup matrices F and F2G
         for (GenSolvablePolynomial<C> f : F) {
             row = new ArrayList<GenSolvablePolynomial<C>>(G.size());
@@ -370,7 +370,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             }
             H = sred.leftNormalform(row, G, f);
             if (!H.isZERO()) {
-                logger.error("nonzero H = " + H);
+                logger.error("nonzero H = {}", H);
             }
             F2G.add(row);
         }
@@ -402,10 +402,10 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
         // add also coefficient generators
         List<GenSolvablePolynomial<C>> X;
         X = PolynomialList.castToSolvableList(ring.generators(modv)); 
-        logger.info("right multipliers = " + X);
+        logger.info("right multipliers = {}", X);
         List<GenSolvablePolynomial<C>> G = new ArrayList<GenSolvablePolynomial<C>>(F.size() * (1 + X.size()));
         G.addAll(F);
-        logger.info("right multipy: G = " + G);
+        logger.info("right multipy: G = {}", G);
         GenSolvablePolynomial<C> p, q;
         for (int i = 0; i < G.size(); i++) { // G changes
             p = G.get(i);
@@ -415,10 +415,10 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                     continue;
                 }
                 q = p.multiply(x);
-                logger.info("right multipy: p = " + p + ", x = " + x + ", q = " + q);
+                logger.info("right multipy: p = {}, x = {}, q = {}", p, x, q);
                 q = sred.leftNormalform(G, q);
                 q = q.monic();
-                logger.info("right multipy: red(q) = " + q);
+                logger.info("right multipy: red(q) = {}", q);
                 if (!q.isZERO()) {
                     //System.out.println("q generating: = " + q + ", p = " + p + ", x = " + x);
                     if (q.isONE()) {
@@ -430,7 +430,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                     if (!G.contains(q)) { // why?
                        G.add(q);
                     } else {
-                       logger.info("right multipy contained: q = " + q);
+                       logger.info("right multipy contained: q = {}", q);
                     } 
                 }
             }
@@ -441,7 +441,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
         //System.out.println("G generated = " + G);
         PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(PolynomialList.castToList(G));
-        logger.info("twosided start " + pairlist);
+        logger.info("twosided start {}", pairlist);
 
         Pair<C> pair;
         GenSolvablePolynomial<C> pi, pj, S, H;
@@ -454,8 +454,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             pi = (GenSolvablePolynomial<C>) pair.pi;
             pj = (GenSolvablePolynomial<C>) pair.pj;
             if (debug) {
-                logger.debug("pi    = " + pi);
-                logger.debug("pj    = " + pj);
+                logger.debug("pi    = {}", pi);
+                logger.debug("pj    = {}", pj);
             }
 
             S = sred.leftSPolynomial(pi, pj);
@@ -464,7 +464,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 continue;
             }
             if (debug) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+                logger.debug("ht(S) = {}", S.leadingExpVector());
             }
 
             H = sred.leftNormalform(G, S);
@@ -473,7 +473,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 continue;
             }
             if (debug) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
+                logger.debug("ht(H) = {}", H.leadingExpVector());
             }
 
             H = H.monic();
@@ -483,7 +483,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 return G; // since no threads are activated
             }
             if (debug) {
-                logger.debug("H = " + H);
+                logger.debug("H = {}", H);
             }
             if (H.length() > 0) {
                 G.add(H);
@@ -511,9 +511,9 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 //System.out.println("G generated = " + G);
             }
         }
-        logger.debug("#sequential list = " + G.size());
+        logger.debug("#sequential list = {}", G.size());
         G = leftMinimalGB(G);
-        logger.info("twosided end " + pairlist);
+        logger.info("twosided end {}", pairlist);
         return G;
     }
 
@@ -549,7 +549,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
         for (int i = 0; i < N.size(); i++) { // 0
             List<GenSolvablePolynomial<C>> row = N.get(i);
             if (debug) {
-                logger.info("row = " + row);
+                logger.info("row = {}", row);
             }
             K.add(row);
             if (i < flen) { // skip identity part
@@ -575,7 +575,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             }
             k++;
         }
-        //System.out.println("norm K reduc = " + K);
+        //System.out.println("norm K reduc = {}", K);
         // truncate 
         N.clear();
         for (List<GenSolvablePolynomial<C>> row : K) {
@@ -674,7 +674,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             k++;
         }
         if (debug) {
-            logger.debug("ix, #M, jx = " + ix + ", " + Mg.size() + ", " + jx);
+            logger.debug("ix, #M, jx = {}, {}, {}", ix, Mg.size(), jx);
         }
         int fix = -1; // copied polys
         // copy Mg to Mf as indicated by ix
@@ -743,7 +743,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
         }
         PairList<C> pairlist = strategy.create(modv, ring);
         pairlist.put(PolynomialList.castToList(G));
-        logger.info("start " + pairlist);
+        logger.info("start {}", pairlist);
 
         GenSolvablePolynomial<C> pi, pj, S, H;
         Pair<C> pair;
@@ -755,8 +755,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             pi = (GenSolvablePolynomial<C>) pair.pi;
             pj = (GenSolvablePolynomial<C>) pair.pj;
             if (debug) {
-                logger.info("pi    = " + pi);
-                logger.info("pj    = " + pj);
+                logger.info("pi    = {}", pi);
+                logger.info("pj    = {}", pj);
             }
 
             S = sred.rightSPolynomial(pi, pj);
@@ -765,7 +765,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 continue;
             }
             if (debug) {
-                logger.info("ht(S) = " + S.leadingExpVector());
+                logger.info("ht(S) = {}", S.leadingExpVector());
             }
 
             H = sred.rightNormalform(G, S);
@@ -774,7 +774,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 continue;
             }
             if (debug) {
-                logger.info("ht(H) = " + H.leadingExpVector());
+                logger.info("ht(H) = {}", H.leadingExpVector());
             }
 
             H = H.monic();
@@ -784,7 +784,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 return G; // since no threads are activated
             }
             if (debug) {
-                logger.info("H = " + H);
+                logger.info("H = {}", H);
             }
             if (H.length() > 0) {
                 //l++;
@@ -792,9 +792,9 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 pairlist.put(H);
             }
         }
-        logger.debug("#sequential list = " + G.size());
+        logger.debug("#sequential list = {}", G.size());
         G = rightMinimalGB(G);
-        logger.info("end " + pairlist);
+        logger.info("end {}", pairlist);
         return G;
     }
 

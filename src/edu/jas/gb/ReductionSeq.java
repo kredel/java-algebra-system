@@ -108,7 +108,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             } else {
                 e = e.subtract(htl[i]);
                 a = a.divide((C) lbc[i]);
-                //logger.info("red div: e = " + e + ", a = " + a);
+                //logger.info("red div: e = {}, a = {}", e, a);
                 //Q = p[i].multiply( a, e );
                 //S = S.subtract( Q );
                 S = S.subtractMultiple(a, e, p[i]);
@@ -199,7 +199,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 //System.out.println("i = "+i+", htl[i] = " + Ap.ring.toScript(htl[i]) + ", lbc[i] = " + lbc[i]  + ", p[i] = " + p[i].ring.toScript(p[i].leadingExpVector()));
                 f = e.subtract(htl[i]);
                 b = a.divide((C) lbc[i]);
-                //logger.info("red div: e = " + e + ", a = " + a + ", f = " + f + ", b = " + b);
+                //logger.info("red div: e = {}, a = {}, f = {}, b = {}", e, a, f, b);
                 //Q = p[i].multiply( a, e );
                 //S = S.subtract( Q );
                 S.doRemoveFromMap(e, a);
@@ -290,7 +290,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 // System.out.println(" S = " + S);
             } else {
                 e = e.subtract(htl[i]);
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 C c = (C) lbc[i];
                 a = a.divide(c);
                 //Q = p[i].multiply( a, e );

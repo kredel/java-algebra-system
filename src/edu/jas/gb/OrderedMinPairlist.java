@@ -157,7 +157,7 @@ public class OrderedMinPairlist<C extends RingElem<C>> extends OrderedPairlist<C
             ExpVector g = me.getKey();
             LinkedList<Pair<C>> xl = me.getValue();
             if (logger.isInfoEnabled()) {
-                logger.info("g  = " + g);
+                logger.info("g  = {}", g);
             }
             pair = null;
             while (!c && xl.size() > 0) {
@@ -195,7 +195,7 @@ public class OrderedMinPairlist<C extends RingElem<C>> extends OrderedPairlist<C
             pair.maxIndex(P.size() - 1);
             remCount++; // count only real pairs
             if (logger.isDebugEnabled()) {
-                logger.info("pair(" + pair.j + "," + pair.i + ")");
+                logger.info("pair({},{})", pair.j, pair.i);
             }
         }
         return pair;
@@ -212,7 +212,7 @@ public class OrderedMinPairlist<C extends RingElem<C>> extends OrderedPairlist<C
         boolean s;
         s = red.get(j).get(i);
         if (!s) {
-            logger.warn("c3.s false for " + j + " " + i);
+            logger.warn("c3.s false for j, i = {}, {}", j, i);
             return s;
         }
         s = true;
