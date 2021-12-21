@@ -156,10 +156,10 @@ public class GBProxy<C extends GcdRingElem<C>> extends GroebnerBaseAbstract<C> {
         try {
             G = pool.invokeAny(cs);
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         }
         return G;

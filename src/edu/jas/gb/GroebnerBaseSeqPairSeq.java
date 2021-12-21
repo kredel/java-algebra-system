@@ -102,8 +102,8 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
             pi = pair.pi;
             pj = pair.pj;
             if (debug) {
-                logger.debug("pi    = " + pi);
-                logger.debug("pj    = " + pj);
+                logger.debug("pi    = {}", pi);
+                logger.debug("pj    = {}", pj);
             }
 
             S = red.SPolynomial(pi, pj);
@@ -112,7 +112,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
                 continue;
             }
             if (debug) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+                logger.debug("ht(S) = {}", S.leadingExpVector());
             }
 
             H = red.normalform(G, S);
@@ -121,7 +121,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
                 continue;
             }
             if (debug) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
+                logger.debug("ht(H) = {}", H.leadingExpVector());
             }
 
             H = H.monic();
@@ -132,15 +132,15 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
                 return G; // since no threads are activated
             }
             if (debug) {
-                logger.debug("H = " + H);
+                logger.debug("H = {}", H);
             }
             G.add(H);
             pairlist.update(pair, H);
             //pairlist.update();
         }
-        logger.debug("#sequential list = " + G.size());
+        logger.debug("#sequential list = {}", G.size());
         G = minimalGB(G);
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         return G;
     }
 
@@ -223,7 +223,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
                 }
                 H = red.normalform(row, G, f);
                 if (!H.isZERO()) {
-                    logger.error("nonzero H = " + H);
+                    logger.error("nonzero H = {}", H);
                 }
                 F2G.add(row);
             }
@@ -251,8 +251,8 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
             pi = pair.pi;
             pj = pair.pj;
             if (debug) {
-                logger.info("i, pi    = " + i + ", " + pi);
-                logger.info("j, pj    = " + j + ", " + pj);
+                logger.info("i, pi    = {}, {}", i, pi);
+                logger.info("j, pj    = {}, {}", j, pj);
             }
 
             rows = new ArrayList<GenPolynomial<C>>(G.size());
@@ -261,7 +261,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
             }
             S = red.SPolynomial(rows, i, pi, j, pj);
             if (debug) {
-                logger.debug("is reduction S = " + red.isReductionNF(rows, G, ring.getZERO(), S));
+                logger.debug("is reduction S = {}", red.isReductionNF(rows, G, ring.getZERO(), S));
             }
             if (S.isZERO()) {
                 pairlist.update(pair, S);
@@ -269,7 +269,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
                 continue;
             }
             if (debug) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+                logger.debug("ht(S) = {}", S.leadingExpVector());
             }
 
             rowh = new ArrayList<GenPolynomial<C>>(G.size());
@@ -278,7 +278,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
             }
             H = red.normalform(rowh, G, S);
             if (debug) {
-                logger.debug("is reduction H = " + red.isReductionNF(rowh, G, S, H));
+                logger.debug("is reduction H = {}", red.isReductionNF(rowh, G, S, H));
             }
             if (H.isZERO()) {
                 pairlist.update(pair, H);
@@ -286,7 +286,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
                 continue;
             }
             if (debug) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
+                logger.debug("ht(H) = {}", H.leadingExpVector());
             }
 
             row = new ArrayList<GenPolynomial<C>>(G.size() + 1);
@@ -331,7 +331,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
                 break;
             }
             if (debug) {
-                logger.debug("H = " + H);
+                logger.debug("H = {}", H);
             }
             G.add(H);
             pairlist.update(pair, H);
@@ -339,20 +339,20 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
         }
         if (debug) {
             exgb = new ExtendedGB<C>(F, G, F2G, G2F);
-            logger.info("exgb unnorm = " + exgb);
+            logger.info("exgb unnorm = {}", exgb);
         }
         G2F = normalizeMatrix(F.size(), G2F);
         if (debug) {
             exgb = new ExtendedGB<C>(F, G, F2G, G2F);
-            logger.info("exgb nonmin = " + exgb);
+            logger.info("exgb nonmin = {}", exgb);
             boolean t2 = isReductionMatrix(exgb);
-            logger.info("exgb t2 = " + t2);
+            logger.info("exgb t2 = {}", t2);
         }
         exgb = minimalExtendedGB(F.size(), G, G2F);
         G = exgb.G;
         G2F = exgb.G2F;
-        logger.debug("#sequential list = " + G.size());
-        logger.info("" + pairlist); 
+        logger.debug("#sequential list = {}", G.size());
+        logger.info("{}", pairlist);
         // setup matrices F and F2G
         for (GenPolynomial<C> f : F) {
             row = new ArrayList<GenPolynomial<C>>(G.size());
@@ -361,15 +361,15 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
             }
             H = red.normalform(row, G, f);
             if (!H.isZERO()) {
-                logger.error("nonzero H = " + H);
+                logger.error("nonzero H = {}", H);
             }
             F2G.add(row);
         }
         exgb = new ExtendedGB<C>(F, G, F2G, G2F);
         if (debug) {
-            logger.info("exgb nonmin = " + exgb);
+            logger.info("exgb nonmin = {}", exgb);
             boolean t2 = isReductionMatrix(exgb);
-            logger.info("exgb t2 = " + t2);
+            logger.info("exgb t2 = {}", t2);
         }
         return exgb;
     }

@@ -200,7 +200,7 @@ public class GroebnerBaseArriSigSeqIter<C extends RingElem<C>> extends GroebnerB
                 continue;
             }
             res.add(p);
-            logger.debug("added p = " + p.sigma);
+            logger.debug("added p = {}", p.sigma);
         }
         return res;
     }

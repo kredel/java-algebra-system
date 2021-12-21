@@ -154,10 +154,8 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
 
             pi = pair.pi;
             pj = pair.pj;
-            if (debug) {
                 logger.debug("pi    = {}", pi);
                 logger.debug("pj    = {}", pj);
-            }
 
             // D-polynomial case ----------------------
             D = dred.GPolynomial(pi, pj);
@@ -203,9 +201,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                     G.add(H);
                     return G; // since no threads are activated
                 }
-                if (logger.isDebugEnabled()) {
-                    logger.debug("H = {}", H);
-                }
+                logger.debug("H = {}", H);
                 if (!H.isZERO()) {
                     logger.info("Sred = {}", H);
                     //len = G.size();

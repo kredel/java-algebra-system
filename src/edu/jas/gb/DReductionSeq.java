@@ -457,7 +457,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
                 // System.out.println(" S = " + S);
             } else { 
                 e =  e.subtract( htl[i] );
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 C c = (C)lbc[i];
                 a = a.divide( c );
                 Q = p[i].multiply( a, e );

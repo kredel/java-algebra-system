@@ -191,10 +191,10 @@ public class GroebnerBaseSeqPairParallel<C extends RingElem<C>> extends Groebner
         if (Thread.currentThread().isInterrupted()) {
             throw new RuntimeException("interrupt before minimalGB");
         }
-        logger.debug("#parallel list = " + G.size());
+        logger.debug("#parallel list = {}", G.size());
         G = minimalGB(G);
         // not in this context // pool.terminate();
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         return G;
     }
 
@@ -344,13 +344,13 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     fin.allIdle();
-                    logger.info("shutdown " + fin + " after: " + e);
+                    logger.info("shutdown {} after: {}", fin, e);
                     //throw new RuntimeException("interrupt 1 in pairlist.hasNext loop");
                     break;
                 }
                 if (Thread.currentThread().isInterrupted()) {
                     fin.allIdle();
-                    logger.info("shutdown after .isInterrupted(): " + fin);
+                    logger.info("shutdown after .isInterrupted(): {}", fin);
                     //throw new RuntimeException("interrupt 2 in pairlist.hasNext loop");
                     break;
                 }
@@ -374,8 +374,8 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("pi = " + pair.pi);
-                logger.debug("pj = " + pair.pj);
+                logger.debug("pi = {}", pair.pi);
+                logger.debug("pj = {}", pair.pj);
             }
             S = red.SPolynomial(pair.pi, pair.pj);
             if (S.isZERO()) {
@@ -383,7 +383,7 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+                logger.debug("ht(S) = {}", S.leadingExpVector());
             }
             H = red.normalform(G, S); //mod
             reduction++;
@@ -392,10 +392,10 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
                 continue;
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
+                logger.debug("ht(H) = {}", H.leadingExpVector());
             }
             H = H.monic();
-            // System.out.println("H   = " + H);
+            // System.out.println("H   = {}", H);
             if (H.isONE()) {
                 // pairlist.update( pair, H );
                 pairlist.putOne(); // not really required
@@ -407,7 +407,7 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
                 return;
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("H = " + H);
+                logger.debug("H = {}", H);
             }
             synchronized (G) {
                 G.add(H);
@@ -416,7 +416,7 @@ class ReducerSeqPair<C extends RingElem<C>> implements Runnable {
             //pairlist.record( pair, H );
             //pairlist.update();
         }
-        logger.info("terminated, done " + reduction + " reductions");
+        logger.info("terminated, done {} reductions", reduction);
     }
 }
 
@@ -474,7 +474,7 @@ class MiReducerSeqPair<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         try {
             H = red.normalform(G, H); //mod
@@ -484,7 +484,7 @@ class MiReducerSeqPair<C extends RingElem<C>> implements Runnable {
             //throw new RuntimeException("interrupt in getNF");
         }
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         // H = H.monic();
     }

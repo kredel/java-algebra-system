@@ -31,7 +31,10 @@ import edu.jas.poly.PolyUtil;
 public class GroebnerBaseSeq<C extends RingElem<C>> 
     extends GroebnerBaseAbstract<C>  {
 
+
     private static final Logger logger = LogManager.getLogger(GroebnerBaseSeq.class);
+
+
     private static final boolean debug = logger.isDebugEnabled();
 
 
@@ -89,21 +92,21 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
         }
         PairList<C> pairlist = strategy.create( modv, ring ); 
         pairlist.put(G);
-        logger.info("start " + pairlist); 
+        logger.info("start {}", pairlist);
 
         Pair<C> pair;
         GenPolynomial<C> pi, pj, S, H;
         while ( pairlist.hasNext() ) {
             pair = pairlist.removeNext();
-            //logger.debug("pair = " + pair);
+            //logger.debug("pair = {}", pair);
             if ( pair == null ) {
                 continue; 
             }
             pi = pair.pi; 
             pj = pair.pj; 
             if ( /*false &&*/ debug ) {
-                logger.debug("pi    = " + pi );
-                logger.debug("pj    = " + pj );
+                logger.debug("pi    = {}", pi );
+                logger.debug("pj    = {}", pj );
             }
 
             S = red.SPolynomial( pi, pj );
@@ -112,14 +115,14 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                 continue;
             }
             if ( debug ) {
-                logger.debug("ht(S) = " + S.leadingExpVector() );
+                logger.debug("ht(S) = {}", S.leadingExpVector() );
             }
 
             H = red.normalform( G, S );
             if ( debug ) {
-                //logger.info("pair = " + pair); 
-                //logger.info("ht(S) = " + S.monic()); //.leadingExpVector() );
-                logger.info("ht(H) = " + H.monic()); //.leadingExpVector() );
+                //logger.info("pair = {}", pair);
+                //logger.info("ht(S) = {}", S.monic()); //.leadingExpVector() );
+                logger.info("ht(H) = {}", H.monic()); //.leadingExpVector() );
             }
             if ( H.isZERO() ) {
                 pair.setZero();
@@ -127,18 +130,18 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
             }
             H = H.monic();
             if ( debug ) {
-                logger.info("ht(H) = " + H.leadingExpVector() );
+                logger.info("ht(H) = {}", H.leadingExpVector() );
             }
 
             H = H.monic();
             if ( H.isONE() ) {
                 G.clear(); G.add( H );
                 pairlist.putOne();
-                logger.info("end " + pairlist); 
+                logger.info("end {}", pairlist);
                 return G; // since no threads are activated
             }
             if ( debug ) {
-                logger.info("H = " + H );
+                logger.info("H = {}", H );
             }
             if ( H.length() > 0 ) {
                 //l++;
@@ -146,9 +149,9 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                 pairlist.put( H );
             }
         }
-        logger.debug("#sequential list = " + G.size());
+        logger.debug("#sequential list = {}", G.size());
         G = minimalGB(G);
-        logger.info("end " + pairlist); 
+        logger.info("end {}", pairlist);
         return G;
     }
 
@@ -234,7 +237,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                 }
                 H = red.normalform( row, G, f );
                 if ( ! H.isZERO() ) {
-                    logger.error("nonzero H = " + H );
+                    logger.error("nonzero H = {}", H );
                 }
                 F2G.add( row );
             }
@@ -261,8 +264,8 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
             pi = pair.pi; 
             pj = pair.pj; 
             if ( debug ) {
-                logger.info("i, pi    = " + i + ", " + pi );
-                logger.info("j, pj    = " + j + ", " + pj );
+                logger.info("i, pi    = {}, {}", i, pi );
+                logger.info("j, pj    = {}, {}", j, pj );
             }
 
             rows = new ArrayList<GenPolynomial<C>>( G.size() );
@@ -279,7 +282,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                 continue;
             }
             if ( debug ) {
-                logger.debug("ht(S) = " + S.leadingExpVector() );
+                logger.debug("ht(S) = {}", S.leadingExpVector() );
             }
 
             rowh = new ArrayList<GenPolynomial<C>>( G.size() );
@@ -296,7 +299,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                 continue;
             }
             if ( debug ) {
-                logger.debug("ht(H) = " + H.leadingExpVector() );
+                logger.debug("ht(H) = {}", H.leadingExpVector() );
             }
 
             row = new ArrayList<GenPolynomial<C>>( G.size()+1 );
@@ -340,7 +343,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                 break; 
             }
             if ( debug ) {
-                logger.debug("H = " + H );
+                logger.debug("H = {}", H );
             }
             G.add( H );
             pairlist.put( H );
@@ -348,20 +351,20 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
         }
         if ( debug ) {
             exgb = new ExtendedGB<C>(F,G,F2G,G2F);
-            logger.info("exgb unnorm = " + exgb);
+            logger.info("exgb unnorm = {}", exgb);
         }
         G2F = normalizeMatrix( F.size(), G2F );
         if ( debug ) {
             exgb = new ExtendedGB<C>(F,G,F2G,G2F);
-            logger.info("exgb nonmin = " + exgb);
+            logger.info("exgb nonmin = {}", exgb);
             boolean t2 = isReductionMatrix( exgb );
-            logger.info("exgb t2 = " + t2);
+            logger.info("exgb t2 = {}", t2);
         }
         exgb = minimalExtendedGB(F.size(),G,G2F);
         G = exgb.G;
         G2F = exgb.G2F;
-        logger.debug("#sequential list = " + G.size());
-        logger.info("" + pairlist); 
+        logger.debug("#sequential list = {}", G.size());
+        logger.info("{}", pairlist);
         // setup matrices F and F2G
         for ( GenPolynomial<C> f : F ) {
             row = new ArrayList<GenPolynomial<C>>( G.size() );
@@ -370,15 +373,15 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
             }
             H = red.normalform( row, G, f );
             if ( ! H.isZERO() ) {
-                logger.error("nonzero H = " + H );
+                logger.error("nonzero H = {}", H );
             }
             F2G.add( row );
         }
         exgb = new ExtendedGB<C>(F,G,F2G,G2F);
         if ( debug ) {
-            logger.info("exgb nonmin = " + exgb);
+            logger.info("exgb nonmin = {}", exgb);
             boolean t2 = isReductionMatrix( exgb );
-            logger.info("exgb t2 = " + t2);
+            logger.info("exgb t2 = {}", t2);
         }
         return exgb;
     }

@@ -144,7 +144,7 @@ public class GroebnerBaseGGVSigSeqIter<C extends RingElem<C>> extends GroebnerBa
                 continue;
             }
             res.add(p);
-            logger.debug("added p = " + p.sigma);
+            logger.debug("added p = {}", p.sigma);
         }
         return res;
     }

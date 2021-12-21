@@ -245,7 +245,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
             // no wait required
             GenPolynomial<C> nn = theList.put(Integer.valueOf(i), G.get(i));
             if (nn != null) {
-                logger.info("double polynomials " + i + ", nn = " + nn + ", G(i) = " + G.get(i));
+                logger.info("double polynomials {}, nn = {}, G(i) = {}", i, nn, G.get(i));
             }
         }
 
@@ -258,24 +258,24 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
         logger.debug("main loop waiting");
         fin.waitDone();
         int ps = theList.size();
-        //logger.debug("#distributed list = "+ps);
+        //logger.debug("#distributed list = {}", ps);
         // make sure all polynomials arrived: not needed in master
         // G = (ArrayList)theList.values();
         G = pairlist.getList();
-        //logger.debug("#pairlist list = "+G.size());
+        //logger.debug("#pairlist list = {}", G.size());
         if (ps != G.size()) {
-            logger.info("#distributed list = " + theList.size() + " #pairlist list = " + G.size());
+            logger.info("#distributed list = {} #pairlist list = {}", theList.size(), G.size());
         }
         long time = System.currentTimeMillis();
         List<GenPolynomial<C>> Gp;
         Gp = minimalGB(G); // not jet distributed but threaded
         time = System.currentTimeMillis() - time;
-        logger.info("parallel gbmi = " + time);
+        logger.info("parallel gbmi = {}", time);
         /*
         time = System.currentTimeMillis();
         G = GroebnerBase.<C>GBmi(G); // sequential
         time = System.currentTimeMillis() - time;
-        logger.info("sequential gbmi = " + time);
+        logger.info("sequential gbmi = {}", time);
         */
         G = Gp;
         //logger.info("cf.terminate()");
@@ -285,7 +285,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
         theList.terminate();
         logger.info("dls.terminate()");
         dls.terminate();
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         return G;
     }
 
@@ -449,7 +449,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
             return;
         }
         if (logger.isDebugEnabled()) {
-            logger.debug("pairChannel = " + pairChannel);
+            logger.debug("pairChannel = {}", pairChannel);
         }
         CriticalPair<C> pair;
         //GenPolynomial<C> pi;
@@ -476,7 +476,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
                 goon = false;
                 e.printStackTrace();
             }
-            //logger.debug("received request, req = " + req);
+            //logger.debug("received request, req = {}", req);
             if (req == null) {
                 goon = false;
                 break;
@@ -489,7 +489,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
             // find pair
             if (logger.isDebugEnabled()) {
                 logger.debug("find pair");
-                logger.debug("pool.hasJobs() " + pool.hasJobs() + " pairlist.hasNext() " + pairlist.hasNext());
+                logger.debug("pool.hasJobs() {} pairlist.hasNext() {}", pool.hasJobs(), pairlist.hasNext());
             }
             while (!pairlist.hasNext()) { // wait
                 pairlist.update();
@@ -526,11 +526,11 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
              * send pair to client, receive H
              */
             if (logger.isDebugEnabled()) {
-                logger.debug("send pair = " + pair);
-                logger.info("theList keys " + theList.keySet());
+                logger.debug("send pair = {}", pair);
+                logger.info("theList keys {}", theList.keySet());
             }
             if (logger.isDebugEnabled()) {
-                logger.info("inWork " + pairlist.inWork());
+                logger.info("inWork {}", pairlist.inWork());
             }
             GBSPTransportMess msg = null;
             if (pair != null) {
@@ -548,7 +548,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
             }
             // use idle time to update pairlist
             pairlist.update();
-            //logger.debug("#distributed list = "+theList.size());
+            //logger.debug("#distributed list = {}", theList.size());
             //logger.debug("receive H polynomial");
             Object rh = null;
             try {
@@ -563,7 +563,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
                 break;
             }
             if (logger.isDebugEnabled()) {
-                logger.info("received H polynomial rh = " + rh);
+                logger.info("received H polynomial rh = {}", rh);
             }
             if (rh == null) {
                 if (pair != null) {
@@ -575,7 +575,7 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
                 // update pair list
                 red++;
                 H = ((GBSPTransportMessPoly<C>) rh).pol;
-                //logger.info("H = " + H);
+                //logger.info("H = {}", H);
                 if (H == null) {
                     if (pair != null) {
                         polIndex = pairlist.record(pair, null);
@@ -610,11 +610,11 @@ class ReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
                     //pair.setZero();
                 }
                 if (logger.isDebugEnabled()) {
-                    logger.debug("invalid message " + rh);
+                    logger.debug("invalid message {}", rh);
                 }
             }
         }
-        logger.info("terminated, done " + red + " reductions");
+        logger.info("terminated, done {} reductions", red);
 
         /*
          * send end mark to client
@@ -823,7 +823,7 @@ class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
     @SuppressWarnings("unchecked")
     public void run() {
         if (logger.isDebugEnabled()) {
-            logger.debug("pairChannel = " + pairChannel + "reducer client running");
+            logger.debug("pairChannel = {} reducer client running", pairChannel);
         }
         CriticalPair<C> pair = null;
         GenPolynomial<C> pi;
@@ -844,7 +844,7 @@ class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
             // pair = (Pair) pairlist.removeNext();
             Object req = new GBSPTransportMessReq();
             if (logger.isDebugEnabled()) {
-                logger.debug("send request = " + req);
+                logger.debug("send request = {}", req);
             }
             try {
                 pairChannel.send(req);
@@ -854,7 +854,7 @@ class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
                 break;
             }
             if (logger.isDebugEnabled()) {
-                logger.debug("receive pair, goon = " + goon);
+                logger.debug("receive pair, goon = {}", goon);
             }
             Object pp = null;
             try {
@@ -870,11 +870,11 @@ class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
                 e.printStackTrace();
             }
             if (logger.isDebugEnabled()) {
-                logger.info("received pair = " + pp);
+                logger.info("received pair = {}", pp);
             }
             H = null;
             if (pp == null) { // should not happen
-                //logger.debug("received pair = " + pp);
+                //logger.debug("received pair = {}", pp);
                 continue;
             }
             if (pp instanceof GBSPTransportMessEnd) {
@@ -888,32 +888,32 @@ class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
                     if (pair != null) {
                         pi = pair.pi;
                         pj = pair.pj;
-                        //logger.debug("pair: pix = " + pair.i 
-                        //               + ", pjx = " + pair.j);
+                        //logger.debug("pair: pix = {}", pair.i
+                        //               + ", pjx = {}", pair.j);
                     }
                 }
                 if (pp instanceof GBSPTransportMessPairIndex) {
                     pix = ((GBSPTransportMessPairIndex) pp).i;
                     pjx = ((GBSPTransportMessPairIndex) pp).j;
-                    //logger.info("waiting for pix = " + pix); 
+                    //logger.info("waiting for pix = {}", pix);
                     pi = theList.getWait(pix);
-                    //logger.info("waiting for pjx = " + pjx); 
+                    //logger.info("waiting for pjx = {}", pjx);
                     pj = theList.getWait(pjx);
-                    //logger.info("pix = " + pix + ", pjx = " +pjx);
+                    //logger.info("pix = {}, pjx = {}", pix, pjx);
                 }
 
                 if (pi != null && pj != null) {
                     if (logger.isDebugEnabled()) {
-                        logger.info("pi = " + pi.leadingExpVector() + ", pj = " + pj.leadingExpVector());
+                        logger.info("pi = {}, pj = {}", pi.leadingExpVector(), pj.leadingExpVector());
                     }
                     S = red.SPolynomial(pi, pj);
-                    //System.out.println("S   = " + S);
+                    //System.out.println("S   = {}", S);
                     if (S.isZERO()) {
                         // pair.setZero(); does not work in dist
                         H = S;
                     } else {
                         if (logger.isDebugEnabled()) {
-                            logger.debug("ht(S) = " + S.leadingExpVector());
+                            logger.debug("ht(S) = {}", S.leadingExpVector());
                         }
                         H = red.normalform(theList, S);
                         reduction++;
@@ -922,14 +922,14 @@ class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
                         } else {
                             H = H.monic();
                             if (logger.isDebugEnabled()) {
-                                logger.info("ht(H) = " + H.leadingExpVector());
+                                logger.info("ht(H) = {}", H.leadingExpVector());
                             }
                         }
                     }
                 }
             } else {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("invalid message = " + pp);
+                    logger.debug("invalid message = {}", pp);
                 }
                 try {
                     Thread.sleep(100);
@@ -939,9 +939,9 @@ class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
             }
 
             // send H or must send null
-            //logger.debug("#distributed list = "+theList.size());
+            //logger.debug("#distributed list = {}", theList.size());
             if (logger.isDebugEnabled()) {
-                logger.info("send H polynomial = " + H);
+                logger.info("send H polynomial = {}", H);
             }
             try {
                 pairChannel.send(new GBSPTransportMessPoly<C>(H));
@@ -951,7 +951,7 @@ class ReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
                 break;
             }
         }
-        logger.info("terminated, done " + reduction + " reductions");
+        logger.info("terminated, done {} reductions", reduction);
         pairChannel.close();
     }
 }
@@ -1002,12 +1002,12 @@ class MiReducerServerSeqPair<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         H = red.normalform(G, H); //mod
         done.release(); //done.V();
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         // H = H.monic();
     }
@@ -1059,12 +1059,12 @@ class MiReducerClientSeqPair<C extends RingElem<C>> implements Runnable {
 
     public void run() {
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         H = red.normalform(G, H); // mod
         done.release(); //done.V();
         if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         // H = H.monic();
     }

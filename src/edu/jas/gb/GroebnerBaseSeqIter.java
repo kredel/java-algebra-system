@@ -89,11 +89,11 @@ public class GroebnerBaseSeqIter<C extends RingElem<C>> extends GroebnerBaseAbst
         // sort, no reverse
         G = OrderedPolynomialList.<C> sort(G);
         //no: Collections.reverse(G);
-        logger.info("G-sort = " + G);
+        logger.info("G-sort = {}", G);
         List<GenPolynomial<C>> Gp = new ArrayList<GenPolynomial<C>>();
         for (GenPolynomial<C> p : G) {
             if (debug) {
-                logger.info("p = " + p);
+                logger.info("p = {}", p);
             }
             GenPolynomial<C> pp = red.normalform(Gp, p);
             if (pp.isZERO()) {
@@ -142,21 +142,21 @@ public class GroebnerBaseSeqIter<C extends RingElem<C>> extends GroebnerBaseAbst
         pairlist.setList(G);
         G.add(g);
         pairlist.put(g);
-        logger.info("start " + pairlist);
+        logger.info("start {}", pairlist);
 
         Pair<C> pair;
         GenPolynomial<C> pi, pj, S, H;
         while (pairlist.hasNext()) {
             pair = pairlist.removeNext();
-            //logger.debug("pair = " + pair);
+            //logger.debug("pair = {}", pair);
             if (pair == null) {
                 continue;
             }
             pi = pair.pi;
             pj = pair.pj;
             if ( /*false &&*/debug) {
-                logger.debug("pi    = " + pi);
-                logger.debug("pj    = " + pj);
+                logger.debug("pi    = {}", pi);
+                logger.debug("pj    = {}", pj);
             }
 
             S = red.SPolynomial(pi, pj);
@@ -165,14 +165,14 @@ public class GroebnerBaseSeqIter<C extends RingElem<C>> extends GroebnerBaseAbst
                 continue;
             }
             if (debug) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+                logger.debug("ht(S) = {}", S.leadingExpVector());
             }
 
             H = red.normalform(G, S);
             if (debug) {
-                //logger.info("pair = " + pair); 
-                //logger.info("ht(S) = " + S.monic()); //.leadingExpVector() );
-                logger.info("ht(H) = " + H.monic()); //.leadingExpVector() );
+                //logger.info("pair = {}", pair);
+                //logger.info("ht(S) = {}", S.monic()); //.leadingExpVector() );
+                logger.info("ht(H) = {}", H.monic()); //.leadingExpVector() );
             }
             if (H.isZERO()) {
                 pair.setZero();
@@ -180,7 +180,7 @@ public class GroebnerBaseSeqIter<C extends RingElem<C>> extends GroebnerBaseAbst
             }
             H = H.monic();
             if (debug) {
-                logger.info("ht(H) = " + H.leadingExpVector());
+                logger.info("ht(H) = {}", H.leadingExpVector());
             }
 
             H = H.monic();
@@ -188,11 +188,11 @@ public class GroebnerBaseSeqIter<C extends RingElem<C>> extends GroebnerBaseAbst
                 G.clear();
                 G.add(H);
                 pairlist.putOne();
-                logger.info("end " + pairlist);
+                logger.info("end {}", pairlist);
                 return G; // since no threads are activated
             }
             if (debug) {
-                logger.info("H = " + H);
+                logger.info("H = {}", H);
             }
             if (H.length() > 0) {
                 //l++;
@@ -200,9 +200,9 @@ public class GroebnerBaseSeqIter<C extends RingElem<C>> extends GroebnerBaseAbst
                 pairlist.put(H);
             }
         }
-        logger.debug("#sequential list = " + G.size());
+        logger.debug("#sequential list = {}", G.size());
         G = minimalGB(G);
-        logger.info("end " + pairlist);
+        logger.info("end {}", pairlist);
         return G;
     }
 
