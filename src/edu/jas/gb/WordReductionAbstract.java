@@ -367,9 +367,9 @@ public abstract class WordReductionAbstract<C extends RingElem<C>> implements Wo
         r = t.subtract(Ap);
         boolean z = r.isZERO();
         if (!z) {
-            logger.info("t = " + t);
-            logger.info("a = " + Ap);
-            logger.info("t-a = " + r);
+            logger.info("t = {}", t);
+            logger.info("a = {}", Ap);
+            logger.info("t-a = {}", r);
         }
         return z;
     }

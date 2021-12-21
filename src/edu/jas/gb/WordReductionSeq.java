@@ -114,7 +114,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 e = elr[0];
                 f = elr[1];
                 if (debug) {
-                    logger.info("red divideWord: e = " + e + ", f = " + f);
+                    logger.info("red divideWord: e = {}, f = {}", e, f);
                 }
                 a = a.divide(lbc[i]);
                 Q = p[i].multiply(a, e, cone, f);
@@ -216,7 +216,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 e = elr[0];
                 Word f = elr[1];
                 if (debug) {
-                    logger.info("redRec divideWord: e = " + e + ", f = " + f + ", htl = " + htl[i]);
+                    logger.info("redRec divideWord: e = {}, f = {}, htl = {}", e, f, htl[i]);
                 }
                 C c = lbc[i];
                 b = a.divide(c);
@@ -229,7 +229,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 }
                 Q = p[i].multiply(lc, e, rc, f);
                 S = S.subtract(Q);
-                //logger.info("redRec: S = " + S + ", R = " + R + ", Q = " + Q);
+                //logger.info("redRec: S = {}, R = {}, Q = {}", S, R, Q);
                 if (!S.isZERO() && g.equals(S.leadingWord())) {
                     System.out.println("divideWord: e = " + e + ", f = " + f);
                     System.out.println("R = " + R);
@@ -241,26 +241,26 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 boolean doset = true;
                 if (!lc.isONE() || !e.isONE()) {
                     if (!fac.coefficient(e).isZERO()) {
-                        logger.warn("e exists in polynomial: " + fac + ", e = " + e + ", lc = " + lc);
-                        logger.warn("f = " + f + ", rc = " + rc);
-                        logger.warn("S = " + S + ", R = " + R);
+                        logger.warn("e exists in polynomial: {}, e = {}, lc = {}", fac, e, lc);
+                        logger.warn("f = {}, rc = {}", f, rc);
+                        logger.warn("S = {}, R = {}", S, R);
                     }
                     fac = fac.sum(lc, e);
                     doset = false;
                 }
-                //logger.info("redRec: left = " + fac + ", lc = " + lc + ", e = " + e);
+                //logger.info("redRec: left = {}, lc = {}, e = {}", fac, lc, e);
                 lrow.set(i, fac);
                 // right row
                 fac = rrow.get(i);
                 if (!rc.isONE() || !f.isONE() || doset) {
                     if (!fac.coefficient(f).isZERO()) {
-                        logger.warn("f exists in polynomial: " + fac + ", f = " + f + ", rc = " + rc);
-                        logger.warn("e = " + e + ", lc = " + lc);
-                        logger.warn("S = " + S + ", R = " + R);
+                        logger.warn("f exists in polynomial: {}, f = {}, rc = {}", fac, f, rc);
+                        logger.warn("e = {}, lc = {}", e, lc);
+                        logger.warn("S = {}, R = {}", S, R);
                     }
                     fac = fac.sum(rc, f);
                 }
-                //logger.info("redRec: right = " + fac + ", rc = " + rc + ", f = " + f);
+                //logger.info("redRec: right = {}, rc = {}, f = {}", fac, rc, f);
                 rrow.set(i, fac);
             }
         }
@@ -376,7 +376,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 e = elr[0];
                 Word f = elr[1];
                 if (debug) {
-                    logger.info("redRec divideWord: e = " + e + ", f = " + f);
+                    logger.info("redRec divideWord: e = {}, f = {}", e, f);
                 }
                 if (f.isONE()) {
                     C c = lbc[i];
@@ -501,7 +501,7 @@ public class WordReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
                 e = elr[0];
                 Word f = elr[1];
                 if (debug) {
-                    logger.info("redRec divideWord: e = " + e + ", f = " + f);
+                    logger.info("redRec divideWord: e = {}, f = {}", e, f);
                 }
                 if (e.isONE()) {
                     C c = lbc[i];

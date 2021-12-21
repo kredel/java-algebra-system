@@ -213,8 +213,8 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
                     //System.out.println("s-pol("+i+","+j+"): " + s.leadingWord());
                     GenWordPolynomial<C> h = red.normalform(F, s);
                     if (!h.isZERO()) {
-                        logger.info("no GB: pi = " + pi + ", pj = " + pj);
-                        logger.info("s  = " + s + ", h = " + h);
+                        logger.info("no GB: pi = {}, pj = {}", pi, pj);
+                        logger.info("s  = {}, h = {}", s, h);
                         return false;
                     }
                 }
@@ -223,8 +223,8 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
                     //System.out.println("s-pol("+j+","+i+"): " + s.leadingWord());
                     GenWordPolynomial<C> h = red.normalform(F, s);
                     if (!h.isZERO()) {
-                        logger.info("no GB: pj = " + pj + ", pi = " + pi);
-                        logger.info("s  = " + s + ", h = " + h);
+                        logger.info("no GB: pj = {}, pi = {}", pj, pi);
+                        logger.info("s  = {}, h = {}", s, h);
                         return false;
                     }
                 }
@@ -324,7 +324,7 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
         for (GenWordPolynomial<C> a : Gp) {
             if (a == null || a.isZERO()) {
                 if (debug) {
-                    logger.debug("zero polynomial " + a);
+                    logger.debug("zero polynomial {}", a);
                 }
                 return false;
             }
@@ -336,7 +336,7 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
             GenWordPolynomial<C> a = G.remove(0);
             if (red.isTopReducible(G, a) || red.isTopReducible(F, a)) {
                 if (debug) {
-                    logger.debug("top reducible polynomial " + a);
+                    logger.debug("top reducible polynomial {}", a);
                 }
                 return false;
             }
@@ -353,7 +353,7 @@ public abstract class WordGroebnerBaseAbstract<C extends RingElem<C>> implements
             GenWordPolynomial<C> a = G.remove(0);
             if (!red.isNormalform(G, a)) {
                 if (debug) {
-                    logger.debug("reducible polynomial " + a);
+                    logger.debug("reducible polynomial {}", a);
                 }
                 return false;
             }
