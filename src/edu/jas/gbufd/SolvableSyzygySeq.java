@@ -178,7 +178,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         final int lenf = F.size();
         SolvableExtendedGB<C> exgb = sbb.extLeftGB(modv, F);
         if (debug) {
-            logger.info("exgb = " + exgb);
+            logger.info("exgb = {}", exgb);
         }
         if (assertEnabled) {
             logger.info("check1 exgb start");
@@ -195,7 +195,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         GenSolvablePolynomialRing<C> ring = G.get(0).ring;
         ModuleList<C> S = new ModuleList<C>(ring, sg);
         if (debug) {
-            logger.info("syz = " + S);
+            logger.info("syz = {}", S);
         }
         if (assertEnabled) {
             logger.info("check2 left syz start");
@@ -323,13 +323,13 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         }
         ModuleList<C> M2L = new ModuleList<C>(ring, M2);
         if (debug) {
-            logger.debug("syz M2L = " + M2L);
+            logger.debug("syz M2L = {}", M2L);
         }
 
         if (debug) {
             ModuleList<C> SF = new ModuleList<C>(ring, sf);
-            logger.debug("syz sf = " + SF);
-            logger.debug("#syz " + sflen + ", " + sf.size());
+            logger.debug("syz sf = {}", SF);
+            logger.debug("#syz {}, {}", sflen, sf.size());
         }
         if (assertEnabled) {
             logger.info("check4 left syz start");
@@ -383,7 +383,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             oc[1] = a.multiply(c);
             return oc;
         }
-        logger.info("computing left Ore condition: " + a + ", " + b);
+        logger.info("computing left Ore condition: {}, {}", a, b);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(2);
         F.add(a);
         F.add(b);
@@ -416,7 +416,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         }
         oc[0] = g1; //G1.get(0);
         oc[1] = (GenSolvablePolynomial<C>) G1.get(1).negate();
-        //logger.info("Ore multiple: " + oc[0].multiply(a) + ", " + Arrays.toString(oc));
+        //logger.info("Ore multiple: {}, {}", oc[0].multiply(a), Arrays.toString(oc));
         return oc;
     }
 
@@ -462,7 +462,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             oc[1] = a.multiply(c);
             return oc;
         }
-        logger.info("computing right Ore condition: " + a + ", " + b);
+        logger.info("computing right Ore condition: {}, {}", a, b);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(2);
         F.add(a);
         F.add(b);
@@ -485,7 +485,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         }
         oc[0] = G1.get(0);
         oc[1] = (GenSolvablePolynomial<C>) G1.get(1).negate();
-        //logger.info("Ore multiple: " + a.multiply(oc[0]) + ", " + Arrays.toString(oc));
+        //logger.info("Ore multiple: {}, {}", a.multiply(oc[0]), Arrays.toString(oc));
         return oc;
     }
 
@@ -510,20 +510,20 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         if (a.totalDegree() > 3 || b.totalDegree() > 3) { // how avoid too long running GBs ?
             //if (a.totalDegree() + b.totalDegree() > 6) { 
             // && a.length() < 10 && b.length() < 10
-            logger.info("skipping simplifier GB computation: degs = " + a.totalDegree() + ", " + b.totalDegree());
+            logger.info("skipping simplifier GB computation: degs = {}, {}", a.totalDegree(), b.totalDegree());
             oc = new GenSolvablePolynomial[] { a, b };
             return oc;
         }
         //GenSolvablePolynomialRing<C> pfac = a.ring;
         oc = rightOreCond(a, b);
-        logger.info("oc = " + Arrays.toString(oc)); // + ", a = " + a + ", b = " + b);
+        logger.info("oc = {}", Arrays.toString(oc)); // + ", a = {}, b = {}", a, b);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(oc.length);
         // opposite order and undo negation
         F.add((GenSolvablePolynomial<C>) oc[1].negate());
         F.add(oc[0]);
-        //logger.info("F = " + F);
+        //logger.info("F = {}", F);
         List<List<GenSolvablePolynomial<C>>> Gz = leftZeroRelationsArbitrary(F);
-        //logger.info("Gz: " + Gz);
+        //logger.info("Gz: {}", Gz);
         List<GenSolvablePolynomial<C>> G1 = new ArrayList<GenSolvablePolynomial<C>>(Gz.size());
         List<GenSolvablePolynomial<C>> G2 = new ArrayList<GenSolvablePolynomial<C>>(Gz.size());
         for (List<GenSolvablePolynomial<C>> ll : Gz) {
@@ -532,9 +532,9 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
                 G2.add(ll.get(1)); // numerators
             }
         }
-        logger.info("G1(den): " + G1 + ", G2(num): " + G2);
+        logger.info("G1(den): {}, G2(num): {}", G1, G2);
         SolvableExtendedGB<C> exgb = sbb.extLeftGB(G1);
-        logger.info("exgb.F: " + exgb.F + ", exgb.G: " + exgb.G);
+        logger.info("exgb.F: {}, exgb.G: {}", exgb.F, exgb.G);
         List<GenSolvablePolynomial<C>> G = exgb.G;
         int m = 0;
         GenSolvablePolynomial<C> min = null;
@@ -550,7 +550,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         //wrong: blas.scalarProduct(G2,exgb.G2F.get(m));
         GenSolvablePolynomial<C> min2 = (GenSolvablePolynomial<C>) blas.scalarProduct(
                         PolynomialList.<C> castToList(exgb.G2F.get(m)), PolynomialList.<C> castToList(G2));
-        logger.info("min(den): " + min + ", min(num): " + min2 + ", m = " + m + ", " + exgb.G2F.get(m));
+        logger.info("min(den): {}, min(num): {}, m = {}, {}", min, min2, m, exgb.G2F.get(m));
         // opposite order
         GenSolvablePolynomial<C> n = min2; // nominator
         GenSolvablePolynomial<C> d = min; // denominator
@@ -571,7 +571,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
                 oc[0] = a; // nominator
                 oc[1] = b; // denominator
                 throw new RuntimeException("simp wrong, giving up: t = " + t);
-                //logger.error("simp wrong, giving up: t = " + t);
+                //logger.error("simp wrong, giving up: t = {}", t);
                 //return oc;
             }
         }

@@ -98,7 +98,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
         this.sred = red;
         cofac = rf;
         if (!cofac.isCommutative()) {
-            logger.warn("right reduction not correct for " + cofac.toScript());
+            logger.warn("right reduction not correct for {}", cofac); //.toScript()
             engine = new GreatestCommonDivisorFake<C>(); // only for Ore conditions
             // TODO check that also coeffTable is empty for recursive solvable poly ring
             //System.out.println("stack trace = "); 
@@ -141,8 +141,8 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
             pi = (GenSolvablePolynomial<C>) pair.pi;
             pj = (GenSolvablePolynomial<C>) pair.pj;
             if (debug) {
-                logger.debug("pi    = " + pi);
-                logger.debug("pj    = " + pj);
+                logger.debug("pi    = {}", pi);
+                logger.debug("pj    = {}", pj);
             }
 
             S = sred.leftSPolynomial(pi, pj);
@@ -150,18 +150,14 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
                 pair.setZero();
                 continue;
             }
-            if (debug) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
-            }
+            logger.debug("ht(S) = {}", S.leadingExpVector());
 
             H = sred.leftNormalform(G, S);
             if (H.isZERO()) {
                 pair.setZero();
                 continue;
             }
-            if (debug) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
-            }
+            logger.debug("ht(H) = {}", H.leadingExpVector());
             H = (GenSolvablePolynomial<C>) engine.basePrimitivePart(H);
             H = (GenSolvablePolynomial<C>) H.abs();
             if (H.isConstant()) {
@@ -169,17 +165,15 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
                 G.add(H);
                 return G; // since no threads are activated
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("H = " + H);
-            }
+            logger.debug("H = {}", H);
             if (H.length() > 0) {
                 G.add(H);
                 pairlist.put(H);
             }
         }
-        logger.debug("#sequential list = " + G.size());
+        logger.debug("#sequential list = {}", G.size());
         G = leftMinimalGB(G);
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         return G;
     }
 
@@ -259,22 +253,22 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
         // add also coefficient generators
         List<GenSolvablePolynomial<C>> X;
         X = PolynomialList.castToSolvableList(ring.generators(modv)); 
-        logger.info("right multipliers = " + X);
+        logger.info("right multipliers = {}", X);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(G.size() * (1 + X.size()));
         F.addAll(G);
-        logger.info("right multipy: F = " + F);
+        logger.info("right multipy: F = {}", F);
         GenSolvablePolynomial<C> p, x, q;
         for (int i = 0; i < F.size(); i++) { // F changes
             p = F.get(i);
             for (int j = 0; j < X.size(); j++) {
                 x = X.get(j);
                 q = p.multiply(x);
-                logger.info("right multipy: p = " + p + ", x = " + x + ", q = " + q);
+                logger.info("right multipy: p = {}, x = {}, q = {}", p, x, q);
                 q = sred.leftNormalform(F, q);
                 if (!q.isZERO()) {
                     q = (GenSolvablePolynomial<C>) engine.basePrimitivePart(q);
                     q = (GenSolvablePolynomial<C>) q.abs();
-                    logger.info("right multipy: red(q) = " + q);
+                    logger.info("right multipy: red(q) = {}", q);
                     F.add(q);
                 }
             }
@@ -295,8 +289,8 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
             pi = (GenSolvablePolynomial<C>) pair.pi;
             pj = (GenSolvablePolynomial<C>) pair.pj;
             if (debug) {
-                logger.debug("pi    = " + pi);
-                logger.debug("pj    = " + pj);
+                logger.debug("pi    = {}", pi);
+                logger.debug("pj    = {}", pj);
             }
 
             S = sred.leftSPolynomial(pi, pj);
@@ -304,18 +298,14 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
                 pair.setZero();
                 continue;
             }
-            if (debug) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
-            }
+            logger.debug("ht(S) = {}", S.leadingExpVector());
 
             H = sred.leftNormalform(G, S);
             if (H.isZERO()) {
                 pair.setZero();
                 continue;
             }
-            if (debug) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
-            }
+            logger.debug("ht(H) = {}", H.leadingExpVector());
 
             H = (GenSolvablePolynomial<C>) engine.basePrimitivePart(H);
             H = (GenSolvablePolynomial<C>) H.abs();
@@ -324,9 +314,7 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
                 G.add(H);
                 return G; // since no threads are activated
             }
-            if (debug) {
-                logger.debug("H = " + H);
-            }
+            logger.debug("H = {}", H);
             if (H.length() > 0) {
                 G.add(H);
                 pairlist.put(H);
@@ -348,9 +336,9 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
                 }
             }
         }
-        logger.debug("#sequential list = " + G.size());
+        logger.debug("#sequential list = {}", G.size());
         G = leftMinimalGB(G);
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         return G;
     }
 

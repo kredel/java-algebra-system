@@ -173,7 +173,7 @@ public class GroebnerBasePseudoParallel<C extends GcdRingElem<C>> extends Groebn
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        logger.info(pool.toString());
+        logger.info("pool = {}", pool);
     }
 
 
@@ -186,7 +186,7 @@ public class GroebnerBasePseudoParallel<C extends GcdRingElem<C>> extends Groebn
             return 0;
         }
         int s = pool.shutdownNow().size();
-        logger.info(pool.toString());
+        logger.info("pool = {}", pool);
         return s;
     }
 
@@ -209,7 +209,7 @@ public class GroebnerBasePseudoParallel<C extends GcdRingElem<C>> extends Groebn
         }
         PairList<C> pairlist = strategy.create( modv, ring ); 
         pairlist.put(G);
-        logger.info("start " + pairlist);
+        logger.info("start {}", pairlist);
 
         Terminator fin = new Terminator(threads);
         PseudoReducer<C> R;
@@ -221,9 +221,9 @@ public class GroebnerBasePseudoParallel<C extends GcdRingElem<C>> extends Groebn
         if (Thread.currentThread().isInterrupted()) {
             throw new RuntimeException("interrupt before minimalGB");
         }
-        logger.debug("#parallel list = " + G.size());
+        logger.debug("#parallel list = {}", G.size());
         G = minimalGB(G);
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         return G;
     }
 
@@ -319,6 +319,9 @@ class PseudoReducer<C extends GcdRingElem<C>> implements Runnable {
     private static final Logger logger = LogManager.getLogger(PseudoReducer.class);
 
 
+    private static final boolean debug = logger.isDebugEnabled();
+
+
     PseudoReducer(Terminator fin, List<GenPolynomial<C>> G, PairList<C> L,
                     GreatestCommonDivisorAbstract<C> engine) {
         this.fin = fin;
@@ -384,9 +387,9 @@ class PseudoReducer<C extends GcdRingElem<C>> implements Runnable {
 
             pi = pair.pi;
             pj = pair.pj;
-            if (logger.isDebugEnabled()) {
-                logger.debug("pi    = " + pi);
-                logger.debug("pj    = " + pj);
+            if (debug) {
+                logger.debug("pi    = {}", pi);
+                logger.debug("pj    = {}", pj);
             }
 
             S = red.SPolynomial(pi, pj);
@@ -395,8 +398,8 @@ class PseudoReducer<C extends GcdRingElem<C>> implements Runnable {
                 fin.initIdle(1);
                 continue;
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
+            if (debug) {
+                logger.debug("ht(S) = {}", S.leadingExpVector());
             }
 
             H = red.normalform(G, S); //mod
@@ -406,8 +409,8 @@ class PseudoReducer<C extends GcdRingElem<C>> implements Runnable {
                 fin.initIdle(1);
                 continue;
             }
-            if (logger.isDebugEnabled()) {
-                logger.info("ht(H) = " + H.leadingExpVector());
+            if (debug) {
+                logger.info("ht(H) = {}", H.leadingExpVector());
             }
 
             H = engine.basePrimitivePart(H); //H.monic();
@@ -423,8 +426,8 @@ class PseudoReducer<C extends GcdRingElem<C>> implements Runnable {
                 fin.allIdle();
                 return;
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("H = " + H);
+            if (debug) {
+                logger.debug("H = {}", H);
             }
             synchronized (G) {
                 G.add(H);
@@ -433,7 +436,7 @@ class PseudoReducer<C extends GcdRingElem<C>> implements Runnable {
             fin.initIdle(1);
         }
         fin.allIdle();
-        logger.info("terminated, done " + reduction + " reductions");
+        logger.info("terminated, done {} reductions", reduction);
     }
 }
 
@@ -460,6 +463,9 @@ class PseudoMiReducer<C extends GcdRingElem<C>> implements Runnable {
 
 
     private static final Logger logger = LogManager.getLogger(PseudoMiReducer.class);
+
+
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     PseudoMiReducer(List<GenPolynomial<C>> G, GenPolynomial<C> p, GreatestCommonDivisorAbstract<C> engine) {
@@ -494,8 +500,8 @@ class PseudoMiReducer<C extends GcdRingElem<C>> implements Runnable {
 
 
     public void run() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+        if (debug) {
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         try {
             H = red.normalform(G, H); //mod
@@ -506,8 +512,8 @@ class PseudoMiReducer<C extends GcdRingElem<C>> implements Runnable {
             Thread.currentThread().interrupt();
             //throw new RuntimeException("interrupt in getNF");
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
+        if (debug) {
+            logger.debug("ht(H) = {}", H.leadingExpVector());
         }
         // H = H.monic();
     }

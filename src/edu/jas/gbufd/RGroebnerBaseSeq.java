@@ -93,10 +93,10 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
                 s = red.normalform(F, s);
                 if (!s.isZERO()) {
                     if (debug) {
-                        logger.debug("p" + i + " = " + pi);
-                        logger.debug("p" + j + " = " + pj);
-                        logger.debug("s-pol = " + red.SPolynomial(pi, pj));
-                        logger.debug("s-pol(" + i + "," + j + ") != 0: " + s);
+                        logger.debug("p{} = {}", i, pi);
+                        logger.debug("p{} = {}", j, pj);
+                        logger.debug("s-pol = {}", red.SPolynomial(pi, pj));
+                        logger.debug("s-pol({},{}) != 0: {}", i, j, s);
                     }
                     return false;
                 }
@@ -115,7 +115,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
     public List<GenPolynomial<C>> GB(int modv, List<GenPolynomial<C>> F) {
         /* boolean closure */
         List<GenPolynomial<C>> bcF = rred.reducedBooleanClosure(F);
-        logger.info("#bcF-#F = " + (bcF.size() - F.size()));
+        logger.info("#bcF-#F = {}", (bcF.size() - F.size()));
         F = bcF;
         /* normalize input */
         List<GenPolynomial<C>> G = new ArrayList<GenPolynomial<C>>();
@@ -158,8 +158,8 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
             pi = pair.pi;
             pj = pair.pj;
             if (logger.isDebugEnabled()) {
-                logger.debug("pi    = " + pi);
-                logger.debug("pj    = " + pj);
+                logger.debug("pi    = {}", pi);
+                logger.debug("pj    = {}", pj);
             }
             if (!red.moduleCriterion(modv, pi, pj)) {
                 continue;
@@ -172,9 +172,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
                 pair.setZero();
                 continue;
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
-            }
+            logger.debug("ht(S) = {}", S.leadingExpVector());
 
             H = red.normalform(G, S);
             if (H.isZERO()) {
@@ -182,23 +180,19 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
                 continue;
             }
             //H = H.monic(); // only for boolean closed H
-            if (logger.isDebugEnabled()) {
-                logger.debug("ht(H) = " + H.leadingExpVector());
-            }
+            logger.debug("ht(H) = {}", H.leadingExpVector());
 
             if (H.isONE()) { // mostly useless
                 G.clear();
                 G.add(H);
                 return G; // not boolean closed ok, since no threads are activated
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("H = " + H);
-            }
+            logger.debug("H = {}", H);
             if (!H.isZERO()) {
-                logger.info("Sred = " + H);
+                logger.info("Sred = {}", H);
                 //len = G.size();
                 bcH = rred.reducedBooleanClosure(G, H);
-                logger.info("#bcH = " + bcH.size());
+                logger.info("#bcH = {}", bcH.size());
                 for (GenPolynomial<C> h : bcH) {
                     h = h.monic(); // monic() ok, since boolean closed
                     G.add(h);
@@ -206,15 +200,15 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
                 }
                 if (debug) {
                     if (!pair.getUseCriterion3() || !pair.getUseCriterion4()) {
-                        logger.info("H != 0 but: " + pair);
+                        logger.info("H != 0 but: {}", pair);
                     }
                 }
             }
         }
-        logger.debug("#sequential list = " + G.size());
+        logger.debug("#sequential list = {}", G.size());
         G = minimalGB(G);
         //G = red.irreducibleSet(G);
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         return G;
     }
 
@@ -256,7 +250,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
                     ff.addAll(F);
                     a = red.normalform(ff, a);
                     if (!a.isZERO()) { // happens
-                        logger.info("minGB not zero " + a);
+                        logger.info("minGB not zero {}", a);
                         bcH = rred.reducedBooleanClosure(G, a);
                         if (bcH.size() > 1) { // never happend so far
                             System.out.println("minGB not bc: bcH size = " + bcH.size());

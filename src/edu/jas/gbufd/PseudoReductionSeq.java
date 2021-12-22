@@ -106,14 +106,14 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
                 //System.out.println(" S = " + S);
             } else {
                 f = e.subtract(htl[i]);
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 @SuppressWarnings("unchecked")
                 C c = (C) lbc[i];
                 if (a.remainder(c).isZERO()) { //c.isUnit() ) {
                     b = a.divide(c);
                     GenPolynomial<C> Sp = S.subtractMultiple(b, f, p[i]);
                     if (e.equals(Sp.leadingExpVector())) { // TODO: avoid if possible
-                        logger.info("degree not descending: S = " + S + ", Sp = " + Sp);
+                        logger.info("degree not descending: S = {}, Sp = {}", S, Sp);
                         R = R.multiply(c);
                         //S = S.multiply(c);
                         Sp = S.scaleSubtractMultiple(c, a, f, p[i]);
@@ -197,21 +197,21 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
             } else {
                 f = e.subtract(htl[i]);
                 if (debug) {
-                    logger.info("red div = " + f);
-                    //logger.info("red a = " + a);
+                    logger.info("red div = {}", f);
+                    //logger.info("red a = {}", a);
                 }
                 GenPolynomial<C> c = (GenPolynomial<C>) lbc[i];
                 //if (a.remainder(c).isZERO()) { //c.isUnit() ) {
                 if (PolyUtil.<C> baseSparsePseudoRemainder(a, c).isZERO()) { //c.isUnit() ) {
                     if (debug) {
-                        logger.info("red c = " + c);
+                        logger.info("red c = {}", c);
                     }
                     //a = a.divide(c);
                     b = PolyUtil.<C> basePseudoDivide(a, c);
                     GenPolynomial<GenPolynomial<C>> Sp = S.subtractMultiple(b, f, p[i]);
                     if (e.equals(Sp.leadingExpVector())) { // TODO: avoid if possible
                         //throw new RuntimeException("degree not descending");
-                        logger.info("degree not descending: S = " + S + ", Sp = " + Sp);
+                        logger.info("degree not descending: S = {}, Sp = {}", S, Sp);
                         R = R.multiply(c);
                         //S = S.multiply(c);
                         Sp = S.scaleSubtractMultiple(c, a, f, p[i]);
@@ -296,7 +296,7 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
                 // System.out.println(" S = " + S);
             } else {
                 e = e.subtract(htl[i]);
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 C c = (C) lbc[i];
                 if (a.remainder(c).isZERO()) { //c.isUnit() ) {
                     a = a.divide(c);
@@ -392,7 +392,7 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
                 //System.out.println(" S = " + S);
             } else {
                 e = e.subtract(htl[i]);
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 C c = lbc[i];
                 if (a.remainder(c).isZERO()) { //c.isUnit() ) {
                     a = a.divide(c);
@@ -407,9 +407,7 @@ public class PseudoReductionSeq<C extends RingElem<C>> extends ReductionAbstract
                 //S = S.subtract(Q);
             }
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("multiplicative factor = " + mfac);
-        }
+        logger.info("multiplicative factor = {}", mfac);
         pf = new PseudoReductionEntry<C>(R, mfac);
         return pf;
     }

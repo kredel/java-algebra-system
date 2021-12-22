@@ -52,7 +52,7 @@ public class CharacteristicSetSimple<C extends GcdRingElem<C>> implements Charac
         if (pfac.nvar <= 1) { // take gcd
             GreatestCommonDivisorAbstract<C> ufd = GCDFactory.<C> getImplementation(pfac.coFac);
             GenPolynomial<C> g = ufd.gcd(A).monic();
-            logger.info("charSet base gcd = " + g);
+            logger.info("charSet base gcd = {}", g);
             S.add(g);
             return S;
         }
@@ -85,14 +85,14 @@ public class CharacteristicSetSimple<C extends GcdRingElem<C>> implements Charac
         List<GenPolynomial<GenPolynomial<C>>> pd = new ArrayList<GenPolynomial<GenPolynomial<C>>>(opl.list);
         Collections.reverse(pd); // change OrderedPolynomialList to avoid
         if (debug) {
-            logger.info("positive degrees: " + pd);
+            logger.info("positive degrees: {}", pd);
         }
         //System.out.println("positive degrees: " + pd);
         //System.out.println("zero     degrees: " + zeroDeg);
         while (pd.size() > 1) {
             GenPolynomial<GenPolynomial<C>> fr = pd.remove(0);
             GenPolynomial<GenPolynomial<C>> qr = pd.get(0); // = get(1)
-            logger.info("pseudo remainder by deg = " + qr.degree() + " in variable " + rfac.getVars()[0]);
+            logger.info("pseudo remainder by deg = {} in variable {}", qr.degree(), rfac.getVars()[0]);
             GenPolynomial<GenPolynomial<C>> rr = PolyUtil.<C> recursiveSparsePseudoRemainder(fr, qr);
             if (rr.isZERO()) {
                 logger.warn("variety is reducible");
@@ -113,7 +113,7 @@ public class CharacteristicSetSimple<C extends GcdRingElem<C>> implements Charac
             GenPolynomial<C> fp = f.extend(pfac, 0, 0L);
             S.add(fp);
         }
-        //logger.info("charSet recursion, Sp = " + Sp);
+        //logger.info("charSet recursion, Sp = {}", Sp);
         if (pd.isEmpty()) {
             return S;
         }

@@ -149,10 +149,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
 
             pi = pair.pi;
             pj = pair.pj;
-            if (debug) {
-                logger.debug("pi    = " + pi);
-                logger.debug("pj    = " + pj);
-            }
+            logger.debug("pi = {}, pj = {}", pi, pj);
 
             S = red.SPolynomial(pi, pj);
             if (S.isZERO()) {
@@ -160,7 +157,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 continue;
             }
             if (debug) {
-                logger.info("ht(S) = " + S.leadingExpVector());
+                logger.info("ht(S) = {}", S.leadingExpVector());
             }
 
             H = redRec.normalformRecursive(G, S);
@@ -169,7 +166,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 continue;
             }
             if (debug) {
-                logger.info("ht(H) = " + H.leadingExpVector());
+                logger.info("ht(H) = {}", H.leadingExpVector());
             }
             H = engine.recursivePrimitivePart(H);
             H = H.abs();
@@ -179,7 +176,7 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 return G; // since no threads are activated
             }
             if (debug) {
-                logger.debug("H = " + H);
+                logger.debug("H = {}", H);
             }
             if (H.length() > 0) {
                 //l++;
@@ -187,9 +184,9 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 pairlist.put(H);
             }
         }
-        logger.debug("#sequential list = " + G.size());
+        logger.debug("#sequential list = {}", G.size());
         G = minimalGB(G);
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         return G;
     }
 
@@ -286,8 +283,8 @@ public class GroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 //System.out.println("i, j = " + i + ", " + j); 
                 h = redRec.normalformRecursive(F, s);
                 if (!h.isZERO()) {
-                    logger.info("no GB: pi = " + pi + ", pj = " + pj);
-                    logger.info("s  = " + s + ", h = " + h);
+                    logger.info("no GB: pi = {}, pj = {}", pi, pj);
+                    logger.info("s = {}, h = {}", s, h);
                     return false;
                 }
             }

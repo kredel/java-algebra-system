@@ -117,7 +117,7 @@ public abstract class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy
             pi = F.get(i);
             for (int j = i + 1; j < F.size(); j++) {
                 pj = F.get(j);
-                //logger.info("p"+i+", p"+j+" = " + pi + ", " +pj);
+                //logger.info("p{}, p{} = {}, {}", i, j, pi, pj);
 
                 if (!red.moduleCriterion(modv, pi, pj)) {
                     continue;
@@ -136,7 +136,7 @@ public abstract class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy
                     throw new RuntimeException("Syzygy no GB");
                 }
                 if (debug) {
-                    logger.info("row = " + row.size());
+                    logger.info("row = {}", row.size());
                 }
                 Z.add(row);
             }
@@ -215,9 +215,9 @@ public abstract class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy
                 continue;
             }
             if (!p.isZERO()) {
-                logger.info("is not ZeroRelation = " + p.toString(p.ring.getVars()));
-                logger.info("row = " + row);
-                //logger.info("F = " + F);
+                logger.info("is not ZeroRelation = {}", p.toString(p.ring.getVars()));
+                logger.info("row = {}", row);
+                //logger.info("F = {}", F);
                 return false;
             }
         }
@@ -239,7 +239,7 @@ public abstract class SyzygyAbstract<C extends GcdRingElem<C>> implements Syzygy
         for (List<GenPolynomial<C>> row : Z.list) {
             List<GenPolynomial<C>> zr = blas.leftScalarProduct(row, F.list);
             if (!blas.isZero(zr)) {
-                logger.info("is not ZeroRelation (" + zr.size() + ") = " + zr);
+                logger.info("is not ZeroRelation ({}) = {}", zr.size(), zr);
                 return false;
             }
         }

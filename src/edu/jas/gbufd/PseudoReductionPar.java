@@ -80,7 +80,7 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
                 ll = Ppp.size();
                 //ll = P.length; // wrong
                 //t = System.currentTimeMillis()-t;
-                //logger.info("Pp.toArray(): size() = " + l + ", ll = " + ll);
+                //logger.info("Pp.toArray(): size() = {}, ll = {}", l, ll);
                 S = Ap.copy(); // S.add(R)? // restart reduction ?
                 R = Rz.copy();
             }
@@ -106,7 +106,7 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
                 //System.out.println(" S = " + S);
             } else {
                 e = e.subtract(f);
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 C c = P[i].leadingBaseCoefficient();
                 if (a.remainder(c).isZERO()) { //c.isUnit() ) {
                     a = a.divide(c);
@@ -166,7 +166,7 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
                 P = Ppp.toArray(P);
                 l = Ppp.size();
                 //t = System.currentTimeMillis()-t;
-                //logger.info("Pp.toArray() = " + t + " ms, size() = " + l);
+                //logger.info("Pp.toArray() = {} ms, size() = {}", t, l);
                 S = Ap.copy(); // S.add(R)? // restart reduction ?
                 R = Rz.copy();
             }
@@ -190,7 +190,7 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
                 //System.out.println(" S = " + S);
             } else {
                 e = e.subtract(f);
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 C c = P[i].leadingBaseCoefficient();
                 if (a.remainder(c).isZERO()) { //c.isUnit() ) {
                     a = a.divide(c);
@@ -205,9 +205,7 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
                 //S = S.subtract(Q);
             }
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("multiplicative factor = " + mfac);
-        }
+        logger.info("multiplicative factor = {}", mfac);
         pf = new PseudoReductionEntry<C>(R, mfac);
         return pf;
     }
@@ -266,7 +264,7 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
                 ll = Ppp.size();
                 //ll = P.length; // wrong
                 //t = System.currentTimeMillis()-t;
-                //logger.info("Pp.toArray(): size() = " + l + ", ll = " + ll);
+                //logger.info("Pp.toArray(): size() = {}, ll = {}", l, ll);
                 S = Ap.copy(); // S.add(R)? // restart reduction ?
                 R = Rz.copy();
             }
@@ -293,20 +291,20 @@ public class PseudoReductionPar<C extends RingElem<C>> extends ReductionAbstract
             } else {
                 f = e.subtract(f);
                 if (debug) {
-                    logger.info("red div = " + e);
+                    logger.info("red div = {}", e);
                 }
                 GenPolynomial<C> c = P[i].leadingBaseCoefficient();
                 //if (a.remainder(c).isZERO()) { //c.isUnit() ) {
                 if (PolyUtil.<C> baseSparsePseudoRemainder(a,c).isZERO()) { 
                     if (debug) {
-                        logger.info("red c = " + c);
+                        logger.info("red c = {}", c);
                     }
                     //a = a.divide(c);
                     GenPolynomial<C> b = PolyUtil.<C> basePseudoDivide(a,c);
                     GenPolynomial<GenPolynomial<C>> Sp = S.subtractMultiple(b, f, P[i]);
                     if (e.equals(Sp.leadingExpVector())) { // TODO: avoid if possible
                         //throw new RuntimeException("degree not descending");
-                        logger.info("degree not descending: S = " + S + ", Sp = " + Sp);
+                        logger.info("degree not descending: S = {}, Sp = {}", S, Sp);
                         R = R.multiply(c);
                         //S = S.multiply(c);
                         Sp = S.scaleSubtractMultiple(c, a, f, P[i]);

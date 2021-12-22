@@ -103,7 +103,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
             }
             for (int j = i + 1; j < F.size(); j++) {
                 pj = F.get(j);
-                //logger.info("p"+i+", p"+j+" = " + pi + ", " +pj);
+                //logger.info("p{}, p{} = {}", j, i, pj);
 
                 if (!red.moduleCriterion(modv, pi, pj)) {
                     continue;
@@ -111,7 +111,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
                 // if ( ! red.criterion4( pi, pj ) ) continue;
                 List<GenSolvablePolynomial<C>> row = new ArrayList<GenSolvablePolynomial<C>>(S);
                 s = sred.leftSPolynomial(row, i, pi, j, pj);
-                //logger.info("row = " + row);
+                //logger.info("row = {}", row);
                 if (s.isZERO()) {
                     Z.add(row);
                     continue;
@@ -121,9 +121,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
                 if (!h.isZERO()) {
                     throw new ArithmeticException("Syzygy no leftGB");
                 }
-                if (logger.isDebugEnabled()) {
-                    logger.info("row = " + row);
-                }
+                logger.debug("row = {}", row);
                 Z.add(row);
             }
         }
@@ -154,12 +152,12 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
             return N;
         }
         GenSolvablePolynomial<C> zero = (GenSolvablePolynomial<C>) M.ring.getZERO();
-        //logger.info("zero = " + zero);
+        //logger.info("zero = {}", zero);
 
         //ModuleList<C> Np = null;
         PolynomialList<C> F = M.getPolynomialList();
         int modv = M.cols; // > 0  
-        logger.info("modv = " + modv);
+        logger.info("modv = {}", modv);
         List<List<GenSolvablePolynomial<C>>> G = leftZeroRelations(modv, F.castToSolvableList());
         //if (G == null) {
         //    return N;
@@ -238,16 +236,16 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
         }
         if (debug) {
             PolynomialList<C> pl = new PolynomialList<C>(rring, rF);
-            logger.info("reversed problem = " + pl.toScript());
+            logger.info("reversed problem = {}", pl); //.toScript()
         }
         List<List<GenSolvablePolynomial<C>>> rZ = leftZeroRelations(modv, rF);
         if (debug) {
             boolean isit = isLeftZeroRelation(rZ, rF);
-            logger.debug("isLeftZeroRelation = " + isit);
+            logger.debug("isLeftZeroRelation = {}", isit);
         }
         GenSolvablePolynomialRing<C> oring = rring.reverse(true);
         if (debug) {
-            logger.debug("ring == oring: " + ring.equals(oring));
+            logger.debug("ring == oring: {}", ring.equals(oring));
         }
         ring = oring;
         Z = new ArrayList<List<GenSolvablePolynomial<C>>>(rZ.size());
@@ -284,12 +282,12 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
             return N;
         }
         GenSolvablePolynomial<C> zero = (GenSolvablePolynomial<C>) M.ring.getZERO();
-        //logger.info("zero = " + zero);
+        //logger.info("zero = {}", zero);
 
         //ModuleList<C> Np = null;
         PolynomialList<C> F = M.getPolynomialList();
         int modv = M.cols; // > 0  
-        logger.info("modv = " + modv);
+        logger.info("modv = {}", modv);
         List<List<GenSolvablePolynomial<C>>> G = rightZeroRelations(modv, F.castToSolvableList());
         //if (G == null) {
         //    return N;
@@ -339,7 +337,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
                 continue;
             }
             if (!p.isZERO()) {
-                logger.info("is not ZeroRelation = " + p);
+                logger.info("is not ZeroRelation = {}", p);
                 return false;
             }
         }
@@ -364,7 +362,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
                 continue;
             }
             if (!p.isZERO()) {
-                logger.info("is not ZeroRelation = " + p);
+                logger.info("is not ZeroRelation = {}", p);
                 return false;
             }
         }
@@ -385,7 +383,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
         for (List<GenPolynomial<C>> row : Z.list) {
             List<GenPolynomial<C>> zr = blas.leftScalarProduct(row, F.list);
             if (!blas.isZero(zr)) {
-                logger.info("is not ZeroRelation (" + zr.size() + ") = " + zr);
+                logger.info("is not ZeroRelation ({}) = {}", zr.size(), zr);
                 return false;
             }
         }
@@ -407,7 +405,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
             List<GenPolynomial<C>> zr = blas.rightScalarProduct(row, F.list);
             //List<GenPolynomial<C>> zr = blas.scalarProduct(row,F.list);
             if (!blas.isZero(zr)) {
-                logger.info("is not ZeroRelation (" + zr.size() + ") = " + zr);
+                logger.info("is not ZeroRelation ({}) = {}", zr.size(), zr);
                 return false;
             }
         }
@@ -440,12 +438,12 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
             return N;
         }
         GenSolvablePolynomial<C> zero = (GenSolvablePolynomial<C>) M.ring.getZERO();
-        //logger.info("zero = " + zero);
+        //logger.info("zero = {}", zero);
 
         //ModuleList<C> Np = null;
         PolynomialList<C> F = M.getPolynomialList();
         int modv = M.cols; // > 0  
-        logger.info("modv = " + modv);
+        logger.info("modv = {}", modv);
         List<List<GenSolvablePolynomial<C>>> G = leftZeroRelationsArbitrary(modv, F.castToSolvableList());
         if (G == null) {
             return N;
@@ -524,18 +522,18 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
         }
         if (debug) {
             PolynomialList<C> pl = new PolynomialList<C>(rring, rF);
-            logger.info("reversed problem = " + pl.toScript());
+            logger.info("reversed problem = {}", pl); //.toScript()
         }
         List<List<GenSolvablePolynomial<C>>> rZ = leftZeroRelationsArbitrary(modv, rF);
         if (debug) {
             ModuleList<C> pl = new ModuleList<C>(rring, rZ);
-            logger.info("reversed syzygies = " + pl.toScript());
+            logger.info("reversed syzygies = {}", pl); //.toScript()
             boolean isit = isLeftZeroRelation(rZ, rF);
-            logger.info("isLeftZeroRelation = " + isit);
+            logger.info("isLeftZeroRelation = {}", isit);
         }
         GenSolvablePolynomialRing<C> oring = rring.reverse(true);
         if (debug) {
-            logger.info("ring == oring: " + ring.equals(oring));
+            logger.info("ring == oring: {}", ring.equals(oring));
         }
         ring = oring;
         Z = new ArrayList<List<GenSolvablePolynomial<C>>>(rZ.size());
@@ -573,12 +571,12 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
             return N;
         }
         GenSolvablePolynomial<C> zero = (GenSolvablePolynomial<C>) M.ring.getZERO();
-        //logger.info("zero = " + zero);
+        //logger.info("zero = {}", zero);
 
         //ModuleList<C> Np = null;
         PolynomialList<C> F = M.getPolynomialList();
         int modv = M.cols; // > 0  
-        logger.info("modv = " + modv);
+        logger.info("modv = {}", modv);
         List<List<GenSolvablePolynomial<C>>> G = rightZeroRelationsArbitrary(modv, F.castToSolvableList());
         //if (G == null) {
         //    return N;
@@ -600,7 +598,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
                         GenSolvablePolynomial<C> vi = (GenSolvablePolynomial<C>) (r.values().toArray())[0];
                         Zi.add(vi);
                     } else { // will not happen
-                        logger.error("p = " + p + ", r = " + r);
+                        logger.error("p = {}, r = {}", p, r);
                         throw new RuntimeException("Map.size() > 1 = " + r.size());
                     }
                 }
@@ -693,7 +691,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
         //System.out.println("oc[1] = " + oc[1]);
         r = oc[0].multiply(num);
         s = oc[1].multiply(n);
-        logger.info("compare: r = " + r + ", s = " + s);
+        logger.info("compare: r = {}, s = {}", r, s);
         return r.compareTo(s);
     }
 

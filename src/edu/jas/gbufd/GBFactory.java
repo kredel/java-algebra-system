@@ -495,7 +495,7 @@ public class GBFactory {
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
     GroebnerBaseAbstract<C> getImplementation(RingFactory<C> fac, PairList<C> pl) {
-        logger.debug("fac = " + fac.getClass().getName());
+        logger.debug("fac = {}", fac.getClass().getName());
         if (fac.isField()) {
             return new GroebnerBaseSeq<C>(pl);
         }
@@ -523,7 +523,7 @@ public class GBFactory {
         } else {
             bba = new GroebnerBasePseudoSeq<C>(fac, pl);
         }
-        logger.debug("bba = " + bba.getClass().getName());
+        logger.debug("bba = {}", bba.getClass().getName());
         return bba;
     }
 
@@ -553,7 +553,7 @@ public class GBFactory {
         if (ComputerThreads.NO_THREADS) {
             return GBFactory.<C> getImplementation(fac, pl);
         }
-        logger.debug("fac = " + fac.getClass().getName());
+        logger.debug("fac = {}", fac.getClass().getName());
         int th = (ComputerThreads.N_CPUS > 2 ? ComputerThreads.N_CPUS - 1 : 2);
         if (fac.isField()) {
             GroebnerBaseAbstract<C> e1 = new GroebnerBaseSeq<C>(pl);
@@ -588,7 +588,7 @@ public class GBFactory {
             //return GBFactory.<GenPolynomial<C>> getImplementation(fac);
             return GBFactory.getImplementation(fac);
         }
-        logger.debug("fac = " + fac.getClass().getName());
+        logger.debug("fac = {}", fac.getClass().getName());
         int th = (ComputerThreads.N_CPUS > 2 ? ComputerThreads.N_CPUS - 1 : 2);
         OrderedPairlist<GenPolynomial<C>> ppl = new OrderedPairlist<GenPolynomial<C>>();
         GroebnerBaseAbstract<GenPolynomial<C>> e1 = new GroebnerBasePseudoRecSeq<C>(fac, ppl);

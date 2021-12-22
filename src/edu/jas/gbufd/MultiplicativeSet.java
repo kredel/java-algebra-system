@@ -206,16 +206,16 @@ public class MultiplicativeSet<C extends GcdRingElem<C>> implements Serializable
         }
         GenPolynomial<C> c = removeFactors(cc);
         if (c.isConstant()) {
-            logger.info("skipped unit or constant = " + c);
+            logger.info("skipped unit or constant = {}", c);
             return this;
         }
         if (ring.coFac.isField()) {
             c = c.monic();
         }
         if (mset.size() == 0) {
-            logger.info("added to empty mset = " + c);
+            logger.info("added to empty mset = {}", c);
         } else {
-            logger.info("added to mset = " + c);
+            logger.info("added to mset = {}", c);
         }
         list = new ArrayList<GenPolynomial<C>>(mset);
         list.add(c);

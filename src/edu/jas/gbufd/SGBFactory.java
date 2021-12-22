@@ -330,9 +330,7 @@ public class SGBFactory {
     public static <C extends GcdRingElem<C>> SolvableGroebnerBaseAbstract<Quotient<C>> getImplementation(
                     QuotientRing<C> fac, GBFactory.Algo a, PairList<Quotient<C>> pl) {
         SolvableGroebnerBaseAbstract<Quotient<C>> bba;
-        if (logger.isInfoEnabled()) {
-            logger.info("QuotientRing, fac = " + fac);
-        }
+        logger.info("QuotientRing, fac = {}", fac);
         switch (a) {
         case qgb:
             bba = new SolvableGroebnerBaseSeq<Quotient<C>>(new SolvableReductionSeq<Quotient<C>>(), pl);
@@ -469,9 +467,7 @@ public class SGBFactory {
     @SuppressWarnings({ "cast", "unchecked" })
     public static <C extends GcdRingElem<C>> // interface RingElem not sufficient 
     SolvableGroebnerBaseAbstract<C> getImplementation(RingFactory<C> fac, PairList<C> pl) {
-        if (debug) {
-            logger.debug("fac = " + fac.getClass().getName()); // + ", fac = " + fac.toScript());
-        }
+        logger.debug("fac = {}", fac.getClass().getName()); // + ", fac = {}", fac.toScript());
         if (fac.isField()) {
             return new SolvableGroebnerBaseSeq<C>(pl);
         }
@@ -506,7 +502,7 @@ public class SGBFactory {
         } else {
             bba = new SolvableGroebnerBasePseudoSeq<C>(fac, pl);
         }
-        logger.info("bba = " + bba.getClass().getName());
+        logger.info("bba = {}", bba.getClass().getName());
         return bba;
     }
 
@@ -536,9 +532,7 @@ public class SGBFactory {
         if (ComputerThreads.NO_THREADS) {
             return SGBFactory.<C> getImplementation(fac, pl);
         }
-        if (debug) {
-            logger.debug("proxy fac = " + fac.getClass().getName());
-        }
+        logger.debug("proxy fac = {}", fac.getClass().getName());
         int th = (ComputerThreads.N_CPUS > 2 ? ComputerThreads.N_CPUS - 1 : 2);
         if (fac.isField()) {
             SolvableGroebnerBaseAbstract<C> e1 = new SolvableGroebnerBaseSeq<C>(pl);
@@ -576,9 +570,7 @@ public class SGBFactory {
             //return SGBFactory.<GenPolynomial<C>> getImplementation(fac);
             return SGBFactory.getImplementation(fac);
         }
-        if (debug) {
-            logger.debug("fac = " + fac.getClass().getName());
-        }
+        logger.debug("fac = {}", fac.getClass().getName());
         //int th = (ComputerThreads.N_CPUS > 2 ? ComputerThreads.N_CPUS - 1 : 2);
         OrderedPairlist<GenPolynomial<C>> ppl = new OrderedPairlist<GenPolynomial<C>>();
         SolvableGroebnerBaseAbstract<GenPolynomial<C>> e1 = new SolvableGroebnerBasePseudoRecSeq<C>(fac, ppl);

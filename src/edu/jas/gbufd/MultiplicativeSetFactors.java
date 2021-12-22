@@ -111,11 +111,11 @@ public class MultiplicativeSetFactors<C extends GcdRingElem<C>> extends Multipli
         }
         GenPolynomial<C> c = removeFactors(cc);
         if (c.isConstant()) {
-            logger.info("skipped unit or constant = " + c);
+            logger.info("skipped unit or constant = {}", c);
             return this;
         }
         List<GenPolynomial<C>> list = engine.factorsRadical(c);
-        logger.info("factorsRadical = " + list);
+        logger.info("factorsRadical = {}", list);
         if (ring.coFac.isField()) {
             list = PolyUtil.<C> monic(list);
         }
@@ -123,7 +123,7 @@ public class MultiplicativeSetFactors<C extends GcdRingElem<C>> extends Multipli
         for (GenPolynomial<C> p : list) {
             if (!p.isConstant() && !p.isZERO()) {
                 if (!mset.contains(p)) {
-                    logger.info("added to irreducible mset = " + p);
+                    logger.info("added to irreducible mset = {}", p);
                     ms.add(p);
                 }
             }

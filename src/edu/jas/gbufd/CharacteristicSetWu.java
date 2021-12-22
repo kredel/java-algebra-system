@@ -51,7 +51,7 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
         if (pfac.nvar <= 1) { // take gcd
             GreatestCommonDivisorAbstract<C> ufd = GCDFactory.<C> getImplementation(pfac.coFac);
             GenPolynomial<C> g = ufd.gcd(A).monic();
-            logger.info("charSet base gcd = " + g);
+            logger.info("charSet base gcd = {}", g);
             S.add(g);
             return S;
         }
@@ -84,17 +84,17 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
         List<GenPolynomial<GenPolynomial<C>>> pd = new ArrayList<GenPolynomial<GenPolynomial<C>>>(opl.list);
         Collections.reverse(pd); // change OrderedPolynomialList to avoid
         if (debug) {
-            logger.info("positive degrees: " + pd);
+            logger.info("positive degrees: {}", pd);
         }
         //System.out.println("positive degrees: " + pd);
         //System.out.println("zero     degrees: " + zeroDeg);
         while (pd.size() > 1) {
             GenPolynomial<GenPolynomial<C>> fr = pd.remove(0);
             GenPolynomial<GenPolynomial<C>> qr = pd.get(0); // = get(1)
-            logger.info("pseudo remainder by deg = " + qr.degree() + " in variable " + rfac.getVars()[0]);
+            logger.info("pseudo remainder by deg = {} in variable {}", qr.degree(), rfac.getVars()[0]);
             GenPolynomial<GenPolynomial<C>> rr = PolyUtil.<C> recursiveSparsePseudoRemainder(fr, qr);
             if (rr.isZERO()) {
-                logger.warn("variety is reducible " + fr + " reduces to zero mod " + pd);
+                logger.warn("variety is reducible {} reduces to zero mod {}", fr, pd);
                 // replace qr by gcd(qr,fr) ?
                 continue;
             }
@@ -112,7 +112,7 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
             GenPolynomial<C> fp = f.extend(pfac, 0, 0L);
             S.add(fp);
         }
-        //logger.info("charSet recursion, Sp = " + Sp);
+        //logger.info("charSet recursion, Sp = {}", Sp);
         if (pd.isEmpty()) {
             return S;
         }
@@ -120,7 +120,7 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
         GenPolynomial<GenPolynomial<C>> rr = pd.get(0);
         GenPolynomial<C> sr = PolyUtil.<C> distribute(pfac, rr);
         sr = PolyGBUtil.<C> topCoefficientPseudoRemainder(Sp, sr);
-        logger.info("charSet rereduced sr = " + sr);
+        logger.info("charSet rereduced sr = {}", sr);
         if (sr.isZERO()) {
             return S;
         }
@@ -128,7 +128,7 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
         //System.out.println("deg(sr): " + d + ", degv(sr): " + sr.leadingExpVector());
         if (d == 0) { // deg zero, invalid characteristic set, restart
             S.add(0, sr);
-            logger.warn("reducible characteristic set, restarting with S = " + S);
+            logger.warn("reducible characteristic set, restarting with S = {}", S);
             return characteristicSet(S);
         }
         sr = sr.monic();
@@ -152,7 +152,7 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
             return A.size() <= 1;
         }
         if (pfac.nvar < A.size()) {
-            logger.info("not CS: pfac = " + pfac + ", A = " + A);
+            logger.info("not CS: pfac = {}, A = {}", pfac, A);
             return false;
         }
         // select polynomials according to the main variable
@@ -161,7 +161,7 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
         int positiveDeg = 0;
         for (GenPolynomial<C> f : A) {
             if (f.isZERO()) {
-                logger.info("not CS: f = " + f);
+                logger.info("not CS: f = {}", f);
                 return false;
             }
             //f = f.monic();
@@ -171,7 +171,7 @@ public class CharacteristicSetWu<C extends GcdRingElem<C>> implements Characteri
             } else {
                 positiveDeg++;
                 if (positiveDeg > 1) {
-                    logger.info("not CS: f = " + f + ", positiveDeg = " + positiveDeg);
+                    logger.info("not CS: f = {}, positiveDeg = {}", f, positiveDeg);
                     return false;
                 }
             }

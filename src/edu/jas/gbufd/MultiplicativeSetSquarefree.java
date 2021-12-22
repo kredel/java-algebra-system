@@ -118,10 +118,10 @@ public class MultiplicativeSetSquarefree<C extends GcdRingElem<C>> extends Multi
         }
         GenPolynomial<C> c = removeFactors(cc);
         if (c.isConstant()) {
-            logger.info("skipped unit or constant = " + c);
+            logger.info("skipped unit or constant = {}", c);
             return this;
         }
-        logger.info("added to squarefree mset = " + c);
+        logger.info("added to squarefree mset = {}", c);
         list = engine.coPrimeSquarefree(c, mset);
         if (ring.coFac.isField()) {
             list = PolyUtil.<C> monic(list);

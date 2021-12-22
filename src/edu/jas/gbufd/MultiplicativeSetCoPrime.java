@@ -118,10 +118,10 @@ public class MultiplicativeSetCoPrime<C extends GcdRingElem<C>> extends Multipli
         }
         GenPolynomial<C> c = removeFactors(cc);
         if (c.isConstant()) {
-            logger.info("skipped unit or constant = " + c);
+            logger.info("skipped unit or constant = {}", c);
             return this;
         }
-        logger.info("added to co-prime mset = " + c);
+        logger.info("added to co-prime mset = {}", c);
         list = engine.coPrime(c, mset);
         if (ring.coFac.isField()) {
             list = PolyUtil.<C> monic(list);

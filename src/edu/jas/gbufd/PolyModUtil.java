@@ -127,22 +127,22 @@ public class PolyModUtil {
         if (n.totalDegree() > 3 || d.totalDegree() > 3) { // how avoid too long running GBs ?
             //if (n.totalDegree() + d.totalDegree() > 6) { // how avoid too long running GBs ?
             // && n.length() < 10 && d.length() < 10
-            logger.warn("skipping GB computation: degs = " + n.totalDegree() + ", " + d.totalDegree());
+            logger.warn("skipping GB computation: degs = {}, {}", n.totalDegree(), d.totalDegree());
             return r.getONE();
         }
         List<GenSolvablePolynomial<C>> A = new ArrayList<GenSolvablePolynomial<C>>(2);
         A.add(n);
         A.add(d);
         SolvableGroebnerBaseAbstract<C> sbb = new SolvableGroebnerBaseSeq<C>();
-        logger.warn("left syzGcd computing GB: " + A);
+        logger.warn("left syzGcd computing GB: {}", A);
         List<GenSolvablePolynomial<C>> G = sbb.rightGB(A); //not: leftGB, not: sbb.twosidedGB(A);
         if (debug) {
-            logger.info("G = " + G);
+            logger.info("G = {}", G);
         }
         if (G.size() == 1) {
             return G.get(0);
         }
-        logger.warn("gcd not determined, set to 1: " + G); // + ", A = " + A);
+        logger.warn("gcd not determined, set to 1: {}", G); // + ", A = {}", A);
         return r.getONE();
     }
 
@@ -172,22 +172,22 @@ public class PolyModUtil {
         if (n.totalDegree() > 3 || d.totalDegree() > 3) { // how avoid too long running GBs ?
             //if (n.totalDegree() + d.totalDegree() > 6) { // how avoid too long running GBs ?
             // && n.length() < 10 && d.length() < 10
-            logger.warn("skipping GB computation: degs = " + n.totalDegree() + ", " + d.totalDegree());
+            logger.warn("skipping GB computation: degs = {}, {}", n.totalDegree(), d.totalDegree());
             return r.getONE();
         }
         List<GenSolvablePolynomial<C>> A = new ArrayList<GenSolvablePolynomial<C>>(2);
         A.add(n);
         A.add(d);
         SolvableGroebnerBaseAbstract<C> sbb = new SolvableGroebnerBaseSeq<C>();
-        logger.warn("right syzGcd computing GB: " + A);
+        logger.warn("right syzGcd computing GB: {}", A);
         List<GenSolvablePolynomial<C>> G = sbb.leftGB(A); // not: sbb.twosidedGB(A);
         if (debug) {
-            logger.info("G = " + G);
+            logger.info("G = {}", G);
         }
         if (G.size() == 1) {
             return G.get(0);
         }
-        logger.warn("gcd not determined, set to 1: " + G); // + ", A = " + A);
+        logger.warn("gcd not determined, set to 1: {}", G); // + ", A = {}", A);
         return r.getONE();
     }
 
@@ -241,7 +241,7 @@ public class PolyModUtil {
         B.add(d);
         List<GenPolynomial<C>> c = PolyGBUtil.<C> intersect(r, A, B);
         if (c.size() != 1) {
-            logger.warn("lcm not uniqe: " + c);
+            logger.warn("lcm not uniqe: {}", c);
             //throw new RuntimeException("lcm not uniqe: " + c);
         }
         GenPolynomial<C> lcm = c.get(0);

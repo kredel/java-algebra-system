@@ -196,7 +196,7 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        logger.info(pool.toString());
+        logger.info("pool = {}", pool);
     }
 
 
@@ -209,7 +209,7 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
             return 0;
         }
         int s = pool.shutdownNow().size();
-        logger.info(pool.toString());
+        logger.info("pool = {}", pool);
         return s;
     }
 
@@ -232,7 +232,7 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
         }
         PairList<GenPolynomial<C>> pairlist = strategy.create(modv, ring);
         pairlist.put(G);
-        logger.info("start " + pairlist);
+        logger.info("start {}", pairlist);
 
         Terminator fin = new Terminator(threads);
         PseudoReducerRec<C> R;
@@ -244,9 +244,9 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
         if (Thread.currentThread().isInterrupted()) {
             throw new RuntimeException("interrupt before minimalGB");
         }
-        logger.debug("#parallel list = " + G.size());
+        logger.debug("#parallel list = {}", G.size());
         G = minimalGB(G);
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         return G;
     }
 
@@ -354,8 +354,8 @@ public class GroebnerBasePseudoRecParallel<C extends GcdRingElem<C>> extends
                 //System.out.println("i, j = " + i + ", " + j); 
                 h = redRec.normalformRecursive(F, s);
                 if (!h.isZERO()) {
-                    logger.info("no GB: pi = " + pi + ", pj = " + pj);
-                    logger.info("s  = " + s + ", h = " + h);
+                    logger.info("no GB: pi = {}, pj = {}", pi, pj);
+                    logger.info("s  = {}, h = {}", s, h);
                     return false;
                 }
             }
@@ -456,10 +456,7 @@ class PseudoReducerRec<C extends GcdRingElem<C>> implements Runnable {
 
             pi = pair.pi;
             pj = pair.pj;
-            if (logger.isDebugEnabled()) {
-                logger.debug("pi    = " + pi);
-                logger.debug("pj    = " + pj);
-            }
+            logger.debug("pi = {}, pj = {}", pi, pj);
 
             S = red.SPolynomial(pi, pj);
             if (S.isZERO()) {
@@ -467,9 +464,7 @@ class PseudoReducerRec<C extends GcdRingElem<C>> implements Runnable {
                 fin.initIdle(1);
                 continue;
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("ht(S) = " + S.leadingExpVector());
-            }
+            logger.debug("ht(S) = {}", S.leadingExpVector());
 
             //H = red.normalform(G, S); //mod
             H = redRec.normalformRecursive(G, S);
@@ -480,7 +475,7 @@ class PseudoReducerRec<C extends GcdRingElem<C>> implements Runnable {
                 continue;
             }
             if (logger.isDebugEnabled()) {
-                logger.info("ht(H) = " + H.leadingExpVector());
+                logger.info("ht(H) = {}", H.leadingExpVector());
             }
 
             H = engine.recursivePrimitivePart(H); //H.monic();
@@ -496,9 +491,7 @@ class PseudoReducerRec<C extends GcdRingElem<C>> implements Runnable {
                 fin.allIdle();
                 return;
             }
-            if (logger.isDebugEnabled()) {
-                logger.debug("H = " + H);
-            }
+            logger.debug("H = {}", H);
             synchronized (G) {
                 G.add(H);
             }
@@ -506,7 +499,7 @@ class PseudoReducerRec<C extends GcdRingElem<C>> implements Runnable {
             fin.initIdle(1);
         }
         fin.allIdle();
-        logger.info("terminated, done " + reduction + " reductions");
+        logger.info("terminated, done {} reductions", reduction);
     }
 }
 
@@ -572,9 +565,7 @@ class PseudoMiReducerRec<C extends GcdRingElem<C>> implements Runnable {
 
 
     public void run() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
-        }
+        logger.debug("ht(H) = {}", H.leadingExpVector());
         try {
             //H = red.normalform(G, H); //mod
             H = redRec.normalformRecursive(G, H);
@@ -585,9 +576,7 @@ class PseudoMiReducerRec<C extends GcdRingElem<C>> implements Runnable {
             Thread.currentThread().interrupt();
             //throw new RuntimeException("interrupt in getNF");
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("ht(H) = " + H.leadingExpVector());
-        }
+        logger.debug("ht(H) = {}", H.leadingExpVector());
         // H = H.monic();
     }
 

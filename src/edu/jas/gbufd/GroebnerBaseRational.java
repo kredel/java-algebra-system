@@ -112,11 +112,11 @@ public class GroebnerBaseRational<C extends BigRational> extends GroebnerBaseAbs
         GenPolynomialRing<BigInteger> iring = new GenPolynomialRing<BigInteger>(cf, rring);
         List<GenPolynomial<BigInteger>> Fi = PolyUtil.integerFromRationalCoefficients(iring, F);
         //System.out.println("Fi = " + Fi);
-        logger.info("#Fi = " + Fi.size());
+        logger.info("#Fi = {}", Fi.size());
 
         List<GenPolynomial<BigInteger>> Gi = bba.GB(modv, Fi);
         //System.out.println("Gi = " + Gi);
-        logger.info("#Gi = " + Gi.size());
+        logger.info("#Gi = {}", Gi.size());
 
         G = PolyUtil.<BigRational> fromIntegerCoefficients(rring, Gi);
         G = PolyUtil.<BigRational> monic(G);
@@ -177,10 +177,10 @@ public class GroebnerBaseRational<C extends BigRational> extends GroebnerBaseAbs
         BigInteger cf = new BigInteger();
         GenPolynomialRing<BigInteger> iring = new GenPolynomialRing<BigInteger>(cf, rring);
         List<GenPolynomial<BigInteger>> Fi = PolyUtil.integerFromRationalCoefficients(iring, F);
-        logger.info("#Fi = " + Fi.size());
+        logger.info("#Fi = {}", Fi.size());
 
         List<GenPolynomial<BigInteger>> Gi = bba.minimalGB(Fi);
-        logger.info("#Gi = " + Gi.size());
+        logger.info("#Gi = {}", Gi.size());
 
         G = PolyUtil.<BigRational> fromIntegerCoefficients(rring, Gi);
         G = PolyUtil.<BigRational> monic(G);

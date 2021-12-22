@@ -149,7 +149,7 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
             sgb = GBFactory.<C> getImplementation(pfac.coFac, strategy);
         }
         List<GenPolynomial<C>> Gp = sgb.GB(modv, Fp);
-        logger.info("graded GB = " + Gp);
+        logger.info("graded GB = {}", Gp);
         if (tord.equals(pfac.tord)) {
             return Gp;
         }
@@ -267,12 +267,12 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
                 H.add(t);
                 if (!g.isZERO()) {
                     newGB.add(g);
-                    logger.info("new element for GB = " + g.leadingExpVector());
+                    logger.info("new element for GB = {}", g.leadingExpVector());
                 }
             }
             t = lMinterm(H, t); // compute lMINTERM of current t (lexMinterm)
         }
-        //logger.info("GB = " + newGB);
+        //logger.info("GB = {}", newGB);
         return newGB;
     }
 
@@ -337,7 +337,7 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         long max = maxArray(degrees); //Find maximum in Array degrees
         for (int i = 0; i < degrees.length; i++) { //Set all zero grades to maximum of array "degrees"
             if (degrees[i] == 0) {
-                logger.info("dimension not zero, setting degree to " + max);
+                logger.info("dimension not zero, setting degree to {}", max);
                 degrees[i] = max; //--> to "make" the ideal zero-dimensional
             }
         }

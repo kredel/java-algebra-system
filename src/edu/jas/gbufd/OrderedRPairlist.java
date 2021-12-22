@@ -73,7 +73,7 @@ public class OrderedRPairlist<C extends RegularRingElem<C> >
             ExpVector g =  me.getKey();
             LinkedList<Pair<C>> xl = me.getValue();
             if ( logger.isInfoEnabled() ) {
-                logger.info("g  = " + g);
+                logger.info("g  = {}", g);
             }
             pair = null;
             if ( xl.size() > 0 ) {
@@ -116,7 +116,7 @@ public class OrderedRPairlist<C extends RegularRingElem<C> >
         boolean s;
         s = red.get( j ).get(i); 
         if ( ! s ) { 
-            logger.warn("c3.s false for " + j + " " + i); 
+            logger.warn("c3.s false for {} {}", j, i); 
             return s;
         }
         s = true;

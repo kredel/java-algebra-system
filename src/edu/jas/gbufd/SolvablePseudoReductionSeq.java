@@ -110,7 +110,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
                 //System.out.println(" S = " + S);
             } else {
                 e = e.subtract(htl[i]);
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 Q = p[i].multiplyLeft(e);
                 C c = Q.leadingBaseCoefficient();
                 ExpVector g = S.leadingExpVector();
@@ -124,7 +124,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
                 }
                 ExpVector h = S.leadingExpVector();
                 if (g.equals(h)) { // Ore condition not fulfilled
-                    logger.info("g==h: g = " + g + ", c = " + c);
+                    logger.info("g==h: g = {}, c = {}", g, c);
                     throw new RuntimeException("g.equals(h): a = " + a + ", ap = " + ap + ", c = " + c);
                 }
             }
@@ -208,8 +208,8 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
             } else {
                 f = e.subtract(htl[i]);
                 if (debug) {
-                    logger.info("red div = " + f);
-                    //logger.info("red a = " + a);
+                    logger.info("red div = {}", f);
+                    //logger.info("red a = {}", a);
                 }
                 Q = p[i].multiplyLeft(f);
                 //if (a.remainder(c).isZERO()) { //c.isUnit() ) {
@@ -241,7 +241,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
                 }
                 ExpVector h = S.leadingExpVector();
                 if (g.equals(h)) { // ! Ore cond
-                    logger.info("g==h: g = " + g);
+                    logger.info("g==h: g = {}", g);
                     throw new RuntimeException("g.equals(h): a = " + a + ", ap = " + ap);
                 }
             }
@@ -319,7 +319,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
                 //throw new RuntimeException("Syzygy no GB");
             } else {
                 e = e.subtract(htl[i]);
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 Q = p[i].multiplyLeft(e);
                 C c = Q.leadingBaseCoefficient();
                 ExpVector g = S.leadingExpVector();
@@ -424,7 +424,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
                 //System.out.println(" S = " + S);
             } else {
                 e = e.subtract(htl[i]);
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 Q = p[i].multiplyLeft(e);
                 C c = Q.leadingBaseCoefficient();
                 ExpVector g = S.leadingExpVector();
@@ -439,14 +439,12 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
                 }
                 ExpVector h = S.leadingExpVector();
                 if (g.equals(h)) { // Ore condition not fulfilled
-                    logger.info("g==h: g = " + g + ", c = " + c);
+                    logger.info("g==h: g = {}, c = {}", g, c);
                     throw new RuntimeException("g==h: a = " + a + ", ap = " + ap);
                 }
             }
         }
-        if (logger.isDebugEnabled()) {
-            logger.info("multiplicative factor = " + mfac);
-        }
+        logger.info("multiplicative factor = {}", mfac);
         pf = new PseudoReductionEntry<C>(R, mfac);
         return pf;
     }
@@ -516,7 +514,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
                 //System.out.println(" S = " + S);
             } else {
                 e = e.subtract(htl[i]);
-                //logger.info("red div = " + e);
+                //logger.info("red div = {}", e);
                 // need pi * a * e, but only pi * e * a or a * pi * e available
                 Q = p[i].multiply(e);
                 assert Q.multiply(a).equals(Q.multiplyLeft(a));
@@ -535,7 +533,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
                 }
                 ExpVector h = S.leadingExpVector();
                 if (g.equals(h)) { // Ore condition not fulfilled
-                    logger.info("g==h: g = " + g + ", c = " + c);
+                    logger.info("g==h: g = {}, c = {}", g, c);
                     throw new RuntimeException("g.equals(h): a = " + a + ", ap = " + ap);
                 }
             }

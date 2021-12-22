@@ -151,7 +151,7 @@ public class PolyGBUtil {
         GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1 + nv);
         GenPolynomialRing<GenPolynomial<GenPolynomial<C>>> rfac2 = rfac.recursive(nv);
         if (debug) {
-            logger.info("rfac =" + rfac);
+            logger.info("rfac = {}", rfac);
         }
         GenPolynomial<GenPolynomial<C>> pr = PolyUtil.<C> recursive(rfac, P);
         GenPolynomial<GenPolynomial<GenPolynomial<C>>> pr2 = PolyUtil.<GenPolynomial<C>> recursive(rfac2, pr);
@@ -350,7 +350,7 @@ public class PolyGBUtil {
         logger.warn("intersect computing GB");
         List<GenPolynomial<C>> G = bb.GB(c);
         if (debug) {
-            logger.debug("intersect GB = " + G);
+            logger.debug("intersect GB = {}", G);
         }
         List<GenPolynomial<C>> I = PolyUtil.<C> intersect(pfac, G);
         return I;
@@ -393,7 +393,7 @@ public class PolyGBUtil {
         List<GenSolvablePolynomial<C>> g = sbb.leftGB(c);
         //List<GenSolvablePolynomial<C>> g = sbb.twosidedGB(c);
         if (debug) {
-            logger.debug("intersect GB = " + g);
+            logger.debug("intersect GB = {}", g);
         }
         List<GenSolvablePolynomial<C>> I = PolyUtil.<C> intersect(pfac, g);
         return I;
@@ -447,7 +447,7 @@ public class PolyGBUtil {
         List<GenWordPolynomial<C>> G = bb.GB(L);
         //System.out.println("G = " + G);
         if (debug) {
-            logger.debug("intersect GB = " + G);
+            logger.debug("intersect GB = {}", G);
         }
         List<GenWordPolynomial<C>> I = PolyUtil.<C> intersect(pfac, G);
         return I;
@@ -501,7 +501,7 @@ public class PolyGBUtil {
             return A;
         }
         GenPolynomialRing<C> pfac = A.get(0).ring;
-        logger.debug("pfac = " + pfac.toScript());
+        logger.debug("pfac = {}", pfac); //.toScript()
         int n = pfac.nvar;
         List<GenPolynomial<C>> Ap = new ArrayList<GenPolynomial<C>>();
         for (GenPolynomial<C> a : A) {
@@ -515,7 +515,7 @@ public class PolyGBUtil {
             return Ap;
         }
         GenPolynomialRing<C> rfac = pfac.extendLower(k);
-        logger.debug("rfac = " + rfac.toScript());
+        logger.debug("rfac = {}", rfac); //.toScript()
         assert rfac.nvar == n + k : "rfac.nvar == n+k";
         List<GenPolynomial<C>> sr = new ArrayList<GenPolynomial<C>>();
         int i = 0;
@@ -557,7 +557,7 @@ public class PolyGBUtil {
         GenPolynomial<C> r = bb.red.normalform(A, m);
         //System.out.println("r = " + r);
         GenPolynomialRing<C> cfac = pfac.contract(g.ring.nvar);
-        logger.debug("cfac = " + cfac.toScript());
+        logger.debug("cfac = {}", cfac); //.toScript()
         Map<ExpVector, GenPolynomial<C>> map = r.contract(cfac);
         //System.out.println("map = " + map);
         boolean t = map.size() == 1 && map.keySet().contains(g.ring.evzero);
@@ -600,9 +600,9 @@ public class PolyGBUtil {
             throw new IllegalArgumentException("size(F) and size(A) must be equal");
         }
         GenPolynomialRing<C> pfac = A.get(0).ring;
-        logger.debug("pfac = " + pfac.toScript());
+        logger.debug("pfac = {}", pfac); //.toScript()
         GenPolynomialRing<C> rfac = pfac.extend(m);
-        logger.debug("rfac = " + rfac.toScript());
+        logger.debug("rfac = {}", rfac); //.toScript()
         GenPolynomial<C> y = rfac.getONE();
         GenPolynomial<C> f = rfac.getZERO();
         int i = 0;
@@ -667,7 +667,7 @@ public class PolyGBUtil {
         GenPolynomialRing<C> pfac = h.ring;
         if (!pfac.coFac.isField()) {
             //System.out.println("pfac = " + pfac.toScript());
-            logger.error("only for field coefficients: " + pfac.toScript());
+            logger.error("only for field coefficients: {}", pfac); //.toScript()
             //throw new IllegalArgumentException("only for field coefficients: " + pfac.toScript());
         }
         GroebnerBaseAbstract<C> bb = GBFactory.<C> getImplementation(pfac.coFac);
@@ -680,7 +680,7 @@ public class PolyGBUtil {
             if (!fi.isZERO()) {
                 //System.out.println("Fp = " + Fp + ", Fi = " + Fi);
                 //System.out.println("h  = " + h  + ", a  = " + a  + ", fi  = " + fi);
-                logger.info("h-a = " + h.subtract(a) + ", fi  = " + fi);
+                logger.info("h-a = {}, fi  = {}", h.subtract(a), fi);
                 return false;
             }
             i++;
