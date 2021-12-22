@@ -94,9 +94,7 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
         ExpVector et = f.trailingExpVector();
         if (!et.isZERO()) {
             GenPolynomial<C> tr = pfac.valueOf(et);
-            if (logger.isInfoEnabled()) {
-                logger.info("trailing term = " + tr);
-            }
+            logger.info("trailing term = {}", tr);
             f = PolyUtil.<C> basePseudoDivide(f, tr);
             R.add(new Interval<C>(pfac.coFac.getZERO()));
         }
@@ -117,9 +115,9 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
         //System.out.println("S = " + S);
         //System.out.println("f_S = " + S.get(0));
         List<Interval<C>> Rp = realRoots(iv, S);
-        if (logger.isInfoEnabled() && !(((Object) f.ring.coFac) instanceof BigRational)) {
-            //logger.info("realRoots bound: " + iv);
-            logger.info("realRoots: " + Rp);
+        if (!(((Object) f.ring.coFac) instanceof BigRational)) {
+            //logger.info("realRoots bound: {}", iv);
+            logger.info("realRoots: {}", Rp);
         }
         R.addAll(Rp);
         return R;
@@ -181,12 +179,12 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
         List<Interval<C>> R1 = realRoots(iv1, S);
         //System.out.println("R1 = " + R1);
         if (debug) {
-            logger.info("R1 = " + R1);
+            logger.info("R1 = {}", R1);
         }
         List<Interval<C>> R2 = realRoots(iv2, S);
         //System.out.println("R2 = " + R2);
         if (debug) {
-            logger.info("R2 = " + R2);
+            logger.info("R2 = {}", R2);
         }
 
         // refine isolating intervals if adjacent 
@@ -352,7 +350,7 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
 
         while (true) {
             long n = realRootCount(v, Sg);
-            logger.debug("n = " + n);
+            logger.debug("n = {}", n);
             if (n == 0) {
                 return v;
             }
@@ -427,8 +425,8 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
             return vn;
         }
         vn = new Interval<C>(zero);
-        logger.warn("interval is zero: iv = " + iv + ", trail = " + f.trailingExpVector().degree()
-                     + ", vi = " + vi + ", vn = " + vn);
+        logger.warn("interval is zero: iv = {}, trail = {}, vi = {}, vn = {}", iv, f.trailingExpVector().degree(),
+                     vi, vn);
         return vn;
     }
 

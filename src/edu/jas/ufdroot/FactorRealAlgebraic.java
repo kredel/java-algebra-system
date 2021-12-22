@@ -26,13 +26,8 @@ import edu.jas.ufd.FactorFactory;
 /**
  * Real algebraic number coefficients factorization algorithms. This class
  * implements factorization methods for polynomials over real algebraic numbers
- * from package
- * 
- * <pre>
- * edu.jas.root
- * </pre>
- * 
- * .
+ * from package <code>edu.jas.root</code>.
+ *
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -127,7 +122,7 @@ public class FactorRealAlgebraic<C extends GcdRingElem<C> & Rational> extends
             GenPolynomial<RealAlgebraicNumber<C>> p = PolyUtilRoot.<C> realFromAlgebraicCoefficients(pfac, a);
             factors.add(p);
         }
-        logger.info("real algebraic factors = " + factors);
+        logger.info("real algebraic factors = {}", factors);
         return factors;
     }
 

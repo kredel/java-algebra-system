@@ -159,7 +159,7 @@ public class ElementaryIntegrationCzichowski<C extends GcdRingElem<C>> extends E
             }
             Q = pfac.copy(Q); // hack to exchange the variables
             AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(Q);
-            logger.debug("afac = " + afac.toScript());
+            logger.debug("afac = {}", afac); //.toScript()
             AlgebraicNumber<C> a = afac.getGenerator();
             // no: a = a.negate();
             // System.out.println("a = " + a);

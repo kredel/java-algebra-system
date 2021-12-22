@@ -44,7 +44,7 @@ public class ElementaryIntegrationBernoulli<C extends GcdRingElem<C>> extends El
     public ElementaryIntegrationBernoulli(RingFactory<C> br) {
         super(br);
         if (!(irr instanceof FactorAbsolute)) {
-            logger.error("no absolute factorization available for coefficient ring " + br);
+            logger.error("no absolute factorization available for coefficient ring {}", br);
             throw new IllegalArgumentException(
                             "no absolute factorization available for coefficient ring " + br);
         }

@@ -49,7 +49,7 @@ public class PolyUtilRoot {
                     GenPolynomialRing<RealAlgebraicNumber<C>> pfac, GenPolynomial<C> A) {
         RealAlgebraicRing<C> afac = (RealAlgebraicRing<C>) pfac.coFac;
         if (debug) {
-            logger.info("afac = " + afac);
+            logger.info("afac = {}", afac);
         }
         return PolyUtil.<C, RealAlgebraicNumber<C>> map(pfac, A, new CoeffToReAlg<C>(afac));
     }

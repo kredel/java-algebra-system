@@ -187,7 +187,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             C M1 = M.sum(M.factory().fromInteger(1)); // asymmetric to origin
             //System.out.println("M = " + M);
             if (debug) {
-                logger.info("rootBound = " + M);
+                logger.info("rootBound = {}", M);
             }
             Complex<C>[] corner = (Complex<C>[]) new Complex[4];
             corner[0] = new Complex<C>(cr, M1.negate(), M); // nw
@@ -202,7 +202,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     roots.addAll(rs);
                 }
             } catch (InvalidBoundaryException e) {
-                //logger.error("invalid boundary for p = " + p);
+                //logger.error("invalid boundary for p = {}", p);
                 throw new RuntimeException("this should never happen " + e);
             }
         }
@@ -248,7 +248,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     Complex<C> center = root.corners[1].sum(delta);
                     //System.out.println("refine center = " + toDecimal(center)); 
                     if (debug) {
-                        logger.info("new center = " + center);
+                        logger.info("new center = {}", center);
                     }
 
                     Complex<C>[] cp = (Complex<C>[]) copyOfComplex(root.corners, 4);
@@ -341,7 +341,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             C M = Mb.getRe();
             C M1 = M.sum(M.factory().fromInteger(1)); // asymmetric to origin
             if (debug) {
-                logger.info("rootBound = " + M);
+                logger.info("rootBound = {}", M);
             }
             Complex<C>[] corner = (Complex<C>[]) new Complex[4];
             corner[0] = new Complex<C>(cr, M1.negate(), M); // nw
@@ -498,7 +498,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     Complex<BigDecimal> sd = nrt.getDecimalCenter();
                     d = sd;
                     x = cr.getZERO();
-                    logger.info("trying new SE starting point " + d);
+                    logger.info("trying new SE starting point {}", d);
                     i = 0;
                     dir = 1;
                 }
@@ -508,7 +508,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     Complex<BigDecimal> sd = nrt.getDecimalCenter();
                     d = sd;
                     x = cr.getZERO();
-                    logger.info("trying new NW starting point " + d);
+                    logger.info("trying new NW starting point {}", d);
                     i = 0;
                     dir = 2;
                 }
@@ -518,7 +518,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     Complex<BigDecimal> sd = nrt.getDecimalCenter();
                     d = sd;
                     x = cr.getZERO();
-                    logger.info("trying new SW starting point " + d);
+                    logger.info("trying new SW starting point {}", d);
                     i = 0;
                     dir = 3;
                 }
@@ -528,7 +528,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     Complex<BigDecimal> sd = nrt.getDecimalCenter();
                     d = sd;
                     x = cr.getZERO();
-                    logger.info("trying new NE starting point " + d);
+                    logger.info("trying new NE starting point {}", d);
                     i = 0;
                     dir = 4;
                 }
@@ -539,7 +539,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                     Complex<BigDecimal> sd = new Complex<BigDecimal>(cr, srr, sri);
                     d = sd;
                     x = cr.getZERO();
-                    logger.info("trying new random starting point " + d);
+                    logger.info("trying new random starting point {}", d);
                     if (dir == -1) {
                         i = 0;
                         dir = 0;
@@ -590,7 +590,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                 C M = Mb.getRe();
                 C M1 = M.sum(M.factory().fromInteger(1)); // asymmetric to origin
                 if (debug) {
-                    logger.info("rootBound = " + M);
+                    logger.info("rootBound = {}", M);
                 }
                 Complex<C>[] corner = (Complex<C>[]) new Complex[4];
                 corner[0] = new Complex<C>(cr, M1.negate(), M); // nw
@@ -617,7 +617,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                             len = len.multiply(new BigRational(1, 1000));
                             try {
                                 r = complexRootRefinement(r, p, len);
-                                logger.info("fall back rootRefinement = " + r);
+                                logger.info("fall back rootRefinement = {}", r);
                                 //System.out.println("len = " + len);
                             } catch (InvalidBoundaryException ee) {
                                 throw new RuntimeException("this should never happen " + ee);

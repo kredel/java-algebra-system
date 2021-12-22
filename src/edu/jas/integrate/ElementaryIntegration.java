@@ -141,9 +141,9 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
         GenPolynomial<C> pi = PolyUtil.<C> baseIntegral(p);
 
         if (debug) {
-            logger.debug("pi  = " + pi);
-            logger.debug("rat = " + rat);
-            logger.debug("log = " + log);
+            logger.debug("pi  = {}", pi);
+            logger.debug("rat = {}", rat);
+            logger.debug("log = {}", log);
         }
         if (log.size() == 0) {
             return new Integral<C>(a, d, pi, rat);
@@ -156,9 +156,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
             LogIntegral<C> pf = integrateLogPartPrepare(ln, ld);
             logi.add(pf);
         }
-        if (debug) {
-            logger.debug("logi = " + logi);
-        }
+        logger.debug("logi = {}", logi);
         return new Integral<C>(a, d, pi, rat, logi);
     }
 
@@ -392,7 +390,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
             r = pfac.copy(r); // hack to exchange the variables
             //System.out.println("r(z_) = " + r);
             AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(r, true); // since irreducible
-            logger.debug("afac = " + afac.toScript());
+            logger.debug("afac = {}", afac); //.toScript()
             AlgebraicNumber<C> a = afac.getGenerator();
             //no: a = a.negate();
             //System.out.println("a = " + a);

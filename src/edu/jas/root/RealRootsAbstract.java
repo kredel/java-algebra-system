@@ -63,13 +63,12 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
             }
         }
         BigRational r = M.getRational();
-        logger.info("rational root bound: " + r);
+        logger.info("rational root bound: {}", r);
         BigInteger i = new BigInteger(r.numerator().divide(r.denominator()));
         i = i.sum(BigInteger.ONE); // ceiling
         M = cfac.fromInteger(i.getVal());
         M = M.sum(f.ring.coFac.getONE());
-        logger.info("integer root bound: " + M);
-        //System.out.println("M = " + M);
+        logger.info("integer root bound: {}", M);
         return M;
     }
 
@@ -566,7 +565,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
                     BigDecimal sd = new BigDecimal(iv.randomPoint().getRational());
                     d = sd;
                     x = sd.getZERO();
-                    logger.info("trying new random starting point " + d);
+                    logger.info("trying new random starting point {}", d);
                     i = 0;
                     dir = 1;
                 }
@@ -574,7 +573,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
                     BigDecimal sd = new BigDecimal(iv.randomPoint().getRational());
                     d = sd;
                     x = sd.getZERO();
-                    logger.info("trying new random starting point " + d);
+                    logger.info("trying new random starting point {}", d);
                     //i = 0;
                     dir = 2; // end
                 }
@@ -611,7 +610,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
                     BigRational len = i.rationalLength();
                     len = len.divide(len.factory().fromInteger(1000));
                     i = refineInterval(i, f, len);
-                    logger.info("fall back rootRefinement = " + i);
+                    logger.info("fall back rootRefinement = {}", i);
                 }
             }
         }
@@ -776,7 +775,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
         Interval<C> iv = new Interval<C>(M.negate(), v.right);
         long r = realRootCount(iv, f);
         if (r <= 0) {
-            logger.warn("no real root in interval " + v);
+            logger.warn("no real root in interval {}", v);
         }
         return r;
     }

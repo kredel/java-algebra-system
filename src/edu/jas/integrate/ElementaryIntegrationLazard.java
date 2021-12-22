@@ -122,9 +122,7 @@ public class ElementaryIntegrationLazard<C extends GcdRingElem<C>> extends Eleme
 
         // SquareFree(R)
         SortedMap<GenPolynomial<C>, Long> resSquareFree = sqf.squarefreeFactors(Rc.leadingBaseCoefficient());
-        if (logger.isInfoEnabled()) {
-            logger.info("SquareFree(R) = " + resSquareFree);
-        }
+        logger.info("SquareFree(R) = {}", resSquareFree);
 
         // First Loop
         SortedMap<GenPolynomial<C>, Long> sfactors = null;
@@ -147,9 +145,7 @@ public class ElementaryIntegrationLazard<C extends GcdRingElem<C>> extends Eleme
             GenPolynomial<C> qi2 = pfac.copy(Q); // hack to exchange the variables
             // System.out.println("r(z_) = " + r);
             AlgebraicNumberRing<C> afac = new AlgebraicNumberRing<C>(qi2);
-            if (logger.isDebugEnabled()) {
-                logger.debug("afac = " + afac.toScript());
-            }
+            logger.debug("afac = {}", afac); //.toScript()
             AlgebraicNumber<C> a = afac.getGenerator();
             // no: a = a.negate();
             // System.out.println("a = " + a);
@@ -176,9 +172,7 @@ public class ElementaryIntegrationLazard<C extends GcdRingElem<C>> extends Eleme
                         // convert to K(alpha)[x]
                         Sa = PolyUtil.convertRecursiveToAlgebraicCoefficients(pafac, S);
                         sfactors = sqf.squarefreeFactors(S.leadingBaseCoefficient());
-                        if (logger.isInfoEnabled()) {
-                            logger.info("SquareFree(S)" + sfactors);
-                        }
+                        logger.info("SquareFree(S){}", sfactors);
                     }
                 }
                 for (GenPolynomial<C> ai : sfactors.keySet()) {

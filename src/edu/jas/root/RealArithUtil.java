@@ -64,7 +64,7 @@ public class RealArithUtil {
             xd = x.subtract(fac.fromInteger(q.val));
         }
         if (debug) {
-            logger.info("cf = " + cf);
+            logger.info("cf = {}", cf);
         }
         return cf;
     }

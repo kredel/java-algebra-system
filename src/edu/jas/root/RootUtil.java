@@ -92,9 +92,7 @@ public class RootUtil {
         //System.out.println("ls = " + ls + ", rs = " + rs);
         C left = fac.parse(ls);
         C right = fac.parse(rs);
-        if (debug) {
-            logger.debug("Interval: left = " + left + ", right = " + right);
-        }
+        logger.debug("Interval: left = {}, right = {}", left, right);
         return new Interval<C>(left, right);
     }
 
@@ -150,10 +148,7 @@ public class RootUtil {
             sw = fac.getONE().negate();
             ne = fac.getONE();
         }
-        //System.out.println("sw = " + sw + ", ne = " + ne);
-        if (debug) {
-            logger.debug("Rectangle: sw = " + sw + ", ne = " + ne);
-        }
+        logger.debug("Rectangle: sw = {}, ne = {}", sw, ne);
         return new Rectangle<C>(sw, ne);
     }
 

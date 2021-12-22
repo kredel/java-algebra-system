@@ -178,7 +178,7 @@ public class ComplexAlgebraicRing<C extends GcdRingElem<C> & Rational>
         try {
             root = engine.complexRootRefinement(root, algebraic.modul, e);
         } catch (InvalidBoundaryException e1) {
-            logger.warn("new eps not set: " + e);
+            logger.warn("new eps not set: {}", e);
             //e1.printStackTrace();
             return; // ignore new eps
         }

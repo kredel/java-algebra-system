@@ -59,7 +59,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
         List<GenPolynomial<C>> S = sturmSequence(g, f);
         //System.out.println("S = " + S);
         if (debug) {
-            logger.info("sturmSeq = " + S);
+            logger.info("sturmSeq = {}", S);
         }
         RingFactory<C> cfac = f.ring.coFac;
         List<C> l = PolyUtil.<C> evaluateMain(cfac, S, a);
@@ -170,20 +170,20 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
             //GenPolynomial<C> ip = PolyUtil.<C> imaginaryPartFromComplex(ifac, a);
             //RealRoots<C> rr = new RealRootsSturm<C>();
             if (rl.isZERO()) {
-                //logger.info("lengthReal == 0: " + rect);
+                //logger.info("lengthReal == 0: {}", rect);
                 //Complex<C> r = rect.getSW();
                 //r = new Complex<C>(r.ring,r.getRe()/*,0*/);
                 //Complex<C> e = PolyUtil.<Complex<C>> evaluateMain(a.ring.coFac, a, r);
-                //logger.info("a(re(rect)): " + e);
+                //logger.info("a(re(rect)): {}", e);
                 //if ( !e.getRe().isZERO() ) {
                 //    return 0;
                 //}
                 //C ev = PolyUtil.<C> evaluateMain(rp.ring.coFac, rp, rl);
-                //logger.info("re(a)(re(rect)): " + ev);
+                //logger.info("re(a)(re(rect)): {}", ev);
                 //Interval<C> iv = new Interval<C>(rect.getSW().getIm(),rect.getNE().getIm());
-                //logger.info("iv: " + iv);
+                //logger.info("iv: {}", iv);
                 //long ic = rr.realRootCount(iv,ip);
-                //logger.info("ic: " + ic);
+                //logger.info("ic: {}", ic);
 
                 Complex<C> sw = rect.getSW();
                 Complex<C> ne = rect.getNE();
@@ -193,14 +193,14 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 ne = ne.sum(cd);
                 rect = rect.exchangeSW(sw);
                 rect = rect.exchangeNE(ne);
-                logger.info("new rectangle: " + rect.toScript());
+                logger.info("new rectangle: {}", rect.toScript());
             }
             if (il.isZERO()) {
-                //logger.info("lengthImag == 0: " + rect);
+                //logger.info("lengthImag == 0: {}", rect);
                 //Interval<C> rv = new Interval<C>(rect.getSW().getRe(),rect.getNE().getRe());
-                //logger.info("rv: " + rv);
+                //logger.info("rv: {}", rv);
                 //long rc = rr.realRootCount(rv,rp);
-                //logger.info("rc: " + rc);
+                //logger.info("rc: {}", rc);
 
                 Complex<C> sw = rect.getSW();
                 Complex<C> ne = rect.getNE();
@@ -210,7 +210,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
                 ne = ne.sum(cd);
                 rect = rect.exchangeSW(sw);
                 rect = rect.exchangeNE(ne);
-                logger.info("new rectangle: " + rect.toScript());
+                logger.info("new rectangle: {}", rect.toScript());
             }
         }
         long wn = windingNumber(rect, a);
@@ -288,7 +288,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
             Complex<C> center = rect.corners[1].sum(delta);
             //System.out.println("center = " + toDecimal(center)); 
             if (debug) {
-                logger.info("new center = " + center);
+                logger.info("new center = {}", center);
             }
             try {
                 Complex<C>[] cp = (Complex<C>[]) copyOfComplex(rect.corners, 4);
