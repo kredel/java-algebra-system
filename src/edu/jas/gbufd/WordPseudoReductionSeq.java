@@ -109,7 +109,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
                 e = elr[0];
                 Word f = elr[1];
                 if (debug) {
-                    logger.info("red divideWord: e = " + e + ", f = " + f);
+                    logger.info("red divideWord: e = {}, f = {}", e, f);
                 }
                 C c = lbc[i];
                 if (a.remainder(c).isZERO()) {
@@ -199,7 +199,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
                 e = elr[0];
                 Word f = elr[1];
                 if (debug) {
-                    logger.info("redRec divideWord: e = " + e + ", f = " + f);
+                    logger.info("redRec divideWord: e = {}, f = {}", e, f);
                 }
                 C c = lbc[i];
                 if (a.remainder(c).isZERO()) {
@@ -314,7 +314,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
                 fl = elr[0];
                 fr = elr[1];
                 if (debug) {
-                    logger.info("redRec divideWord: e = " + e + ", fl = " + fl + ", fr = " + fr);
+                    logger.info("redRec divideWord: e = {}, fl = {}, fr = {}", e, fl, fr);
                 }
                 GenPolynomial<C> c = lbc[i];
                 if (PolyUtil.<C> baseSparsePseudoRemainder(a, c).isZERO()) {
@@ -327,8 +327,8 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
                 }
                 Sp = S.subtract(Q);
                 if (e.equals(Sp.leadingWord())) { // TODO: avoid, not possible in general
-                    //logger.info("redRec: e = " + e + ", hti = " + htl[i] + ", fl = " + fl + ", fr = " + fr);
-                    //logger.info("redRec: S = " + S + ", Sp = " + Sp + ", a = " + a + ", b = " + b + ", c = " + c);
+                    //logger.info("redRec: e = {}, hti = {}, fl = {}, fr = {}", e, htl[i], fl, fr);
+                    //logger.info("redRec: S = {}, Sp = {}, a = {}, b = {}, c = {}", S, Sp, a, b, c);
                     //throw new RuntimeException("degree not descending");
                     R = R.multiply(c);
                     S = S.multiply(c);

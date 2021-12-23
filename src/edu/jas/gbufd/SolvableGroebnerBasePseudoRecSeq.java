@@ -288,7 +288,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         // add also coefficient generators
         List<GenSolvablePolynomial<GenPolynomial<C>>> X;
         X = PolynomialList.castToSolvableList(ring.generators(modv)); 
-        logger.info("right multipliers = " + X);
+        logger.info("right multipliers = {}", X);
         List<GenSolvablePolynomial<GenPolynomial<C>>> F = new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>(
                         G.size() * (1 + X.size()));
         F.addAll(G);

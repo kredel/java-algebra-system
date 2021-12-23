@@ -73,7 +73,7 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
         super(red, pl);
         cofac = rf;
         if (!cofac.isCommutative()) {
-            logger.warn("reduction not correct for " + cofac.toScript());
+            logger.warn("reduction not correct for {}", cofac); //.toScript()
         }
         //engine = GCDFactory.<C> getImplementation(rf);
         //not used: engine = (GreatestCommonDivisorAbstract<C>)GCDFactory.<C>getProxy( rf );
@@ -100,7 +100,7 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
         //Collections.sort(G);
         OrderedWordPairlist<C> pairlist = (OrderedWordPairlist<C>) strategy.create(ring);
         pairlist.put(G);
-        logger.info("start " + pairlist);
+        logger.info("start {}", pairlist);
 
         WordPair<C> pair;
         GenWordPolynomial<C> pi;
@@ -109,15 +109,14 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
         GenWordPolynomial<C> H;
         while (pairlist.hasNext()) {
             pair = pairlist.removeNext();
-            //logger.debug("pair = " + pair);
+            //logger.debug("pair = {}", pair);
             if (pair == null) {
                 continue;
             }
             pi = pair.pi;
             pj = pair.pj;
             if (debug) {
-                logger.info("pi   = " + pi + ", pj = " + pj);
-                //logger.info("pj    = " + pj);
+                logger.info("pi = {}, pj = {}", pi, pj);
             }
 
             S = red.SPolynomials(pi, pj);
@@ -130,7 +129,7 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
                     continue;
                 }
                 if (debug) {
-                    logger.info("ht(S) = " + s.leadingWord());
+                    logger.info("ht(S) = {}", s.leadingWord());
                 }
                 boolean t = pairlist.criterion3(pair.i, pair.j, s.leadingWord());
                 //System.out.println("criterion3(" + pair.i + "," + pair.j + ") = " + t);
@@ -140,24 +139,23 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
 
                 H = red.normalform(G, s);
                 if (debug) {
-                    //logger.info("pair = " + pair); 
-                    //logger.info("ht(S) = " + S.monic()); //.leadingWord() );
-                    logger.info("ht(H) = " + H.monic()); //.leadingWord() );
+                    //logger.info("pair = {}", pair);
+                    //logger.info("ht(S) = {}", S.monic()); //.leadingWord() );
+                    logger.info("ht(H) = {}", H.monic()); //.leadingWord() );
                 }
                 if (H.isZERO()) {
                     //pair.setZero();
                     continue;
                 }
                 if (!t) {
-                    logger.info("criterion3(" + pair.i + "," + pair.j + ") wrong: " + s.leadingWord()
-                                    + " --> " + H.leadingWord());
+                    logger.info("criterion3({},{}) wrong: {} --> {}", pair.i, pair.j, s.leadingWord(), H.leadingWord());
                 }
 
                 //H = H.monic();
                 H = basePrimitivePart(H);
                 H = H.abs();
                 if (debug) {
-                    logger.info("ht(H) = " + H.leadingWord());
+                    logger.info("ht(H) = {}", H.leadingWord());
                 }
                 if (H.isONE()) {
                     G.clear();
@@ -165,7 +163,7 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
                     return G; // since no threads are activated
                 }
                 if (debug) {
-                    logger.info("H = " + H);
+                    logger.info("H = {}", H);
                 }
                 if (H.length() > 0) {
                     //l++;
@@ -174,9 +172,9 @@ public class WordGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends WordGro
                 }
             }
         }
-        //logger.info("#sequential list = " + G.size());
+        //logger.info("#sequential list = {}", G.size());
         G = minimalGB(G);
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         //Collections.sort(G);
         //Collections.reverse(G);
         return G;

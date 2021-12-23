@@ -105,7 +105,7 @@ public class WordGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         redRec = (WordPseudoReduction<C>) (WordPseudoReduction) red;
         cofac = (GenPolynomialRing<C>) rf;
         if (!cofac.isCommutative()) {
-            logger.warn("reduction not correct for " + cofac.toScript());
+            logger.warn("reduction not correct for {}", cofac); //.toScript()
         }
         engine = GCDFactory.<C> getImplementation(cofac.coFac);
         //not used: engine = GCDFactory.<C>getProxy(cofac.coFac);
@@ -134,7 +134,7 @@ public class WordGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         OrderedWordPairlist<GenPolynomial<C>> pairlist = (OrderedWordPairlist<GenPolynomial<C>>) strategy
                         .create(ring);
         pairlist.put(G);
-        logger.info("start " + pairlist);
+        logger.info("start {}", pairlist);
 
         WordPair<GenPolynomial<C>> pair;
         GenWordPolynomial<GenPolynomial<C>> pi;
@@ -143,15 +143,14 @@ public class WordGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         GenWordPolynomial<GenPolynomial<C>> H;
         while (pairlist.hasNext()) {
             pair = pairlist.removeNext();
-            //logger.debug("pair = " + pair);
+            //logger.debug("pair = {}", pair);
             if (pair == null) {
                 continue;
             }
             pi = pair.pi;
             pj = pair.pj;
             if (debug) {
-                logger.info("pi   = " + pi + ", pj = " + pj);
-                //logger.info("pj    = " + pj);
+                logger.info("pi   = {}, pj = {}", pi, pj);
             }
 
             S = red.SPolynomials(pi, pj);
@@ -164,7 +163,7 @@ public class WordGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                     continue;
                 }
                 if (debug) {
-                    logger.info("ht(S) = " + s.leadingWord());
+                    logger.info("ht(S) = {}", s.leadingWord());
                 }
                 boolean t = pairlist.criterion3(pair.i, pair.j, s.leadingWord());
                 //System.out.println("criterion3(" + pair.i + "," + pair.j + ") = " + t);
@@ -174,24 +173,23 @@ public class WordGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
 
                 H = redRec.normalformRecursive(G, s);
                 if (debug) {
-                    //logger.info("pair = " + pair); 
-                    //logger.info("ht(S) = " + S.monic()); //.leadingWord() );
-                    logger.info("ht(H) = " + H.monic()); //.leadingWord() );
+                    //logger.info("pair = {}", pair);
+                    //logger.info("ht(S) = {}", S.monic()); //.leadingWord() );
+                    logger.info("ht(H) = {}", H.monic()); //.leadingWord() );
                 }
                 if (H.isZERO()) {
                     //pair.setZero();
                     continue;
                 }
                 if (!t) {
-                    logger.info("criterion3(" + pair.i + "," + pair.j + ") wrong: " + s.leadingWord()
-                                    + " --> '" + H.leadingWord() + "'");
+                    logger.info("criterion3({},{}) wrong: {} --> '{}'", pair.i, pair.j, s.leadingWord(), H.leadingWord());
                 }
 
                 //H = H.monic();
                 H = recursivePrimitivePart(H);
                 H = H.abs();
                 if (debug) {
-                    logger.info("ht(H) = " + H.leadingWord());
+                    logger.info("ht(H) = {}", H.leadingWord());
                 }
                 if (H.isONE()) {
                     G.clear();
@@ -199,7 +197,7 @@ public class WordGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                     return G; // since no threads are activated
                 }
                 if (debug) {
-                    logger.info("H = " + H);
+                    logger.info("H = {}", H);
                 }
                 if (H.length() > 0) {
                     //l++;
@@ -208,9 +206,9 @@ public class WordGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                 }
             }
         }
-        //logger.info("#sequential list = " + G.size());
+        //logger.info("#sequential list = {}", G.size());
         G = minimalGB(G);
-        logger.info("" + pairlist);
+        logger.info("{}", pairlist);
         //Collections.sort(G);
         //Collections.reverse(G);
         return G;
@@ -316,8 +314,8 @@ public class WordGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
                     //System.out.println("i, j = " + i + ", " + j); 
                     h = redRec.normalformRecursive(F, s);
                     if (!h.isZERO()) {
-                        logger.info("no GB: pi = " + pi + ", pj = " + pj);
-                        logger.info("s  = " + s + ", h = " + h);
+                        logger.info("no GB: pi = {}, pj = {}", pi, pj);
+                        logger.info("s  = {}, h = {}", s, h);
                         return false;
                     }
                 }

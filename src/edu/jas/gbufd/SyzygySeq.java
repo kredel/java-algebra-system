@@ -177,7 +177,7 @@ public class SyzygySeq<C extends GcdRingElem<C>> extends SyzygyAbstract<C> {
         final int lenf = F.size();
         ExtendedGB<C> exgb = bb.extGB(F);
         if (debug) {
-            logger.debug("exgb = " + exgb);
+            logger.debug("exgb = {}", exgb);
             if (!bb.isReductionMatrix(exgb)) {
                 logger.error("is reduction matrix ? false");
             }
@@ -190,7 +190,7 @@ public class SyzygySeq<C extends GcdRingElem<C>> extends SyzygyAbstract<C> {
         GenPolynomialRing<C> ring = G.get(0).ring;
         ModuleList<C> S = new ModuleList<C>(ring, sg);
         if (debug) {
-            logger.debug("syz = " + S);
+            logger.debug("syz = {}", S);
             if (!isZeroRelation(sg, G)) {
                 logger.error("is syzygy ? false");
             }
@@ -297,10 +297,10 @@ public class SyzygySeq<C extends GcdRingElem<C>> extends SyzygyAbstract<C> {
         }
         if (debug) {
             ModuleList<C> M2L = new ModuleList<C>(ring, M2);
-            logger.debug("syz M2L = " + M2L);
+            logger.debug("syz M2L = {}", M2L);
             ModuleList<C> SF = new ModuleList<C>(ring, sf);
-            logger.debug("syz sf = " + SF);
-            logger.debug("#syz " + sflen + ", " + sf.size());
+            logger.debug("syz sf = {}", SF);
+            logger.debug("#syz {}, {}", sflen, sf.size());
             if (!isZeroRelation(sf, F)) {
                 logger.error("is syz sf ? false");
             }

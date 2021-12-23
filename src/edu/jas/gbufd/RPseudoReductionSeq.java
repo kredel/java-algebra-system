@@ -328,7 +328,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
                         }
                         f = e.subtract(htl[i]);
                         if (debug) {
-                            logger.info("red div = " + f);
+                            logger.info("red div = {}", f);
                         }
                         Q = p[i].multiply(a, f);
                         S = S.subtract(Q); // not ok with reductum

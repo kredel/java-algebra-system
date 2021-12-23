@@ -253,7 +253,7 @@ public class RReductionSeq<C extends RegularRingElem<C>> extends ReductionAbstra
                             continue;
                         }
                         f = e.subtract(htl[i]);
-                        //logger.info("red div = " + f);
+                        //logger.info("red div = {}", f);
                         Q = p[i].multiply(b, f);
                         S = S.subtract(Q); // not ok with reductum
                         f = S.leadingExpVector();
@@ -419,7 +419,7 @@ public class RReductionSeq<C extends RegularRingElem<C>> extends ReductionAbstra
                             continue;
                         }
                         f = e.subtract(htl[i]);
-                        //logger.info("red div = " + f);
+                        //logger.info("red div = {}", f);
                         Q = p[i].multiply(a, f);
                         S = S.subtract(Q); // not ok with reductum
 
