@@ -221,7 +221,7 @@ public class SquarefreeFactory {
      */
     @SuppressWarnings({ "unchecked", "cast" })
     public static <C extends GcdRingElem<C>> SquarefreeAbstract<C> getImplementation(RingFactory<C> fac) {
-        //logger.info("fac = " + fac.getClass().getName());
+        //logger.info("fac = {}", fac.getClass().getName());
         //System.out.println("fac_o = " + fac.getClass().getName());
         SquarefreeAbstract/*raw type<C>*/ ufd = null;
         AlgebraicNumberRing afac = null;
@@ -266,7 +266,7 @@ public class SquarefreeFactory {
             throw new IllegalArgumentException(
                             "no squarefree factorization implementation for " + fac.getClass().getName());
         }
-        logger.debug("ufd = " + ufd);
+        logger.debug("ufd = {}", ufd);
         return (SquarefreeAbstract<C>) ufd;
     }
 

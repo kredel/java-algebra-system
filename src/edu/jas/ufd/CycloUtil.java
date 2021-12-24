@@ -50,7 +50,7 @@ public class CycloUtil {
         GenPolynomial<BigInteger> h = pfac.univariate(0).subtract(pfac.getONE());
         //System.out.println("h = " + h);
         SortedMap<Long, Integer> fac = PrimeInteger.factors(n);
-        logger.info("factors = " + fac);
+        logger.info("factors = {}", fac);
 
         for (Map.Entry<Long, Integer> m : fac.entrySet()) {
             // h = dup_quo(dup_inflate(h, p, K), h, K)
@@ -86,7 +86,7 @@ public class CycloUtil {
         H.add(q);
 
         SortedMap<Long, Integer> fac = PrimeInteger.factors(n);
-        logger.info("factors = " + fac);
+        logger.info("factors = {}", fac);
 
         for (Map.Entry<Long, Integer> m : fac.entrySet()) {
             //Q = [ dup_quo(dup_inflate(h, p, K), h, K) for h in H ]

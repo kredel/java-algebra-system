@@ -120,7 +120,7 @@ public class PolyUfdUtil {
             if (f) {
                 return f;
             }
-            logger.info("no factorization(map): F = " + F + ", P = " + P + ", t = " + t);
+            logger.info("no factorization(map): F = {}, P = {}, t = {}", F, P, t);
         }
         return f;
     }
@@ -446,7 +446,7 @@ public class PolyUfdUtil {
         //System.out.println("x - k alpha = " + s);
         //System.out.println("s.ring = " + s.ring.toScript());
         if (debug) {
-            logger.info("x - k alpha: " + s);
+            logger.info("x - k alpha: {}", s);
         }
         // substitute, convert and switch
         //System.out.println("Asubs = " + A);
@@ -686,7 +686,7 @@ public class PolyUfdUtil {
             lq = (int) ((AlgebraicNumberRing) pfac.coFac).extensionDegree();
             q = q.pow(lq); //Power.power(q, lq);
         }
-        logger.info("Q matrix for cfac = " + q);
+        logger.info("Q matrix for cfac = {}", q);
         long d = A.degree(0);
         GenPolynomial<C> x = pfac.univariate(0);
         //System.out.println("x = " + x.toScript());

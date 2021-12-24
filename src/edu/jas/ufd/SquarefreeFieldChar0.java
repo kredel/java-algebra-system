@@ -156,16 +156,12 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         ExpVector et = A.trailingExpVector();
         if (!et.isZERO()) {
             GenPolynomial<C> tr = pfac.valueOf(et);
-            if (logger.isInfoEnabled()) {
-                logger.info("trailing term = " + tr);
-            }
+            logger.info("trailing term = {}", tr);
             A = PolyUtil.<C> basePseudoDivide(A, tr);
             long ep = et.getVal(0); // univariate
             et = et.subst(0, 1);
             tr = pfac.valueOf(et);
-            if (logger.isInfoEnabled()) {
-                logger.info("tr, ep = " + tr + ", " + ep);
-            }
+            logger.info("tr, ep = {}, {}", tr, ep);
             sfactors.put(tr, ep);
             if (A.length() == 1) {
                 return sfactors;
@@ -209,9 +205,9 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
             if (z.degree(0) > 0) {
                 if (ldbcf.isONE() && !z.leadingBaseCoefficient().isONE()) {
                     z = z.monic();
-                    //logger.info("z,monic = " + z);
+                    //logger.info("z,monic = {}", z);
                 }
-                logger.info("z, k = " + z + ", " + k);
+                logger.info("z, k = {}, {}", z, k);
                 sfactors.put(z, k);
             }
         }
@@ -281,9 +277,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         GenPolynomial<GenPolynomial<C>> d = PolyUtil.<C> recursiveDeriviative(pp);
         //System.out.println("d = " + d);
         GenPolynomial<GenPolynomial<C>> g = engine.recursiveUnivariateGcd(pp, d);
-        if (logger.isInfoEnabled()) {
-            logger.info("gcd = " + g);
-        }
+        logger.info("gcd = {}", g);
         //System.out.println("g,rec = " + g);
         //g = PolyUtil.<C> monic(g);
         //return g.isONE();
@@ -325,17 +319,13 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         }
         // factors of content
         GenPolynomial<C> Pc = engine.recursiveContent(P);
-        if (logger.isInfoEnabled()) {
-            logger.info("recursiveContent = " + Pc);
-        }
+        logger.info("recursiveContent = {}", Pc);
         Pc = Pc.monic();
         if (!Pc.isONE()) {
             P = PolyUtil.<C> coefficientPseudoDivide(P, Pc);
         }
         SortedMap<GenPolynomial<C>, Long> rsf = squarefreeFactors(Pc);
-        if (logger.isInfoEnabled()) {
-            logger.info("squarefreeFactors = " + rsf);
-        }
+        logger.info("squarefreeFactors = {}", rsf);
         // add factors of content
         for (Map.Entry<GenPolynomial<C>, Long> me : rsf.entrySet()) {
             GenPolynomial<C> c = me.getKey();
@@ -349,9 +339,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         ExpVector et = P.trailingExpVector();
         if (!et.isZERO()) {
             GenPolynomial<GenPolynomial<C>> tr = pfac.valueOf(et);
-            if (logger.isInfoEnabled()) {
-                logger.info("trailing term = " + tr);
-            }
+            logger.info("trailing term = {}", tr);
             P = PolyUtil.<C> recursivePseudoDivide(P, tr);
             long ep = et.getVal(0); // univariate
             et = et.subst(0, 1);
@@ -399,7 +387,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
             if (!z.isONE() && !z.isZERO()) {
                 if (ldbcf.isONE()) {
                     z = PolyUtil.<C> monic(z);
-                    logger.info("z,monic = " + z);
+                    logger.info("z,monic = {}", z);
                 }
                 sfactors.put(z, k);
             }
@@ -430,15 +418,11 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         GenPolynomial<C> Pc = engine.recursiveContent(Pr);
         Pr = PolyUtil.<C> coefficientPseudoDivide(Pr, Pc);
         GenPolynomial<C> Ps = squarefreePart(Pc);
-        if (logger.isInfoEnabled()) {
-            logger.info("content = " + Pc + ", squarefreePart = " + Ps);
-        }
+        logger.info("content = {}, squarefreePart = {}", Pc, Ps);
         GenPolynomial<GenPolynomial<C>> PP = recursiveUnivariateSquarefreePart(Pr);
         GenPolynomial<GenPolynomial<C>> PS = PP.multiply(Ps);
         GenPolynomial<C> D = PolyUtil.<C> distribute(pfac, PS);
-        if (logger.isInfoEnabled()) {
-            logger.info("univRec = " + Pr + ", squarefreePart = " + PP);
-        }
+        logger.info("univRec = {}, squarefreePart = {}", Pr, PP);
         return D;
     }
 
@@ -499,9 +483,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
             GenPolynomial<C> D = PolyUtil.<C> distribute(pfac, Dr);
             sfactors.put(D, i);
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("squarefreeFactors(" + P + ") = " + sfactors);
-        }
+        logger.info("squarefreeFactors({}) = {}", P, sfactors);
         return normalizeFactorization(sfactors);
     }
 

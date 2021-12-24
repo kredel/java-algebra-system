@@ -121,14 +121,14 @@ public class GreatestCommonDivisorModEval<MOD extends GcdRingElem<MOD> & Modular
             r = S;
         }
         if (debug) {
-            logger.debug("degrees: e = " + e + ", f = " + f);
+            logger.debug("degrees: e = {}, f = {}", e, f);
         }
         r = r.abs();
         q = q.abs();
         // setup factories
         ModularRingFactory<MOD> cofac = (ModularRingFactory<MOD>) P.ring.coFac;
         if (!cofac.isField()) {
-            logger.warn("cofac is not a field: " + cofac);
+            logger.warn("cofac is not a field: {}", cofac);
         }
         GenPolynomialRing<GenPolynomial<MOD>> rfac = fac.recursive(fac.nvar - 1);
         GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, rfac);
@@ -184,14 +184,14 @@ public class GreatestCommonDivisorModEval<MOD extends GcdRingElem<MOD> & Modular
         GenPolynomial<MOD> cm;
         GenPolynomial<GenPolynomial<MOD>> cp = null;
         if (debug) {
-            logger.debug("c = " + c);
-            logger.debug("cc = " + cc);
-            logger.debug("G = " + G);
-            logger.info("wdegv = " + wdegv + ", in " + rfac.toScript());
+            logger.debug("c = {}", c);
+            logger.debug("cc = {}", cc);
+            logger.debug("G = {}", G);
+            logger.info("wdegv = {}", wdegv + ", in {}", rfac.toScript());
         }
         for (MOD d = cofac.getZERO(); d.compareTo(end) <= 0; d = d.sum(inc)) {
             if (++i >= en) {
-                logger.warn("elements of Z_p exhausted, en = " + en);
+                logger.warn("elements of Z_p exhausted, en = {}", en);
                 return mufd.gcd(P, S);
                 //throw new ArithmeticException("elements of Z_p exhausted, en = " + en);
             }
@@ -210,24 +210,24 @@ public class GreatestCommonDivisorModEval<MOD extends GcdRingElem<MOD> & Modular
                 continue;
             }
             if (debug) {
-                logger.debug("eval d = " + d);
+                logger.debug("eval d = {}", d);
             }
             // compute modular gcd in recursion
             cm = gcd(rm, qm);
             if (debug) {
-                logger.debug("cm = " + cm + ", rm = " + rm + ", qm = " + qm);
+                logger.debug("cm = {}, rm = {}, qm = {}", cm, rm, qm);
                 //cm = mufd.gcd(rm,qm);
-                //logger.debug("cm = " + cm + ", rm = " + rm + ", qm = " + qm);
+                //logger.debug("cm = {}, rm = {}, qm = {}", cm, rm, qm);
             }
             // test for constant g.c.d
             if (cm.isConstant()) {
-                logger.debug("cm.isConstant = " + cm + ", c = " + c);
+                logger.debug("cm.isConstant = {}, c = {}", cm, c);
                 if (c.ring.nvar < cm.ring.nvar) {
                     c = c.extend(mfac, 0, 0);
                 }
                 cm = cm.abs().multiply(c);
                 q = cm.extend(fac, 0, 0);
-                //logger.debug("q             = " + q + ", c = " + c);
+                //logger.debug("q             = {}, c = {}", q, c);
                 return q;
             }
             // test for unlucky evaluation point
@@ -236,7 +236,7 @@ public class GreatestCommonDivisorModEval<MOD extends GcdRingElem<MOD> & Modular
                 // evaluation point ok, next round
                 if (M != null) {
                     if (M.degree(0) > G) {
-                        logger.info("deg(M) > G: " + M.degree(0) + " > " + G);
+                        logger.info("deg(M) > G: {} > {}", M.degree(0), G);
                         // continue; // why should this be required?
                     }
                 }
@@ -267,7 +267,7 @@ public class GreatestCommonDivisorModEval<MOD extends GcdRingElem<MOD> & Modular
             mi = mi.inverse(); // mod p
             cp = PolyUtil.interpolate(rfac, cp, M, mi, cm, d);
             if (debug) {
-                logger.debug("cp = " + cp + ", cm = " + cm + ", M = " + M + " :: " + M.ring.toScript());
+                logger.debug("cp = {}, cm = {} :: {}", cp, cm, M);
             }
             mn = ufac.getONE().multiply(d);
             mn = ufac.univariate(0).subtract(mn);
@@ -276,7 +276,7 @@ public class GreatestCommonDivisorModEval<MOD extends GcdRingElem<MOD> & Modular
             boolean tt = false;
             if (cp.leadingBaseCoefficient().equals(cc)) {
                 cp = recursivePrimitivePart(cp).abs();
-                logger.debug("test cp == cc: " + cp + " == " + cc);
+                logger.debug("test cp == cc: {} == {}", cp, cc);
                 tt = PolyUtil.<MOD> recursiveSparsePseudoRemainder(qr, cp).isZERO();
                 tt = tt && PolyUtil.<MOD> recursiveSparsePseudoRemainder(rr, cp).isZERO();
                 if (tt) {
@@ -284,20 +284,19 @@ public class GreatestCommonDivisorModEval<MOD extends GcdRingElem<MOD> & Modular
                     break;
                 }
                 if (M.degree(0) > G) { // no && cp.degree(0) > Gm
-                    logger.debug("break: fail 1, cp = " + cp);
+                    logger.debug("break: fail 1, cp = {}", cp);
                     cp = rfac.getONE();
                     break;
                 }
             }
             // test for completion
             if (M.degree(0) > G) { //  no && cp.degree(0) > Gm
-                logger.debug("break: M = " + M + ", G = " + G + ", mn = " + mn + ", M.deg(0) = "
-                                + M.degree(0));
+                logger.debug("break: M = {}, G = {}, mn = {}, M.deg(0) = {}", M, G, mn, M.degree(0));
                 cp = recursivePrimitivePart(cp).abs();
                 tt = PolyUtil.<MOD> recursiveSparsePseudoRemainder(qr, cp).isZERO();
                 tt = tt && PolyUtil.<MOD> recursiveSparsePseudoRemainder(rr, cp).isZERO();
                 if (!tt) {
-                    logger.debug("break: fail 2, cp = " + cp);
+                    logger.debug("break: fail 2, cp = {}", cp);
                     cp = rfac.getONE();
                 }
                 break;
@@ -385,12 +384,12 @@ public class GreatestCommonDivisorModEval<MOD extends GcdRingElem<MOD> & Modular
             r = S;
         }
         if (debug) {
-            logger.debug("degrees: e = " + e + ", f = " + f);
+            logger.debug("degrees: e = {}, f = {}", e, f);
         }
         // setup factories
         ModularRingFactory<MOD> cofac = (ModularRingFactory<MOD>) P.ring.coFac;
         if (!cofac.isField()) {
-            logger.warn("cofac is not a field: " + cofac);
+            logger.warn("cofac is not a field: {}", cofac);
         }
         GenPolynomialRing<GenPolynomial<MOD>> rfac = fac.recursive(fac.nvar - 1);
         GenPolynomialRing<MOD> mfac = new GenPolynomialRing<MOD>(cofac, rfac);
@@ -427,36 +426,34 @@ public class GreatestCommonDivisorModEval<MOD extends GcdRingElem<MOD> & Modular
         GenPolynomial<MOD> cm;
         GenPolynomial<GenPolynomial<MOD>> cp = null;
         if (debug) {
-            //logger.info("qr    = " + qr + ", q = " + q);
-            //logger.info("rr    = " + rr + ", r = " + r);
-            //logger.info("qd0   = " + qd0);
-            //logger.info("rd0   = " + rd0);
-            logger.info("G     = " + G);
-            //logger.info("rdegv = " + rdegv); // + ", rr.degree(0) = " + rr.degree(0));
-            //logger.info("qdegv = " + qdegv); // + ", qr.degree(0) = " + qr.degree(0));
+            //logger.info("qr    = {}, q = {}", qr, q);
+            //logger.info("rr    = {}, r = {}", rr, r);
+            //logger.info("qd0   = {}", qd0);
+            //logger.info("rd0   = {}", rd0);
+            logger.info("G     = {}", G);
+            //logger.info("rdegv = {}", rdegv); // + ", rr.degree(0) = {}", rr.degree(0));
+            //logger.info("qdegv = {}", qdegv); // + ", qr.degree(0) = {}", qr.degree(0));
         }
         for (MOD d = cofac.getZERO(); d.compareTo(end) <= 0; d = d.sum(inc)) {
             if (++i >= en) {
-                logger.warn("elements of Z_p exhausted, en = " + en + ", p = " + cofac.getIntegerModul());
+                logger.warn("elements of Z_p exhausted, en = {}, p = {}", en, cofac.getIntegerModul());
                 return mufd.resultant(P, S);
                 //throw new ArithmeticException("prime list exhausted");
             }
             // map polynomials
             qm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, qr, d);
-            //logger.info("qr(" + d + ") = " + qm + ", qr = " + qr);
+            //logger.info("qr({}) = {}, qr = {}", d, qm, qr);
             if (qm.isZERO() || !qm.degreeVector().equals(qdegv)) {
                 if (debug) {
-                    logger.info("un-lucky evaluation point " + d + ", qm = " + qm.degreeVector() + " < "
-                                    + qdegv);
+                    logger.info("un-lucky evaluation point {}, qm = {} < {}", d, qm.degreeVector(), qdegv);
                 }
                 continue;
             }
             rm = PolyUtil.<MOD> evaluateFirstRec(ufac, mfac, rr, d);
-            //logger.info("rr(" + d + ") = " + rm + ", rr = " + rr);
+            //logger.info("rr({}) = {}, rr = {}", d, rm, rr);
             if (rm.isZERO() || !rm.degreeVector().equals(rdegv)) {
                 if (debug) {
-                    logger.info("un-lucky evaluation point " + d + ", rm = " + rm.degreeVector() + " < "
-                                    + rdegv);
+                    logger.info("un-lucky evaluation point {}, rm = {} < {}", d, rm.degreeVector(), rdegv);
                 }
                 continue;
             }
@@ -474,18 +471,18 @@ public class GreatestCommonDivisorModEval<MOD extends GcdRingElem<MOD> & Modular
             mi = PolyUtil.<MOD> evaluateMain(cofac, M, d);
             mi = mi.inverse(); // mod p
             cp = PolyUtil.interpolate(rfac, cp, M, mi, cm, d);
-            //logger.info("cp = " + cp);
+            //logger.info("cp = {}", cp);
             mn = ufac.getONE().multiply(d);
             mn = ufac.univariate(0).subtract(mn);
             M = M.multiply(mn);
             // test for completion
             if (M.degree(0) > G) {
                 if (debug) {
-                    logger.info("last lucky evaluation point " + d);
+                    logger.info("last lucky evaluation point {}", d);
                 }
                 break;
             }
-            //logger.info("M  = " + M);
+            //logger.info("M  = {}", M);
         }
         // distribute
         q = PolyUtil.<MOD> distribute(fac, cp);

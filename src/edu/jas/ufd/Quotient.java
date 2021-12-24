@@ -99,12 +99,12 @@ public class Quotient<C extends GcdRingElem<C>>
         if (!isred) {
             // must reduce to lowest terms
             GenPolynomial<C> gcd = ring.gcd(n, d);
-            if (false || debug) {
-                logger.info("gcd = " + gcd);
+            if (debug) {
+                logger.debug("gcd = {}", gcd);
             }
             //GenPolynomial<C> gcd = ring.ring.getONE();
             if (!gcd.isONE()) {
-                //logger.info("gcd = " + gcd);
+                //logger.debug("gcd = {}", gcd);
                 n = ring.divide(n, gcd);
                 d = ring.divide(d, gcd);
             }

@@ -86,16 +86,12 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
         ExpVector et = A.trailingExpVector();
         if (!et.isZERO()) {
             GenPolynomial<C> tr = pfac.valueOf(et);
-            if (logger.isInfoEnabled()) {
-                logger.info("trailing term = " + tr);
-            }
+            logger.info("trailing term = {}", tr);
             A = PolyUtil.<C> basePseudoDivide(A, tr);
             long ep = et.getVal(0); // univariate
             et = et.subst(0, 1);
             tr = pfac.valueOf(et);
-            if (logger.isInfoEnabled()) {
-                logger.info("tr, ep = " + tr + ", " + ep);
-            }
+            logger.info("tr, ep = {}, {}", tr, ep);
             sfactors.put(tr, ep);
             if (A.length() == 1) {
                 return sfactors;
@@ -131,7 +127,7 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
             Z = Y.subtract(Wp);
             k++;
         }
-        logger.info("W, k = " + W + ", " + k);
+        logger.info("W, k = {}, {}", W, k);
         if (!W.isONE()) {
             sfactors.put(W, k);
         }
@@ -173,17 +169,13 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
         }
         // factors of content
         GenPolynomial<C> Pc = engine.recursiveContent(P);
-        if (logger.isInfoEnabled()) {
-            logger.info("recursiveContent = " + Pc);
-        }
+        logger.info("recursiveContent = {}", Pc);
         Pc = Pc.monic();
         if (!Pc.isONE()) {
             P = PolyUtil.<C> coefficientPseudoDivide(P, Pc);
         }
         SortedMap<GenPolynomial<C>, Long> rsf = squarefreeFactors(Pc);
-        if (logger.isInfoEnabled()) {
-            logger.info("squarefreeFactors = " + rsf);
-        }
+        logger.info("squarefreeFactors = {}", rsf);
         // add factors of content
         for (Map.Entry<GenPolynomial<C>, Long> me : rsf.entrySet()) {
             GenPolynomial<C> c = me.getKey();
@@ -197,9 +189,7 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
         ExpVector et = P.trailingExpVector();
         if (!et.isZERO()) {
             GenPolynomial<GenPolynomial<C>> tr = pfac.valueOf(et);
-            if (logger.isInfoEnabled()) {
-                logger.info("trailing term = " + tr);
-            }
+            logger.info("trailing term = {}", tr);
             P = PolyUtil.<C> recursivePseudoDivide(P, tr);
             long ep = et.getVal(0); // univariate
             et = et.subst(0, 1);
@@ -239,7 +229,7 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
             Z = Y.subtract(Wp);
             k++;
         }
-        logger.info("W, k = " + W + ", " + k);
+        logger.info("W, k = {}, {}", W, k);
         if (!W.isONE()) {
             sfactors.put(W, k);
         }

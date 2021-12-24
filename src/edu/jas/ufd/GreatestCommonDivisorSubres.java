@@ -100,7 +100,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
             r = S;
         }
         if (debug) {
-            logger.debug("degrees: e = " + e + ", f = " + f);
+            logger.debug("degrees: e = {}, f = {}", e, f);
         }
         r = r.abs();
         q = q.abs();
@@ -176,7 +176,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
             r = S;
         }
         if (debug) {
-            logger.debug("degrees: e = " + e + ", f = " + f);
+            logger.debug("degrees: e = {}, f = {}", e, f);
         }
         r = r.abs();
         q = q.abs();
@@ -202,7 +202,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
             //System.out.println("rgcd delta = " + delta);
             x = PolyUtil.<C> recursiveDensePseudoRemainder(q, r);
             if (logger.isDebugEnabled()) {
-                logger.info("recursiveDensePseudoRemainder.bits = " + x.bitLength());
+                logger.info("recursiveDensePseudoRemainder.bits = {}", x.bitLength());
             }
             q = r;
             if (!x.isZERO()) {
@@ -475,7 +475,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
         //}
         if (logger.isInfoEnabled()) {
             System.out.println("subResCoeffs: " + myList);
-            //logger.info("subResCoeffs: " + myList);
+            //logger.info("subResCoeffs: {}", myList);
         }
         return myList;
     }

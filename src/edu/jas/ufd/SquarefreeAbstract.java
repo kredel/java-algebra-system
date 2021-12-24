@@ -135,7 +135,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         GenPolynomial<GenPolynomial<C>> S = recursiveUnivariateSquarefreePart(P);
         boolean f = P.equals(S);
         if (!f) {
-            logger.info("not Squarefree, S != P: " + P + " != " + S);
+            logger.info("not Squarefree, S != P: {} != {}", P, S);
         }
         return f;
     }
@@ -265,7 +265,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         }
         boolean f = P.equals(t) || P.equals(t.negate());
         if (!f) {
-            logger.info("no factorization(list): F = " + F + ", P = " + P + ", t = " + t);
+            logger.info("no factorization(list): F = {}, P = {}, t = {}", F, P, t);
         }
         return f;
     }
@@ -317,7 +317,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             if (f) {
                 return f;
             }
-            logger.info("no factorization(map): F = " + F + ", P = " + P + ", t = " + t);
+            logger.info("no factorization(map): F = {}, P = {}, t = {}", F, P, t);
             //RuntimeException e = new RuntimeException("fac-map");
             //e.printStackTrace();
             //throw e;
@@ -360,8 +360,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
             if (f) {
                 return f;
             }
-            logger.info("no factorization(map): F  = " + F + ", P  = " + P + ", t  = " + t + ", Pp = " + Pp
-                            + ", tp = " + tp);
+            logger.info("no factorization(map): F  = {}, P  = {}, t  = {}, Pp = {}, tp = {}", F, P, t, Pp, tp);
             //RuntimeException e = new RuntimeException("fac-map");
             //e.printStackTrace();
             //throw e;
@@ -518,7 +517,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         }
         List<GenPolynomial<C>> fi = F.get(0);
         if (fi.size() != 1) {
-            logger.info("size(fi) != 1 " + fi);
+            logger.info("size(fi) != 1 {}", fi);
             return false;
         }
         boolean t;
@@ -586,7 +585,7 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
         C s = null;
         SortedMap<C, Long> factors = squarefreeFactors(P);
         //if (logger.isWarnEnabled()) {
-        //    logger.warn("sqfPart, better use sqfFactors, factors = " + factors);
+        //    logger.warn("sqfPart, better use sqfFactors, factors = {}", factors);
         //}
         for (C sp : factors.keySet()) {
             if (s == null) {

@@ -135,9 +135,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
             return root;
         }
         SortedMap<GenPolynomial<C>, Long> sf = squarefreeFactors(P);
-        if (logger.isInfoEnabled()) {
-            logger.info("sf = " + sf);
-        }
+        logger.info("sf = {}", sf);
         // better: test if sf.size() == 1 // not ok
         Long k = null;
         for (Map.Entry<GenPolynomial<C>, Long> me : sf.entrySet()) {
@@ -268,9 +266,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
             if (sm == null) {
                 return null;
             }
-            if (logger.isInfoEnabled()) {
-                logger.info("sm,rec = " + sm);
-            }
+            logger.info("sm,rec = {}", sm);
             GenPolynomial<C> r = rf.getONE();
             for (Map.Entry<GenPolynomial<C>, Long> me : sm.entrySet()) {
                 GenPolynomial<C> rp = me.getKey();

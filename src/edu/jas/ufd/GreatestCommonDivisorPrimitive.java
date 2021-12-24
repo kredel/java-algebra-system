@@ -62,7 +62,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>>
             r = S;
         }
         if (debug) {
-            logger.debug("degrees: e = " + e + ", f = " + f);
+            logger.debug("degrees: e = {}, f = {}", e, f);
         }
         r = r.abs();
         q = q.abs();
@@ -121,7 +121,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>>
             r = S;
         }
         if (debug) {
-            logger.debug("degrees: e = " + e + ", f = " + f);
+            logger.debug("degrees: e = {}, f = {}", e, f);
         }
         r = r.abs();
         q = q.abs();
@@ -142,7 +142,7 @@ public class GreatestCommonDivisorPrimitive<C extends GcdRingElem<C>>
         while (!r.isZERO()) {
             x = PolyUtil.<C> recursiveSparsePseudoRemainder(q, r);
             if (logger.isDebugEnabled()) {
-                logger.info("recursiveSparsePseudoRemainder.bits = " + x.bitLength());
+                logger.info("recursiveSparsePseudoRemainder.bits = {}", x.bitLength());
             }
             q = r;
             r = recursivePrimitivePart(x);

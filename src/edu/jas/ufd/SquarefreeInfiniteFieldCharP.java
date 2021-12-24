@@ -142,9 +142,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
         if (sf.size() == 0) {
             return null;
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("sf,quot = " + sf);
-        }
+        logger.info("sf,quot = {}", sf);
         // better: test if sf.size() == 2 // no, since num and den factors 
         Long k = null;
         long cl = c.longValueExact();
@@ -228,9 +226,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
             if (sm == null) {
                 return null;
             }
-            if (logger.isInfoEnabled()) {
-                logger.info("sm,root = " + sm);
-            }
+            logger.info("sm,root = {}", sm);
             Quotient<C> r = rf.getONE();
             for (Map.Entry<Quotient<C>, Long> me : sm.entrySet()) {
                 Quotient<C> rp = me.getKey();
@@ -243,7 +239,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
             ExpVector e = ExpVector.create(1, 0, fl);
             d.doPutToMap(e, r);
         }
-        logger.info("sm,root,d = " + d);
+        logger.info("sm,root,d = {}", d);
         return d;
     }
 
@@ -282,9 +278,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
             if (sm == null) {
                 return null;
             }
-            if (logger.isInfoEnabled()) {
-                logger.info("sm,base,root = " + sm);
-            }
+            logger.info("sm,base,root = {}", sm);
             Quotient<C> r = rf.getONE();
             for (Map.Entry<Quotient<C>, Long> me : sm.entrySet()) {
                 Quotient<C> rp = me.getKey();
@@ -301,9 +295,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
             ExpVector e = ExpVector.create(1, 0, fl);
             d.doPutToMap(e, r);
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("sm,base,d = " + d);
-        }
+        logger.info("sm,base,d = {}", d);
         return d;
     }
 

@@ -154,14 +154,14 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
         GenPolynomial<AlgebraicNumber<C>> cpp = Power.<GenPolynomial<AlgebraicNumber<C>>> positivePower(cp,
                         c);
         if (logger.isInfoEnabled()) {
-            logger.info("cp   = " + cp);
-            logger.info("cp^p = " + cpp);
-            logger.info("P    = " + P);
+            logger.info("cp   = {}", cp);
+            logger.info("cp^p = {}", cpp);
+            logger.info("P    = {}", P);
         }
         GenPolynomialRing<C> ppfac = new GenPolynomialRing<C>(apfac.coFac, pfac);
         List<GenPolynomial<C>> gl = new ArrayList<GenPolynomial<C>>();
         if (deg == c.longValueExact() && afac.modul.length() == 2) {
-            logger.info("deg(" + deg + ") == char_p(" + c.longValueExact() + ")");
+            logger.info("deg({}) == char_p({})", deg, c.longValueExact());
             for (Monomial<AlgebraicNumber<C>> m : cpp) {
                 ExpVector f = m.e;
                 AlgebraicNumber<C> a = m.c;
@@ -182,7 +182,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
                         Quotient<C> ccp = (Quotient<C>) (Object) cc;
                         Quotient<C> pcp = (Quotient<C>) (Object) pc;
                         if (pcp.isConstant()) {
-                            //logger.error("finite field not allowed here " + afac.toScript());
+                            //logger.error("finite field not allowed here {}", afac.toScript());
                             throw new ArithmeticException("finite field not allowed here " + afac.toScript());
                         }
                         //C dc = cc.divide(pc);
@@ -217,9 +217,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
                 }
             }
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("equations = " + gl);
-        }
+        logger.info("equations = {}", gl);
         // solve system of equations and construct result
         Reduction<C> red = new ReductionSeq<C>();
         gl = red.irreducibleSet(gl);
@@ -228,9 +226,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
         if (z < 0) { // no solution
             return null;
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("solution = " + gl);
-        }
+        logger.info("solution = {}", gl);
         GenPolynomial<C> car = apfac.getZERO();
         for (GenPolynomial<C> pl : gl) {
             if (pl.length() <= 1) {
@@ -276,7 +272,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
         }
         AlgebraicNumber<C> rr = new AlgebraicNumber<C>(afac, car);
         if (logger.isInfoEnabled()) {
-            logger.info("solution AN = " + rr);
+            logger.info("solution AN = {}", rr);
             //System.out.println("rr = " + rr);
         }
         root.put(rr, 1L);
@@ -325,9 +321,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
             if (sm == null) {
                 return null;
             }
-            if (logger.isInfoEnabled()) {
-                logger.info("sm_alg,root = " + sm);
-            }
+            logger.info("sm_alg,root = {}", sm);
             AlgebraicNumber<C> r = rf.getONE();
             for (Map.Entry<AlgebraicNumber<C>, Long> me : sm.entrySet()) {
                 AlgebraicNumber<C> rp = me.getKey();
@@ -340,7 +334,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
             ExpVector e = ExpVector.create(1, 0, fl);
             d.doPutToMap(e, r);
         }
-        logger.info("sm_alg,root,d = " + d);
+        logger.info("sm_alg,root,d = {}", d);
         return d;
     }
 
@@ -379,9 +373,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
             if (sm == null) {
                 return null;
             }
-            if (logger.isInfoEnabled()) {
-                logger.info("sm_alg,base,root = " + sm);
-            }
+            logger.info("sm_alg,base,root = {}", sm);
             AlgebraicNumber<C> r = rf.getONE();
             for (Map.Entry<AlgebraicNumber<C>, Long> me : sm.entrySet()) {
                 AlgebraicNumber<C> rp = me.getKey();
@@ -398,9 +390,7 @@ public class SquarefreeInfiniteAlgebraicFieldCharP<C extends GcdRingElem<C>>
             ExpVector e = ExpVector.create(1, 0, fl);
             d.doPutToMap(e, r);
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("sm_alg,base,d = " + d);
-        }
+        logger.info("sm_alg,base,d = {}", d);
         return d;
     }
 

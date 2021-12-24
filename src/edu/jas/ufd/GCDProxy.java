@@ -106,7 +106,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //System.out.println("starting e1 " + e1.getClass().getName());
                     GenPolynomial<C> g = e1.baseGcd(P, S);
                     if (debug) {
-                        logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                        logger.info("GCDProxy done e1 {}", e1.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -114,9 +114,9 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GCDProxy e1 " + e);
-                    logger.info("GCDProxy P = " + P);
-                    logger.info("GCDProxy S = " + S);
+                    logger.info("GCDProxy e1 {}", e);
+                    logger.info("GCDProxy P = {}", P);
+                    logger.info("GCDProxy S = {}", S);
                     throw new RuntimeException("GCDProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -130,7 +130,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //System.out.println("starting e2 " + e2.getClass().getName());
                     GenPolynomial<C> g = e2.baseGcd(P, S);
                     if (debug) {
-                        logger.info("GCDProxy done e2 " + e2.getClass().getName());
+                        logger.info("GCDProxy done e2 {}", e2.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -138,9 +138,9 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GCDProxy e2 " + e);
-                    logger.info("GCDProxy P = " + P);
-                    logger.info("GCDProxy S = " + S);
+                    logger.info("GCDProxy e2 {}", e);
+                    logger.info("GCDProxy P = {}", P);
+                    logger.info("GCDProxy S = {}", S);
                     throw new RuntimeException("GCDProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -149,10 +149,10 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
         try {
             g = pool.invokeAny(cs);
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         }
         return g;
@@ -192,7 +192,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                 try {
                     GenPolynomial<GenPolynomial<C>> g = e1.recursiveUnivariateGcd(P, S);
                     if (debug) {
-                        logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                        logger.info("GCDProxy done e1 {}", e1.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -200,9 +200,9 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GCDProxy e1 " + e);
-                    logger.info("GCDProxy P = " + P);
-                    logger.info("GCDProxy S = " + S);
+                    logger.info("GCDProxy e1 {}", e);
+                    logger.info("GCDProxy P = {}", P);
+                    logger.info("GCDProxy S = {}", S);
                     throw new RuntimeException("GCDProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -215,7 +215,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                 try {
                     GenPolynomial<GenPolynomial<C>> g = e2.recursiveUnivariateGcd(P, S);
                     if (debug) {
-                        logger.info("GCDProxy done e2 " + e2.getClass().getName());
+                        logger.info("GCDProxy done e2 {}", e2.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -223,9 +223,9 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GCDProxy e2 " + e);
-                    logger.info("GCDProxy P = " + P);
-                    logger.info("GCDProxy S = " + S);
+                    logger.info("GCDProxy e2 {}", e);
+                    logger.info("GCDProxy P = {}", P);
+                    logger.info("GCDProxy S = {}", S);
                     throw new RuntimeException("GCDProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -234,10 +234,10 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
         try {
             g = pool.invokeAny(cs);
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         }
         return g;
@@ -276,7 +276,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //System.out.println("starting e1 " + e1.getClass().getName());
                     GenPolynomial<C> g = e1.gcd(P, S);
                     if (debug) {
-                        logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                        logger.info("GCDProxy done e1 {}", e1.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -284,9 +284,9 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GCDProxy e1 " + e);
-                    logger.info("GCDProxy P = " + P);
-                    logger.info("GCDProxy S = " + S);
+                    logger.info("GCDProxy e1 {}", e);
+                    logger.info("GCDProxy P = {}", P);
+                    logger.info("GCDProxy S = {}", S);
                     throw new RuntimeException("GCDProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -300,7 +300,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //System.out.println("starting e2 " + e2.getClass().getName());
                     GenPolynomial<C> g = e2.gcd(P, S);
                     if (debug) {
-                        logger.info("GCDProxy done e2 " + e2.getClass().getName());
+                        logger.info("GCDProxy done e2 {}", e2.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -308,9 +308,9 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GCDProxy e2 " + e);
-                    logger.info("GCDProxy P = " + P);
-                    logger.info("GCDProxy S = " + S);
+                    logger.info("GCDProxy e2 {}", e);
+                    logger.info("GCDProxy P = {}", P);
+                    logger.info("GCDProxy S = {}", S);
                     throw new RuntimeException("GCDProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -319,10 +319,10 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
         try {
             g = pool.invokeAny(cs);
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         }
         return g;
@@ -361,7 +361,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //System.out.println("starting e1 " + e1.getClass().getName());
                     GenPolynomial<C> g = e1.baseResultant(P, S);
                     if (debug) {
-                        logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                        logger.info("GCDProxy done e1 {}", e1.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -369,9 +369,9 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GCDProxy e1 " + e);
-                    logger.info("GCDProxy P = " + P);
-                    logger.info("GCDProxy S = " + S);
+                    logger.info("GCDProxy e1 {}", e);
+                    logger.info("GCDProxy P = {}", P);
+                    logger.info("GCDProxy S = {}", S);
                     throw new RuntimeException("GCDProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -385,7 +385,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //System.out.println("starting e2 " + e2.getClass().getName());
                     GenPolynomial<C> g = e2.baseResultant(P, S);
                     if (debug) {
-                        logger.info("GCDProxy done e2 " + e2.getClass().getName());
+                        logger.info("GCDProxy done e2 {}", e2.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -393,9 +393,9 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GCDProxy e2 " + e);
-                    logger.info("GCDProxy P = " + P);
-                    logger.info("GCDProxy S = " + S);
+                    logger.info("GCDProxy e2 {}", e);
+                    logger.info("GCDProxy P = {}", P);
+                    logger.info("GCDProxy S = {}", S);
                     throw new RuntimeException("GCDProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -404,10 +404,10 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
         try {
             g = pool.invokeAny(cs);
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         }
         return g;
@@ -447,7 +447,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                 try {
                     GenPolynomial<GenPolynomial<C>> g = e1.recursiveUnivariateResultant(P, S);
                     if (debug) {
-                        logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                        logger.info("GCDProxy done e1 {}", e1.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -455,9 +455,9 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GCDProxy e1 " + e);
-                    logger.info("GCDProxy P = " + P);
-                    logger.info("GCDProxy S = " + S);
+                    logger.info("GCDProxy e1 {}", e);
+                    logger.info("GCDProxy P = {}", P);
+                    logger.info("GCDProxy S = {}", S);
                     throw new RuntimeException("GCDProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -470,7 +470,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                 try {
                     GenPolynomial<GenPolynomial<C>> g = e2.recursiveUnivariateResultant(P, S);
                     if (debug) {
-                        logger.info("GCDProxy done e2 " + e2.getClass().getName());
+                        logger.info("GCDProxy done e2 {}", e2.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -478,9 +478,9 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GCDProxy e2 " + e);
-                    logger.info("GCDProxy P = " + P);
-                    logger.info("GCDProxy S = " + S);
+                    logger.info("GCDProxy e2 {}", e);
+                    logger.info("GCDProxy P = {}", P);
+                    logger.info("GCDProxy S = {}", S);
                     throw new RuntimeException("GCDProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -489,10 +489,10 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
         try {
             g = pool.invokeAny(cs);
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         }
         return g;
@@ -531,7 +531,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //System.out.println("starting e1 " + e1.getClass().getName());
                     GenPolynomial<C> g = e1.resultant(P, S);
                     if (debug) {
-                        logger.info("GCDProxy done e1 " + e1.getClass().getName());
+                        logger.info("GCDProxy done e1 {}", e1.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -539,9 +539,9 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GCDProxy e1 " + e);
-                    logger.info("GCDProxy P = " + P);
-                    logger.info("GCDProxy S = " + S);
+                    logger.info("GCDProxy e1 {}", e);
+                    logger.info("GCDProxy P = {}", P);
+                    logger.info("GCDProxy S = {}", S);
                     throw new RuntimeException("GCDProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -555,7 +555,7 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //System.out.println("starting e2 " + e2.getClass().getName());
                     GenPolynomial<C> g = e2.resultant(P, S);
                     if (debug) {
-                        logger.info("GCDProxy done e2 " + e2.getClass().getName());
+                        logger.info("GCDProxy done e2 {}", e2.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -563,9 +563,9 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("GCDProxy e2 " + e);
-                    logger.info("GCDProxy P = " + P);
-                    logger.info("GCDProxy S = " + S);
+                    logger.info("GCDProxy e2 {}", e);
+                    logger.info("GCDProxy P = {}", P);
+                    logger.info("GCDProxy S = {}", S);
                     throw new RuntimeException("GCDProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -574,10 +574,10 @@ public class GCDProxy<C extends GcdRingElem<C>> extends GreatestCommonDivisorAbs
         try {
             g = pool.invokeAny(cs);
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         }
         return g;

@@ -128,16 +128,12 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>>
         ExpVector et = A.trailingExpVector();
         if (!et.isZERO()) {
             GenPolynomial<C> tr = pfac.valueOf(et);
-            if (logger.isInfoEnabled()) {
-                logger.info("trailing term = " + tr);
-            }
+            logger.info("trailing term = {}", tr);
             A = PolyUtil.<C> basePseudoDivide(A, tr);
             long ep = et.getVal(0); // univariate
             et = et.subst(0, 1);
             tr = pfac.valueOf(et);
-            if (logger.isInfoEnabled()) {
-                logger.info("tr, ep = " + tr + ", " + ep);
-            }
+            logger.info("tr, ep = {}, {}", tr, ep);
             sfactors.put(tr, ep);
             if (A.length() == 1) {
                 return sfactors;
@@ -181,9 +177,9 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>>
             if (z.degree(0) > 0) {
                 if (ldbcf.isONE() && !z.leadingBaseCoefficient().isONE()) {
                     z = engine.basePrimitivePart(z);
-                    //logger.info("z,pp = " + z);
+                    //logger.info("z,pp = {}", z);
                 }
-                logger.info("z, k = " + z + ", " + k);
+                logger.info("z, k = {}, {}", z, k);
                 sfactors.put(z, k);
             }
         }
@@ -268,18 +264,14 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>>
         }
         // factors of content
         GenPolynomial<C> Pc = engine.recursiveContent(P);
-        if (logger.isInfoEnabled()) {
-            logger.info("Pc = " + Pc);
-        }
+        logger.info("Pc = {}", Pc);
         Pc = engine.basePrimitivePart(Pc);
         //System.out.println("Pc,PP = " + Pc);
         if (!Pc.isONE()) {
             P = PolyUtil.<C> coefficientPseudoDivide(P, Pc);
         }
         SortedMap<GenPolynomial<C>, Long> rsf = squarefreeFactors(Pc);
-        if (logger.isInfoEnabled()) {
-            logger.info("rsf = " + rsf);
-        }
+        logger.info("rsf = {}", rsf);
         // add factors of content
         for (Map.Entry<GenPolynomial<C>, Long> me : rsf.entrySet()) {
             GenPolynomial<C> c = me.getKey();
@@ -293,9 +285,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>>
         ExpVector et = P.trailingExpVector();
         if (!et.isZERO()) {
             GenPolynomial<GenPolynomial<C>> tr = pfac.valueOf(et);
-            if (logger.isInfoEnabled()) {
-                logger.info("trailing term = " + tr);
-            }
+            logger.info("trailing term = {}", tr);
             P = PolyUtil.<C> recursivePseudoDivide(P, tr);
             long ep = et.getVal(0); // univariate
             et = et.subst(0, 1);
@@ -320,7 +310,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>>
                 T = engine.recursiveUnivariateGcd(T0, Tp);
                 //System.out.println("iT = " + T);
                 if (debug) {
-                    logger.info("T0 = " + T0 + ", Tp = " + Tp + ", T = " + T);
+                    logger.info("T0 = {}, Tp = {}, T = {}", T0, Tp, T);
                 }
                 T = engine.baseRecursivePrimitivePart(T);
                 //System.out.println("iT = " + T);
@@ -336,7 +326,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>>
             k++;
             GenPolynomial<GenPolynomial<C>> W = engine.recursiveUnivariateGcd(T, V);
             if (debug) {
-                logger.info("T = " + T + ", V = " + V + ", W = " + W);
+                logger.info("T = {}, V = {}, W = {}", T, V, W);
             }
             W = engine.baseRecursivePrimitivePart(W);
             GenPolynomial<GenPolynomial<C>> z = PolyUtil.<C> recursivePseudoDivide(V, W);
@@ -349,9 +339,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>>
             //was: if ( z.degree(0) > 0 ) {
             if (!z.isONE() && !z.isZERO()) {
                 z = engine.baseRecursivePrimitivePart(z);
-                if (logger.isInfoEnabled()) {
-                    logger.info("z = " + z + ", k = " + k);
-                }
+                logger.info("z = {}, k = {}", z, k);
                 sfactors.put(z, k);
             }
         }

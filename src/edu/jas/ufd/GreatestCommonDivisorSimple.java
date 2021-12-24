@@ -64,7 +64,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             r = S;
         }
         if (debug) {
-            logger.debug("degrees: e = " + e + ", f = " + f);
+            logger.debug("degrees: e = {}, f = {}", e, f);
         }
         C c;
         if (field) {
@@ -140,7 +140,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             r = S;
         }
         if (debug) {
-            logger.debug("degrees: e = " + e + ", f = " + f);
+            logger.debug("degrees: e = {}, f = {}", e, f);
         }
         if (field) {
             r = PolyUtil.<C> monic(r);
@@ -166,7 +166,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         while (!r.isZERO()) {
             x = PolyUtil.<C> recursiveSparsePseudoRemainder(q, r);
             if (logger.isDebugEnabled()) {
-                logger.info("recursiveSparsePseudoRemainder.bits = " + x.bitLength());
+                logger.info("recursiveSparsePseudoRemainder.bits = {}", x.bitLength());
             }
             q = r;
             if (field) {

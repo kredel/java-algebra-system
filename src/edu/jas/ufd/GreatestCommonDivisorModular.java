@@ -147,7 +147,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
             r = S;
         }
         if (debug) {
-            logger.debug("degrees: e = " + e + ", f = " + f);
+            logger.debug("degrees: e = {}, f = {}", e, f);
         }
         r = r.abs();
         q = q.abs();
@@ -199,11 +199,11 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
         GenPolynomial<MOD> cm = null;
         GenPolynomial<BigInteger> cpi = null;
         if (debug) {
-            logger.debug("c = " + c);
-            logger.debug("cc = " + cc);
-            logger.debug("n  = " + n);
-            logger.debug("cf = " + cf);
-            logger.info("wdegv = " + wdegv + ", in " + fac.toScript());
+            logger.debug("c = {}", c);
+            logger.debug("cc = {}", cc);
+            logger.debug("n  = {}", n);
+            logger.debug("cf = {}", cf);
+            logger.info("wdegv = {}, in {}", wdegv, fac.toScript());
         }
         for (java.math.BigInteger p : primes) {
             //System.out.println("next run ++++++++++++++++++++++++++++++++++");
@@ -211,7 +211,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
                 continue;
             }
             if (++i >= pn) {
-                logger.warn("prime list exhausted, pn = " + pn);
+                logger.warn("prime list exhausted, pn = {}", pn);
                 return iufd.gcd(P, S);
                 //throw new ArithmeticException("prime list exhausted");
             }
@@ -236,13 +236,13 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
                 continue;
             }
             if (debug) {
-                logger.info("cofac = " + cofac.getIntegerModul());
+                logger.info("cofac = {}", cofac.getIntegerModul());
             }
             // compute modular gcd
             cm = mufd.gcd(rm, qm);
             // test for constant g.c.d
             if (cm.isConstant()) {
-                logger.debug("cm, constant = " + cm);
+                logger.debug("cm, constant = {}", cm);
                 return fac.getONE().multiply(c);
                 //return cm.abs().multiply( c );
             }
@@ -297,8 +297,8 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
                 }
                 rfac = new GenPolynomialRing<MOD>(cofacM, fac);
                 if (!cofac.getClass().equals(cofacM.getClass())) {
-                    logger.info("adjusting coefficents: cofacM = " + cofacM.getClass() + ", cofacP = "
-                                    + cofac.getClass());
+                    logger.info("adjusting coefficents: cofacM = {}, cofacP = {}", cofacM.getClass(),
+                                    cofac.getClass());
                     cofac = (ModularRingFactory) new ModIntegerRing(p);
                     mfac = new GenPolynomialRing<MOD>(cofac, fac);
                     GenPolynomial<BigInteger> mm = PolyUtil.<MOD> integerFromModularCoefficients(fac, cm);
@@ -307,8 +307,8 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
                     mi = mi.inverse(); // mod p
                 }
                 if (!cp.ring.coFac.getClass().equals(cofacM.getClass())) {
-                    logger.info("adjusting coefficents: cofacM = " + cofacM.getClass() + ", cofacM' = "
-                                    + cp.ring.coFac.getClass());
+                    logger.info("adjusting coefficents: cofacM = {}, cofacM' = {}", cofacM.getClass(),
+                                    cp.ring.coFac.getClass());
                     ModularRingFactory cop = (ModularRingFactory) cp.ring.coFac;
                     cofac = (ModularRingFactory) new ModIntegerRing(cop.getIntegerModul().getVal());
                     mfac = new GenPolynomialRing<MOD>(cofac, fac);
@@ -340,12 +340,12 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
                 if (!PolyUtil.<BigInteger> baseSparsePseudoRemainder(r, x).isZERO()) {
                     continue;
                 }
-                logger.info("done on exact division, #primes = " + i);
+                logger.info("done on exact division, #primes = {}", i);
                 break;
             }
         }
         if (debug) {
-            logger.info("done on M = " + M + ", #primes = " + i);
+            logger.info("done on M = {}, #primes = {}", M, i);
         }
         // remove normalization
         q = PolyUtil.<MOD> integerFromModularCoefficients(fac, cp);
@@ -443,15 +443,15 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
         GenPolynomial<MOD> cm = null;
         //GenPolynomial<BigInteger> cpi = null;
         if (debug) {
-            logger.debug("an  = " + an);
-            logger.debug("bn  = " + bn);
-            logger.debug("e+f = " + (e + f));
-            logger.debug("cn  = " + cn);
-            logger.info("n     = " + n);
-            //logger.info("q     = " + q);
-            //logger.info("r     = " + r);
-            //logger.info("rdegv = " + rdegv.toString(fac.getVars()));
-            //logger.info("qdegv = " + qdegv.toString(fac.getVars()));
+            logger.debug("an  = {}", an);
+            logger.debug("bn  = {}", bn);
+            logger.debug("e+f = {}", (e + f));
+            logger.debug("cn  = {}", cn);
+            logger.info("n     = {}", n);
+            //logger.info("q     = {}", q);
+            //logger.info("r     = {}", r);
+            //logger.info("rdegv = {}", rdegv.toString(fac.getVars()));
+            //logger.info("qdegv = {}", qdegv.toString(fac.getVars()));
         }
         for (java.math.BigInteger p : primes) {
             //System.out.println("next run ++++++++++++++++++++++++++++++++++");
@@ -459,7 +459,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
                 continue;
             }
             if (++i >= pn) {
-                logger.warn("prime list exhausted, pn = " + pn);
+                logger.warn("prime list exhausted, pn = {}", pn);
                 return iufd.resultant(P, S);
                 //throw new ArithmeticException("prime list exhausted");
             }
@@ -473,28 +473,28 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
             mfac = new GenPolynomialRing<MOD>(cofac, fac);
             qm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, q);
             if (qm.isZERO() || !qm.leadingExpVector().equals(qdegv)) { //degreeVector()
-                //logger.info("qm = " + qm);
+                //logger.info("qm = {}", qm);
                 if (debug) {
-                    logger.info("unlucky prime = " + cofac.getIntegerModul() + ", degv = "
-                                    + qm.leadingExpVector());
+                    logger.info("unlucky prime = {}, degv = {}", cofac.getIntegerModul(),
+                                    qm.leadingExpVector());
                 }
                 continue;
             }
             rm = PolyUtil.<MOD> fromIntegerCoefficients(mfac, r);
             if (rm.isZERO() || !rm.leadingExpVector().equals(rdegv)) { //degreeVector()
-                //logger.info("rm = " + rm);
+                //logger.info("rm = {}", rm);
                 if (debug) {
-                    logger.info("unlucky prime = " + cofac.getIntegerModul() + ", degv = "
-                                    + rm.leadingExpVector());
+                    logger.info("unlucky prime = {}, degv = ", cofac.getIntegerModul(),
+                                    rm.leadingExpVector());
                 }
                 continue;
             }
-            logger.info("lucky prime = " + cofac.getIntegerModul());
+            logger.info("lucky prime = {}", cofac.getIntegerModul());
 
             // compute modular resultant
             cm = mufd.resultant(qm, rm);
             if (debug) {
-                logger.info("res_p = " + cm);
+                logger.info("res_p = {}", cm);
             }
 
             // prepare chinese remainder algorithm
@@ -517,8 +517,8 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
                 }
                 rfac = new GenPolynomialRing<MOD>(cofacM, fac);
                 if (!cofac.getClass().equals(cofacM.getClass())) {
-                    logger.info("adjusting coefficents: cofacM = " + cofacM.getClass() + ", cofacP = "
-                                    + cofac.getClass());
+                    logger.info("adjusting coefficents: cofacM = {}, cofacP = {}", cofacM.getClass(),
+                                    cofac.getClass());
                     cofac = (ModularRingFactory) new ModIntegerRing(p);
                     mfac = new GenPolynomialRing<MOD>(cofac, fac);
                     GenPolynomial<BigInteger> mm = PolyUtil.<MOD> integerFromModularCoefficients(fac, cm);
@@ -527,8 +527,8 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
                     mi = mi.inverse(); // mod p
                 }
                 if (!cp.ring.coFac.getClass().equals(cofacM.getClass())) {
-                    logger.info("adjusting coefficents: cofacM = " + cofacM.getClass() + ", cofacM' = "
-                                    + cp.ring.coFac.getClass());
+                    logger.info("adjusting coefficents: cofacM = {}, cofacM' = {}", cofacM.getClass(),
+                                    cp.ring.coFac.getClass());
                     ModularRingFactory cop = (ModularRingFactory) cp.ring.coFac;
                     cofac = (ModularRingFactory) new ModIntegerRing(cop.getIntegerModul().getVal());
                     mfac = new GenPolynomialRing<MOD>(cofac, fac);
@@ -543,7 +543,7 @@ public class GreatestCommonDivisorModular<MOD extends GcdRingElem<MOD> & Modular
             }
         }
         if (debug) {
-            logger.info("done on M = " + M + ", #primes = " + i);
+            logger.info("done on M = {}, #primes = {}", M, i);
         }
         // convert to integer polynomial
         q = PolyUtil.<MOD> integerFromModularCoefficients(fac, cp);
