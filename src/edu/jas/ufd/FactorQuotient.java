@@ -112,9 +112,7 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
 
         // factor in C[x_1,...,x_n][y_1,...,y_m]
         List<GenPolynomial<GenPolynomial<C>>> irfacts = nengine.recursiveFactorsSquarefree(Pi);
-        if (logger.isInfoEnabled()) {
-            logger.info("irfacts = " + irfacts);
-        }
+        logger.info("irfacts = {}", irfacts);
         if (irfacts.size() <= 1) {
             factors.add(P);
             return factors;
@@ -130,9 +128,7 @@ public class FactorQuotient<C extends GcdRingElem<C>> extends FactorAbstract<Quo
             r = r.multiply(ldcf);
             qfacts.add(0, r);
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("qfacts = " + qfacts);
-        }
+        logger.info("qfacts = {}", qfacts);
         factors.addAll(qfacts);
         return factors;
     }

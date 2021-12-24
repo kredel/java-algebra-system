@@ -84,12 +84,10 @@ public class FactorRational extends FactorAbsolute<BigRational> {
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(bi, pfac);
         GenPolynomial<BigInteger> Pi = PolyUtil.integerFromRationalCoefficients(ifac, Pr);
         if (debug) {
-            logger.info("Pi = " + Pi);
+            logger.info("Pi = {}", Pi);
         }
         List<GenPolynomial<BigInteger>> ifacts = iengine.baseFactorsSquarefree(Pi);
-        if (logger.isInfoEnabled()) {
-            logger.info("ifacts = " + ifacts);
-        }
+        logger.info("ifacts = {}", ifacts);
         if (ifacts.size() <= 1) {
             factors.add(P);
             return factors;
@@ -104,9 +102,7 @@ public class FactorRational extends FactorAbsolute<BigRational> {
             r = r.multiply(ldcf);
             rfacts.set(0, r);
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("rfacts = " + rfacts);
-        }
+        logger.info("rfacts = {}", rfacts);
         factors.addAll(rfacts);
         return factors;
     }
@@ -144,12 +140,10 @@ public class FactorRational extends FactorAbsolute<BigRational> {
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(bi, pfac);
         GenPolynomial<BigInteger> Pi = PolyUtil.integerFromRationalCoefficients(ifac, Pr);
         if (debug) {
-            logger.info("Pi = " + Pi);
+            logger.info("Pi = {}", Pi);
         }
         List<GenPolynomial<BigInteger>> ifacts = iengine.factorsSquarefree(Pi);
-        if (logger.isInfoEnabled()) {
-            logger.info("ifacts = " + ifacts);
-        }
+        logger.info("ifacts = {}", ifacts);
         if (ifacts.size() <= 1) {
             factors.add(P);
             return factors;
@@ -164,9 +158,7 @@ public class FactorRational extends FactorAbsolute<BigRational> {
             r = r.multiply(ldcf);
             rfacts.set(0, r);
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("rfacts = " + rfacts);
-        }
+        logger.info("rfacts = {}", rfacts);
         factors.addAll(rfacts);
         return factors;
     }
@@ -201,12 +193,10 @@ public class FactorRational extends FactorAbsolute<BigRational> {
         GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(bi, pfac);
         GenPolynomial<BigInteger> Pi = PolyUtil.integerFromRationalCoefficients(ifac, Pr);
         if (debug) {
-            logger.info("Pi = " + Pi);
+            logger.info("Pi = {}", Pi);
         }
         SortedMap<GenPolynomial<BigInteger>, Long> ifacts = iengine.factors(Pi);
-        if (logger.isInfoEnabled()) {
-            logger.info("ifacts = " + ifacts);
-        }
+        logger.info("ifacts = {}", ifacts);
         for (Map.Entry<GenPolynomial<BigInteger>, Long> me : ifacts.entrySet()) {
             GenPolynomial<BigInteger> g = me.getKey();
             if (g.isONE()) { // skip 1

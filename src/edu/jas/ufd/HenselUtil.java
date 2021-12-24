@@ -141,7 +141,7 @@ public class HenselUtil {
             }
             // E mod p
             Ep = PolyUtil.<MOD> fromIntegerCoefficients(pfac, E);
-            //logger.info("Ep = " + Ep);
+            //logger.info("Ep = {}", Ep);
 
             // construct approximation mod p
             Ap = S.multiply(Ep); // S,T ++ T,S
@@ -352,7 +352,7 @@ public class HenselUtil {
             E = E.divide(Qi);
             // E mod p
             Ep = PolyUtil.<MOD> fromIntegerCoefficients(qfac, E);
-            //logger.info("Ep = " + Ep + ", qfac = " + qfac);
+            //logger.info("Ep = {}, qfac = {}", Ep, qfac);
             //if (Ep.isZERO()) {
             //System.out.println("leaving on zero error");
             //??logger.info("leaving on zero Ep");
@@ -363,13 +363,13 @@ public class HenselUtil {
             Ap = Sp.multiply(Ep); // S,T ++ T,S
             Bp = Tp.multiply(Ep);
             GenPolynomial<MOD>[] QR;
-            //logger.info("Ap = " + Ap + ", Bp = " + Bp + ", fac(Ap) = " + Ap.ring);
+            //logger.info("Ap = {}, Bp = {}, fac(Ap) = {}", Ap, Bp, Ap.ring);
             QR = Ap.quotientRemainder(Bq);
             GenPolynomial<MOD> Qp;
             GenPolynomial<MOD> Rp;
             Qp = QR[0];
             Rp = QR[1];
-            //logger.info("Qp = " + Qp + ", Rp = " + Rp);
+            //logger.info("Qp = {}, Rp = {}", Qp, Rp);
             A1p = Rp;
             B1p = Bp.sum(Aq.multiply(Qp));
 
@@ -394,7 +394,7 @@ public class HenselUtil {
             E = E.divide(Qi);
             // E mod q
             Ep = PolyUtil.<MOD> fromIntegerCoefficients(qfac, E);
-            //logger.info("Ep2 = " + Ep);
+            //logger.info("Ep2 = {}", Ep);
 
             // construct approximation mod q
             Ap = Sp.multiply(Ep); // S,T ++ T,S
@@ -597,7 +597,7 @@ public class HenselUtil {
         BigInteger M2 = M.multiply(M.fromInteger(2));
         if (debug) {
             //System.out.println("M2 =  " + M2);
-            logger.debug("M2 =  " + M2);
+            logger.debug("M2 =  {}", M2);
         }
         BigInteger Mq = Qi;
         GenPolynomialRing<MOD> qfac;
@@ -701,7 +701,7 @@ public class HenselUtil {
             // compute E=(C-AB)/p mod p^e
             if (debug) {
                 //System.out.println("mfac =  " + Cm.ring);
-                logger.debug("mfac =  " + Cm.ring);
+                logger.debug("mfac =  {}", Cm.ring);
             }
             Em = Cm.subtract(Am.multiply(Bm));
             //System.out.println("Em =  " + Em);
@@ -721,7 +721,7 @@ public class HenselUtil {
             //            Emp = PolyUtil.<MOD>fromIntegerCoefficients(qfac,
             //               PolyUtil.integerFromModularCoefficients(fac,Em) ); 
             //System.out.println("Emp =  " + Emp);
-            //logger.info("Emp = " + Emp);
+            //logger.info("Emp = {}", Emp);
             if (Emp.isZERO()) {
                 if (C.subtract(Ai.multiply(Bi)).isZERO()) {
                     logger.info("leaving on zero Emp");
@@ -1173,13 +1173,13 @@ public class HenselUtil {
             lift.set(j, S.get(1));
             //System.out.println("B("+(j+1)+") = " + B.get(j+1));
             if (debug) {
-                logger.info("lift(" + j + ") = " + lift.get(j));
+                logger.info("lift({}) = {}", j, lift.get(j));
             }
         }
         //System.out.println("liftb = " + lift);
         lift.set(r - 1, b);
         if (debug) {
-            logger.info("lift(" + (r - 1) + ") = " + b);
+            logger.info("lift({}) = {}", (r - 1), b);
         }
         //System.out.println("B("+(r-1)+") = " + B.get(r-1) + " : " +  B.get(r-1).ring.coFac + ", b = " +  b + " : " +  b.ring.coFac);
         //System.out.println("B = " + B);
@@ -1595,7 +1595,7 @@ public class HenselUtil {
         List<GenPolynomial<MOD>> S = liftExtendedEuclidean(F, k + 1); // lift works for any k, use this
         //System.out.println("Sext = " + S);
         if (debug) {
-            logger.info("EE lift = " + S);
+            logger.info("EE lift = {}", S);
             // adjust coefficients
             List<GenPolynomial<MOD>> Sx = PolyUtil.fromIntegerCoefficients(pfac,
                             PolyUtil.integerFromModularCoefficients(ifac, S));
@@ -1664,7 +1664,7 @@ public class HenselUtil {
             Fi = Fii;
             modul = modul.multiply(p);
             if (i >= k - 1) {
-                logger.info("e != 0 for k = " + k);
+                logger.info("e != 0 for k = {}", k);
             }
         }
         // setup ring mod p^k
@@ -1761,7 +1761,7 @@ public class HenselUtil {
         List<GenPolynomial<MOD>> S = liftExtendedEuclidean(F, k + 1); // lift works for any k, use this
         //System.out.println("Sext = " + S);
         if (debug) {
-            logger.info("EE lift = " + S);
+            logger.info("EE lift = {}", S);
             // adjust coefficients
             List<GenPolynomial<MOD>> Sx = PolyUtil.fromIntegerCoefficients(pfac,
                             PolyUtil.integerFromModularCoefficients(ifac, S));
@@ -1830,7 +1830,7 @@ public class HenselUtil {
             Fi = Fii;
             modul = modul.multiply(p);
             if (i >= k - 1) {
-                logger.info("e != 0 for k = " + k);
+                logger.info("e != 0 for k = {}", k);
             }
         }
         //System.out.println("Fi = " + Fi);

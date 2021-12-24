@@ -130,7 +130,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         for (Long p : fac.keySet()) {
             BigInteger pi = BigInteger.valueOf(p);
             if (!lc.remainder(pi).isZERO() && !tc.remainder(pi.power(2)).isZERO()) {
-                logger.info("isIrreducibleEisenstein: fac = " + fac + ", lc = " + lc + ", tc = " + tc);
+                logger.info("isIrreducibleEisenstein: fac = {}, lc = {}, tc = {}", fac, lc, tc);
                 return true;
             }
         }
@@ -178,7 +178,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         //System.out.println("isCyclotomicPolynomial = " + P);
         factors = CycloUtil.cyclotomicFactors(P);
         if (factors.size() > 0) {
-            logger.info("cyclotomicFactors: #factors = " + factors.size());
+            logger.info("cyclotomicFactors: #factors = {}", factors.size());
             return normalizeFactorization(factors);
         }
         //}
@@ -210,10 +210,10 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         List<GenPolynomial<BigInteger>> ilist = null;
         int i = 0;
         if (debug) {
-            logger.debug("an  = " + an);
-            logger.debug("ac  = " + ac);
-            logger.debug("M   = " + M);
-            logger.info("degv = " + degv);
+            logger.debug("an  = {}", an);
+            logger.debug("ac  = {}", ac);
+            logger.debug("M   = {}", M);
+            logger.info("degv = {}", degv);
         }
         Iterator<java.math.BigInteger> pit = primes.iterator();
         pit.next(); // skip p = 2
@@ -232,7 +232,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 java.math.BigInteger p = pit.next();
                 //System.out.println("next run ++++++++++++++++++++++++++++++++++");
                 if (++i >= pn) {
-                    logger.error("prime list exhausted, pn = " + pn);
+                    logger.error("prime list exhausted, pn = {}", pn);
                     throw new ArithmeticException("prime list exhausted");
                 }
                 if (ModLongRing.MAX_LONG.compareTo(p) > 0) {
@@ -240,27 +240,27 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 } else {
                     cofac = (ModularRingFactory) new ModIntegerRing(p, true);
                 }
-                logger.info("prime = " + cofac);
+                logger.info("prime = {}", cofac);
                 nf = cofac.fromInteger(ac.getVal());
                 if (nf.isZERO()) {
-                    logger.info("unlucky prime (nf) = " + p);
+                    logger.info("unlucky prime (nf) = {}", p);
                     continue;
                 }
                 // initialize polynomial factory and map polynomial
                 mfac = new GenPolynomialRing<MOD>(cofac, pfac);
                 am = PolyUtil.<MOD> fromIntegerCoefficients(mfac, P);
                 if (!am.degreeVector().equals(degv)) { // allways true
-                    logger.info("unlucky prime (deg) = " + p);
+                    logger.info("unlucky prime (deg) = {}", p);
                     continue;
                 }
                 GenPolynomial<MOD> ap = PolyUtil.<MOD> baseDeriviative(am);
                 if (ap.isZERO()) {
-                    logger.info("unlucky prime (a')= " + p);
+                    logger.info("unlucky prime (a')= {}", p);
                     continue;
                 }
                 GenPolynomial<MOD> g = mengine.baseGcd(am, ap);
                 if (g.isONE()) {
-                    logger.info("**lucky prime = " + p);
+                    logger.info("**lucky prime = {}", p);
                     break;
                 }
             }
@@ -270,9 +270,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 am = am.divide(nf); // make monic
             }
             mlist = mfactor.baseFactorsSquarefree(am);
-            if (logger.isInfoEnabled()) {
-                logger.info("modlist  = " + mlist);
-            }
+            logger.info("modlist  = {}", mlist);
             if (mlist.size() <= 1) {
                 factors.add(P);
                 return factors;
@@ -300,21 +298,20 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 AD.and(D);
             }
             int s = modfac[k].size();
-            logger.info("mod(" + plist[k] + ") #s = " + s + ", D = " + D /*+ ", lt = " + ev*/);
-            //System.out.println("mod s = " + s);
+            logger.info("mod({}) #s = {}, D = {}", plist[k], s, D);
             if (s < min) {
                 min = s;
                 mlist = modfac[k];
             }
         }
-        logger.info("min = " + min + ", AD = " + AD);
+        logger.info("min = {}, AD = {}", min, AD);
         if (mlist.size() <= 1) {
             logger.info("mlist.size() = 1");
             factors.add(P);
             return factors;
         }
         if (AD.cardinality() <= 2) { // only one possible factor
-            logger.info("degree set cardinality = " + AD.cardinality());
+            logger.info("degree set cardinality = {}", AD.cardinality());
             factors.add(P);
             return factors;
         }
@@ -325,7 +322,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             for (int k = 0; k < TT; k++) {
                 mlist = modfac[k];
                 if (debug) {
-                    logger.info("lifting from " + mlist);
+                    logger.info("lifting from {}", mlist);
                 }
                 if (P.leadingBaseCoefficient().isONE()) { // monic case
                     factors = searchFactorsMonic(P, M, mlist, AD); // does now work in all cases
@@ -340,7 +337,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         } else {
             // try only shortest factor list
             if (debug) {
-                logger.info("lifting shortest from " + mlist);
+                logger.info("lifting shortest from {}", mlist);
             }
             if (P.leadingBaseCoefficient().isONE()) {
                 long t = System.currentTimeMillis();
@@ -379,7 +376,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         int max = 0;
         for (int k = 0; k < TT; k++) {
             int s = intfac[k].size();
-            logger.info("int s = " + s);
+            logger.info("int s = {}", s);
             if (s > max) {
                 max = s;
                 ilist = intfac[k];
@@ -475,7 +472,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             k++;
             pi = pi.multiply(m);
         }
-        logger.info("p^k = " + m + "^" + k);
+        logger.info("p^k = {}^{}", m, k);
         GenPolynomial<BigInteger> PP = C, P = C;
         // lift via Hensel
         try {
@@ -484,9 +481,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         } catch (NoLiftingException e) {
             throw new RuntimeException(e);
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("lifted modlist = " + lift);
-        }
+        logger.info("lifted modlist = {}", lift);
         GenPolynomialRing<MOD> mpfac = lift.get(0).ring;
 
         // combine trial factors
@@ -503,7 +498,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             for (List<GenPolynomial<MOD>> flist : ps) {
                 //System.out.println("degreeSum = " + degreeSum(flist));
                 if (!D.get((int) FactorInteger.<MOD> degreeSum(flist))) {
-                    logger.info("skipped by degree set " + D + ", deg = " + degreeSum(flist));
+                    logger.info("skipped by degree set {}, deg = {}", D, degreeSum(flist));
                     continue;
                 }
                 GenPolynomial<MOD> mtrial = Power.<GenPolynomial<MOD>> multiply(mpfac, flist);
@@ -514,7 +509,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //}
                 //System.out.println("+flist = " + flist + ", mtrial = " + mtrial);
                 if (mtrial.degree(0) > deg) { // this test is sometimes wrong
-                    logger.info("degree " + mtrial.degree(0) + " > deg " + deg);
+                    logger.info("degree {} > deg {}", mtrial.degree(0), deg);
                     //continue;
                 }
                 //System.out.println("+flist    = " + flist);
@@ -524,7 +519,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 trial = engine.basePrimitivePart(trial);
                 //System.out.println("pp(trial)= " + trial);
                 if (PolyUtil.<BigInteger> baseSparsePseudoRemainder(u, trial).isZERO()) {
-                    logger.info("successful trial = " + trial);
+                    logger.info("successful trial = {}", trial);
                     //System.out.println("trial    = " + trial);
                     //System.out.println("flist    = " + flist);
                     //trial = engine.basePrimitivePart(trial);
@@ -534,22 +529,22 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     //System.out.println("u        = " + u);
                     //if (lift.removeAll(flist)) {
                     lift = removeOnce(lift, flist);
-                    logger.info("new lift= " + lift);
+                    logger.info("new lift= {}", lift);
                     dl = (lift.size() + 1) / 2;
                     //System.out.println("dl = " + dl); 
                     j = 0; // since j++
                     break;
-                    //} logger.error("error removing flist from lift = " + lift);
+                    //} logger.error("error removing flist from lift = {}", lift);
                 }
             }
         }
         if (!u.isONE() && !u.equals(P)) {
-            logger.info("rest u = " + u);
+            logger.info("rest u = {}", u);
             //System.out.println("rest u = " + u);
             factors.add(u);
         }
         if (factors.size() == 0) {
-            logger.info("irred u = " + u);
+            logger.info("irred u = {}", u);
             //System.out.println("irred u = " + u);
             factors.add(PP);
         }
@@ -614,7 +609,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             for (List<GenPolynomial<MOD>> flist : ps) {
                 //System.out.println("degreeSum = " + degreeSum(flist));
                 if (!D.get((int) FactorInteger.<MOD> degreeSum(flist))) {
-                    logger.info("skipped by degree set " + D + ", deg = " + degreeSum(flist));
+                    logger.info("skipped by degree set {}, deg = {}", D, degreeSum(flist));
                     continue;
                 }
                 GenPolynomial<MOD> trial = mfac.getONE().multiply(nf);
@@ -623,7 +618,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     trial = trial.multiply(fk);
                 }
                 if (trial.degree(0) > deg) { // this test is sometimes wrong
-                    logger.info("degree > deg " + deg + ", degree = " + trial.degree(0));
+                    logger.info("degree > deg {}, degree = {}", deg, trial.degree(0));
                     //continue;
                 }
                 GenPolynomial<MOD> cofactor = um.divide(trial);
@@ -638,7 +633,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 } catch (NoLiftingException e) {
                     // no liftable factors
                     if ( /*debug*/logger.isDebugEnabled()) {
-                        logger.info("no liftable factors " + e);
+                        logger.info("no liftable factors {}", e);
                         //e.printStackTrace();
                     }
                     continue;
@@ -646,15 +641,15 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 GenPolynomial<BigInteger> itrial = ilist.A;
                 GenPolynomial<BigInteger> icofactor = ilist.B;
                 if (logger.isDebugEnabled()) {
-                    logger.info("       modlist = " + trial + ", cofactor " + cofactor);
-                    logger.info("lifted intlist = " + itrial + ", cofactor " + icofactor);
+                    logger.info("       modlist = {}, cofactor {}", trial, cofactor);
+                    logger.info("lifted intlist = {}, cofactor {}", itrial, icofactor);
                 }
                 //System.out.println("lifted intlist = " + itrial + ", cofactor " + icofactor); 
 
                 itrial = engine.basePrimitivePart(itrial);
                 //System.out.println("pp(trial)= " + itrial);
                 if (PolyUtil.<BigInteger> baseSparsePseudoRemainder(u, itrial).isZERO()) {
-                    logger.info("successful trial = " + itrial);
+                    logger.info("successful trial = {}", itrial);
                     //System.out.println("trial    = " + itrial);
                     //System.out.println("cofactor = " + icofactor);
                     //System.out.println("flist    = " + flist);
@@ -669,20 +664,20 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     //System.out.println("um       = " + um);
                     //if (mlist.removeAll(flist)) {
                     mlist = removeOnce(mlist, flist);
-                    logger.info("new mlist= " + mlist);
+                    logger.info("new mlist= {}", mlist);
                     dl = (mlist.size() + 1) / 2;
                     j = 0; // since j++
                     break;
-                    //} logger.error("error removing flist from ilist = " + mlist);
+                    //} logger.error("error removing flist from ilist = {}", mlist);
                 }
             }
         }
         if (!u.isONE() && !u.equals(P)) {
-            logger.info("rest u = " + u);
+            logger.info("rest u = {}", u);
             factors.add(u);
         }
         if (factors.size() == 0) {
-            logger.info("irred u = " + PP);
+            logger.info("irred u = {}", PP);
             factors.add(PP);
         }
         return normalizeFactorization(factors);
@@ -719,7 +714,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         if (factors != null) {
             return factors;
         }
-        logger.warn("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: " + P);
+        logger.warn("factorsSquarefreeHensel not applicable or failed, reverting to Kronecker for: {}", P);
         factors = super.factorsSquarefree(P);
         return factors;
     }
@@ -744,7 +739,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             if (! pfac.tord.equals(TermOrderByName.INVLEX)) {
                 pfac = new GenPolynomialRing<BigInteger>(pfac,TermOrderByName.INVLEX);
                 Pp = pfac.copy(Pp);
-                logger.warn("invlexed polynomial: " + Pp + ", from ring " + P.ring);
+                logger.warn("invlexed polynomial: {}, from ring {}", Pp, P.ring);
             } else {
                 tlex = false;
             }
@@ -759,8 +754,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             if (!TermOrderOptimization.isIdentityPermutation(opt.perm)) {
                 iperm = TermOrderOptimization.inversePermutation(opt.perm);
                 Pp = opt.list.get(0);
-                logger.info("optimized polynomial: " + Pp);
-                logger.warn("optimized ring: " + opt.ring + ", original ring: " + pfac);
+                logger.info("optimized polynomial: {}", Pp);
+                logger.warn("optimized ring: {}, original ring: {}", opt.ring, pfac);
             }
         }
         ExpVector degv = Pp.degreeVector();
@@ -768,17 +763,17 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         List<GenPolynomial<BigInteger>> facs = null;
         if (degv.length() == donv.length) { // all variables appear, hack for Hensel, check
             try {
-                logger.info("try factorsSquarefreeHensel: " + Pp);
+                logger.info("try factorsSquarefreeHensel: {}", Pp);
                 facs = factorsSquarefreeHensel(Pp);
             } catch (Exception e) {
-                logger.info("exception " + e);
+                logger.info("exception {}", e);
                 //e.printStackTrace();
             }
         } else { // not all variables appear, remove unused variables, hack for Hensel, check
             GenPolynomial<BigInteger> pu = PolyUtil.<BigInteger> removeUnusedUpperVariables(Pp);
             //GenPolynomial<BigInteger> pl = PolyUtil.<BigInteger> removeUnusedLowerVariables(pu); // not useful
             try {
-                logger.info("try factorsSquarefreeHensel: " + pu);
+                logger.info("try factorsSquarefreeHensel: {}", pu);
                 facs = factorsSquarefreeHensel(pu);
                 List<GenPolynomial<BigInteger>> fs = new ArrayList<GenPolynomial<BigInteger>>(facs.size());
                 GenPolynomialRing<BigInteger> pf = Pp.ring;
@@ -791,7 +786,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //System.out.println("fs = " + fs);
                 facs = fs;
             } catch (Exception e) {
-                logger.info("exception " + e);
+                logger.info("exception {}", e);
                 //e.printStackTrace();
             }
         }
@@ -800,11 +795,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         if (USE_OPT && iperm != null) {
             facs = TermOrderOptimization.<BigInteger> permutation(iperm, pfac, facs);
-            logger.warn("de-optimized polynomials: " + facs);
+            logger.warn("de-optimized polynomials: {}", facs);
         }
         if (tlex) {
             facs = P.ring.copy(facs);
-            logger.warn("de-invlexed polynomials: " + facs);
+            logger.warn("de-invlexed polynomials: {}", facs);
         }
         facs = normalizeFactorization(facs);
         return facs;
@@ -851,7 +846,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             prr = PolyUtil.<BigInteger> recursiveDivide(prr, prrc);
             GenPolynomial<BigInteger> prrcu = prrc.extendLower(pfac, 0, 0L); // since switched vars
             pd = PolyUtil.<BigInteger> basePseudoDivide(pd, prrcu);
-            logger.info("recursive content = " + prrc + ", new P = " + pd);
+            logger.info("recursive content = {}, new P = {}", prrc, pd);
             cfactors = factorsSquarefree(prrc);
             List<GenPolynomial<BigInteger>> cff = new ArrayList<GenPolynomial<BigInteger>>(cfactors.size());
             for (GenPolynomial<BigInteger> fs : cfactors) {
@@ -859,11 +854,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 cff.add(fsp);
             }
             cfactors = cff;
-            logger.info("cfactors = " + cfactors);
+            logger.info("cfactors = {}", cfactors);
         }
         GenPolynomial<BigInteger> lprr = prr.leadingBaseCoefficient();
         //System.out.println("prr  = " + prr);
-        logger.info("leading coeffcient = " + lprr);
+        logger.info("leading coeffcient = {}", lprr);
         boolean isMonic = false; // multivariate monic
         if (lprr.isConstant()) { // isONE ?
             isMonic = true;
@@ -871,7 +866,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         SortedMap<GenPolynomial<BigInteger>, Long> lfactors = factors(lprr);
         //System.out.println("lfactors = " + lfactors);
         List<GenPolynomial<BigInteger>> lfacs = new ArrayList<GenPolynomial<BigInteger>>(lfactors.keySet());
-        logger.info("leading coefficient factors = " + lfacs);
+        logger.info("leading coefficient factors = {}", lfacs);
 
         // search evaluation point and evaluate
         GenPolynomialRing<BigInteger> cpfac = pfac;
@@ -916,12 +911,12 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         boolean notLucky = true;
         while (notLucky) { // for Wang's test
             if (Math.abs(evStart) > 371L) {
-                logger.warn("found         points   : V = " + V + ", dei = " + dei);
+                logger.warn("found         points   : V = {}, dei = {}", V, dei);
                 //if (tParts != null && tParts.size() > 0) { // at least one successful eval point 
-                //    logger.warn("some evaluation points found after " + Math.abs(evStart) + " iterations, tParts = " + tParts);
+                //    logger.warn("some evaluation points found after {} iterations, tParts = {}", Math.abs(evStart), tParts);
                 //    break;
                 //}
-                logger.warn("no evaluation point for: P = " + P + ", prr = " + prr + ", lprr = " + lprr + ", lfacs = " + lfacs);
+                logger.warn("no evaluation point for: P = {}, prr = {}, lprr = {}, lfacs = {}", P, prr, lprr, lfacs);
                 throw new RuntimeException(
                                            "no evaluation point found after " + Math.abs(evStart) + " iterations");
             }
@@ -954,14 +949,14 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 Vi = null;
                 pep = null;
                 while (doIt) {
-                    logger.info("vi(" + j + ") = " + vi);
+                    logger.info("vi({}) = {}", j, vi);
                     Vi = new BigInteger(vi);
                     pep = PolyUtil.<BigInteger> evaluateMain(cpfac, pe, Vi);
                     //System.out.println("pep = " + pep);
                     //System.out.println("degp = " + degp + ", dege = " + pep.degree(cpfac.nvar - 1));
                     // check lucky evaluation point 
                     if (degp == pep.degree(cpfac.nvar - 1)) {
-                        logger.info("pep = " + pep);
+                        logger.info("pep = {}", pep);
                         //System.out.println("deg(pe) = " + degp + ", deg(pep) = " + pep.degree(cpfac.nvar-1));
                         // check squarefree
                         if (sengine.isSquarefree(pep)) { // cpfac.nvar == 1 && ?? no, must test on each variable
@@ -998,7 +993,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 // ensure different evaluation points
                 Set<Long> Evset = new HashSet<Long>(Evs);
                 while (Evset.size() != Evs.size()) {
-                    //logger.warn("same eval points: " + Evs + " != " + Evset);
+                    //logger.warn("same eval points: {} != {}", Evs, Evset);
                     long vgi = Evs.get(j);
                     if (vgi > 0L) {
                         vgi += 1L;
@@ -1008,7 +1003,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     Evs.set(j, vgi);
                     Evset.clear(); Evset.addAll(Evs); //= new HashSet<Long>(Evs);
                     evStart = vgi;
-                    //logger.warn("same eval points: " + Evs + ", j = " + j);
+                    //logger.warn("same eval points: {}, j = {}", Evs, j);
                 }
                 //System.out.println(", j = " + j + ", vi_b " + Vi);
                 //evStart = vi+1L;
@@ -1041,7 +1036,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 int i = 1;
                 for (BigInteger ci : cei) {
                     if (ci.isZERO()) {
-                        logger.info("condition (0) not met for cei = " + cei); // + ", dei = " + dei);
+                        logger.info("condition (0) not met for cei = {}", cei); // + ", dei = {}", dei);
                         notLucky = true;
                         break;
                     }
@@ -1058,12 +1053,12 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     }
                     dei.add(q);
                     if (q.isONE()) {
-                        logger.info("condition (1) not met for dei = " + dei + ", cei = " + cei);
+                        logger.info("condition (1) not met for dei = {}, cei = {}", dei, cei);
                         if (!testSeparate(cei, pecw)) {
                             countSeparate++;
                             if (countSeparate > COUNT_MAX) {
-                                logger.info("too many inseparable evaluation points: " + countSeparate
-                                            + ", removing " + pecw);
+                                logger.info("too many inseparable evaluation points: {}, removing {}", countSeparate,
+                                            pecw);
                             }
                         }
                         notLucky = true;
@@ -1076,9 +1071,9 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             if (notLucky) {
                 continue;
             }
-            logger.info("evaluation points  = " + V + ", dei = " + dei);
+            logger.info("evaluation points  = {}, dei = {}", V, dei);
             //System.out.println("Evs = " + Evs);
-            logger.info("univariate polynomial = " + pe + ", pecw = " + pecw);
+            logger.info("univariate polynomial = {}, pecw = {}", pe, pecw);
             //pe = pe.abs();
             //ufactors = baseFactorsRadical(pe); //baseFactorsSquarefree(pe); wrong since not primitive
             ufactors = baseFactorsSquarefree(pe.divide(pecw)); //wrong if not primitive
@@ -1094,7 +1089,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 }
                 return factors;
             }
-            logger.info("univariate factors = " + ufactors); // + ", of " + pe);
+            logger.info("univariate factors = {}", ufactors); // + ", of {}", pe);
             //System.out.println("lfacs    = " + lfacs);
             //System.out.println("cei      = " + cei);
             //System.out.println("pecw     = " + pecw);
@@ -1143,7 +1138,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 lpx = Power.<GenPolynomial<BigInteger>> multiply(lprr.ring, lf); // test only, not used
                 //System.out.println("lpx = " + lpx);
                 if (!lprr.degreeVector().equals(lpx.degreeVector())) {
-                    logger.info("deg(lprr) != deg(lpx): lprr = " + lprr + ", lpx = " + lpx);
+                    logger.info("deg(lprr) != deg(lpx): lprr = {}, lpx = {}", lprr, lpx);
                     notLucky = true;
                     continue;
                 }
@@ -1215,7 +1210,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                         }
                         if (pes.equals(Power.<GenPolynomial<BigInteger>> multiply(pe.ring, un))) {
                             //System.out.println("*pe  = " + pes + ", pec = " + pec);
-                            //ystem.out.println("*ln  = " + ln + ", *lf = " + lf);
+                            //System.out.println("*ln  = " + ln + ", *lf = " + lf);
                             //System.out.println("*un  = " + un + ", *ufactors = " + ufactors);
                             //System.out.println("*pe == prod(un) ");
                             isPrimitive = false;
@@ -1230,15 +1225,15 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //if (notLucky) {
                 //    continue;
                 //}
-                logger.info("distributed factors of leading coefficient = " + lf);
+                logger.info("distributed factors of leading coefficient = {}", lf);
                 lpx = Power.<GenPolynomial<BigInteger>> multiply(lprr.ring, lf);
                 if (!lprr.abs().equals(lpx.abs())) { // not correctly distributed
                     if (!lprr.degreeVector().equals(lpx.degreeVector())) {
-                        logger.info("lprr != lpx: lprr = " + lprr + ", lpx = " + lpx);
+                        logger.info("lprr != lpx: lprr = {}, lpx = {}", lprr, lpx);
                         notLucky = true;
                     }
                 }
-                //logger.warn("V = " + V + ", pe = " + pe + ", cei = " + cei + ", lf = " + lf + ", ln = " + ln);
+                //logger.warn("V = {}, pe = {}, cei = {}, lf = {}, ln = {}", V, pe, cei, lf, ln);
             } // end determine leading coefficients for factors
 
             if (!notLucky) {
@@ -1259,13 +1254,13 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 }
             }
         } // end notLucky loop
-        logger.warn("end notLucky loop, trial parts = " + tParts.size());
+        logger.warn("end notLucky loop, trial parts = {}", tParts.size());
 
         // search TrialParts with shortest factorization of univariate polynomial
         int min = Integer.MAX_VALUE;
         TrialParts tpmin = null;
         for (TrialParts tp : tParts) {
-            //logger.info("tp.univFactors.size() = " + tp.univFactors.size());
+            //logger.info("tp.univFactors.size() = {}", tp.univFactors.size());
             if (tp.univFactors.size() < min) {
                 min = tp.univFactors.size();
                 tpmin = tp;
@@ -1274,7 +1269,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         for (TrialParts tp : tParts) {
             if (tp.univFactors.size() == min) {
                 if (!tp.univFactors.get(0).isConstant()) {
-                    logger.info("tp.univFactors = " + tp.univFactors);
+                    logger.info("tp.univFactors = {}", tp.univFactors);
                     tpmin = tp;
                     break;
                 }
@@ -1286,8 +1281,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         ufactors = tpmin.univFactors;
         cei = tpmin.ldcfEval; // unused
         lf = tpmin.ldcfFactors;
-        logger.info("iterations    = " + Math.abs(evStart));
-        logger.info("minimal trial = " + tpmin);
+        logger.info("iterations    = {}", Math.abs(evStart));
+        logger.info("minimal trial = {}", tpmin);
 
         GenPolynomialRing<BigInteger> ufac = pe.ring;
 
@@ -1324,7 +1319,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             int pi = 0;
             while (pi++ < pn && primeIter.hasNext()) {
                 p = primeIter.next();
-                logger.info("prime = " + p);
+                logger.info("prime = {}", p);
                 // initialize coefficient factory and map normalization factor and polynomials
                 ModularRingFactory<MOD> cf = null;
                 if (ModLongRing.MAX_LONG.compareTo(p) > 0) {
@@ -1353,10 +1348,8 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         if (cofac == null) { // no lucky prime found
             throw new RuntimeException("giving up on Hensel preparation, no lucky prime found");
         }
-        logger.info("lucky prime = " + cofac.getIntegerModul());
-        if (logger.isDebugEnabled()) {
-            logger.debug("univariate modulo p: = " + Pm);
-        }
+        logger.info("lucky prime = {}", cofac.getIntegerModul());
+        logger.debug("univariate modulo p: = {}", Pm);
 
         // coefficient bound
         BigInteger an = pd.maxNorm();
@@ -1383,13 +1376,13 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 throw new RuntimeException("something is wrong, no modular p^k factorization");
             }
         }
-        logger.info("univariate modulo p^k: " + peqq + " = " + muqfactors);
+        logger.info("univariate modulo p^k: {} = {}", peqq, muqfactors);
 
         // convert C from Z[...] to Z_q[...]
         GenPolynomialRing<MOD> qcfac = new GenPolynomialRing<MOD>(muqfac, pd.ring);
         GenPolynomial<MOD> pq = PolyUtil.<MOD> fromIntegerCoefficients(qcfac, pd);
         //System.out.println("pd = " + pd);
-        logger.info("multivariate modulo p^k: " + pq);
+        logger.info("multivariate modulo p^k: {}", pq);
 
         //List<MOD> Vm = new ArrayList<MOD>(V.size());
         //for (BigInteger v : V) {
@@ -1402,7 +1395,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         List<GenPolynomial<MOD>> mlift;
         try {
             mlift = HenselMultUtil.<MOD> liftHensel(pd, pq, muqfactors, V, k, lf);
-            logger.info("mlift = " + mlift);
+            logger.info("mlift = {}", mlift);
         } catch (NoLiftingException nle) {
             //System.out.println("exception : " + nle);
             //nle.printStackTrace();
@@ -1415,7 +1408,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             throw aex;
         }
         if (mlift.size() <= 1) { // irreducible mod I, p^k, can this happen?
-            logger.info("modular lift size == 1: " + mlift);
+            logger.info("modular lift size == 1: {}", mlift);
             factors.add(pd); // P
             if (cfactors != null) {
                 cfactors.addAll(factors);
@@ -1438,7 +1431,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //System.out.println("degreeSum = " + degreeSum(flist));
                 GenPolynomial<MOD> mtrial = Power.<GenPolynomial<MOD>> multiply(mfac, flist);
                 if (mtrial.degree() > deg) { // this test is sometimes wrong
-                    logger.info("degree > deg " + deg + ", degree = " + mtrial.degree());
+                    logger.info("degree > deg {}, degree = {}", deg, mtrial.degree());
                     //continue;
                 }
                 GenPolynomial<BigInteger> trial = PolyUtil.integerFromModularCoefficients(pfac, mtrial);
@@ -1446,22 +1439,22 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 //if ( ! isPrimitive ) {
                 //}
                 if (debug) {
-                    logger.info("trial    = " + trial); // + ", mtrial = " + mtrial);
+                    logger.info("trial    = {}", trial); // + ", mtrial = {}", mtrial);
                 }
                 if (PolyUtil.<BigInteger> baseSparsePseudoRemainder(ui, trial).isZERO()) {
-                    logger.info("successful trial = " + trial);
+                    logger.info("successful trial = {}", trial);
                     factors.add(trial);
                     ui = PolyUtil.<BigInteger> basePseudoDivide(ui, trial);
                     //System.out.println("ui        = " + ui);
                     mlift = removeOnce(mlift, flist);
-                    logger.info("new mlift= " + mlift);
+                    logger.info("new mlift= {}", mlift);
                     //System.out.println("dl = " + dl); 
                     if (mlift.size() > 1) {
                         dl = (mlift.size() + 1) / 2;
                         j = 0; // since j++
                         break;
                     }
-                    logger.info("last factor = " + ui);
+                    logger.info("last factor = {}", ui);
                     factors.add(ui);
                     if (cfactors != null) {
                         cfactors.addAll(factors);
@@ -1472,12 +1465,12 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             }
         }
         if (!ui.isONE() && !ui.equals(pd)) {
-            logger.info("rest factor = " + ui);
+            logger.info("rest factor = {}", ui);
             // pp(ui) ?? no ??
             factors.add(ui);
         }
         if (factors.size() == 0) {
-            logger.info("irreducible P = " + P);
+            logger.info("irreducible P = {}", P);
             factors.add(pd); // P
         }
         if (cfactors != null) {

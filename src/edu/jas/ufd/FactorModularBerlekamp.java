@@ -119,7 +119,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         //System.out.println("Qm1 = " + Qm1);
         LinAlg<MOD> lu = new LinAlg<MOD>();
         List<GenVector<MOD>> Nsb = lu.nullSpaceBasis(Qm1);
-        logger.info("Nsb = " + Nsb);
+        logger.info("Nsb = {}", Nsb);
         int k = Nsb.size();
         if (k == 1) {
             factors.add(P);
@@ -137,8 +137,8 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
                 trials.add(rp);
             }
         }
-        logger.info("#ofFactors k = " + k);
-        logger.info("trials = " + trials);
+        logger.info("#ofFactors k = {}", k);
+        logger.info("trials = {}", trials);
         factors.add(P);
         for (GenPolynomial<MOD> t : trials) {
             if (factors.size() == k) {
@@ -168,7 +168,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
                 }
                 factors.add(g);
                 a = a.divide(g);
-                logger.info("s = " + s + ", g = " + g + ", a = " + a);
+                logger.info("s = {}, g = {}, a = {}", s, g, a);
                 if (a.isONE()) {
                     break;
                 }
@@ -222,7 +222,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
         //System.out.println("Qm1 = " + Qm1);
         LinAlg<MOD> lu = new LinAlg<MOD>();
         List<GenVector<MOD>> Nsb = lu.nullSpaceBasis(Qm1);
-        logger.info("Nsb = " + Nsb);
+        logger.info("Nsb = {}", Nsb);
         int k = Nsb.size();
         if (k == 1) {
             factors.add(P);
@@ -238,8 +238,8 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
             GenPolynomial<MOD> rp = pfac.fromVector(rv);
             trials.add(rp);
         }
-        logger.info("#ofFactors k = " + k);
-        logger.info("trials = " + trials);
+        logger.info("#ofFactors k = {}", k);
+        logger.info("trials = {}", trials);
         factors.add(P);
         GenVectorModul<MOD> vfac = new GenVectorModul<MOD>(pfac.coFac, k);
         //long q = pfac.coFac.characteristic().longValueExact();
@@ -250,7 +250,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
             lq = (int) ((AlgebraicNumberRing) pfac.coFac).extensionDegree();
             q = q.pow(lq); //Power.power(q, lq);
         }
-        logger.info("char = " + pfac.coFac.characteristic() + ", q = " + q + ", lq = " + lq);
+        logger.info("char = {}, q = {}, lq = {}", pfac.coFac.characteristic(), q, lq);
         do {
             // breadth first search, since some a might be irreducible
             GenPolynomial<MOD> a = factors.remove(0);
@@ -305,7 +305,7 @@ public class FactorModularBerlekamp<MOD extends GcdRingElem<MOD>> extends Factor
             factors.add(g);
             //System.out.println("a = " + a);
             a = a.divide(g);
-            logger.info("rv = " + rv + ", g = " + g + ", a/g = " + a);
+            logger.info("rv = {}, g = {}, a/g = {}", rv, g, a);
             if (!a.isONE()) {
                 factors.add(a);
             }

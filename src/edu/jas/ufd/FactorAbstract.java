@@ -153,20 +153,20 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         topt.add(P);
         OptimizedPolynomialList<C> opt = TermOrderOptimization.<C> optimizeTermOrder(pfac, topt);
         P = opt.list.get(0);
-        logger.info("optimized polynomial: " + P);
+        logger.info("optimized polynomial: {}", P);
         List<Integer> iperm = TermOrderOptimization.inversePermutation(opt.perm);
-        logger.info("optimize perm: " + opt.perm + ", de-optimize perm: " + iperm);
+        logger.info("optimize perm: {}, de-optimize perm: {}", opt.perm, iperm);
 
         ExpVector degv = P.degreeVector();
         int[] donv = degv.dependencyOnVariables();
         List<GenPolynomial<C>> facs = null;
         if (degv.length() == donv.length) { // all variables appear
-            logger.info("do.full factorsSquarefreeKronecker: " + P);
+            logger.info("do.full factorsSquarefreeKronecker: {}", P);
             facs = factorsSquarefreeKronecker(P);
         } else { // not all variables appear, remove unused variables
             GenPolynomial<C> pu = PolyUtil.<C> removeUnusedUpperVariables(P);
             //GenPolynomial<C> pl = PolyUtil.<C> removeUnusedLowerVariables(pu); // not useful after optimize
-            logger.info("do.sparse factorsSquarefreeKronecker: " + pu);
+            logger.info("do.sparse factorsSquarefreeKronecker: {}", pu);
             facs = factorsSquarefreeKronecker(pu); // pl
             List<GenPolynomial<C>> fs = new ArrayList<GenPolynomial<C>>(facs.size());
             GenPolynomialRing<C> pf = P.ring;
@@ -180,7 +180,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             facs = fs;
         }
         List<GenPolynomial<C>> iopt = TermOrderOptimization.<C> permutation(iperm, pfac, facs);
-        logger.info("de-optimized polynomials: " + iopt);
+        logger.info("de-optimized polynomials: {}", iopt);
         facs = normalizeFactorization(iopt);
         return facs;
     }
@@ -195,7 +195,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
     @Override
     public List<GenPolynomial<C>> factorsSquarefree(GenPolynomial<C> P) {
         if (P != null && P.ring.nvar > 1) {
-           logger.warn("no multivariate factorization for " + P.toScript() + ": falling back to Kronecker algorithm in " + P.ring.toScript());
+           logger.warn("no multivariate factorization for {}: falling back to Kronecker algorithm in {}", P, P.ring.toScript());
            //if (P.ring.characteristic().signum() == 0) {
            //    throw new IllegalArgumentException("P.ring.characteristic().signum() == 0");
            //}
@@ -235,13 +235,12 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         GenPolynomial<C> kr = PolyUfdUtil.<C> substituteKronecker(P, d);
         GenPolynomialRing<C> ufac = kr.ring;
         ufac.setVars(ufac.newVars("zz")); // side effects 
-        logger.info("deg(subs(P,d=" + d + ")) = " + kr.degree(0) + ", original degrees: " + P.degreeVector());
+        logger.info("deg(subs(P,d={})) = {}, original degrees: {}", d, kr.degree(0), P.degreeVector());
         if (debug) {
-            logger.info("subs(P,d=" + d + ") = " + kr);
-            //System.out.println("subs(P,d=" + d + ") = " + kr);
+            logger.info("subs(P,d={}) = {}", d, kr);
         }
         if (kr.degree(0) > 100) {
-            logger.warn("Kronecker substitution has to high degree " + kr.degree(0));
+            logger.warn("Kronecker substitution has to high degree {}", kr.degree(0));
             TimeStatus.checkTime("degree > 100");
         }
 
@@ -250,8 +249,8 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         // kr might not be squarefree so complete factor univariate
         SortedMap<GenPolynomial<C>, Long> slist = baseFactors(kr);
         if (debug && !isFactorization(kr, slist)) {
-            logger.warn("kr    = " + kr);
-            logger.warn("slist = " + slist);
+            logger.warn("kr    = {}", kr);
+            logger.warn("slist = {}", slist);
             throw new ArithmeticException("no factorization");
         }
         for (Map.Entry<GenPolynomial<C>, Long> me : slist.entrySet()) {
@@ -268,10 +267,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         }
         //wrong: List<GenPolynomial<C>> klist = PolyUfdUtil.<C> backSubstituteKronecker(pfac, ulist, d);
         //System.out.println("back(klist) = " + PolyUfdUtil.<C> backSubstituteKronecker(pfac, ulist, d));
-        if (logger.isInfoEnabled()) {
-            logger.info("ulist = " + ulist);
-            //System.out.println("ulist = " + ulist);
-        }
+        logger.info("ulist = {}", ulist);
         // combine trial factors
         int dl = ulist.size() - 1; //(ulist.size() + 1) / 2;
         //System.out.println("dl = " + dl);
@@ -292,7 +288,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 GenPolynomial<C> trial = PolyUfdUtil.<C> backSubstituteKronecker(pfac, utrial, d);
                 ti++;
                 if (ti % 2000 == 0) {
-                    logger.warn("ti(" + ti + ") ");
+                    logger.warn("ti({})", ti);
                     TimeStatus.checkTime(ti + " % 2000 == 0");
                 }
                 if (!evl.multipleOf(trial.leadingExpVector())) {
@@ -306,16 +302,16 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 }
                 trial = trial.monic();
                 if (ti % 15000 == 0) {
-                    logger.warn("\ndl   = " + dl + ", deg(u) = " + deg);
-                    logger.warn("ulist = " + ulist);
-                    logger.warn("kr    = " + kr);
-                    logger.warn("u     = " + u);
-                    logger.warn("trial = " + trial);
+                    logger.warn("ndl   = {}, deg(u) = {}", dl, deg);
+                    logger.warn("ulist = {}", ulist);
+                    logger.warn("kr    = {}", kr);
+                    logger.warn("u     = {}", u);
+                    logger.warn("trial = {}", trial);
                 }
                 GenPolynomial<C> rem = PolyUtil.<C> baseSparsePseudoRemainder(u, trial);
                 //System.out.println(" rem = " + rem);
                 if (rem.isZERO()) {
-                    logger.info("trial = " + trial);
+                    logger.info("trial = {}", trial);
                     //System.out.println("trial = " + trial);
                     factors.add(trial);
                     u = PolyUtil.<C> basePseudoDivide(u, trial); //u = u.divide( trial );
@@ -335,11 +331,11 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             }
         }
         if (!u.isONE() && !u.equals(P)) {
-            logger.info("rest u = " + u);
+            logger.info("rest u = {}", u);
             factors.add(u);
         }
         if (factors.size() == 0) {
-            logger.info("irred P = " + P);
+            logger.info("irred P = {}", P);
             factors.add(P); // == u
         }
         return normalizeFactorization(factors);
@@ -413,10 +409,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             factors.put(pc, 1L);
             P = P.divide(c); // make primitive or monic
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("base facs for P = " + P);
-            //System.out.println(StringUtil.selectStackTrace("edu\\.jas.*"));
-        }
+        logger.info("base facs for P = {}", P);
         SortedMap<GenPolynomial<C>, Long> facs = sengine.baseSquarefreeFactors(P);
         if (facs == null || facs.size() == 0) {
             facs = new TreeMap<GenPolynomial<C>, Long>();
@@ -424,7 +417,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         }
         if (logger.isInfoEnabled()
                         && (facs.size() > 1 || (facs.size() == 1 && facs.get(facs.firstKey()) > 1))) {
-            logger.info("squarefree facs   = " + facs);
+            logger.info("squarefree facs   = {}", facs);
             //System.out.println("sfacs   = " + facs);
             //boolean tt = isFactorization(P,facs);
             //System.out.println("sfacs tt   = " + tt);
@@ -435,7 +428,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             //System.out.println("g       = " + g);
             if (pfac.coFac.isField() && !g.leadingBaseCoefficient().isONE()) {
                 g = g.monic(); // how can this happen?
-                logger.warn("squarefree facs mon = " + g);
+                logger.warn("squarefree facs mon = {}", g);
             }
             if (g.degree(0) <= 1) {
                 if (!g.isONE()) {
@@ -444,8 +437,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             } else {
                 List<GenPolynomial<C>> sfacs = baseFactorsSquarefree(g);
                 if (debug) {
-                    logger.info("factors of squarefree = " + sfacs);
-                    //System.out.println("sfacs   = " + sfacs);
+                    logger.info("factors of squarefree = {}", sfacs);
                 }
                 for (GenPolynomial<C> h : sfacs) {
                     Long j = factors.get(h); // evtl. constants
@@ -521,7 +513,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             return factors;
         }
         if (!pfac.tord.equals(TermOrderByName.INVLEX)) {
-            logger.warn("wrong term order " + pfac.tord + ", factorization may not be correct, better use " + TermOrderByName.INVLEX);
+            logger.warn("wrong term order {}, factorization may not be correct, better use {}", pfac.tord, TermOrderByName.INVLEX);
         }
         C c;
         if (pfac.coFac.isField()) { 
@@ -539,9 +531,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             factors.put(pc, 1L);
             P = P.divide(c); // make base primitive or base monic
         }
-        if (logger.isInfoEnabled()) {
-            logger.info("base primitive part P = " + P);
-        }
+        logger.info("base primitive part P = {}", P);
         GenPolynomial<C>[] cpp = engine.contentPrimitivePart(P);
         GenPolynomial<C> pc = cpp[0];
         if (!pc.isONE()) {
@@ -552,14 +542,10 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 GenPolynomial<C> pn = g.extend(pfac,0,0L);
                 factors.put(pn,d);
             }
-            if (logger.isInfoEnabled()) {
-                logger.info("content factors = " + factors);
-            }
+            logger.info("content factors = {}", factors);
         }
         P = cpp[1];
-        if (logger.isInfoEnabled()) {
-            logger.info("primitive part P = " + P);
-        }
+        logger.info("primitive part P = {}", P);
         if (P.isONE()) {
             return factors;
         }
@@ -571,11 +557,11 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         }
         if (logger.isInfoEnabled()) {
             if (facs.size() > 1) {
-                logger.info("squarefree mfacs      = " + facs);
+                logger.info("squarefree mfacs      = {}", facs);
             } else if (facs.size() == 1 && facs.get(facs.firstKey()) > 1L) {
-                logger.info("squarefree #mfacs 1-n = " + facs);
+                logger.info("squarefree #mfacs 1-n = {}", facs);
             } else {
-                logger.info("squarefree #mfacs 1-1 = " + facs);
+                logger.info("squarefree #mfacs 1-1 = {}", facs);
             }
         }
         for (Map.Entry<GenPolynomial<C>, Long> me : facs.entrySet()) {
@@ -585,10 +571,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             }
             Long d = me.getValue(); // facs.get(g);
             List<GenPolynomial<C>> sfacs = factorsSquarefree(g);
-            if (logger.isInfoEnabled()) {
-                logger.info("factors of squarefree ^" + d + " = " + sfacs);
-                //System.out.println("sfacs   = " + sfacs);
-            }
+            logger.info("factors of squarefree ^{} = {}", d, sfacs);
             for (GenPolynomial<C> h : sfacs) {
                 long dd = d;
                 Long j = factors.get(h); // evtl. constants
@@ -732,9 +715,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
 
         // factor in C[x_1,...,x_n,y_1,...,y_m]
         List<GenPolynomial<C>> ifacts = factorsSquarefree(Pi);
-        if (logger.isInfoEnabled()) {
-            logger.info("ifacts = " + ifacts);
-        }
+        logger.info("ifacts = {}", ifacts);
         if (ifacts.size() <= 1) {
             factors.add(P);
             return factors;
@@ -748,7 +729,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
         List<GenPolynomial<GenPolynomial<C>>> rfacts = PolyUtil.<C> recursive(pfac, ifacts);
         //System.out.println("rfacts = " + rfacts);
         if (logger.isDebugEnabled()) {
-            logger.info("recfacts = " + rfacts);
+            logger.info("recfacts = {}", rfacts);
         }
         factors.addAll(rfacts);
         return factors;
@@ -788,9 +769,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
 
         // factor in C[x_1,...,x_n,y_1,...,y_m]
         SortedMap<GenPolynomial<C>, Long> dfacts = factors(Pi);
-        if (logger.isInfoEnabled()) {
-            logger.info("dfacts = " + dfacts);
-        }
+        logger.info("dfacts = {}", dfacts);
         if (!ldcf.isONE() && ldcf.isUnit()) {
             GenPolynomial<C> r = dfacts.firstKey();
             Long E = dfacts.remove(r);
@@ -804,9 +783,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             factors.put(rp, E);
         }
         //System.out.println("rfacts = " + rfacts);
-        if (logger.isInfoEnabled()) {
-            logger.info("recursive factors = " + factors);
-        }
+        logger.info("recursive factors = {}", factors);
         return factors;
     }
 

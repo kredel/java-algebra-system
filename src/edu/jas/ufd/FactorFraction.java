@@ -76,7 +76,7 @@ public class FactorFraction<C extends GcdRingElem<C>,
     public FactorFraction(QuotPairFactory<GenPolynomial<C>,D> fac, FactorAbstract<C> nengine) {
         this.qfac = fac;
         this.nengine = nengine;
-        logger.info("qfac.fac: " + qfac.pairFactory().toScript());
+        logger.info("qfac.fac: {}", qfac.pairFactory()); //.toScript()
     }
 
 

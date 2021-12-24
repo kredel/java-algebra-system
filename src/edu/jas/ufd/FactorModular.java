@@ -211,7 +211,7 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         SortedMap<Long, GenPolynomial<MOD>> dfacs = baseDistinctDegreeFactors(P);
         if (debug) {
-            logger.info("dfacs    = " + dfacs);
+            logger.info("dfacs    = {}", dfacs);
             //System.out.println("dfacs    = " + dfacs);
         }
         for (Map.Entry<Long, GenPolynomial<MOD>> me : dfacs.entrySet()) {
@@ -219,7 +219,7 @@ public class FactorModular<MOD extends GcdRingElem<MOD> & Modular> extends Facto
             GenPolynomial<MOD> f = me.getValue(); // dfacs.get(e);
             List<GenPolynomial<MOD>> efacs = baseEqualDegreeFactors(f, e);
             if (debug) {
-                logger.info("efacs " + e + "   = " + efacs);
+                logger.info("efacs {} = {}", e, efacs);
                 //System.out.println("efacs " + e + "   = " + efacs);
             }
             factors.addAll(efacs);

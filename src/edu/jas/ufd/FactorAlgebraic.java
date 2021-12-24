@@ -145,18 +145,14 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
         List<GenPolynomial<C>> nfacs;
         if (!sqf) {
             //System.out.println("\nres = " + res); 
-            logger.warn("sqf(" + ks + ") = " + res.degree());
+            logger.warn("sqf({}) = {}", ks, res.degree());
             //res = factorCoeff.squarefreePart(res); // better use obtained factors
             //res = factorCoeff.baseFactors(res).lastKey();
         }
         //res = res.monic();
-        if (logger.isInfoEnabled()) {
-            logger.info("res = " + res);
-        }
+        logger.info("res = {}", res);
         nfacs = factorCoeff.baseFactorsRadical(res);
-        if (logger.isInfoEnabled()) {
-            logger.info("res facs = " + nfacs); // Q[X]
-        }
+        logger.info("res facs = {}", nfacs); // Q[X]
         if (nfacs.size() == 1) {
             factors.add(P);
             return factors;
@@ -170,7 +166,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
             //System.out.println("nfi = " + nfi);
             Ni = PolyUfdUtil.<C> substituteConvertToAlgebraicCoefficients(pfac, nfi, ks);
             if (logger.isInfoEnabled()) {
-                logger.info("Ni = " + Ni);
+                logger.info("Ni = {}", Ni);
                 //System.out.println("Pp = " + Pp);
             }
             // compute gcds of factors with polynomial
@@ -178,9 +174,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
             if (!pni.leadingBaseCoefficient().isONE()) {
                 pni = pni.monic();
             }
-            if (logger.isInfoEnabled()) {
-                logger.info("gcd(Ni,Pp) = " + pni);
-            }
+            logger.info("gcd(Ni,Pp) = {}", pni);
             if (!pni.isONE()) {
                 factors.add(pni);
                 Pp = Pp.divide(pni);
@@ -242,7 +236,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
         while (!sqf) {
             // k = 0,1,2,-1,-2
             if (ki >= klist.length) {
-                logger.warn("sqf(" + ks + ") = " + res.degree());
+                logger.warn("sqf({}) = {}", ks, res.degree());
                 break;
             }
             k = klist[ki];
@@ -263,15 +257,11 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
             System.out.println("sqf_" + pfac.nvar + "(" + ks + ") = " + res.degree());
         }
         //res = res.monic();
-        if (logger.isInfoEnabled()) {
-            logger.info("res = " + res);
-            logger.info("factorCoeff = " + factorCoeff);
-        }
+        logger.info("res = {}", res);
+        logger.info("factorCoeff = {}", factorCoeff);
         nfacs = factorCoeff.factorsRadical(res);
         //System.out.println("\nnfacs = " + nfacs); // Q[X]
-        if (logger.isInfoEnabled()) {
-            logger.info("res facs = " + nfacs); // Q[X]
-        }
+        logger.info("res facs = {}", nfacs); // Q[X]
         if (nfacs.size() == 1) {
             factors.add(P);
             return factors;
@@ -285,7 +275,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
             //System.out.println("nfi = " + nfi);
             Ni = PolyUfdUtil.<C> substituteConvertToAlgebraicCoefficients(pfac, nfi, ks);
             if (logger.isInfoEnabled()) {
-                logger.info("Ni = " + Ni);
+                logger.info("Ni = {}", Ni);
                 //System.out.println("Pp = " + Pp);
             }
             // compute gcds of factors with polynomial
@@ -294,9 +284,7 @@ public class FactorAlgebraic<C extends GcdRingElem<C>> extends FactorAbsolute<Al
                 //System.out.println("gcd(Ni,Pp) not monic " + pni);
                 pni = pni.monic();
             }
-            if (logger.isInfoEnabled()) {
-                logger.info("gcd(Ni,Pp) = " + pni);
-            }
+            logger.info("gcd(Ni,Pp) = {}", pni);
             //System.out.println("gcd(Ni,Pp) = " + pni);
             if (!pni.isONE()) {
                 factors.add(pni);
