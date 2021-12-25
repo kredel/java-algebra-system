@@ -477,15 +477,11 @@ public class RingFactoryTokenizer {
                     } else {
                         pfac = new GenPolynomialRing<BigRational>(tcfac, vs, new TermOrder(), anv);
                     }
-                    if (debug) {
-                        logger.debug("pfac = " + pfac);
-                    }
+                    logger.debug("pfac = {}", pfac);
                     GenPolynomialTokenizer ptok = new GenPolynomialTokenizer(pfac, reader);
                     GenPolynomial mod = ptok.nextPolynomial();
                     ptok = null;
-                    if (debug) {
-                        logger.debug("mod = " + mod);
-                    }
+                    logger.debug("mod = {}", mod);
                     pfac = tpfac;
                     fac = tfac;
                     vars = ovars;
@@ -500,9 +496,7 @@ public class RingFactoryTokenizer {
                         coeff = new AlgebraicNumberRing<BigRational>(anmod);
                         ct = coeffType.ANrat;
                     }
-                    if (debug) {
-                        logger.debug("coeff = " + coeff);
-                    }
+                    logger.debug("coeff = {}", coeff);
                     tt = tok.nextToken();
                     if (tt == ']') {
                         //ok, no nextToken();
@@ -643,9 +637,7 @@ public class RingFactoryTokenizer {
         int tt;
         tt = tok.nextToken();
         if (tt == '|') {
-            if (debug) {
-                logger.debug("split index");
-            }
+            logger.debug("split index");
             tt = tok.nextToken();
             if (tt == StreamTokenizer.TT_EOF) {
                 return e;
@@ -662,9 +654,7 @@ public class RingFactoryTokenizer {
                 }
             }
         } else if (tt == '[') {
-            if (debug) {
-                logger.debug("split index");
-            }
+            logger.debug("split index");
             tt = tok.nextToken();
             if (tt == StreamTokenizer.TT_EOF) {
                 return e;
@@ -774,9 +764,7 @@ public class RingFactoryTokenizer {
         GenSolvablePolynomial sp;
         int tt;
         tt = tok.nextToken();
-        if (debug) {
-            logger.debug("start relation table: " + tt);
-        }
+        logger.debug("start relation table: {}", tt);
         if (tok.sval != null) {
             if (tok.sval.equalsIgnoreCase("RelationTable")) {
                 GenPolynomialTokenizer ptok = new GenPolynomialTokenizer(pfac, reader);
@@ -803,7 +791,7 @@ public class RingFactoryTokenizer {
             }
         }
         if (debug) {
-            logger.info("table = " + table);
+            logger.info("table = {}", table);
         }
         return;
     }
@@ -823,19 +811,20 @@ public class RingFactoryTokenizer {
     public GenPolynomialRing nextPolynomialRing() throws IOException {
         //String comments = "";
         //comments += nextComment();
-        //if (debug) logger.debug("comment = " + comments);
+        //if (debug) logger.debug("comment = {}", comments);
 
         RingFactory coeff = nextCoefficientRing();
-        logger.info("coeff = " + coeff);
+        logger.info("coeff = {}", coeff);
 
         vars = nextVariableList();
-        logger.info("vars = " + Arrays.toString(vars));
+        final var vv = vars;
+        logger.info("vars = {}", () -> Arrays.toString(vv));
         if (vars != null) {
             nvars = vars.length;
         }
 
         tord = nextTermOrder();
-        logger.info("tord = " + tord);
+        logger.info("tord = {}", tord);
         // check more TOs
 
         initFactory(coeff, parsedCoeff); // global: nvars, tord, vars
@@ -858,19 +847,19 @@ public class RingFactoryTokenizer {
     public GenSolvablePolynomialRing nextSolvablePolynomialRing() throws IOException {
         //String comments = "";
         //comments += nextComment();
-        //if (debug) logger.debug("comment = " + comments);
+        //if (debug) logger.debug("comment = {}", comments);
 
         RingFactory coeff = nextCoefficientRing();
-        logger.info("coeff = " + coeff.getClass().getSimpleName());
+        logger.info("coeff = {}", coeff.getClass().getSimpleName());
 
         vars = nextVariableList();
-        logger.info("vars = " + Arrays.toString(vars));
+        logger.info("vars = {}", Arrays.toString(vars));
         if (vars != null) {
             nvars = vars.length;
         }
 
         tord = nextTermOrder();
-        logger.info("tord = " + tord);
+        logger.info("tord = {}", tord);
         // check more TOs
 
         initFactory(coeff, parsedCoeff); // must be because of symmetric read
@@ -880,7 +869,7 @@ public class RingFactoryTokenizer {
 
         nextRelationTable();
         if (logger.isInfoEnabled()) {
-            logger.info("table = " + table + ", tok = " + tok);
+            logger.info("table = {}", table + ", tok = {}", tok);
         }
         // now spfac is initialized
         return spfac;
@@ -903,7 +892,7 @@ public class RingFactoryTokenizer {
         if (tok.ttype == ',') {
             tt = tok.nextToken();
             if (debug) {
-                logger.debug("after comma: " + tt);
+                logger.debug("after comma: {}", tt);
             }
         }
     }

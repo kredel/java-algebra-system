@@ -198,7 +198,7 @@ public class ReductionSeq<C extends RingElem<C>> // should be FieldElem<C>>
             }
             ExpVector e = m.getKey();
             if (debug) {
-                logger.debug("e = " + e.toString(Ap.ring.vars));
+                logger.debug("e = {}", e.toString(Ap.ring.vars));
             }
             // search ps with ht(ps) | ht(S)
             List<Integer> li = new ArrayList<Integer>();

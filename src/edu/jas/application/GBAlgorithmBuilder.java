@@ -265,7 +265,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
     @SuppressWarnings({ "cast", "unchecked" })
     public GBAlgorithmBuilder<C> fractionFree() {
         if (algo != null) {
-            logger.warn("selected algorithm ignored: " + algo + ", use fractionFree before");
+            logger.warn("selected algorithm ignored: {}, use fractionFree before other requests", algo + "");
         }
         if (((Object) ring.coFac) instanceof BigRational) {
             BigRational cf = (BigRational) (Object) ring.coFac;
@@ -282,7 +282,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) (GroebnerBaseAbstract) bb;
             return new GBAlgorithmBuilder<C>(ring, cbb, strategy);
         }
-        logger.warn("no fraction free algorithm implemented for " + ring);
+        logger.warn("no fraction free algorithm implemented for {}", ring);
         return this;
     }
 
@@ -304,7 +304,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
     @SuppressWarnings({ "cast", "unchecked" })
     public GBAlgorithmBuilder<C> domainAlgorithm(GBFactory.Algo a) {
         if (strategy != null) {
-            logger.warn("strategy " + strategy + " ignored for algorithm " + a);
+            logger.warn("strategy {} ignored for algorithm {}", strategy, a);
         }
         if (((Object) ring.coFac) instanceof BigInteger) {
             BigInteger cf = (BigInteger) (Object) ring.coFac;
@@ -318,7 +318,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             GroebnerBaseAbstract<C> cbb = (GroebnerBaseAbstract<C>) (GroebnerBaseAbstract) bb;
             return new GBAlgorithmBuilder<C>(ring, cbb);
         }
-        logger.warn("no domain algorithm implemented for " + ring);
+        logger.warn("no domain algorithm implemented for {}", ring);
         return this;
     }
 
@@ -398,7 +398,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             GroebnerBaseAbstract<C> pbb = new GBProxy<C>(algo, bb);
             return new GBAlgorithmBuilder<C>(ring, pbb, strategy);
         }
-        logger.warn("no parallel algorithm implemented for " + ring);
+        logger.warn("no parallel algorithm implemented for {}", ring);
         return this;
     }
 
@@ -418,7 +418,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             }
             return new GBAlgorithmBuilder<C>(ring, bb, strategy);
         }
-        logger.warn("no FGLM algorithm implemented for " + ring);
+        logger.warn("no FGLM algorithm implemented for {}", ring);
         return this;
     }
 
@@ -438,7 +438,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             }
             return new GBAlgorithmBuilder<C>(ring, bb, strategy);
         }
-        logger.warn("no Groebner walk algorithm implemented for " + ring);
+        logger.warn("no Groebner walk algorithm implemented for {}", ring);
         return this;
     }
 
@@ -454,11 +454,11 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             bb = new GroebnerBaseSeqIter<C>(strategy);
             // if (algo instanceof GBProxy) ... assemble parallel todo
             if (algo != null) {
-                logger.warn("algorithm " + algo + " ignored for " + bb);
+                logger.warn("algorithm {} ignored for {}", algo, bb);
             }
             return new GBAlgorithmBuilder<C>(ring, bb, strategy);
         }
-        logger.warn("no iterated GB algorithm implemented for " + ring);
+        logger.warn("no iterated GB algorithm implemented for {}", ring);
         return this;
     }
 
@@ -474,14 +474,14 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             bb = new GroebnerBaseF5zSigSeqIter<C>();
             // if (algo instanceof GBProxy) ... assemble parallel todo
             if (algo != null) {
-                logger.warn("algorithm " + algo + " ignored for " + bb);
+                logger.warn("algorithm {} ignored for {}", algo, bb);
             }
             if (strategy != null) {
-                logger.warn("strategy " + strategy + " ignored for " + bb);
+                logger.warn("strategy {} ignored for {}", strategy, bb);
             }
             return new GBAlgorithmBuilder<C>(ring, bb, strategy);
         }
-        logger.warn("no iterated F5 GB algorithm implemented for " + ring);
+        logger.warn("no iterated F5 GB algorithm implemented for {}", ring);
         return this;
     }
 
@@ -497,14 +497,14 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             bb = new GroebnerBaseGGVSigSeqIter<C>();
             // if (algo instanceof GBProxy) ... assemble parallel todo
             if (algo != null) {
-                logger.warn("algorithm " + algo + " ignored for " + bb);
+                logger.warn("algorithm {} ignored for {}", algo, bb);
             }
             if (strategy != null) {
-                logger.warn("strategy " + strategy + " ignored for " + bb);
+                logger.warn("strategy {} ignored for {}", strategy, bb);
             }
             return new GBAlgorithmBuilder<C>(ring, bb, strategy);
         }
-        logger.warn("no iterated GGV GB algorithm implemented for " + ring);
+        logger.warn("no iterated GGV GB algorithm implemented for {}", ring);
         return this;
     }
 
@@ -520,14 +520,14 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
             bb = new GroebnerBaseArriSigSeqIter<C>();
             // if (algo instanceof GBProxy) ... assemble parallel todo
             if (algo != null) {
-                logger.warn("algorithm " + algo + " ignored for " + bb);
+                logger.warn("algorithm {} ignored for {}", algo, bb);
             }
             if (strategy != null) {
-                logger.warn("strategy " + strategy + " ignored for " + bb);
+                logger.warn("strategy {} ignored for {}", strategy, bb);
             }
             return new GBAlgorithmBuilder<C>(ring, bb, strategy);
         }
-        logger.warn("no iterated Arri GB algorithm implemented for " + ring);
+        logger.warn("no iterated Arri GB algorithm implemented for {}", ring);
         return this;
     }
 

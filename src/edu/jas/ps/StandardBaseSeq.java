@@ -186,7 +186,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
             }
             if (logger.isInfoEnabled()) {
                 ExpVector es = S.orderExpVector();
-                logger.info("ht(S) = " + es.toString(S.ring.vars) + ", " + es); // + ", S = " + S);
+                logger.info("ht(S) = {}, {}", es.toString(S.ring.vars), es); // + ", S = {}", S);
             }
 
             //long t = System.currentTimeMillis();
@@ -199,7 +199,7 @@ public class StandardBaseSeq<C extends RingElem<C>>
             //System.out.println("time = " + t);
             if (logger.isInfoEnabled()) {
                 ExpVector eh = H.orderExpVector();
-                logger.info("ht(H) = " + eh.toString(S.ring.vars) + ", " + eh); // + ", coeff(HT(H)) = " + H.coefficient(eh));
+                logger.info("ht(H) = {}, {}", eh.toString(S.ring.vars), eh); // + ", coeff(HT(H)) = {}", H.coefficient(eh));
             }
 
             //H = H.monic();

@@ -160,7 +160,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         this.bb = bb;
         this.red = red;
         if (debug) {
-            logger.info("constructed: " + this);
+            logger.info("constructed: {}", this);
         }
     }
 
@@ -452,7 +452,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
             return;
         }
         List<GenWordPolynomial<C>> G = getList();
-        logger.info("doGB computing = " + G);
+        logger.info("doGB computing = {}", G);
         list = bb.GB(G);
         isGB = true;
         testGB = true;
@@ -963,7 +963,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         F.addAll(getList());
         List<GenWordPolynomial<C>> G = bb.GB(F);
         if (debug) {
-            logger.info("isUnit GB = " + G);
+            logger.info("isUnit GB = {}", G);
         }
         for (GenWordPolynomial<C> p : G) {
             if (p == null) {

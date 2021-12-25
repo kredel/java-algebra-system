@@ -209,7 +209,7 @@ public class IntegerProgram implements java.io.Serializable {
             sb.append(") ");
         }
         if (DEBUG) {
-            logger.debug("list=" + sb.toString());
+            logger.debug("list = {}", sb);
         }
 
         Reader source = new StringReader(sb.toString());
@@ -226,7 +226,7 @@ public class IntegerProgram implements java.io.Serializable {
             return;
         }
         if (DEBUG) {
-            logger.debug("F=" + F);
+            logger.debug("F = {}", F);
         }
         I = new Ideal<BigInteger>(F);
         return;
@@ -279,7 +279,7 @@ public class IntegerProgram implements java.io.Serializable {
         long[] l;
         this.B = Arrays.copyOf(B, B.length);
         if (DEBUG) {
-            logger.debug("GB=" + GB);
+            logger.debug("GB = {}", GB);
         }
         if (negVars) {
             l = new long[m + n + 1];
@@ -318,7 +318,8 @@ public class IntegerProgram implements java.io.Serializable {
         }
         if (success) {
             if (DEBUG) {
-                logger.debug("The solution is: " + Arrays.toString(returnMe));
+		final long[] ll = returnMe;
+                logger.debug("The solution is: {}", () -> Arrays.toString(ll));
             }
         } else {
             logger.warn("The Problem does not have a feasible solution.");

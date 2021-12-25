@@ -318,7 +318,7 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
                 if (S.red.isZERO()) {
                     w = w.subtract(a, e);
                 } else { // only in minimalGB
-                    logger.info("green_red = " + zero.sum(a, e));
+                    logger.info("green_red = {}", zero.sum(a, e));
                     r = r.subtract(a, e);
                 }
                 S = new ColorPolynomial<C>(g, r, w);
@@ -345,7 +345,7 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
             } else {
                 f = e;
                 e = e.subtract(htl[i]); // EVDIF( e, htl[i] );
-                // logger.info("red div = " + e);
+                // logger.info("red div = {}", e);
                 GenPolynomial<C> c = (GenPolynomial<C>) lbc[i];
                 GenPolynomial<C> g = engine.gcd(a, c);
                 if (!g.isONE()) {
@@ -492,7 +492,7 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
                 s.append(c.toString() + "\n");
             }
             s.append("]");
-            logger.info(s.toString());
+            logger.info("{}", s);
         }
         return cd;
     }
@@ -529,7 +529,7 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
             return CS;
         }
         for (Condition<C> cond : cd) {
-            logger.info("determine wrt cond = " + cond);
+            logger.info("determine wrt cond = {}", cond);
             if (cond.zero.isONE()) { // should not happen
                 System.out.println("ideal is one = " + cond.zero);
                 // continue; // can treat all coeffs as green

@@ -141,7 +141,7 @@ public class Local<C extends GcdRingElem<C>>
         //GenPolynomial<C> gcd = ring.ring.getONE();
         GenPolynomial<C> gcd = ring.engine.gcd(n, d);
         if (debug) {
-            logger.info("gcd = " + gcd);
+            logger.info("gcd = {}", gcd);
         }
         if (gcd.isONE()) {
             num = n;

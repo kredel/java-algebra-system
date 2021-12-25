@@ -117,7 +117,7 @@ public class RealAlgebraicRing<C extends GcdRingElem<C> & Rational>
                         rleft, rright);
         edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>> rr = new edu.jas.root.RealAlgebraicRing<edu.jas.root.RealAlgebraicNumber<C>>(
                         p0ar, r2r);
-        logger.info("realRing = " + rr);
+        logger.info("realRing = {}", rr);
         realRing = rr;
     }
 

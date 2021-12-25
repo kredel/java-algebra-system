@@ -92,7 +92,7 @@ public class ColoredSystem<C extends GcdRingElem<C>> {
         boolean contained = false;
         for (ColoredSystem<C> x : L) {
             if (condition.equals(x.condition) && list.equals(x.list)) {
-                logger.info("replaced system = " + x.condition);
+                logger.info("replaced system = {}", x.condition);
                 S.add(this);
                 contained = true;
             } else { // copy existing

@@ -168,7 +168,7 @@ public class FactorAlgebraicPrim<C extends GcdRingElem<C>> extends FactorAbsolut
                 f = f.multiply(pga);
                 factors.add(pga);
             } else {
-                logger.warn("algebraic number mismatch: ag = " + ag + ", expected Ad = " + Ad);
+                logger.warn("algebraic number mismatch: ag = {}, expected Ad = {}", ag, Ad);
             }
         }
         f = f.subtract(P);

@@ -223,11 +223,9 @@ public class SolvableLocalRing<C extends GcdRingElem<C>> implements RingFactory<
                         continue; // ignore undefined multiplication
                     }
                     if (!p.equals(q)) {
-                        if (true || debug) {
-                            logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
-                            logger.info("p = ( Xk * Xj ) * Xi = " + p);
-                            logger.info("q = Xk * ( Xj * Xi ) = " + q);
-                        }
+                        logger.info("Xk = {}, Xj = {}, Xi = {}", Xk, Xj, Xi);
+                        logger.info("p = ( Xk * Xj ) * Xi = {}", p);
+                        logger.info("q = Xk * ( Xj * Xi ) = {}", q);
                         return false;
                     }
                 }

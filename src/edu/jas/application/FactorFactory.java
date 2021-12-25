@@ -163,8 +163,7 @@ public class FactorFactory extends edu.jas.ufd.FactorFactory {
      */
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> FactorAbstract<C> getImplementation(RingFactory<C> fac) {
-        logger.info("app factor factory = " + fac.getClass().getName());
-        //System.out.println("fac_o = " + fac.getClass().getName());
+        logger.info("app factor factory = {}", fac.getClass().getName());
         FactorAbstract/*raw type<C>*/ ufd = null;
         edu.jas.application.RealAlgebraicRing rrfac = null;
         RealAlgebraicRing rfac = null;
@@ -208,7 +207,7 @@ public class FactorFactory extends edu.jas.ufd.FactorFactory {
             ufd = edu.jas.ufd.FactorFactory.getImplementation(fac);
             //return (FactorAbstract<C>) ufd;
         }
-        //logger.info("implementation = " + ufd);
+        //logger.info("implementation = {}", ufd);
         return (FactorAbstract<C>) ufd;
     }
 

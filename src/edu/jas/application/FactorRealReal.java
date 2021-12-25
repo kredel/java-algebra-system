@@ -132,7 +132,7 @@ public class FactorRealReal<C extends GcdRingElem<C> & Rational>
             factors.add(p);
         }
         if (debug) {
-            logger.info("rafactors = " + factors);
+            logger.info("rafactors = {}", factors);
         }
         return factors;
     }

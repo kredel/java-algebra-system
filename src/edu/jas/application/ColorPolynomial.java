@@ -256,8 +256,8 @@ public class ColorPolynomial<C extends RingElem<C>> implements Serializable
         int s = red.length() + white.length();
         int t = f.length();
         if (t != s) {
-            logger.warn("incomplete coloring state " + s + " != " + t);
-            logger.info("f = " + f + ", red = " + red + ", white = " + white);
+            logger.warn("incomplete coloring state {} != {}", s, t);
+            logger.info("f = {}, red = {}, white = {}", f, red, white);
             //throw new RuntimeException("illegal coloring state " + s + " != " + t);
         }
         return f;

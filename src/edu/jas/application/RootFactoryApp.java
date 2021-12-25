@@ -77,7 +77,7 @@ public class RootFactoryApp {
         Complex<RealAlgebraicNumber<C>> a = PolyUtil.<Complex<RealAlgebraicNumber<C>>> evaluateMain(cr, p, r);
         boolean t = a.isZERO();
         if (!t) {
-            logger.info("f(r) = " + a + ", f = " + f + ", r  = " + r);
+            logger.info("f(r) = {}, f = {}, r  = {}", a, f, r);
             return t;
         }
         // test approximation? not working
@@ -170,8 +170,8 @@ public class RootFactoryApp {
         GenPolynomial<C> re = PolyUtil.<C> realPartFromComplex(rfac, su);
         GenPolynomial<C> im = PolyUtil.<C> imaginaryPartFromComplex(rfac, su);
         if (debug) {
-            logger.debug("rfac = " + rfac.toScript());
-            logger.debug("t  = " + t + ", re = " + re.toScript() + ", im = " + im.toScript());
+            logger.debug("rfac = {}", () -> rfac.toScript());
+            logger.debug("t  = {}, re = {}, im = {}", t, re.toScript(), im.toScript()); // ()-> not possible
         }
         List<GenPolynomial<C>> li = new ArrayList<GenPolynomial<C>>(2);
         li.add(re);

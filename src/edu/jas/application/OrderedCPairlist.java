@@ -319,8 +319,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable 
             Map.Entry<ExpVector, LinkedList<CPair<C>>> me = ip.next();
             ExpVector g = me.getKey();
             LinkedList<CPair<C>> xl = me.getValue();
-            if (logger.isInfoEnabled())
-                logger.info("g  = " + g);
+            logger.info("g = {}", g);
             pair = null;
             while (!c && xl.size() > 0) {
                 pair = xl.removeFirst();
@@ -419,7 +418,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable 
         // assert i < j;
         boolean s = red.get(j).get(i);
         if (!s) {
-            logger.warn("c3.s false for " + j + " " + i);
+            logger.warn("c3.s false for j = {}, i = {}", j, i);
             return s;
         }
         // now s = true;
