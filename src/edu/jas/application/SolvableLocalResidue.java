@@ -126,7 +126,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
             den = ring.ring.getONE();
             return;
         }
-        //logger.info("constructor: n = " + n + ", NF(n) = " + nr);
+        //logger.info("constructor: n = {}, NF(n) = {}", n, nr);
         //n = nr; // not always working, failed
         C lc = d.leadingBaseCoefficient();
         if (!lc.isONE() && lc.isUnit()) {
@@ -159,19 +159,19 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
         //GenSolvablePolynomial<C>[] gcd = PolyModUtil.<C> syzGcdCofactors(r.ring, n, d);
         GenSolvablePolynomial<C>[] gcd = FDUtil.<C> leftGcdCofactors(r.ring, n, d);
         if (!gcd[0].isONE()) {
-            logger.info("constructor: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
+            logger.info("constructor: gcd = {}", Arrays.toString(gcd)); // + ", {}", n + ", " +d);
             n = gcd[1];
             d = gcd[2];
         }
         gcd = FDUtil.<C> rightGcdCofactors(r.ring, n, d);
         if (!gcd[0].isONE()) {
-            logger.info("constructor: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
+            logger.info("constructor: gcd = {}", Arrays.toString(gcd)); // + ", {}", n + ", " +d);
             n = gcd[1];
             d = gcd[2];
         }
         // not perfect, TODO improve
         GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n, d);
-        logger.info("simp: " + Arrays.toString(simp) + ", " + n + ", " + d);
+        logger.info("simp: {}, {}, {}", Arrays.toString(simp), n, d);
         num = simp[0];
         den = simp[1];
     }
@@ -318,7 +318,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
         // if ( den.compareTo(b.den) == 0 ) {
         //     n = (GenSolvablePolynomial<C>) num.subtract(b.num);
         //     //\\ p = ring.ideal.normalform(n);
-        //     //logger.info("p.signum() = " + p.signum());
+        //     //logger.info("p.signum() = {}", p.signum());
         //     return p.signum();
         // }
         // GenSolvablePolynomial<C> r, s;
@@ -326,8 +326,8 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
         // // if (b.den.isONE()) { }
         // GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(den,b.den);
         // if (debug) {
-        //     logger.info("oc[0] den =<>= oc[1] b.den: (" + oc[0] + ") (" + den + ") = (" + oc[1]
-        //                 + ") (" + b.den + ")");
+        //     logger.info("oc[0] den =<>= oc[1] b.den: ({}", oc[0] + ") ({}", den + ") = ({}", oc[1]
+        //                 + ") ({}", b.den + ")");
         // }
         // q = oc[0].multiply(den); 
         // q = ring.ideal.normalform(q);
@@ -336,7 +336,7 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
         // s = oc[1].multiply(b.num);
         // p = (GenSolvablePolynomial<C>) r.subtract(s);
         // //\\ p = ring.ideal.normalform(p);
-        // //logger.info("p.signum() = " + p.signum());
+        // //logger.info("p.signum() = {}", p.signum());
         // if ( t == 0 ) {
         //     throw new RuntimeException("can not happen: denominator is zero: this " + this + ", b = " + b);
         // } 
@@ -421,14 +421,13 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
         // general case
         GenSolvablePolynomial<C>[] oc = ring.engine.leftOreCond(den, S.den);
         if (debug) {
-            logger.info("oc[0] den =sum= oc[1] S.den: (" + oc[0] + ") (" + den + ") = (" + oc[1] + ") ("
-                            + S.den + ")");
+            logger.info("oc[0] den =sum= oc[1] S.den: ({}) ({}) = ({}) ({})", oc[0], den, oc[1], S.den);
         }
         d = oc[0].multiply(den);
         n1 = oc[0].multiply(num);
         n2 = oc[1].multiply(S.num);
         n = (GenSolvablePolynomial<C>) n1.sum(n2);
-        //logger.info("n = " + n + ", d = " + d);
+        //logger.info("n = {}, d = {}", n, d);
         return new SolvableLocalResidue<C>(ring, n, d, false);
     }
 

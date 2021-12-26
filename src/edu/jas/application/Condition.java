@@ -193,20 +193,20 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
         }
         boolean t = zero.isONE();
         if (t) {
-            logger.info("contradiction zero.isONE(): " + this);
+            logger.info("contradiction zero.isONE(): {}", this);
             return t;
         }
         for (GenPolynomial<C> p : zero.getList()) {
             t = nonZero.contains(p);
             if (t) {
-                logger.info("contradiction nonZero.contains(zero): " + this + ", pol = " + p);
+                logger.info("contradiction nonZero.contains(zero): {}, pol = {}", this, p);
                 return t;
             }
         }
         for (GenPolynomial<C> p : nonZero.mset) {
             t = zero.contains(p);
             if (t) {
-                logger.info("contradiction zero.contains(nonZero): " + this + ", pol = " + p);
+                logger.info("contradiction zero.contains(nonZero): {}, pol = {}", this, p);
                 return t;
             }
         }
@@ -223,7 +223,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
         // assert color(z) == white 
         z = z.monic();
         Ideal<C> idz = zero.sum(z);
-        logger.info("added to ideal: " + z);
+        logger.info("added to ideal: {}", z);
 
         Condition<C> nc = new Condition<C>(idz, nonZero);
         //if (true) {
@@ -245,7 +245,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
             return this;
         }
         MultiplicativeSet<C> ms = nonZero.add(n);
-        logger.info("added to non zero: " + n);
+        logger.info("added to non zero: {}", n);
 
         Condition<C> nc = new Condition<C>(zero, ms);
         //if (true) {
@@ -265,38 +265,38 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
         //}
         Ideal<C> idz = zero.squarefree();
         if (!idz.getList().equals(zero.getList())) {
-            logger.info("simplify squarefree: " + zero.getList() + " to " + idz.getList());
+            logger.info("simplify squarefree: {} to {}", zero.getList(), idz.getList());
         }
         List<GenPolynomial<C>> ml = idz.normalform(nonZero.mset);
         MultiplicativeSet<C> ms = nonZero;
         if (!ml.equals(nonZero.mset)) {
             if (ml.size() != nonZero.mset.size()) {
                 logger.info("contradiction(==0):");
-                logger.info("simplify normalform contradiction: " + nonZero.mset + " to " + ml);
+                logger.info("simplify normalform contradiction: {} to {}", nonZero.mset, ml);
                 return null;
             }
-            logger.info("simplify normalform: " + nonZero.mset + " to " + ml);
+            logger.info("simplify normalform: {} to {}", nonZero.mset, ml);
             ms = nonZero.replace(ml);
         }
         List<GenPolynomial<C>> Z = ms.removeFactors(idz.getList());
         if (!Z.equals(idz.getList())) {
             if (Z.size() != idz.getList().size()) { // never true
                 logger.info("contradiction(!=0):");
-                logger.info("simplify removeFactors contradiction: " + idz.getList() + " to " + Z);
+                logger.info("simplify removeFactors contradiction: {} to {}", idz.getList(), Z);
                 return null;
             }
-            logger.info("simplify removeFactors: " + idz.getList() + " to " + Z);
+            logger.info("simplify removeFactors: {} to {}", idz.getList(), Z);
             idz = new Ideal<C>(zero.getRing(), Z); // changes ideal
         }
         Condition<C> nc = new Condition<C>(idz, ms);
         if (nc.isContradictory()) { // eventually a factor became 1
-            logger.info("simplify contradiction: " + nc);
+            logger.info("simplify contradiction: {}", nc);
             return null;
         }
         if (idz.equals(zero) && ms.equals(nonZero)) {
             return this;
         }
-        logger.info("condition simplified: " + this + " to " + nc);
+        logger.info("condition simplified: {} to {}", this, nc);
         //if (false) { // no further simplification
         //    return nc;
         //}
@@ -368,7 +368,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
                 // since break is not possible
             case WHITE:
             default:
-                logger.info("recheck undetermined coeff c = " + c + ", cond = " + this);
+                logger.info("recheck undetermined coeff c = {}, cond = {}", c, this);
                 if (extendZero(c) == null) { // contradiction if colored green
                     logger.info("recheck assume red");
                     red = red.sum(c, e); // assume red

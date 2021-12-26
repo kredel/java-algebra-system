@@ -387,7 +387,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
     @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
         if (!(b instanceof SolvableIdeal)) {
-            logger.warn("equals no Ideal");
+            logger.warn("equals no SolvableIdeal");
             return false;
         }
         SolvableIdeal<C> B = null;
@@ -462,7 +462,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         logger.warn("isLeftGB computing");
         boolean igb = bb.isLeftGB(getList());
         if (sided != Side.left) {
-            logger.warn("wrong usage for is left sided GB: " + sided);
+            logger.warn("wrong usage for is left sided GB: {}", sided);
             //sided = Side.left;
         } else {
             isGB = igb;
@@ -484,16 +484,16 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
             return;
         }
         if (sided == Side.right) {
-            logger.warn("wrong usage for left sided GB: " + sided);
+            logger.warn("wrong usage for left sided GB: {}", sided);
             throw new IllegalArgumentException("wrong usage for left sided GB: " + sided);
         }
         List<GenSolvablePolynomial<C>> G = getList();
         if (sided == Side.left) {
-            logger.info("leftGB computing = " + G);
+            logger.info("leftGB computing = {}", G);
             G = bb.leftGB(G);
         }
         if (sided == Side.twosided) {
-            logger.info("twosidedGB computing = " + G);
+            logger.info("twosidedGB computing = {}", G);
             G = bb.twosidedGB(G);
         }
         //if (isTopt) {
@@ -548,7 +548,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         }
         //logger.warn("GB computing");
         List<GenSolvablePolynomial<C>> G = getList();
-        logger.info("twosidedGB computing = " + G);
+        logger.info("twosidedGB computing = {}", G);
         G = bb.twosidedGB(G);
         PolynomialList<C> li = new PolynomialList<C>(getRing(), G);
         SolvableIdeal<C> tsgb = new SolvableIdeal<C>(li, true, true, bb, red, Side.twosided);
@@ -588,7 +588,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         }
         //logger.warn("GB computing");
         List<GenSolvablePolynomial<C>> G = getList();
-        logger.info("rightGB computing = " + G);
+        logger.info("rightGB computing = {}", G);
         G = bb.rightGB(G);
         PolynomialList<C> li = new PolynomialList<C>(getRing(), G);
         SolvableIdeal<C> rgb = new SolvableIdeal<C>(li, true, true, bb, red, Side.right);
@@ -660,8 +660,8 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
             }
             GenSolvablePolynomial<C> z = red.leftNormalform(si, b);
             if (!z.isZERO()) {
-                logger.info("contains nf(b) != 0: " + z + " of " + b);
-                //        + ", si = " + si + ", ring = " + z.ring.toScript());
+                logger.info("contains nf(b) != 0: {} of {}", z, b);
+                //        + ", si = {}, ring = {}", si, z.ring.toScript());
                 return false;
             }
         }
@@ -987,8 +987,8 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         logger.warn("infiniteQuotientRab computing GB ");
         List<GenSolvablePolynomial<C>> g = bb.leftGB(c);
         if (debug) {
-            logger.info("infiniteQuotientRab    = " + tfac + ", c = " + c);
-            logger.info("infiniteQuotientRab GB = " + g);
+            logger.info("infiniteQuotientRab    = {}, c = {}", tfac, c);
+            logger.info("infiniteQuotientRab GB = {}", g);
         }
         SolvableIdeal<C> E = new SolvableIdeal<C>(tfac, g, true, sided);
         SolvableIdeal<C> Is = E.intersect(getRing());
@@ -1052,14 +1052,14 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         SolvableIdeal<C> I = this.GB(); // should be already
         GenSolvablePolynomial<C> hs = h;
         SolvableIdeal<C> Is = null;
-        logger.info("infiniteQuotient hs = " + hs);
+        logger.info("infiniteQuotient hs = {}", hs);
         long dm = -1;
         boolean eq = false;
         while (!eq) {
             Is = I.quotient(hs);
             Is = Is.GB(); // should be already
-            //logger.info("ideal Is = " + Is);
-            logger.info("infiniteQuotient s = " + s);
+            //logger.info("ideal Is = {}", Is);
+            logger.info("infiniteQuotient s = {}", s);
             if (Is.isZERO()) {
                 logger.warn("infiniteQuotient does not exist");
                 return I;
@@ -1072,7 +1072,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
                 }
                 //System.out.println("deg(Is) = " + ds);
                 if (ds > dm) {
-                    logger.warn("no convergence in infiniteQuotient (dm,ds): " + dm + " < " + ds);
+                    logger.warn("no convergence in infiniteQuotient (dm,ds): {} < {}", dm, ds);
                     return I;
                     //throw new RuntimeException("no convergence in infiniteQuotient");
                 }
@@ -1102,7 +1102,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         }
         SolvableIdeal<C> x = infiniteQuotientRab(h); // may fail
         if (debug) {
-            logger.debug("infiniteQuotientRab = " + x);
+            logger.debug("infiniteQuotientRab = {}", x);
         }
         return x.isONE();
     }
@@ -1378,15 +1378,15 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
             g = g.multiply(lbc);
         }
         if (debug) {
-            //logger.info("inv G = " + G);
-            //logger.info("inv G2F = " + x.G2F);
-            //logger.info("inv row "+i+" = " + row);
-            //logger.info("inv h = " + h);
-            //logger.info("inv g = " + g);
-            //logger.info("inv f = " + f);
+            //logger.info("inv G = {}", G);
+            //logger.info("inv G2F = {}", x.G2F);
+            //logger.info("inv row {} = {}", i, row);
+            //logger.info("inv h = {}", h);
+            //logger.info("inv g = {}", g);
+            //logger.info("inv f = {}", f);
             f = g.multiply(h);
             k = red.leftNormalform(getList(), f);
-            logger.debug("inv k = " + k);
+            logger.debug("inv k = {}", k);
             if (!k.isUnit()) {
                 throw new NotInvertibleException(" k = " + k);
             }

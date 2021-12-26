@@ -248,7 +248,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
 
         List<ColoredSystem<C>> CS = cred.determine(F);
         if (logger.isDebugEnabled()) {
-            logger.info("determined polynomials =\n" + CS);
+            logger.info("determined polynomials =\n{}", CS);
         }
         // substitute zero conditions into parameter coefficients and test
         for (ColoredSystem<C> cs : CS) {
@@ -307,7 +307,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             il.add(p);
             i++;
         }
-        logger.info("random ideal = " + il);
+        logger.info("random ideal = {}", il);
         Ideal<C> id = new Ideal<C>(ccf, il);
         ResidueRing<C> r = new ResidueRing<C>(id);
         //GroebnerBase<Residue<C>> bb = new GroebnerBasePseudoSeq<Residue<C>>(r);
@@ -396,9 +396,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         List<ColoredSystem<C>> CS = cred.determine(F);
         // System.out.println("CS = " + CS);
         // CS.remove(0); // empty colored system
-        if (logger.isInfoEnabled()) {
-            logger.info("determined polynomials =\n" + CS);
-        }
+        logger.info("determined polynomials =\n{}", CS);
 
         // setup pair lists
         List<ColoredSystem<C>> CSs = new ArrayList<ColoredSystem<C>>();
@@ -425,15 +423,15 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         while (CSs.size() > 0) {
             cs = CSs.get(0); // remove(0);
             si++;
-            logger.info("poped GBsys number    " + si + " with condition = " + cs.condition);
-            logger.info("poped GBsys (remaining " + (CSs.size() - 1) + ") with pairlist  = " + cs.pairlist);
+            logger.info("poped GBsys number    {} with condition = {}", si, cs.condition);
+            logger.info("poped GBsys (remaining {}) with pairlist  = {}", (CSs.size() - 1), cs.pairlist);
             if (!cs.isDetermined()) {
                 cs = cs.reDetermine();
             }
             pairlist = cs.pairlist;
             G = cs.list;
             cond = cs.condition;
-            // logger.info( pairlist.toString() );
+            // logger.info("{}", pairlist);
 
             CPair<C> pair;
             ColorPolynomial<C> pi;
@@ -449,8 +447,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 pi = pair.pi;
                 pj = pair.pj;
                 if (debug) {
-                    logger.info("pi    = " + pi);
-                    logger.info("pj    = " + pj);
+                    logger.info("pi = {}, pj = {}", pi, pj);
                 }
 
                 S = cred.SPolynomial(pi, pj);
@@ -459,8 +456,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     continue;
                 }
                 if (debug) {
-                    // logger.info("ht(S) = " + S.leadingExpVector() );
-                    logger.info("S = " + S);
+                    // logger.info("ht(S) = {}", S.leadingExpVector() );
+                    logger.info("S = {}", S);
                 }
 
                 H = cred.normalform(cond, G, S);
@@ -469,14 +466,14 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     continue;
                 }
                 if (debug) {
-                    logger.info("ht(H) = " + H.leadingExpVector());
+                    logger.info("ht(H) = {}", H.leadingExpVector());
                 }
 
                 H = H.abs();
                 if (debug) {
-                    logger.debug("H = " + H);
+                    logger.debug("H = {}", H);
                 }
-                logger.info("H = " + H);
+                logger.info("H = {}", H);
                 if (!H.isZERO()) {
                     //CSh = new ArrayList<ColoredSystem<C>>();
                     ncs = determineAddPairs(cs, H);
@@ -487,8 +484,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     pairlist = cs.pairlist;
                     G = cs.list;
                     cond = cs.condition;
-                    logger.info("replaced main branch = " + cond);
-                    logger.info("#new systems       = " + ncs.size());
+                    logger.info("replaced main branch = {}", cond);
+                    logger.info("#new systems       = {}", ncs.size());
                     int yi = CSs.size();
                     for (ColoredSystem<C> x : ncs) {
                         if (!x.isDetermined()) {
@@ -496,7 +493,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                         }
                         CSs = x.addToList(CSs);
                     }
-                    logger.info("#new systems added = " + (CSs.size() - yi));
+                    logger.info("#new systems added = {}", (CSs.size() - yi));
                 }
             }
             // all s-pols reduce to zero in this branch
@@ -505,7 +502,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             }
             CSb.add(cs);
             CSs.remove(0);
-            logger.info("done with = " + cs.condition);
+            logger.info("done with = {}", cs.condition);
         }
         // all branches done
         CSh = new ArrayList<ColoredSystem<C>>();
@@ -521,8 +518,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
             }
             // cs = new ColoredSystem<C>( x.condition, G, x.pairlist );
             CSh.add(cs);
-            logger.info("#sequential done = " + x.condition);
-            logger.info(x.pairlist.toString());
+            logger.info("#sequential done = {}", x.condition);
+            logger.info("{}", x.pairlist);
         }
         CSb = new ArrayList<ColoredSystem<C>>(CSh);
         return new GroebnerSystem<C>(CSb);
@@ -555,12 +552,12 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         // System.out.println("to determine = " + A);
         GenPolynomial<GenPolynomial<C>> Ap = A.getPolynomial();
         List<Condition<C>> cd = cred.caseDistinction(cond, Ap);
-        logger.info("# cases = " + cd.size());
+        logger.info("# cases = {}", cd.size());
         for (Condition<C> cnd : cd) {
             //nz = cnd.determine(Ap);
             nz = cnd.reDetermine(A);
             if (nz.isZERO()) {
-                logger.info("zero determined nz = " + nz);
+                logger.info("zero determined nz = {}", nz);
                 Sp = new ArrayList<ColorPolynomial<C>>(S);
                 OrderedCPairlist<C> PL = pl.copy();
                 NS = new ColoredSystem<C>(cnd, Sp, PL);
@@ -580,7 +577,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 System.out.println("*** S.contains(nz) ***");
                 continue;
             }
-            logger.info("new determined nz = " + nz);
+            logger.info("new determined nz = {}", nz);
             Sp = new ArrayList<ColorPolynomial<C>>(S);
             Sp.add(nz);
             OrderedCPairlist<C> PL = pl.copy();
@@ -672,7 +669,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                     } catch (RuntimeException ignored) {
                     }
                     if (!a.isZERO()) {
-                        logger.error("nf(a) != 0 " + b + ", " + a);
+                        logger.error("nf(a) != 0 {}, {}", b, a);
                         F.add(b);
                     }
                 }
@@ -707,7 +704,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
                 G.add(a); // adds as last
             } else { // should not happen
                 if (debug) {
-                    logger.error("nf(a) not determined " + b + ", " + a);
+                    logger.error("nf(a) not determined {}, {}", b, a);
                 }
                 G.add(b); // adds as last
             }

@@ -166,9 +166,7 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
             return Bp;
         }
         assert (ring.nvar == Bp.ring.nvar);
-        if (debug) {
-            logger.debug("ring = " + ring);
-        }
+        logger.debug("ring = {}", ring);
         //System.out.println("this = " + this + ", Bp = " + Bp);
         ExpVector Z = ring.evzero;
         LocalSolvablePolynomial<C> Dp = ring.getZERO().copy();
@@ -183,8 +181,9 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
         for (Map.Entry<ExpVector, SolvableLocal<C>> y : A.entrySet()) {
             SolvableLocal<C> a = y.getValue();
             ExpVector e = y.getKey();
-            if (debug)
-                logger.info("e = " + e + ", a = " + a);
+            if (debug) {
+                logger.info("e = {}, a = {}", e, a);
+            }
             //int[] ep = e.dependencyOnVariables();
             //int el1 = ring.nvar + 1;
             //if (ep.length > 0) {
@@ -195,7 +194,7 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                 SolvableLocal<C> b = x.getValue();
                 ExpVector f = x.getKey();
                 if (debug)
-                    logger.info("f = " + f + ", b = " + b);
+                    logger.info("f = {}, b = {}", f, b);
                 int[] fp = f.dependencyOnVariables();
                 int fl1 = 0;
                 if (fp.length > 0) {
@@ -209,10 +208,10 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                 if (ring.polCoeff.coeffTable.isEmpty() || b.isConstant() || e.isZERO()) { // symmetric
                     Cps = new LocalSolvablePolynomial<C>(ring, b, e);
                     if (debug)
-                        logger.info("symmetric coeff: b = " + b + ", e = " + e);
+                        logger.info("symmetric coeff: b = {}, e = {}", b, e);
                 } else { // unsymmetric
                     if (debug)
-                        logger.info("unsymmetric coeff: b = " + b + ", e = " + e);
+                        logger.info("unsymmetric coeff: b = {}, e = {}", b, e);
                     // compute e * b as ( e * 1/b.den ) * b.num
                     if (b.den.isONE()) { // recursion base
                         // for (Map.Entry<ExpVector, C> z : b.num.getMap().entrySet()) {
@@ -220,7 +219,7 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                         //     SolvableLocal<C> cc = b.ring.getONE().multiply(c);
                         //     ExpVector g = z.getKey();
                         //     if (debug)
-                        //         logger.info("g = " + g + ", c = " + c);
+                        //         logger.info("g = {}, c = {}", g, c);
                         //     int[] gp = g.dependencyOnVariables();
                         //     int gl1 = 0;
                         //     if (gp.length > 0) {
@@ -228,7 +227,7 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                         //     }
                         //     int gl1s = b.ring.ring.nvar + 1 - gl1;
                         //     if (debug) {
-                        //         logger.info("gl1s = " + gl1s);
+                        //         logger.info("gl1s = {}", gl1s);
                         //     }
                         //     // split e = e1 * e2, g = g1 * g2
                         //     ExpVector e1 = e;
@@ -245,14 +244,14 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                         //         g2 = Zc.subst(gl1, g.getVal(gl1));
                         //     }
                         //     if (debug)
-                        //         logger.info("coeff, e1 = " + e1 + ", e2 = " + e2);
+                        //         logger.info("coeff, e1 = {}, e2 = {}", e1, e2);
                         //     if (debug)
-                        //         logger.info("coeff, g1 = " + g1 + ", g2 = " + g2);
+                        //         logger.info("coeff, g1 = {}, g2 = {}", g1, g2);
                         //     TableRelation<GenPolynomial<C>> crel = ring.coeffTable.lookup(e2, g2);
                         //     if (debug)
-                        //         logger.info("coeff, crel = " + crel.p);
+                        //         logger.info("coeff, crel = {}", crel.p);
                         //     if (debug)
-                        //         logger.info("coeff, e  = " + e + " g, = " + g + ", crel = " + crel);
+                        //         logger.info("coeff, e  = {}, g = {}, crel = {}", e, g, crel);
                         //     Cs = ring.fromPolyCoefficients(crel.p); //LocalSolvablePolynomial<C>(ring, crel.p);
                         //     // rest of multiplication and update relations
                         //     if (crel.f != null) {
@@ -291,15 +290,15 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                         LocalSolvablePolynomial<C> rsp = ring.fromPolyCoefficients(rsp3);
                         Cps = rsp;
                         // if (rsp.compareTo(Cps) != 0) {
-                        //     logger.info("coeff-poly: Cps = " + Cps);
-                        //     logger.info("coeff-poly: rsp = " + rsp);
+                        //     logger.info("coeff-poly: Cps = {}", Cps);
+                        //     logger.info("coeff-poly: rsp = {}", rsp);
                         //     //System.out.println("rsp.compareTo(Cps) != 0");
                         //     //} else {
                         //     //System.out.println("rsp.compareTo(Cps) == 0");
                         // }
                     } else { // b.den != 1
                         if (debug)
-                            logger.info("coeff-num: Cps = " + Cps + ", num = " + b.num + ", den = " + b.den);
+                            logger.info("coeff-num: Cps = {}, num = {}, den = {}", Cps, b.num, b.den);
                         Cps = new LocalSolvablePolynomial<C>(ring, b.ring.getONE(), e);
 
                         // coefficient multiplication with 1/den: 
@@ -328,14 +327,14 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                     }
                 } // end coeff
                 if (debug)
-                    logger.info("coeff-den: Cps = " + Cps);
+                    logger.info("coeff-den: Cps = {}", Cps);
                 // polynomial multiplication 
                 LocalSolvablePolynomial<C> Dps = ring.getZERO().copy();
                 LocalSolvablePolynomial<C> Ds = null;
                 LocalSolvablePolynomial<C> D1, D2;
                 if (ring.table.isEmpty() || Cps.isConstant() || f.isZERO()) { // symmetric
                     if (debug)
-                        logger.info("symmetric poly: b = " + b + ", e = " + e);
+                        logger.info("symmetric poly: b = {}, e = {}", b, e);
                     ExpVector g = e.sum(f);
                     if (Cps.isConstant()) {
                         Ds = new LocalSolvablePolynomial<C>(ring, Cps.leadingBaseCoefficient(), g); // symmetric!
@@ -344,13 +343,13 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                     }
                 } else { // eventually unsymmetric
                     if (debug)
-                        logger.info("unsymmetric poly: Cps = " + Cps + ", f = " + f);
+                        logger.info("unsymmetric poly: Cps = {}, f = {}", Cps, f);
                     for (Map.Entry<ExpVector, SolvableLocal<C>> z : Cps.val.entrySet()) {
                         // split g = g1 * g2, f = f1 * f2
                         SolvableLocal<C> c = z.getValue();
                         ExpVector g = z.getKey();
                         if (debug)
-                            logger.info("g = " + g + ", c = " + c);
+                            logger.info("g = {}, c = {}", g, c);
                         int[] gp = g.dependencyOnVariables();
                         int gl1 = ring.nvar + 1;
                         if (gp.length > 0) {
@@ -360,7 +359,7 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                         if (gl1s <= fl1s) { // symmetric
                             ExpVector h = g.sum(f);
                             if (debug)
-                                logger.info("disjoint poly: g = " + g + ", f = " + f + ", h = " + h);
+                                logger.info("disjoint poly: g = {}, f = {}, h = {}", g, f, h);
                             Ds = (LocalSolvablePolynomial<C>) zero.sum(one, h); // symmetric!
                         } else {
                             ExpVector g1 = g.subst(gl1, 0);
@@ -369,12 +368,12 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                             ExpVector f1 = f.subst(fl1, 0);
                             ExpVector f2 = Z.subst(fl1, f.getVal(fl1));
                             if (debug) {
-                                logger.info("poly, g1 = " + g1 + ", f1 = " + f1 + ", Dps = " + Dps);
-                                logger.info("poly, g2 = " + g2 + ", f2 = " + f2);
+                                logger.info("poly, g1 = {}, f1 = {}, Dps = {}", g1, f1, Dps);
+                                logger.info("poly, g2 = {}, f2 = {}", g2, f2);
                             }
                             TableRelation<SolvableLocal<C>> rel = ring.table.lookup(g2, f2);
                             if (debug)
-                                logger.info("poly, g  = " + g + ", f  = " + f + ", rel = " + rel);
+                                logger.info("poly, g  = {}, f  = {}, rel = {}", g, f, rel);
                             Ds = new LocalSolvablePolynomial<C>(ring, rel.p); //ring.copy(rel.p);
                             if (rel.f != null) {
                                 D2 = new LocalSolvablePolynomial<C>(ring, one, rel.f);
@@ -408,8 +407,7 @@ public class LocalSolvablePolynomial<C extends GcdRingElem<C>> extends
                     Ds = Dps;
                 }
                 Ds = Ds.multiplyLeft(a); // multiply(a,b); // non-symmetric 
-                if (debug)
-                    logger.debug("Ds = " + Ds);
+                logger.debug("Ds = {}", Ds);
                 Dp = (LocalSolvablePolynomial<C>) Dp.sum(Ds);
             } // end B loop
         } // end A loop

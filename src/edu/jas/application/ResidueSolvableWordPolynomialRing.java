@@ -369,11 +369,9 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
                         p = Xk.multiply(Xj).multiply(Xi);
                         q = Xk.multiply(Xj.multiply(Xi));
                         if (!p.equals(q)) {
-                            if (logger.isInfoEnabled()) {
-                                logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
-                                logger.info("p = ( Xk * Xj ) * Xi = " + p);
-                                logger.info("q = Xk * ( Xj * Xi ) = " + q);
-                            }
+                            logger.info("Xk = {}, Xj = {}, Xi = {}", Xk, Xj, Xi);
+                            logger.info("p = ( Xk * Xj ) * Xi = {}", p);
+                            logger.info("q = Xk * ( Xj * Xi ) = {}", q);
                             return false;
                         }
                     } catch (RuntimeException e) {
@@ -549,7 +547,7 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
             GenSolvablePolynomial<WordResidue<C>> s = pt.nextSolvablePolynomial();
             p = new ResidueSolvableWordPolynomial<C>(this, s);
         } catch (IOException e) {
-            logger.error(e.toString() + " parse " + this);
+            logger.error(e.toString() + " parse {}", this);
             p = ZERO;
         }
         return p;

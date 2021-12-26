@@ -233,25 +233,14 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
                     }
                     if (p.num.equals(q.num) && p.den.equals(q.den)) { // short cut
                         continue;
-                    // } else {
-                    //     int s = p.num.length() + q.num.length() + p.den.length() + q.den.length();
-                    //     if (s > 5) {
-                    //         System.out.println("lr assoc: p = " + p.toScript());
-                    //         System.out.println("lr assoc: q = " + q.toScript());
-                    //         System.out.println("lr assoc: Xk = " + Xk.toScript() + ", Xj = " + Xj.toScript() + ", Xi = " + Xi.toScript());
-                    //         System.out.println("lr size = " + s);
-                    //      continue;
-                    //     }
                     }
                     if (!p.equals(q)) {
-                        if (true || debug) {
-                            System.out.println("lr assoc: p = " + p.toScript());
-                            System.out.println("lr assoc: q = " + q.toScript());
-                            System.out.println("lr assoc: Xk = " + Xk.toScript() + ", Xj = " + Xj.toScript() + ", Xi = " + Xi.toScript());
-                            logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
-                            logger.info("p = ( Xk * Xj ) * Xi = " + p);
-                            logger.info("q = Xk * ( Xj * Xi ) = " + q);
-                        }
+                        //System.out.println("lr assoc: p = " + p.toScript());
+                        //System.out.println("lr assoc: q = " + q.toScript());
+                        //System.out.println("lr assoc: Xk = " + Xk.toScript() + ", Xj = " + Xj.toScript() + ", Xi = " + Xi.toScript());
+                        logger.info("Xk = {}, Xj = {}, Xi = {}", Xk, Xj, Xi);
+                        logger.info("p = ( Xk * Xj ) * Xi = {}", p);
+                        logger.info("q = Xk * ( Xj * Xi ) = {}", q);
                         return false;
                     }
                 }

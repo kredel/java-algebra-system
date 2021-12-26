@@ -170,9 +170,7 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
             return this;
         }
         assert (ring.nvar == Bp.ring.nvar);
-        if (debug) {
-            logger.debug("ring = " + ring);
-        }
+        logger.debug("ring = {}", ring);
         ExpVector Z = ring.evzero;
         ResidueSolvablePolynomial<C> Dp = ring.getZERO().copy();
         ResidueSolvablePolynomial<C> zero = ring.getZERO().copy();
@@ -187,7 +185,7 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
             SolvableResidue<C> a = y.getValue();
             ExpVector e = y.getKey();
             if (debug)
-                logger.info("e = " + e + ", a = " + a);
+                logger.info("e = {}, a = {}", e, a);
             //int[] ep = e.dependencyOnVariables();
             //int el1 = ring.nvar + 1;
             //if (ep.length > 0) {
@@ -198,7 +196,7 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                 SolvableResidue<C> b = x.getValue();
                 ExpVector f = x.getKey();
                 if (debug)
-                    logger.info("f = " + f + ", b = " + b);
+                    logger.info("f = {}, b = {}", f, b);
                 int[] fp = f.dependencyOnVariables();
                 int fl1 = 0;
                 if (fp.length > 0) {
@@ -211,10 +209,10 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                 if (ring.polCoeff.coeffTable.isEmpty() || b.isConstant() || e.isZERO()) { // symmetric
                     Cps = new ResidueSolvablePolynomial<C>(ring, b, e);
                     if (debug)
-                        logger.info("symmetric coeff: b = " + b + ", e = " + e);
+                        logger.info("symmetric coeff: b = {}, e = {}", b, e);
                 } else { // unsymmetric
                     if (debug)
-                        logger.info("unsymmetric coeff: b = " + b + ", e = " + e);
+                        logger.info("unsymmetric coeff: b = {}, e = {}", b, e);
                     // recursive polynomial coefficient multiplication : e * b.val
                     RecSolvablePolynomial<C> rsp1 = new RecSolvablePolynomial<C>(ring.polCoeff, e);
                     RecSolvablePolynomial<C> rsp2 = new RecSolvablePolynomial<C>(ring.polCoeff, b.val);
@@ -222,7 +220,7 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                     Cps = ring.fromPolyCoefficients(rsp3);
                 }
                 if (debug) {
-                    logger.info("coeff-poly: Cps = " + Cps);
+                    logger.info("coeff-poly: Cps = {}", Cps);
                 }
                 // polynomial multiplication 
                 ResidueSolvablePolynomial<C> Dps = ring.getZERO().copy();
@@ -230,7 +228,7 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                 ResidueSolvablePolynomial<C> D1, D2;
                 if (ring.table.isEmpty() || Cps.isConstant() || f.isZERO()) { // symmetric
                     if (debug)
-                        logger.info("symmetric poly: b = " + b + ", e = " + e);
+                        logger.info("symmetric poly: b = {}, e = {}", b, e);
                     ExpVector g = e.sum(f);
                     if (Cps.isConstant()) {
                         Ds = new ResidueSolvablePolynomial<C>(ring, Cps.leadingBaseCoefficient(), g); // symmetric!
@@ -239,13 +237,13 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                     }
                 } else { // eventually unsymmetric
                     if (debug)
-                        logger.info("unsymmetric poly: Cps = " + Cps + ", f = " + f);
+                        logger.info("unsymmetric poly: Cps = {}, f = {}", Cps, f);
                     for (Map.Entry<ExpVector, SolvableResidue<C>> z : Cps.val.entrySet()) {
                         // split g = g1 * g2, f = f1 * f2
                         SolvableResidue<C> c = z.getValue();
                         ExpVector g = z.getKey();
                         if (debug)
-                            logger.info("g = " + g + ", c = " + c);
+                            logger.info("g = {}, c = {}", g, c);
                         int[] gp = g.dependencyOnVariables();
                         int gl1 = ring.nvar + 1;
                         if (gp.length > 0) {
@@ -255,7 +253,7 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                         if (gl1s <= fl1s) { // symmetric
                             ExpVector h = g.sum(f);
                             if (debug)
-                                logger.info("disjoint poly: g = " + g + ", f = " + f + ", h = " + h);
+                                logger.info("disjoint poly: g = {}, f = {}, h = {}", g, f, h);
                             Ds = (ResidueSolvablePolynomial<C>) zero.sum(one, h); // symmetric!
                         } else {
                             ExpVector g1 = g.subst(gl1, 0);
@@ -264,12 +262,12 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                             ExpVector f1 = f.subst(fl1, 0);
                             ExpVector f2 = Z.subst(fl1, f.getVal(fl1));
                             if (debug)
-                                logger.info("poly, g1 = " + g1 + ", f1 = " + f1 + ", Dps = " + Dps);
+                                logger.info("poly, g1 = {}, f1 = {}, Dps = {}", g1, f1, Dps);
                             if (debug)
-                                logger.info("poly, g2 = " + g2 + ", f2 = " + f2);
+                                logger.info("poly, g2 = {}, f2 = {}", g2, f2);
                             TableRelation<SolvableResidue<C>> rel = ring.table.lookup(g2, f2);
                             if (debug)
-                                logger.info("poly, g  = " + g + ", f  = " + f + ", rel = " + rel);
+                                logger.info("poly, g  = {}, f  = {}, rel = {}", g, f, rel);
                             Ds = new ResidueSolvablePolynomial<C>(ring, rel.p); //ring.copy(rel.p);
                             if (rel.f != null) {
                                 D2 = new ResidueSolvablePolynomial<C>(ring, one, rel.f);
@@ -303,8 +301,7 @@ public class ResidueSolvablePolynomial<C extends GcdRingElem<C>> extends
                     Ds = Dps;
                 }
                 Ds = Ds.multiplyLeft(a); // multiply(a,b); // non-symmetric 
-                if (debug)
-                    logger.debug("Ds = " + Ds);
+                logger.debug("Ds = {}", Ds);
                 Dp = (ResidueSolvablePolynomial<C>) Dp.sum(Ds);
             } // end B loop
         } // end A loop

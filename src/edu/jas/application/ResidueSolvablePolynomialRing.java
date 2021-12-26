@@ -375,11 +375,9 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
                     p = Xk.multiply(Xj).multiply(Xi);
                     q = Xk.multiply(Xj.multiply(Xi));
                     if (!p.equals(q)) {
-                        if (logger.isInfoEnabled()) {
-                            logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
-                            logger.info("p = ( Xk * Xj ) * Xi = " + p);
-                            logger.info("q = Xk * ( Xj * Xi ) = " + q);
-                        }
+                        logger.info("Xk = {}, Xj = {}, Xi = {}", Xk, Xj, Xi);
+                        logger.info("p = ( Xk * Xj ) * Xi = {}", p);
+                        logger.info("q = Xk * ( Xj * Xi ) = {}", q);
                         return false;
                     }
                 }
@@ -515,7 +513,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
             GenSolvablePolynomial<SolvableResidue<C>> s = pt.nextSolvablePolynomial();
             p = new ResidueSolvablePolynomial<C>(this, s);
         } catch (IOException e) {
-            logger.error(e.toString() + " parse " + this);
+            logger.error("{} parse {}", e, this);
             p = ZERO;
         }
         return p;
