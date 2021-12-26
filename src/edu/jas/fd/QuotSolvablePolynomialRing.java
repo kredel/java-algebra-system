@@ -378,12 +378,10 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>>
                     p = Xk.multiply(Xj).multiply(Xi);
                     q = Xk.multiply(Xj.multiply(Xi));
                     if (!p.equals(q)) {
-                        if (logger.isInfoEnabled()) {
-                            logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
-                            logger.info("p = ( Xk * Xj ) * Xi = " + p);
-                            logger.info("q = Xk * ( Xj * Xi ) = " + q);
-                            logger.info("q-p = " + p.subtract(q));
-                        }
+                        logger.info("Xk = {}, Xj = {}, Xi = {}", Xk, Xj, Xi);
+                        logger.info("p = ( Xk * Xj ) * Xi = {}", p);
+                        logger.info("q = Xk * ( Xj * Xi ) = {}", q);
+                        logger.info("q-p = {}", p.subtract(q));
                         return false;
                     }
                 }
@@ -519,7 +517,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>>
             GenSolvablePolynomial<SolvableQuotient<C>> s = pt.nextSolvablePolynomial();
             p = new QuotSolvablePolynomial<C>(this, s);
         } catch (IOException e) {
-            logger.error(e.toString() + " parse " + this);
+            logger.error("{} parse {}", e, this);
             p = ZERO;
         }
         return p;

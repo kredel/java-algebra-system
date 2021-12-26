@@ -116,7 +116,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //System.out.println("starting e1 " + e1.getClass().getName());
                     GenSolvablePolynomial<C> g = e1.leftBaseGcd(P, S);
                     if (debug) {
-                        logger.info("SGCDParallelProxy done e1 " + e1.getClass().getName());
+                        logger.info("SGCDParallelProxy done e1 {}", e1.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -124,9 +124,9 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGCDParallelProxy e1 " + e);
-                    logger.info("SGCDParallelProxy P = " + P);
-                    logger.info("SGCDParallelProxy S = " + S);
+                    logger.info("SGCDParallelProxy e1 {}", e);
+                    logger.info("SGCDParallelProxy P = {}", P);
+                    logger.info("SGCDParallelProxy S = {}", S);
                     throw new RuntimeException("SGCDParallelProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -140,7 +140,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //System.out.println("starting e2 " + e2.getClass().getName());
                     GenSolvablePolynomial<C> g = e2.leftBaseGcd(P, S);
                     if (debug) {
-                        logger.info("SGCDParallelProxy done e2 " + e2.getClass().getName());
+                        logger.info("SGCDParallelProxy done e2 {}", e2.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -148,9 +148,9 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGCDParallelProxy e2 " + e);
-                    logger.info("SGCDParallelProxy P = " + P);
-                    logger.info("SGCDParallelProxy S = " + S);
+                    logger.info("SGCDParallelProxy e2 {}", e);
+                    logger.info("SGCDParallelProxy P = {}", P);
+                    logger.info("SGCDParallelProxy S = {}", S);
                     throw new RuntimeException("SGCDParallelProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -163,14 +163,14 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                 g = pool.invokeAny(cs, ComputerThreads.getTimeout(), ComputerThreads.getTimeUnit());
             }
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         } catch (TimeoutException e) {
-            logger.info("TimeoutException after " + ComputerThreads.getTimeout() + " "
-                            + ComputerThreads.getTimeUnit());
+            logger.info("TimeoutException after {} {}", ComputerThreads.getTimeout(),
+                            ComputerThreads.getTimeUnit());
             g = e0.leftBaseGcd(P, S); // fake returns 1
         }
         return g;
@@ -211,7 +211,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                 try {
                     GenSolvablePolynomial<GenPolynomial<C>> g = e1.leftRecursiveUnivariateGcd(P, S);
                     if (debug) {
-                        logger.info("SGCDParallelProxy done e1 " + e1.getClass().getName());
+                        logger.info("SGCDParallelProxy done e1 {}", e1.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -219,9 +219,9 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGCDParallelProxy e1 " + e);
-                    logger.info("SGCDParallelProxy P = " + P);
-                    logger.info("SGCDParallelProxy S = " + S);
+                    logger.info("SGCDParallelProxy e1 {}", e);
+                    logger.info("SGCDParallelProxy P = {}", P);
+                    logger.info("SGCDParallelProxy S = {}", S);
                     throw new RuntimeException("SGCDParallelProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -234,7 +234,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                 try {
                     GenSolvablePolynomial<GenPolynomial<C>> g = e2.leftRecursiveUnivariateGcd(P, S);
                     if (debug) {
-                        logger.info("SGCDParallelProxy done e2 " + e2.getClass().getName());
+                        logger.info("SGCDParallelProxy done e2 {}", e2.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -242,9 +242,9 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGCDParallelProxy e2 " + e);
-                    logger.info("SGCDParallelProxy P = " + P);
-                    logger.info("SGCDParallelProxy S = " + S);
+                    logger.info("SGCDParallelProxy e2 {}", e);
+                    logger.info("SGCDParallelProxy P = {}", P);
+                    logger.info("SGCDParallelProxy S = {}", S);
                     throw new RuntimeException("SGCDParallelProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -257,14 +257,14 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                 g = pool.invokeAny(cs, ComputerThreads.getTimeout(), ComputerThreads.getTimeUnit());
             }
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         } catch (TimeoutException e) {
-            logger.info("TimeoutException after " + ComputerThreads.getTimeout() + " "
-                            + ComputerThreads.getTimeUnit());
+            logger.info("TimeoutException after {} {}", ComputerThreads.getTimeout(),
+                        ComputerThreads.getTimeUnit());
             g = e0.leftRecursiveUnivariateGcd(P, S); // fake returns 1
         }
         return g;
@@ -304,7 +304,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //System.out.println("starting e1 " + e1.getClass().getName());
                     GenSolvablePolynomial<C> g = e1.leftGcd(P, S);
                     if (debug) {
-                        logger.info("SGCDParallelProxy done e1 " + e1.getClass().getName());
+                        logger.info("SGCDParallelProxy done e1 {}", e1.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -312,9 +312,9 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGCDParallelProxy e1 " + e);
-                    logger.info("SGCDParallelProxy P = " + P);
-                    logger.info("SGCDParallelProxy S = " + S);
+                    logger.info("SGCDParallelProxy e1 {}", e);
+                    logger.info("SGCDParallelProxy P = {}", P);
+                    logger.info("SGCDParallelProxy S = {}", S);
                     throw new RuntimeException("SGCDParallelProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -328,7 +328,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //System.out.println("starting e2 " + e2.getClass().getName());
                     GenSolvablePolynomial<C> g = e2.leftGcd(P, S);
                     if (debug) {
-                        logger.info("SGCDParallelProxy done e2 " + e2.getClass().getName());
+                        logger.info("SGCDParallelProxy done e2 {}", e2.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -336,9 +336,9 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGCDParallelProxy e2 " + e);
-                    logger.info("SGCDParallelProxy P = " + P);
-                    logger.info("SGCDParallelProxy S = " + S);
+                    logger.info("SGCDParallelProxy e2 {}", e);
+                    logger.info("SGCDParallelProxy P = {}", P);
+                    logger.info("SGCDParallelProxy S = {}", S);
                     throw new RuntimeException("SGCDParallelProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -351,14 +351,14 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                 g = pool.invokeAny(cs, ComputerThreads.getTimeout(), ComputerThreads.getTimeUnit());
             }
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         } catch (TimeoutException e) {
-            logger.info("TimeoutException after " + ComputerThreads.getTimeout() + " "
-                            + ComputerThreads.getTimeUnit());
+            logger.info("TimeoutException after {} {}", ComputerThreads.getTimeout(),
+                            ComputerThreads.getTimeUnit());
             g = e0.leftGcd(P, S); // fake returns 1
         }
         return g;
@@ -398,7 +398,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //System.out.println("starting e1 " + e1.getClass().getName());
                     GenSolvablePolynomial<C> g = e1.rightBaseGcd(P, S);
                     if (debug) {
-                        logger.info("SGCDParallelProxy done e1 " + e1.getClass().getName());
+                        logger.info("SGCDParallelProxy done e1 {}", e1.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -406,9 +406,9 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGCDParallelProxy e1 " + e);
-                    logger.info("SGCDParallelProxy P = " + P);
-                    logger.info("SGCDParallelProxy S = " + S);
+                    logger.info("SGCDParallelProxy e1 {}", e);
+                    logger.info("SGCDParallelProxy P = {}", P);
+                    logger.info("SGCDParallelProxy S = {}", S);
                     throw new RuntimeException("SGCDParallelProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -422,7 +422,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //System.out.println("starting e2 " + e2.getClass().getName());
                     GenSolvablePolynomial<C> g = e2.rightBaseGcd(P, S);
                     if (debug) {
-                        logger.info("SGCDParallelProxy done e2 " + e2.getClass().getName());
+                        logger.info("SGCDParallelProxy done e2 {}", e2.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -430,9 +430,9 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGCDParallelProxy e2 " + e);
-                    logger.info("SGCDParallelProxy P = " + P);
-                    logger.info("SGCDParallelProxy S = " + S);
+                    logger.info("SGCDParallelProxy e2 {}", e);
+                    logger.info("SGCDParallelProxy P = {}", P);
+                    logger.info("SGCDParallelProxy S = {}", S);
                     throw new RuntimeException("SGCDParallelProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -445,14 +445,14 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                 g = pool.invokeAny(cs, ComputerThreads.getTimeout(), ComputerThreads.getTimeUnit());
             }
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         } catch (TimeoutException e) {
-            logger.info("TimeoutException after " + ComputerThreads.getTimeout() + " "
-                            + ComputerThreads.getTimeUnit());
+            logger.info("TimeoutException after {} {}", ComputerThreads.getTimeout(),
+                            ComputerThreads.getTimeUnit());
             g = e0.rightBaseGcd(P, S); // fake returns 1
         }
         return g;
@@ -493,7 +493,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                 try {
                     GenSolvablePolynomial<GenPolynomial<C>> g = e1.rightRecursiveUnivariateGcd(P, S);
                     if (debug) {
-                        logger.info("SGCDParallelProxy done e1 " + e1.getClass().getName());
+                        logger.info("SGCDParallelProxy done e1 {}", e1.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -501,9 +501,9 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGCDParallelProxy e1 " + e);
-                    logger.info("SGCDParallelProxy P = " + P);
-                    logger.info("SGCDParallelProxy S = " + S);
+                    logger.info("SGCDParallelProxy e1 {}", e);
+                    logger.info("SGCDParallelProxy P = {}", P);
+                    logger.info("SGCDParallelProxy S = {}", S);
                     throw new RuntimeException("SGCDParallelProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -516,7 +516,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                 try {
                     GenSolvablePolynomial<GenPolynomial<C>> g = e2.rightRecursiveUnivariateGcd(P, S);
                     if (debug) {
-                        logger.info("SGCDParallelProxy done e2 " + e2.getClass().getName());
+                        logger.info("SGCDParallelProxy done e2 {}", e2.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -524,9 +524,9 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGCDParallelProxy e2 " + e);
-                    logger.info("SGCDParallelProxy P = " + P);
-                    logger.info("SGCDParallelProxy S = " + S);
+                    logger.info("SGCDParallelProxy e2 {}", e);
+                    logger.info("SGCDParallelProxy P = {}", P);
+                    logger.info("SGCDParallelProxy S = {}", S);
                     throw new RuntimeException("SGCDParallelProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -539,14 +539,14 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                 g = pool.invokeAny(cs, ComputerThreads.getTimeout(), ComputerThreads.getTimeUnit());
             }
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         } catch (TimeoutException e) {
-            logger.info("TimeoutException after " + ComputerThreads.getTimeout() + " "
-                            + ComputerThreads.getTimeUnit());
+            logger.info("TimeoutException after {} {}", ComputerThreads.getTimeout(),
+                            ComputerThreads.getTimeUnit());
             g = e0.rightRecursiveUnivariateGcd(P, S); // fake returns 1
         }
         return g;
@@ -586,7 +586,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //System.out.println("starting e1 " + e1.getClass().getName());
                     GenSolvablePolynomial<C> g = e1.rightGcd(P, S);
                     if (debug) {
-                        logger.info("SGCDParallelProxy done e1 " + e1.getClass().getName());
+                        logger.info("SGCDParallelProxy done e1 {}", e1.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -594,9 +594,9 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGCDParallelProxy e1 " + e);
-                    logger.info("SGCDParallelProxy P = " + P);
-                    logger.info("SGCDParallelProxy S = " + S);
+                    logger.info("SGCDParallelProxy e1 {}", e);
+                    logger.info("SGCDParallelProxy P = {}", P);
+                    logger.info("SGCDParallelProxy S = {}", S);
                     throw new RuntimeException("SGCDParallelProxy e1 " + e);
                     //return P.ring.getONE();
                 }
@@ -610,7 +610,7 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //System.out.println("starting e2 " + e2.getClass().getName());
                     GenSolvablePolynomial<C> g = e2.rightGcd(P, S);
                     if (debug) {
-                        logger.info("SGCDParallelProxy done e2 " + e2.getClass().getName());
+                        logger.info("SGCDParallelProxy done e2 {}", e2.getClass().getName());
                     }
                     return g;
                 } catch (PreemptingException e) {
@@ -618,9 +618,9 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                     //return P.ring.getONE();
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    logger.info("SGCDParallelProxy e2 " + e);
-                    logger.info("SGCDParallelProxy P = " + P);
-                    logger.info("SGCDParallelProxy S = " + S);
+                    logger.info("SGCDParallelProxy e2 {}", e);
+                    logger.info("SGCDParallelProxy P = {}", P);
+                    logger.info("SGCDParallelProxy S = {}", S);
                     throw new RuntimeException("SGCDParallelProxy e2 " + e);
                     //return P.ring.getONE();
                 }
@@ -633,14 +633,14 @@ public class SGCDParallelProxy<C extends GcdRingElem<C>> extends GreatestCommonD
                 g = pool.invokeAny(cs, ComputerThreads.getTimeout(), ComputerThreads.getTimeUnit());
             }
         } catch (InterruptedException ignored) {
-            logger.info("InterruptedException " + ignored);
+            logger.info("InterruptedException {}", ignored);
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            logger.info("ExecutionException " + e);
+            logger.info("ExecutionException {}", e);
             Thread.currentThread().interrupt();
         } catch (TimeoutException e) {
-            logger.info("TimeoutException after " + ComputerThreads.getTimeout() + " "
-                            + ComputerThreads.getTimeUnit());
+            logger.info("TimeoutException after {} {}", ComputerThreads.getTimeout(),
+                            ComputerThreads.getTimeUnit());
             g = e0.rightGcd(P, S); // fake returns 1
         }
         return g;

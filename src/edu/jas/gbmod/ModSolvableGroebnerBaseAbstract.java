@@ -71,14 +71,14 @@ public abstract class ModSolvableGroebnerBaseAbstract<C extends RingElem<C>> imp
         }
         PolynomialList<C> F = M.getPolynomialList();
         if (debug) {
-            logger.info("F left +++++++++++++++++++ \n" + F);
+            logger.info("F left +++++++++++++++++++ \n{}", F);
         }
         GenSolvablePolynomialRing<C> sring = (GenSolvablePolynomialRing<C>) F.ring;
         int modv = M.cols;
         List<GenSolvablePolynomial<C>> G = leftGB(modv, F.castToSolvableList());
         F = new PolynomialList<C>(sring, G);
         if (debug) {
-            logger.info("G left +++++++++++++++++++ \n" + F);
+            logger.info("G left +++++++++++++++++++ \n{}", F);
         }
         N = F.getModuleList(modv);
         return N;
@@ -161,7 +161,7 @@ public abstract class ModSolvableGroebnerBaseAbstract<C extends RingElem<C>> imp
             return N;
         }
         if (debug) {
-            logger.info("M ====================== \n" + M);
+            logger.info("M ====================== \n{}", M);
         }
         TermOrder to = M.ring.tord;
         if (to.getSplit() <= M.ring.nvar) {
@@ -183,12 +183,12 @@ public abstract class ModSolvableGroebnerBaseAbstract<C extends RingElem<C>> imp
         }
         ModuleList<C> rM = new ModuleList<C>(rring, nlist);
         if (debug) {
-            logger.info("rM -------------------- \n" + rM);
+            logger.info("rM -------------------- \n{}", rM);
         }
         ModuleList<C> rMg = leftGB(rM);
         if (debug) {
-            logger.info("rMg -------------------- \n" + rMg);
-            logger.info("isLeftGB(rMg) ---------- " + isLeftGB(rMg));
+            logger.info("rMg -------------------- \n{}", rMg);
+            logger.info("isLeftGB(rMg) ---------- {}", isLeftGB(rMg));
         }
         mlist = rMg.castToSolvableList();
         nlist = new ArrayList<List<GenSolvablePolynomial<C>>>(rMg.rows);
@@ -202,8 +202,8 @@ public abstract class ModSolvableGroebnerBaseAbstract<C extends RingElem<C>> imp
         }
         ModuleList<C> Mg = new ModuleList<C>(sring, nlist);
         if (debug) {
-            logger.info("Mg -------------------- \n" + Mg);
-            logger.info("isRightGB(Mg) --------- " + isRightGB(Mg));
+            logger.info("Mg -------------------- \n{}", Mg);
+            logger.info("isRightGB(Mg) --------- {}", isRightGB(Mg));
         }
         return Mg;
     }

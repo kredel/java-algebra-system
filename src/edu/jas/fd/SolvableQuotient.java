@@ -141,19 +141,19 @@ public class SolvableQuotient<C extends GcdRingElem<C>>
         //GenSolvablePolynomial<C>[] gcd = PolyModUtil.<C> syzGcdCofactors(r.ring, n, d);
         GenSolvablePolynomial<C>[] gcd = FDUtil.<C> leftGcdCofactors(r.ring, n, d);
         if (!gcd[0].isONE()) {
-            logger.info("constructor: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
+            logger.info("constructor: gcd = {}", Arrays.toString(gcd)); // + ", {}", n + ", " +d);
             n = gcd[1];
             d = gcd[2];
         }
         gcd = FDUtil.<C> rightGcdCofactors(r.ring, n, d);
         if (!gcd[0].isONE()) {
-            logger.info("constructor: gcd = " + Arrays.toString(gcd)); // + ", " + n + ", " +d);
+            logger.info("constructor: gcd = {}", Arrays.toString(gcd)); // + ", {}", n + ", " +d);
             n = gcd[1];
             d = gcd[2];
         }
         // not perfect, TODO 
         GenSolvablePolynomial<C>[] simp = ring.engine.leftSimplifier(n, d);
-        logger.info("simp: " + Arrays.toString(simp) + ", " + n + ", " + d);
+        logger.info("simp: {}, {}, {}", Arrays.toString(simp), n, d);
         num = simp[0];
         den = simp[1];
     }

@@ -301,7 +301,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         }
         GenSolvablePolynomial<C> d = null, cs = null, x;
         GenSolvablePolynomial<GenPolynomial<C>> Pr = P.rightRecursivePolynomial();
-        logger.info("RI-recCont: P = " + P + ", right(P) = " + Pr);
+        logger.info("RI-recCont: P = {}, right(P) = {}", P, Pr);
         for (GenPolynomial<C> c : Pr.getMap().values()) {
             cs = (GenSolvablePolynomial<C>) c;
             if (d == null) {
@@ -310,7 +310,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
                 x = d;
                 d = leftGcd(d, cs); // go to recursion, P = P'*gcd(P,S)
                 ///d = rightGcd(d, cs); // go to recursion,  P = gcd(P,S)*P'
-                logger.info("RI-recCont: d = " + x + ", cs = " + cs + ", d = " + d);
+                logger.info("RI-recCont: d = {}, cs = {}, d = {}", x, cs, d);
             }
             if (d.isONE()) {
                 return d;
@@ -369,7 +369,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         }
         GenSolvablePolynomial<C> d = null, cs = null;
         GenSolvablePolynomial<GenPolynomial<C>> Pr = P; //FDUtil.<C> rightRecursivePolynomial(P);
-        logger.info("recCont: P = " + P + ", right(P) = " + Pr);
+        logger.info("recCont: P = {}, right(P) = {}", P, Pr);
         for (GenPolynomial<C> c : Pr.getMap().values()) {
             cs = (GenSolvablePolynomial<C>) c;
             if (d == null) {
@@ -377,7 +377,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             } else {
                 d = rightGcd(d, cs); // go to recursion
                 ///d = leftGcd(d, cs); // go to recursion
-                logger.info("recCont: cs = " + cs + ", d = " + d);
+                logger.info("recCont: cs = {}, d = {}", cs, d);
             }
             if (d.isONE()) {
                 return d;
@@ -777,7 +777,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
                 System.out.println("fullGcd, ss = " + ss);
                 throw new RuntimeException("fullGcd: not divisible");
             }
-            logger.info("fullGcd(P,S) okay: D = " + D + ", P = " + P + ", S = " + S);
+            logger.info("fullGcd(P,S) okay: D = {}, P = {}, S = {}", D, P, S);
         }
         return D;
     }
@@ -837,7 +837,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
                 System.out.println("RI-fullGcd, ss = " + ss);
                 throw new RuntimeException("RI-fullGcd: not divisible");
             }
-            logger.info("RI-fullGcd(P,S) okay: D = " + D);
+            logger.info("RI-fullGcd(P,S) okay: D = {}", D);
         }
         return D;
     }
@@ -1218,18 +1218,18 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (a.equals(b)) { // required because of rationals gcd
             oc[0] = rf.getONE();
             oc[1] = rf.getONE();
-            logger.info("Ore multiple: " + Arrays.toString(oc));
+            logger.info("Ore multiple: {}", Arrays.toString(oc));
             return oc;
         }
         if (a.equals(b.negate())) { // required because of rationals gcd
             oc[0] = rf.getONE();
             oc[1] = rf.getONE().negate();
-            logger.info("Ore multiple: " + Arrays.toString(oc));
+            logger.info("Ore multiple: {}", Arrays.toString(oc));
             return oc;
         }
         if (rf.isCommutative()) {
             if (debug) {
-                logger.info("left Ore condition on coefficients, commutative case: " + a + ", " + b);
+                logger.info("left Ore condition on coefficients, commutative case: {}, {}", a, b);
             }
             C gcd = a.gcd(b);
             if (gcd.isONE()) {
@@ -1239,7 +1239,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
                     oc[0] = oc[0].negate();
                     oc[1] = oc[1].negate();
                 }
-                logger.info("Ore multiple: " + Arrays.toString(oc));
+                logger.info("Ore multiple: {}", Arrays.toString(oc));
                 return oc;
             }
             C p = a.multiply(b);
@@ -1250,25 +1250,25 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
                 oc[0] = oc[0].negate();
                 oc[1] = oc[1].negate();
             }
-            logger.info("Ore multiple: lcm=" + lcm + ", gcd=" + gcd + ", " + Arrays.toString(oc));
+            logger.info("Ore multiple: lcm={}, gcd={}, {}", lcm, gcd, Arrays.toString(oc));
             return oc;
         }
         // now non-commutative
         if (rf.isField()) {
-            logger.info("left Ore condition on coefficients, skew field " + rf + " case: " + a + ", " + b);
+            logger.info("left Ore condition on coefficients, skew field {} case: {}, {}", rf, a, b);
             //C gcd = a.gcd(b); // always one 
             //C lcm = rf.getONE();
             oc[0] = a.inverse(); //lcm.divide(a);
             oc[1] = b.inverse(); //lcm.divide(b);
-            logger.info("Ore multiple: " + Arrays.toString(oc));
+            logger.info("Ore multiple: {}", Arrays.toString(oc));
             return oc;
         }
         if (b instanceof StarRingElem) {
-            logger.info("left Ore condition on coefficients, StarRing case: " + a + ", " + b);
+            logger.info("left Ore condition on coefficients, StarRing case: {}, {}", a, b);
             C bs = (C) ((StarRingElem) b).conjugate();
             oc[0] = bs.multiply(b); // bar(b) b a = s a 
             oc[1] = a.multiply(bs); // a bar(b) b = a s
-            logger.info("Ore multiple: " + Arrays.toString(oc));
+            logger.info("Ore multiple: {}", Arrays.toString(oc));
             return oc;
         }
         throw new UnsupportedOperationException(
@@ -1302,18 +1302,18 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             return oc;
         }
         if (pfac.isCommutative()) {
-            logger.info("left Ore condition, polynomial commutative case: " + a + ", " + b);
+            logger.info("left Ore condition, polynomial commutative case: {}, {}", a, b);
             edu.jas.ufd.GreatestCommonDivisorAbstract<C> cgcd = GCDFactory.<C> getImplementation(pfac.coFac);
             GenSolvablePolynomial<C> lcm = (GenSolvablePolynomial<C>) cgcd.lcm(a, b);
             //oc[0] = FDUtil.<C> basePseudoQuotient(lcm, a);
             //oc[1] = FDUtil.<C> basePseudoQuotient(lcm, b);
             oc[0] = (GenSolvablePolynomial<C>) PolyUtil.<C> basePseudoDivide(lcm, a);
             oc[1] = (GenSolvablePolynomial<C>) PolyUtil.<C> basePseudoDivide(lcm, b);
-            logger.info("Ore multiple: " + lcm + ", " + Arrays.toString(oc));
+            logger.info("Ore multiple: {}, {}", lcm, Arrays.toString(oc));
             return oc;
         }
         oc = syz.leftOreCond(a, b);
-        //logger.info("Ore multiple: " + oc[0].multiply(a) + ", " + Arrays.toString(oc));
+        //logger.info("Ore multiple: {}, {}", oc[0].multiply(a), Arrays.toString(oc));
         return oc;
     }
 
@@ -1351,7 +1351,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             return oc;
         }
         if (rf.isCommutative()) {
-            logger.info("right Ore condition on coefficients, commutative case: " + a + ", " + b);
+            logger.info("right Ore condition on coefficients, commutative case: {}, {}", a, b);
             C gcd = a.gcd(b);
             if (gcd.isONE()) {
                 oc[0] = b;
@@ -1370,29 +1370,29 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
                 oc[0] = oc[0].negate();
                 oc[1] = oc[1].negate();
             }
-            logger.info("Ore multiple: " + lcm + ", " + Arrays.toString(oc));
+            logger.info("Ore multiple: {}, {}", lcm, Arrays.toString(oc));
             return oc;
         }
         // now non-commutative
         if (rf.isField()) {
-            logger.info("right Ore condition on coefficients, skew field " + rf + " case: " + a + ", " + b);
+            logger.info("right Ore condition on coefficients, skew field {} case: {}, {}", rf, a, b);
             //C gcd = a.gcd(b); // always one 
             //C lcm = rf.getONE();
             oc[0] = a.inverse(); //lcm.divide(a);
             oc[1] = b.inverse(); //lcm.divide(b);
-            logger.info("Ore multiple: " + Arrays.toString(oc));
+            logger.info("Ore multiple: {}", Arrays.toString(oc));
             return oc;
         }
         if (b instanceof StarRingElem) {
-            logger.info("right Ore condition on coefficients, StarRing case: " + a + ", " + b);
+            logger.info("right Ore condition on coefficients, StarRing case: {}, {}", a, b);
             C bs = (C) ((StarRingElem) b).conjugate();
             oc[0] = b.multiply(bs); // a b bar(b) = a s
             oc[1] = bs.multiply(a); // b bar(b) a = s a 
-            logger.info("Ore multiple: " + Arrays.toString(oc));
+            logger.info("Ore multiple: {}", Arrays.toString(oc));
             return oc;
         }
         throw new UnsupportedOperationException(
-                        "rightOreCond not implemented for " + rf.getClass() + ", rf = " + rf.toScript());
+                        "rightOreCond not implemented for " + rf.getClass() + ", rf = {}" + rf.toScript());
         //return oc;
     }
 
@@ -1422,18 +1422,18 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             return oc;
         }
         if (pfac.isCommutative()) {
-            logger.info("right Ore condition, polynomial commutative case: " + a + ", " + b);
+            logger.info("right Ore condition, polynomial commutative case: {}, {}", a, b);
             edu.jas.ufd.GreatestCommonDivisorAbstract<C> cgcd = GCDFactory.<C> getImplementation(pfac.coFac);
             GenSolvablePolynomial<C> lcm = (GenSolvablePolynomial<C>) cgcd.lcm(a, b);
             //oc[0] = FDUtil.<C> basePseudoQuotient(lcm, a);
             //oc[1] = FDUtil.<C> basePseudoQuotient(lcm, b);
             oc[0] = (GenSolvablePolynomial<C>) PolyUtil.<C> basePseudoDivide(lcm, a);
             oc[1] = (GenSolvablePolynomial<C>) PolyUtil.<C> basePseudoDivide(lcm, b);
-            logger.info("Ore multiple: " + lcm + ", " + Arrays.toString(oc));
+            logger.info("Ore multiple: {}, {}", lcm , Arrays.toString(oc));
             return oc;
         }
         oc = syz.rightOreCond(a, b);
-        //logger.info("Ore multiple: " + oc[0].multiply(a) + ", " + Arrays.toString(oc));
+        //logger.info("Ore multiple: {}, {}", oc[0].multiply(a), Arrays.toString(oc));
         return oc;
     }
 

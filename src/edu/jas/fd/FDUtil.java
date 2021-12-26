@@ -315,7 +315,7 @@ public class FDUtil {
             return true;
         }
         if (debug) {
-            logger.info("not QR: D = " + D);
+            logger.info("not QR: D = {}", D);
         }
         //System.out.println("FDQR: Pa = " + Pa);
         //System.out.println("FDQR: Rb = " + Rb);
@@ -507,7 +507,7 @@ public class FDUtil {
         if (true) {
             System.out.println("Pa = " + Pa);
             System.out.println("Rb = " + Rb);
-            logger.info("not right QR: Pa-Rb = " + D);
+            logger.info("not right QR: Pa-Rb = {}", D);
         }
         return false;
     }
@@ -758,7 +758,7 @@ public class FDUtil {
      }
      GenSolvablePolynomial<GenPolynomial<C>> p = P.ring.getZERO().copy();
      GenSolvablePolynomial<GenPolynomial<C>> Pr = P.rightRecursivePolynomial();
-     logger.info("P = " + P + ", right(P) = " + Pr + ", left(s) = " + s);
+     logger.info("P = {}, right(P) = {}, left(s) = {}", P, Pr, s);
      for (Map.Entry<ExpVector, GenPolynomial<C>> m1 : Pr.getMap().entrySet()) {
      GenSolvablePolynomial<C> c1 = (GenSolvablePolynomial<C>) m1.getValue();
      ExpVector e1 = m1.getKey();
@@ -771,7 +771,7 @@ public class FDUtil {
      }
      }
      GenSolvablePolynomial<GenPolynomial<C>> pl = p.evalAsRightRecursivePolynomial();
-     logger.info("pl = " + pl + ", p = " + p);
+     logger.info("pl = {}, p = {}", pl, p);
      return pl;
      }
     */
@@ -874,7 +874,7 @@ public class FDUtil {
             GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.rightDivide(s); // s * c = a
             //System.out.println("recRightDivide: s \\ a = c: " + s + " \\ " + a + " = " + c);
             if (c.isZERO()) {
-                //logger.info("something is wrong: c is zero, a = " + a + ", s = " + s);
+                //logger.info("something is wrong: c is zero, a = {}, s = {}", a, s);
                 throw new RuntimeException("something is wrong: c is zero, a = " + a + ", s = " + s);
             }
             r = onep.multiply(s.multiply(c), f); // left 1 * s * c * (1 f)
@@ -1134,9 +1134,7 @@ public class FDUtil {
         //GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorFake<C>(r.coFac);
         GreatestCommonDivisorAbstract<C> e2 = new GreatestCommonDivisorSyzygy<C>(r.coFac);
         GreatestCommonDivisorAbstract<C> engine = new SGCDParallelProxy<C>(r.coFac, e1, e2);
-        if (info) {
-            logger.info("leftGCD_in: " + n + ", " + d);
-        }
+        logger.info("leftGCD_in: {}, {}", n, d);
         GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
         res[0] = engine.leftGcd(n, d);
         //res[0] = PolyModUtil.<C> syzLeftGcd(r, n, d);
@@ -1145,9 +1143,7 @@ public class FDUtil {
         if (res[0].isONE()) {
             return res;
         }
-        if (info) {
-            logger.info("leftGCD_out: " + res[0]);
-        }
+        logger.info("leftGCD_out: {}", res[0]);
         GenSolvablePolynomial<C>[] nqr;
         nqr = FDUtil.<C> rightBasePseudoQuotientRemainder(n, res[0]);
         if (!nqr[1].isZERO()) {
@@ -1181,9 +1177,7 @@ public class FDUtil {
         GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorFake<C>(r.coFac);
         //GreatestCommonDivisorAbstract<C> e2 = new GreatestCommonDivisorSyzygy<C>(r.coFac);
         //GreatestCommonDivisorAbstract<C> engine = new SGCDParallelProxy<C>(r.coFac, e1, e2);
-        if (info) {
-            logger.info("rightGCD_in: " + n + ", " + d);
-        }
+        logger.info("rightGCD_in: {}, {}", n, d);
         GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
         res[0] = engine.rightGcd(n, d);
         //res[0] = PolyModUtil.<C> syzRightGcd(r, n, d);
@@ -1192,9 +1186,7 @@ public class FDUtil {
         if (res[0].isONE()) {
             return res;
         }
-        if (info) {
-            logger.info("rightGCD_out: " + res[0]);
-        }
+        logger.info("rightGCD_out: {}", res[0]);
         GenSolvablePolynomial<C>[] nqr;
         nqr = FDUtil.<C> leftBasePseudoQuotientRemainder(n, res[0]);
         if (!nqr[1].isZERO()) {

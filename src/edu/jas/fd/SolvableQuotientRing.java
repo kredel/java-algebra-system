@@ -177,11 +177,9 @@ public class SolvableQuotientRing<C extends GcdRingElem<C>> implements RingFacto
                     p = Xk.multiply(Xj).multiply(Xi);
                     q = Xk.multiply(Xj.multiply(Xi));
                     if (!p.equals(q)) {
-                        if (logger.isInfoEnabled()) {
-                            logger.info("Xk = " + Xk + ", Xj = " + Xj + ", Xi = " + Xi);
-                            logger.info("p = ( Xk * Xj ) * Xi = " + p);
-                            logger.info("q = Xk * ( Xj * Xi ) = " + q);
-                        }
+                        logger.info("Xk = {}, Xj = {}, Xi = {}", Xk, Xj, Xi);
+                        logger.info("p = ( Xk * Xj ) * Xi = {}", p);
+                        logger.info("q = Xk * ( Xj * Xi ) = {}", q);
                         return false;
                     }
                 }
