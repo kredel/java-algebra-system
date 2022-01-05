@@ -452,7 +452,6 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
         if (ring.coFac.isField()) {
             GroebnerBaseAbstract<C> bb;
             bb = new GroebnerBaseSeqIter<C>(strategy);
-            // if (algo instanceof GBProxy) ... assemble parallel todo
             if (algo != null) {
                 logger.warn("algorithm {} ignored for {}", algo, bb);
             }
@@ -472,7 +471,6 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
         if (ring.coFac.isField()) {
             GroebnerBaseAbstract<C> bb;
             bb = new GroebnerBaseF5zSigSeqIter<C>();
-            // if (algo instanceof GBProxy) ... assemble parallel todo
             if (algo != null) {
                 logger.warn("algorithm {} ignored for {}", algo, bb);
             }
@@ -495,7 +493,6 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
         if (ring.coFac.isField()) {
             GroebnerBaseAbstract<C> bb;
             bb = new GroebnerBaseGGVSigSeqIter<C>();
-            // if (algo instanceof GBProxy) ... assemble parallel todo
             if (algo != null) {
                 logger.warn("algorithm {} ignored for {}", algo, bb);
             }
@@ -518,7 +515,6 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
         if (ring.coFac.isField()) {
             GroebnerBaseAbstract<C> bb;
             bb = new GroebnerBaseArriSigSeqIter<C>();
-            // if (algo instanceof GBProxy) ... assemble parallel todo
             if (algo != null) {
                 logger.warn("algorithm {} ignored for {}", algo, bb);
             }
