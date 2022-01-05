@@ -1365,17 +1365,29 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
     /**
      * Test if this ideal is maximal.
-     * @return true, if this is maximal and not one, else false.
+     * @return true, if this is certainly maximal and not one, else false.
      */
     public boolean isMaximal() {
         if (commonZeroTest() != 0) {
             return false;
         }
+        long dm = 1L;
         for (Long d : univariateDegrees()) {
             if (d > 1L) {
-                // todo: test if univariate irreducible and no multiple polynomials
-                return false;
+                dm = d;
             }
+        }
+        if (dm == 1L) {
+            return true;
+        }
+        // eventually prime decomposition of zero dimensional ideal
+        if (list.ring.tord.getEvord() != TermOrder.INVLEX) { // skip test(?)
+            logger.warn("TermOrder != INVLEX, isMaximal skipped, found {}", list.ring.tord);
+            return false;
+        }
+        List<IdealWithUniv<C>> pdec = zeroDimPrimeDecompositionFE();
+        if (pdec.size() != 1) { // not prime
+            return false;
         }
         return true;
     }

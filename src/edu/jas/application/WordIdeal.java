@@ -998,7 +998,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
 
     /**
      * Test if this ideal is maximal.
-     * @return true, if this is maximal and not one, else false.
+     * @return true, if this is certainly maximal and not one, 
+     *         false, if this is one, has dimension &ge; 1 or it is not jet determined if it is maximal.
      */
     public boolean isMaximal() {
         if (commonZeroTest() != 0) {
@@ -1006,7 +1007,6 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         }
         for (Long d : univariateDegrees()) {
             if (d > 1L) {
-                // todo: test if univariate irreducible and no multiple polynomials
                 return false;
             }
         }
