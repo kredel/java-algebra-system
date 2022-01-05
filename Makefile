@@ -22,7 +22,7 @@ LIBPATH=$(HOME)/java/lib
 JUNITPATH=$(LIBPATH)/junit-4.13.1.jar:$(LIBPATH)/hamcrest-core-1.3.jar
 #LOG4JPATH=$(LIBPATH)/log4j-1.2.17.jar
 #LOG4JPATH=$(LIBPATH)/log4j-core-2.5.jar:$(LIBPATH)/log4j-api-2.5.jar:$(LIBPATH)/log4j-1.2-api-2.5.jar
-LOG4JPATH=$(LIBPATH)/log4j-core-2.16.0.jar:$(LIBPATH)/log4j-api-2.16.0.jar
+LOG4JPATH=$(LIBPATH)/log4j-core-2.17.1.jar:$(LIBPATH)/log4j-api-2.17.1.jar
 #LOG4JPATH=$(LIBPATH)/mylog.jar
 #LOG4JPATH=$(LIBPATH)/nolog.jar
 JOMPPATH=$(LIBPATH)/jomp1.0b.jar
@@ -86,7 +86,7 @@ MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 JAVA_MEM=-Xms500M -Xmx900M
 
 #SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/junit.jar-4.13.1.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms500M -J-Xmx900M"
-SOPTS="-J-cp ../lib/log4j-core-2.16.0.jar:../lib/log4j-api-2.16.0.jar:../lib/junit.jar-4.13.1.jar:../lib/hamcrest-core-1.3.jar:. -J-Xms500M -J-Xmx900M"
+SOPTS="-J-cp ../lib/log4j-core-2.17.1.jar:../lib/log4j-api-2.17.1.jar:../lib/junit.jar-4.13.1.jar:../lib/hamcrest-core-1.3.jar:. -J-Xms500M -J-Xmx900M"
 #SOPTS="-J-verbose:gc -J-Xms1500M -J-Xmx2900M"
 #SOPTS="-J-verbose:gc"
 

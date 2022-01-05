@@ -12,7 +12,7 @@ LIBPATH=$(HOME)/java/lib
 JYTHONPATH=$(HOME)/java/jython/jython.jar
 JRUBYPATH=$(HOME)/java/jruby/lib/jruby.jar:$(HOME)/java/jruby/lib/ruby/stdlib
 
-LOG4JPATH=$(LIBPATH)/log4j-core-2.16.0.jar:$(LIBPATH)/log4j-api-2.16.0.jar
+LOG4JPATH=$(LIBPATH)/log4j-core-2.17.1.jar:$(LIBPATH)/log4j-api-2.17.1.jar
 JUNITPATH=$(LIBPATH)/junit.jar:$(LIBPATH)/hamcrest-core.jar
 CLASSPATH=$(LOG4JPATH):$(JUNITPATH):$(JASPATH):$(LIBPATH)/jas.jar
 
