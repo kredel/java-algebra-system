@@ -222,6 +222,7 @@ public class ResidueRing<C extends GcdRingElem<C>> implements RingFactory<Residu
             isField = 1;
             return true;
         }
+        isField = 0;
         return false;
     }
 

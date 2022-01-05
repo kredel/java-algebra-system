@@ -1382,7 +1382,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         }
         // eventually prime decomposition of zero dimensional ideal
         if (list.ring.tord.getEvord() != TermOrder.INVLEX) { // skip test(?)
-            logger.warn("TermOrder != INVLEX, isMaximal skipped, found {}", list.ring.tord);
+            logger.warn("TermOrder {} != INVLEX, isMaximal prime depomposition skipped", list.ring.tord);
             return false;
         }
         List<IdealWithUniv<C>> pdec = zeroDimPrimeDecompositionFE();
