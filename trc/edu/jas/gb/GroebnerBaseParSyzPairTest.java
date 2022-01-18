@@ -5,8 +5,6 @@
 package edu.jas.gb;
 
 
-// import edu.jas.poly.GroebnerBase;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -63,13 +61,10 @@ public class GroebnerBaseParSyzPairTest extends TestCase {
     GenPolynomialRing<BigRational> fac;
 
 
-    List<GenPolynomial<BigRational>> L;
+    List<GenPolynomial<BigRational>> L, G;
 
 
     PolynomialList<BigRational> F;
-
-
-    List<GenPolynomial<BigRational>> G;
 
 
     GroebnerBaseAbstract<BigRational> bbseq;
@@ -81,19 +76,7 @@ public class GroebnerBaseParSyzPairTest extends TestCase {
     GroebnerBaseAbstract<BigRational> bbspar;
 
 
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     int rl = 3; //4; //3; 
@@ -140,7 +123,6 @@ public class GroebnerBaseParSyzPairTest extends TestCase {
 
     /**
      * Test syzygy pair parallel GBase.
-     * 
      */
     public void testSyzPairParallelGBase() {
 
@@ -191,7 +173,6 @@ public class GroebnerBaseParSyzPairTest extends TestCase {
 
     /**
      * Test compare sequential with syzygy pair parallel GBase.
-     * 
      */
     public void testSequentialSyzPairParallelGBase() {
 
@@ -252,7 +233,6 @@ public class GroebnerBaseParSyzPairTest extends TestCase {
 
     /**
      * Test compare parallel with syzygy pair parallel GBase.
-     * 
      */
     public void testParallelSyzPairParallelGBase() {
 
@@ -313,7 +293,6 @@ public class GroebnerBaseParSyzPairTest extends TestCase {
 
     /**
      * Test Trinks7 GBase.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testTrinks7GBase() {

@@ -5,8 +5,6 @@
 package edu.jas.gb;
 
 
-// import edu.jas.poly.GroebnerBase;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -63,13 +61,10 @@ public class GroebnerBaseParTest extends TestCase {
     GenPolynomialRing<BigRational> fac;
 
 
-    List<GenPolynomial<BigRational>> L;
+    List<GenPolynomial<BigRational>> L, G;
 
 
     PolynomialList<BigRational> F;
-
-
-    List<GenPolynomial<BigRational>> G;
 
 
     GroebnerBase<BigRational> bbseq;
@@ -78,19 +73,7 @@ public class GroebnerBaseParTest extends TestCase {
     GroebnerBase<BigRational> bbpar;
 
 
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     int rl = 3; //4; //3; 
@@ -133,7 +116,6 @@ public class GroebnerBaseParTest extends TestCase {
 
     /**
      * Test parallel GBase.
-     * 
      */
     public void testParallelGBase() {
 
@@ -184,7 +166,6 @@ public class GroebnerBaseParTest extends TestCase {
 
     /**
      * Test compare sequential with parallel GBase.
-     * 
      */
     public void testSequentialParallelGBase() {
 
@@ -245,7 +226,6 @@ public class GroebnerBaseParTest extends TestCase {
 
     /**
      * Test Trinks7 GBase.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testTrinks7GBase() {
@@ -269,6 +249,5 @@ public class GroebnerBaseParTest extends TestCase {
         assertEquals("#GB(Trinks7) == 6", 6, G.size());
         //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring,G);
         //System.out.println("G = " + trinks);
-
     }
 }

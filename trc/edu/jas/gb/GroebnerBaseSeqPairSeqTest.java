@@ -61,31 +61,16 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
     GenPolynomialRing<BigRational> fac;
 
 
-    List<GenPolynomial<BigRational>> L;
+    List<GenPolynomial<BigRational>> L, G;
 
 
     PolynomialList<BigRational> F;
 
 
-    List<GenPolynomial<BigRational>> G;
-
-
     GroebnerBase<BigRational> bb; // do interface
 
 
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     int rl = 3; //4; //3; 
@@ -122,7 +107,6 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
 
     /**
      * Test sequential GBase.
-     * 
      */
     public void testSeqPairSequentialGBase() {
 
@@ -173,7 +157,6 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
 
     /**
      * Test Trinks7 GBase.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testTrinks7GBase() {
@@ -203,7 +186,6 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
 
     /**
      * Test sequential extended GBase.
-     * 
      */
     public void testSeqPairSequentialExtendedGBase() {
 
@@ -268,7 +250,6 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
 
     /**
      * Test Trinks7 GBase.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void testTrinks7ExtendedGBase() {

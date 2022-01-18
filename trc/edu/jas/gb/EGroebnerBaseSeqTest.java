@@ -64,31 +64,16 @@ public class EGroebnerBaseSeqTest extends TestCase {
     GenPolynomialRing<BigInteger> fac;
 
 
-    List<GenPolynomial<BigInteger>> L;
+    List<GenPolynomial<BigInteger>> L, G;
 
 
     PolynomialList<BigInteger> F;
 
 
-    List<GenPolynomial<BigInteger>> G;
-
-
     GroebnerBase<BigInteger> bb;
 
 
-    GenPolynomial<BigInteger> a;
-
-
-    GenPolynomial<BigInteger> b;
-
-
-    GenPolynomial<BigInteger> c;
-
-
-    GenPolynomial<BigInteger> d;
-
-
-    GenPolynomial<BigInteger> e;
+    GenPolynomial<BigInteger> a, b, c, d, e;
 
 
     int rl = 3; //4; //3; 
@@ -125,7 +110,6 @@ public class EGroebnerBaseSeqTest extends TestCase {
 
     /**
      * Test sequential GBase.
-     * 
      */
     public void testSequentialGBase() {
 
@@ -175,7 +159,6 @@ public class EGroebnerBaseSeqTest extends TestCase {
 
     /**
      * Test Trinks7 GBase over Z.
-     * 
      */
     @SuppressWarnings("unchecked")
     public void xtestTrinks7GBaseZ() { // needs 20 sec
@@ -205,7 +188,6 @@ public class EGroebnerBaseSeqTest extends TestCase {
 
     /**
      * Test Trinks7 GBase over Z(B).
-     * 
      */
     @SuppressWarnings("unchecked")
     public void xtestTrinks7GBaseZ_B() {
