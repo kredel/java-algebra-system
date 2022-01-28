@@ -60,7 +60,7 @@ import edu.jas.structure.RingFactory;
  * </pre>
  *
  * <p>
- * <b>Todo:</b> Base decision also on degree vectors and number of variables of
+ * <b>TODO:</b> Base decision also on degree vectors and number of variables of
  * polynomials. Incorporate also number of CPUs / threads available (done with
  * <code>GCDProxy</code>).
  * 

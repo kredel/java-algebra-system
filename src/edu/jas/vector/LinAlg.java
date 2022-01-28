@@ -561,7 +561,7 @@ public class LinAlg<C extends RingElem<C>> implements Serializable {
     /**
      * Matrix fraction free Gauss elimination. Matrix A is replaced by
      * its fraction free LU decomposition. A contains a copy of both
-     * matrices L-E and U as A=(L-E)+U such that P*A=L*U. Todo: L is
+     * matrices L-E and U as A=(L-E)+U such that P*A=L*U. TODO: L is
      * not computed but 0. The permutation matrix is not stored as a
      * matrix, but in an integer vector P of size N+1 containing
      * column indexes where the permutation matrix has "1". The last
