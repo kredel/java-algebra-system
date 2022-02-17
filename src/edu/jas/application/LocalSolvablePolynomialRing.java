@@ -188,6 +188,7 @@ public class LocalSolvablePolynomialRing<C extends GcdRingElem<C>> extends
             ExpVector f = null;
             GenSolvablePolynomial<GenPolynomial<C>> p = null;
             polCoeff.table.update(e, f, p); // from rt
+            throw new RuntimeException("TODO");
         }
         //coeffTable = polCoeff.coeffTable; //new RelationTable<GenPolynomial<C>>(polCoeff, true);
         ZERO = new LocalSolvablePolynomial<C>(this);

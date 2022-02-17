@@ -25,6 +25,7 @@ import edu.jas.structure.GcdRingElem;
  * over non-commutative word residue coefficients. Objects of this class are
  * intended to be immutable. The implementation is based on TreeMap respectively
  * SortedMap from exponents to coefficients by extension of GenPolynomial.
+ * Will eventually be deprecated.
  * @param <C> base coefficient type
  * @author Heinz Kredel
  */

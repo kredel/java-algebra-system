@@ -43,6 +43,7 @@ import edu.jas.structure.RingFactory;
  * non-commutative multiplication relations between the coefficients and the
  * main variables are maintained in a coefficient relation table. Almost
  * immutable object, except variable names and relation table contents.
+ * Will eventually be deprecated use QLRSolvablePolynomialRing.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
@@ -187,6 +188,7 @@ public class ResidueSolvablePolynomialRing<C extends GcdRingElem<C>> extends
             ExpVector f = null;
             GenSolvablePolynomial<GenPolynomial<C>> p = null;
             polCoeff.table.update(e, f, p); // from rt
+            throw new RuntimeException("TODO");
         }
         //coeffTable = polCoeff.coeffTable; //new RelationTable<GenPolynomial<C>>(polCoeff, true);
         ZERO = new ResidueSolvablePolynomial<C>(this);

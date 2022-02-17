@@ -25,6 +25,7 @@ import edu.jas.structure.GcdRingElem;
  * over solvable residue coefficients. Objects of this class are intended to be
  * immutable. The implementation is based on TreeMap respectively SortedMap from
  * exponents to coefficients by extension of GenPolynomial.
+ * Will eventually be deprecated use QLRSolvablePolynomial.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
