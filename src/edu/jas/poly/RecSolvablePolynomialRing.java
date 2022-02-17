@@ -23,14 +23,15 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * RecSolvablePolynomialRing generic recursive solvable polynomial factory
- * implementing RingFactory and extending GenSolvablePolynomialRing factory.
- * Factory for n-variate ordered solvable polynomials over solvable polynomial
- * coefficients. The non-commutative multiplication relations are maintained in
- * a relation table and the non-commutative multiplication relations between the
- * coefficients and the main variables are maintained in a coefficient relation
- * table. Almost immutable object, except variable names and relation table
- * contents.
+ * RecSolvablePolynomialRing generic recursive solvable polynomial
+ * factory implementing RingFactory and extending
+ * GenSolvablePolynomialRing factory.  Factory for n-variate ordered
+ * solvable polynomials over solvable polynomial coefficients. The
+ * non-commutative multiplication relations are maintained in a
+ * relation table and the non-commutative multiplication relations
+ * between the coefficients and the variables are maintained in a
+ * coefficient-polynomial relation table. Almost immutable object,
+ * except variable names and relation table contents.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
@@ -224,14 +225,14 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
         s.append(",\"" + varsToString() + "\",");
         String to = tord.toScript();
         s.append(to);
+        if (coeffTable.size() > 0) {
+            String rel = coeffTable.toScript();
+            s.append(",coeffpolrel=");
+            s.append(rel);
+        }
         if (table.size() > 0) {
             String rel = table.toScript();
             s.append(",rel=");
-            s.append(rel);
-        }
-        if (coeffTable.size() > 0) {
-            String rel = coeffTable.toScript();
-            s.append(",coeffrel=");
             s.append(rel);
         }
         s.append(")");
