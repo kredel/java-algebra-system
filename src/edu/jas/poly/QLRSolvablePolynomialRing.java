@@ -14,37 +14,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.Scripting;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingElem;
-import edu.jas.structure.RingFactory;
 import edu.jas.structure.QuotPair;
 import edu.jas.structure.QuotPairFactory;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.RingFactory;
 
 
 /**
- * QLRSolvablePolynomialRing generic recursive solvable polynomial
- * factory implementing RingFactory and extending
- * GenSolvablePolynomialRing factory.  Factory for n-variate ordered
- * solvable polynomials over solvable quotient, local and
- * local-residue coefficients. The non-commutative multiplication
- * relations are maintained in a relation table and the
- * non-commutative multiplication relations between the coefficients
- * and the main variables are maintained in a coefficient relation
- * table. Almost immutable object, except variable names and relation
- * table contents.
+ * QLRSolvablePolynomialRing generic recursive solvable polynomial factory
+ * implementing RingFactory and extending GenSolvablePolynomialRing factory.
+ * Factory for n-variate ordered solvable polynomials over solvable quotient,
+ * local and local-residue coefficients. The non-commutative multiplication
+ * relations are maintained in a relation table and the non-commutative
+ * multiplication relations between the coefficients and the main variables are
+ * maintained in a coefficient relation table. Almost immutable object, except
+ * variable names and relation table contents.
  * @param <C> polynomial coefficient type
  * @param <D> quotient coefficient type
  * @author Heinz Kredel
  */
 
-public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPolynomial<D>>, 
-                                       D extends GcdRingElem<D> > 
-       extends GenSolvablePolynomialRing<C> {
+public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPolynomial<D>>, D extends GcdRingElem<D>>
+                extends GenSolvablePolynomialRing<C> {
 
 
     private static final Logger logger = LogManager.getLogger(QLRSolvablePolynomialRing.class);
@@ -61,19 +58,19 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
     /**
      * The constant polynomial 0 for this ring. Hides super ZERO.
      */
-    public final QLRSolvablePolynomial<C,D> ZERO;
+    public final QLRSolvablePolynomial<C, D> ZERO;
 
 
     /**
      * The constant polynomial 1 for this ring. Hides super ONE.
      */
-    public final QLRSolvablePolynomial<C,D> ONE;
+    public final QLRSolvablePolynomial<C, D> ONE;
 
 
     /**
      * Factory to create coefficients.
      */
-    public final QuotPairFactory<GenPolynomial<D>,C> qpfac;
+    public final QuotPairFactory<GenPolynomial<D>, C> qpfac;
 
 
     /**
@@ -94,8 +91,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @param n number of variables.
      * @param rt solvable multiplication relations.
      */
-    public QLRSolvablePolynomialRing(RingFactory<C> cf, int n,
-                    RelationTable<C> rt) {
+    public QLRSolvablePolynomialRing(RingFactory<C> cf, int n, RelationTable<C> rt) {
         this(cf, n, new TermOrder(), null, rt);
     }
 
@@ -120,8 +116,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @param t a term order.
      * @param rt solvable multiplication relations.
      */
-    public QLRSolvablePolynomialRing(RingFactory<C> cf, int n, TermOrder t,
-                    RelationTable<C> rt) {
+    public QLRSolvablePolynomialRing(RingFactory<C> cf, int n, TermOrder t, RelationTable<C> rt) {
         this(cf, n, t, null, rt);
     }
 
@@ -198,11 +193,10 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @param rt solvable multiplication relations.
      */
     @SuppressWarnings("unchecked")
-    public QLRSolvablePolynomialRing(RingFactory<C> cf, int n, TermOrder t, String[] v,
-                    RelationTable<C> rt) {
+    public QLRSolvablePolynomialRing(RingFactory<C> cf, int n, TermOrder t, String[] v, RelationTable<C> rt) {
         super(cf, n, t, v, rt);
         //if (rt == null) { // handled in super }
-        qpfac = (QuotPairFactory<GenPolynomial<D>,C>) cf; // crucial part of type
+        qpfac = (QuotPairFactory<GenPolynomial<D>, C>) cf; // crucial part of type
         RingFactory<GenPolynomial<D>> cfring = qpfac.pairFactory(); // == coFac.ring
         polCoeff = new RecSolvablePolynomialRing<D>(cfring, n, t, v);
         if (table.size() > 0) { // TODO
@@ -212,9 +206,9 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
             polCoeff.table.update(e, f, p); // from rt
             throw new RuntimeException("TODO");
         }
-        ZERO = new QLRSolvablePolynomial<C,D>(this);
+        ZERO = new QLRSolvablePolynomial<C, D>(this);
         C coeff = coFac.getONE();
-        ONE = new QLRSolvablePolynomial<C,D>(this, coeff, evzero);
+        ONE = new QLRSolvablePolynomial<C, D>(this, coeff, evzero);
     }
 
 
@@ -229,7 +223,8 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
             res += "\n" + polCoeff.coeffTable.toString(vars);
             res += "\n" + polCoeff.table.toString(vars);
         } else {
-            res += ", #rel = " + table.size() + " + " + polCoeff.coeffTable.size() + " + " + polCoeff.table.size();
+            res += ", #rel = " + table.size() + " + " + polCoeff.coeffTable.size() + " + "
+                            + polCoeff.table.size();
         }
         return res;
     }
@@ -265,7 +260,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
             s.append(",rel=");
             s.append(rel);
         }
-/*
+        /*
         if (polCoeff.coeffTable.size() > 0) {
             String crel = polCoeff.coeffTable.toScript();
             s.append(",coeffrel=");
@@ -278,7 +273,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
                 s.append(polrel);
             }
         }
-*/
+        */
         s.append(")");
         String cpol = polCoeff.toScript();
         s.append("\n  # ");
@@ -297,9 +292,9 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
         if (!(other instanceof QLRSolvablePolynomialRing)) {
             return false;
         }
-        QLRSolvablePolynomialRing<C,D> oring = null;
+        QLRSolvablePolynomialRing<C, D> oring = null;
         try {
-            oring = (QLRSolvablePolynomialRing<C,D>) other;
+            oring = (QLRSolvablePolynomialRing<C, D>) other;
         } catch (ClassCastException ignored) {
         }
         if (oring == null) {
@@ -339,7 +334,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return 0 as QLRSolvablePolynomial.
      */
     @Override
-    public QLRSolvablePolynomial<C,D> getZERO() {
+    public QLRSolvablePolynomial<C, D> getZERO() {
         return ZERO;
     }
 
@@ -349,7 +344,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return 1 as QLRSolvablePolynomial.
      */
     @Override
-    public QLRSolvablePolynomial<C,D> getONE() {
+    public QLRSolvablePolynomial<C, D> getONE() {
         return ONE;
     }
 
@@ -383,13 +378,13 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
         if (!polCoeff.isAssociative()) { // not done via generators??
             return false;
         }
-        QLRSolvablePolynomial<C,D> Xi, Xj, Xk, p, q;
+        QLRSolvablePolynomial<C, D> Xi, Xj, Xk, p, q;
         List<GenPolynomial<C>> gens = generators();
         //System.out.println("QLR gens = " + gens);
         int ngen = gens.size();
         for (int i = 0; i < ngen; i++) {
-            Xi = (QLRSolvablePolynomial<C,D>) gens.get(i);
-            if(Xi.degree() == 0) {
+            Xi = (QLRSolvablePolynomial<C, D>) gens.get(i);
+            if (Xi.degree() == 0) {
                 C lbc = Xi.leadingBaseCoefficient();
                 if (lbc.numerator().degree() == 0 && lbc.denominator().degree() == 0) {
                     //System.out.println("qlr assoc skip: Xi = " + lbc);
@@ -397,16 +392,16 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
                 }
             }
             for (int j = i + 1; j < ngen; j++) {
-                Xj = (QLRSolvablePolynomial<C,D>) gens.get(j);
-                if(Xj.degree() == 0) {
-                   C lbc = Xi.leadingBaseCoefficient();
-                   if (lbc.numerator().degree() == 0 && lbc.denominator().degree() == 0) {
-                       //System.out.println("qlr assoc skip: Xj = " + lbc);
-                       continue; // skip
-                   }
+                Xj = (QLRSolvablePolynomial<C, D>) gens.get(j);
+                if (Xj.degree() == 0) {
+                    C lbc = Xi.leadingBaseCoefficient();
+                    if (lbc.numerator().degree() == 0 && lbc.denominator().degree() == 0) {
+                        //System.out.println("qlr assoc skip: Xj = " + lbc);
+                        continue; // skip
+                    }
                 }
                 for (int k = j + 1; k < ngen; k++) {
-                    Xk = (QLRSolvablePolynomial<C,D>) gens.get(k);
+                    Xk = (QLRSolvablePolynomial<C, D>) gens.get(k);
                     if (Xi.degree() == 0 && Xj.degree() == 0 && Xk.degree() == 0) {
                         //System.out.println("qlr assoc degree == 0");
                         continue; // skip
@@ -436,7 +431,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
                 }
             }
         }
-        return true; 
+        return true;
     }
 
 
@@ -447,20 +442,20 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return a QLRSolvablePolynomial&lt;C&gt;.
      */
     @Override
-    public QLRSolvablePolynomial<C,D> fromInteger(long a) {
-        return new QLRSolvablePolynomial<C,D>(this, coFac.fromInteger(a), evzero);
+    public QLRSolvablePolynomial<C, D> fromInteger(long a) {
+        return new QLRSolvablePolynomial<C, D>(this, coFac.fromInteger(a), evzero);
     }
 
 
     /**
-     * Get a (constant) QLRSolvablePolynomial&lt;C&gt; element from a
-     * BigInteger value.
+     * Get a (constant) QLRSolvablePolynomial&lt;C&gt; element from a BigInteger
+     * value.
      * @param a BigInteger.
      * @return a QLRSolvablePolynomial&lt;C&gt;.
      */
     @Override
-    public QLRSolvablePolynomial<C,D> fromInteger(BigInteger a) {
-        return new QLRSolvablePolynomial<C,D>(this, coFac.fromInteger(a), evzero);
+    public QLRSolvablePolynomial<C, D> fromInteger(BigInteger a) {
+        return new QLRSolvablePolynomial<C, D>(this, coFac.fromInteger(a), evzero);
     }
 
 
@@ -471,7 +466,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return a random solvable polynomial.
      */
     @Override
-    public QLRSolvablePolynomial<C,D> random(int n) {
+    public QLRSolvablePolynomial<C, D> random(int n) {
         return random(n, random);
     }
 
@@ -484,7 +479,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return a random solvable polynomial.
      */
     @Override
-    public QLRSolvablePolynomial<C,D> random(int n, Random rnd) {
+    public QLRSolvablePolynomial<C, D> random(int n, Random rnd) {
         if (nvar == 1) {
             return random(5, n, n, 0.7f, rnd);
         }
@@ -501,7 +496,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return a random solvable polynomial.
      */
     @Override
-    public QLRSolvablePolynomial<C,D> random(int k, int l, int d, float q) {
+    public QLRSolvablePolynomial<C, D> random(int k, int l, int d, float q) {
         return random(k, l, d, q, random);
     }
 
@@ -517,15 +512,15 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      */
     @Override
     @SuppressWarnings("unchecked")
-    public QLRSolvablePolynomial<C,D> random(int k, int l, int d, float q, Random rnd) {
-        QLRSolvablePolynomial<C,D> r = getZERO(); // copy( ZERO ); 
+    public QLRSolvablePolynomial<C, D> random(int k, int l, int d, float q, Random rnd) {
+        QLRSolvablePolynomial<C, D> r = getZERO(); // copy( ZERO ); 
         ExpVector e;
         C a;
         // add random coeffs and exponents
         for (int i = 0; i < l; i++) {
             e = ExpVector.random(nvar, d, q, rnd);
             a = coFac.random(k, rnd);
-            r = (QLRSolvablePolynomial<C,D>) r.sum(a, e);
+            r = (QLRSolvablePolynomial<C, D>) r.sum(a, e);
             // somewhat inefficient but clean
         }
         return r;
@@ -537,8 +532,8 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @param c
      * @return a copy of c.
      */
-    public QLRSolvablePolynomial<C,D> copy(QLRSolvablePolynomial<C,D> c) {
-        return new QLRSolvablePolynomial<C,D>(this, c.getMap());
+    public QLRSolvablePolynomial<C, D> copy(QLRSolvablePolynomial<C, D> c) {
+        return new QLRSolvablePolynomial<C, D>(this, c.getMap());
     }
 
 
@@ -548,7 +543,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return QLRSolvablePolynomial from s.
      */
     @Override
-    public QLRSolvablePolynomial<C,D> parse(String s) {
+    public QLRSolvablePolynomial<C, D> parse(String s) {
         return parse(new StringReader(s));
     }
 
@@ -560,12 +555,12 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      */
     @Override
     @SuppressWarnings("unchecked")
-    public QLRSolvablePolynomial<C,D> parse(Reader r) {
+    public QLRSolvablePolynomial<C, D> parse(Reader r) {
         GenPolynomialTokenizer pt = new GenPolynomialTokenizer(this, r);
-        QLRSolvablePolynomial<C,D> p = null;
+        QLRSolvablePolynomial<C, D> p = null;
         try {
             GenSolvablePolynomial<C> s = pt.nextSolvablePolynomial();
-            p = new QLRSolvablePolynomial<C,D>(this, s);
+            p = new QLRSolvablePolynomial<C, D>(this, s);
         } catch (IOException e) {
             logger.error("{} parse {}", e, this);
             p = ZERO;
@@ -581,8 +576,8 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      */
     @Override
     @SuppressWarnings("unchecked")
-    public QLRSolvablePolynomial<C,D> univariate(int i) {
-        return (QLRSolvablePolynomial<C,D>) super.univariate(i);
+    public QLRSolvablePolynomial<C, D> univariate(int i) {
+        return (QLRSolvablePolynomial<C, D>) super.univariate(i);
     }
 
 
@@ -595,8 +590,8 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      */
     @Override
     @SuppressWarnings("unchecked")
-    public QLRSolvablePolynomial<C,D> univariate(int i, long e) {
-        return (QLRSolvablePolynomial<C,D>) super.univariate(i, e);
+    public QLRSolvablePolynomial<C, D> univariate(int i, long e) {
+        return (QLRSolvablePolynomial<C, D>) super.univariate(i, e);
     }
 
 
@@ -610,8 +605,8 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      */
     @Override
     @SuppressWarnings("unchecked")
-    public QLRSolvablePolynomial<C,D> univariate(int modv, int i, long e) {
-        return (QLRSolvablePolynomial<C,D>) super.univariate(modv, i, e);
+    public QLRSolvablePolynomial<C, D> univariate(int modv, int i, long e) {
+        return (QLRSolvablePolynomial<C, D>) super.univariate(modv, i, e);
     }
 
 
@@ -620,7 +615,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
     @Override
-    public List<QLRSolvablePolynomial<C,D>> univariateList() {
+    public List<QLRSolvablePolynomial<C, D>> univariateList() {
         return univariateList(0, 1L);
     }
 
@@ -631,7 +626,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return List(X_1,...,X_n) a list of univariate polynomials.
      */
     @Override
-    public List<QLRSolvablePolynomial<C,D>> univariateList(int modv) {
+    public List<QLRSolvablePolynomial<C, D>> univariateList(int modv) {
         return univariateList(modv, 1L);
     }
 
@@ -644,11 +639,11 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return List(X_1^e,...,X_n^e) a list of univariate polynomials.
      */
     @Override
-    public List<QLRSolvablePolynomial<C,D>> univariateList(int modv, long e) {
-        List<QLRSolvablePolynomial<C,D>> pols = new ArrayList<QLRSolvablePolynomial<C,D>>(nvar);
+    public List<QLRSolvablePolynomial<C, D>> univariateList(int modv, long e) {
+        List<QLRSolvablePolynomial<C, D>> pols = new ArrayList<QLRSolvablePolynomial<C, D>>(nvar);
         int nm = nvar - modv;
         for (int i = 0; i < nm; i++) {
-            QLRSolvablePolynomial<C,D> p = univariate(modv, nm - 1 - i, e);
+            QLRSolvablePolynomial<C, D> p = univariate(modv, nm - 1 - i, e);
             pols.add(p);
         }
         return pols;
@@ -662,11 +657,11 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return extended solvable polynomial ring factory.
      */
     @Override
-    public QLRSolvablePolynomialRing<C,D> extend(int i) {
-        return extend(i,false);
+    public QLRSolvablePolynomialRing<C, D> extend(int i) {
+        return extend(i, false);
     }
 
-    
+
     /**
      * Extend variables. Used e.g. in module embedding. Extend number of
      * variables by i.
@@ -675,16 +670,16 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return extended solvable polynomial ring factory.
      */
     @Override
-    public QLRSolvablePolynomialRing<C,D> extend(int i, boolean top) {
+    public QLRSolvablePolynomialRing<C, D> extend(int i, boolean top) {
         GenPolynomialRing<C> pfac = super.extend(i, top);
-        QLRSolvablePolynomialRing<C,D> spfac = new QLRSolvablePolynomialRing<C,D>(pfac.coFac, pfac.nvar,
+        QLRSolvablePolynomialRing<C, D> spfac = new QLRSolvablePolynomialRing<C, D>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.getVars());
         spfac.table.extend(this.table);
         spfac.polCoeff.coeffTable.extend(this.polCoeff.coeffTable);
         return spfac;
     }
 
-    
+
     /**
      * Extend variables. Used e.g. in module embedding. Extend number of
      * variables by length(vn). New variables commute with the exiting
@@ -693,11 +688,11 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return extended polynomial ring factory.
      */
     @Override
-    public QLRSolvablePolynomialRing<C,D> extend(String[] vn) {
+    public QLRSolvablePolynomialRing<C, D> extend(String[] vn) {
         return extend(vn, false);
     }
 
-    
+
     /**
      * Extend variables. Used e.g. in module embedding. Extend number of
      * variables by length(vn). New variables commute with the exiting
@@ -707,16 +702,16 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return extended polynomial ring factory.
      */
     @Override
-    public QLRSolvablePolynomialRing<C,D> extend(String[] vn, boolean top) {
+    public QLRSolvablePolynomialRing<C, D> extend(String[] vn, boolean top) {
         GenPolynomialRing<C> pfac = super.extend(vn, top);
-        QLRSolvablePolynomialRing<C,D> spfac = new QLRSolvablePolynomialRing<C,D>(pfac.coFac, pfac.nvar,
+        QLRSolvablePolynomialRing<C, D> spfac = new QLRSolvablePolynomialRing<C, D>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.vars);
         spfac.table.extend(this.table);
         spfac.polCoeff.coeffTable.extend(this.polCoeff.coeffTable);
         return spfac;
     }
-    
-    
+
+
     /**
      * Contract variables. Used e.g. in module embedding. Contract number of
      * variables by i.
@@ -724,9 +719,9 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return contracted solvable polynomial ring factory.
      */
     @Override
-    public QLRSolvablePolynomialRing<C,D> contract(int i) {
+    public QLRSolvablePolynomialRing<C, D> contract(int i) {
         GenPolynomialRing<C> pfac = super.contract(i);
-        QLRSolvablePolynomialRing<C,D> spfac = new QLRSolvablePolynomialRing<C,D>(pfac.coFac, pfac.nvar,
+        QLRSolvablePolynomialRing<C, D> spfac = new QLRSolvablePolynomialRing<C, D>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.getVars());
         spfac.table.contract(this.table);
         spfac.polCoeff.coeffTable.contract(this.polCoeff.coeffTable);
@@ -739,7 +734,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return solvable polynomial ring factory with reversed variables.
      */
     @Override
-    public QLRSolvablePolynomialRing<C,D> reverse() {
+    public QLRSolvablePolynomialRing<C, D> reverse() {
         return reverse(false);
     }
 
@@ -750,9 +745,9 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      * @return solvable polynomial ring factory with reversed variables.
      */
     @Override
-    public QLRSolvablePolynomialRing<C,D> reverse(boolean partial) {
+    public QLRSolvablePolynomialRing<C, D> reverse(boolean partial) {
         GenPolynomialRing<C> pfac = super.reverse(partial);
-        QLRSolvablePolynomialRing<C,D> spfac = new QLRSolvablePolynomialRing<C,D>(pfac.coFac, pfac.nvar,
+        QLRSolvablePolynomialRing<C, D> spfac = new QLRSolvablePolynomialRing<C, D>(pfac.coFac, pfac.nvar,
                         pfac.tord, pfac.getVars());
         spfac.partial = partial;
         spfac.table.reverse(this.table);
@@ -768,8 +763,8 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      *            converted.
      * @return polynomial with type C coefficients.
      */
-    public QLRSolvablePolynomial<C,D> fromPolyCoefficients(GenSolvablePolynomial<GenPolynomial<D>> A) {
-        QLRSolvablePolynomial<C,D> B = getZERO().copy();
+    public QLRSolvablePolynomial<C, D> fromPolyCoefficients(GenSolvablePolynomial<GenPolynomial<D>> A) {
+        QLRSolvablePolynomial<C, D> B = getZERO().copy();
         if (A == null || A.isZERO()) {
             return B;
         }
@@ -777,7 +772,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
             ExpVector e = y.getKey();
             GenSolvablePolynomial<D> a = (GenSolvablePolynomial<D>) y.getValue();
             //C p = new C(qfac, a); 
-            C p = qpfac.create(a); 
+            C p = qpfac.create(a);
             if (!p.isZERO()) {
                 B.doPutToMap(e, p);
             }
@@ -793,7 +788,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      *            converted.
      * @return polynomial with type GenSolvablePolynomial<C> coefficients.
      */
-    public RecSolvablePolynomial<D> toPolyCoefficients(QLRSolvablePolynomial<C,D> A) {
+    public RecSolvablePolynomial<D> toPolyCoefficients(QLRSolvablePolynomial<C, D> A) {
         RecSolvablePolynomial<D> B = polCoeff.getZERO().copy();
         if (A == null || A.isZERO()) {
             return B;

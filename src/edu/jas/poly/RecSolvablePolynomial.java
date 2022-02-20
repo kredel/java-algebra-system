@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.RingElem;
 
@@ -100,7 +100,8 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
      * @param r solvable polynomial ring factory.
      * @param v the SortedMap of some other (solvable) polynomial.
      */
-    protected RecSolvablePolynomial(RecSolvablePolynomialRing<C> r, SortedMap<ExpVector, GenPolynomial<C>> v) {
+    protected RecSolvablePolynomial(RecSolvablePolynomialRing<C> r,
+                    SortedMap<ExpVector, GenPolynomial<C>> v) {
         this(r);
         val.putAll(v); // assume no zero coefficients
     }
@@ -219,7 +220,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                         logger.info("unsymmetric coeff, e*b: b = {}, e = {}", b, e);
                     for (Map.Entry<ExpVector, C> z : b.val.entrySet()) {
                         C c = z.getValue();
-                        GenPolynomial<C> cc = b.ring.valueOf(c); 
+                        GenPolynomial<C> cc = b.ring.valueOf(c);
                         ExpVector g = z.getKey();
                         if (debug)
                             logger.info("g = {}, c = {}", g, c);
@@ -257,7 +258,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                         Cs = new RecSolvablePolynomial<C>(ring, crel.p);
                         // rest of multiplication and update relations
                         if (crel.f != null) { // process remaining right power
-                            GenPolynomial<C> c2 = b.ring.valueOf(crel.f); 
+                            GenPolynomial<C> c2 = b.ring.valueOf(crel.f);
                             C2 = new RecSolvablePolynomial<C>(ring, c2, Z);
                             Cs = Cs.multiply(C2);
                             if (crel.e == null) {
@@ -273,7 +274,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                             ring.coeffTable.update(e2, g2, Cs);
                         }
                         if (!g1.isZERO()) { // process remaining right part
-                            GenPolynomial<C> c2 = b.ring.valueOf(g1); 
+                            GenPolynomial<C> c2 = b.ring.valueOf(g1);
                             C2 = new RecSolvablePolynomial<C>(ring, c2, Z);
                             Cs = Cs.multiply(C2);
                         }
@@ -339,7 +340,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                                 logger.info("poly, g  = {}, f = {}, rel = {}", g, f, rel);
                             Ds = new RecSolvablePolynomial<C>(ring, rel.p); //ring.copy(rel.p);
                             if (rel.f != null) {
-                                D2 = ring.valueOf(rel.f); 
+                                D2 = ring.valueOf(rel.f);
                                 Ds = Ds.multiply(D2);
                                 if (rel.e == null) {
                                     g4 = g2;
@@ -349,17 +350,17 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
                                 ring.table.update(g4, f2, Ds);
                             }
                             if (rel.e != null) {
-                                D1 = ring.valueOf(rel.e); 
+                                D1 = ring.valueOf(rel.e);
                                 Ds = D1.multiply(Ds);
                                 ring.table.update(g2, f2, Ds);
                             }
                             if (!f1.isZERO()) {
-                                D2 = ring.valueOf(f1); 
+                                D2 = ring.valueOf(f1);
                                 Ds = Ds.multiply(D2);
                                 //ring.table.update(?,f1,Ds)
                             }
                             if (!g1.isZERO()) {
-                                D1 = ring.valueOf(g1); 
+                                D1 = ring.valueOf(g1);
                                 Ds = D1.multiply(Ds);
                                 //ring.table.update(e1,?,Ds)
                             }
@@ -456,8 +457,8 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (c == null || c.isZERO()) {
             return Cp;
         }
-        RecSolvablePolynomial<C> Cb = ring.valueOf(b); 
-        RecSolvablePolynomial<C> Cc = ring.valueOf(c); 
+        RecSolvablePolynomial<C> Cb = ring.valueOf(b);
+        RecSolvablePolynomial<C> Cc = ring.valueOf(c);
         return Cb.multiply(this).multiply(Cc);
         // wrong:
         // Map<ExpVector, GenPolynomial<C>> Cm = Cp.val; //getMap();
@@ -532,7 +533,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (b == null || b.isZERO()) {
             return ring.getZERO();
         }
-        RecSolvablePolynomial<C> Cp = ring.valueOf(b, e); 
+        RecSolvablePolynomial<C> Cp = ring.valueOf(b, e);
         return multiply(Cp);
     }
 
@@ -548,15 +549,16 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
      *         solvable multiplication.
      */
     @Override
-    public RecSolvablePolynomial<C> multiply(GenPolynomial<C> b, ExpVector e, GenPolynomial<C> c, ExpVector f) {
+    public RecSolvablePolynomial<C> multiply(GenPolynomial<C> b, ExpVector e, GenPolynomial<C> c,
+                    ExpVector f) {
         if (b == null || b.isZERO()) {
             return ring.getZERO();
         }
         if (c == null || c.isZERO()) {
             return ring.getZERO();
         }
-        RecSolvablePolynomial<C> Cp = ring.valueOf(b, e); 
-        RecSolvablePolynomial<C> Dp = ring.valueOf(c, f); 
+        RecSolvablePolynomial<C> Cp = ring.valueOf(b, e);
+        RecSolvablePolynomial<C> Dp = ring.valueOf(c, f);
         return multiply(Cp, Dp);
     }
 
@@ -573,7 +575,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (b == null || b.isZERO()) {
             return ring.getZERO();
         }
-        RecSolvablePolynomial<C> Cp = ring.valueOf(b, e); 
+        RecSolvablePolynomial<C> Cp = ring.valueOf(b, e);
         return Cp.multiply(this);
     }
 
@@ -588,7 +590,7 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
         if (e == null || e.isZERO()) {
             return this;
         }
-        RecSolvablePolynomial<C> Cp = ring.valueOf(e); 
+        RecSolvablePolynomial<C> Cp = ring.valueOf(e);
         return Cp.multiply(this);
     }
 
@@ -688,12 +690,13 @@ public class RecSolvablePolynomial<C extends RingElem<C>> extends GenSolvablePol
 
 
     /**
-     * RecSolvablePolynomial multiplication. Commutative product with 
+     * RecSolvablePolynomial multiplication. Commutative product with
      * coefficient.
      * @param b coefficient.
-     * @return B*b, where * is commutative multiplication with respect to main variables.
+     * @return B*b, where * is commutative multiplication with respect to main
+     *         variables.
      */
-     public RecSolvablePolynomial<C> multiplyRightComm(GenPolynomial<C> b) {
+    public RecSolvablePolynomial<C> multiplyRightComm(GenPolynomial<C> b) {
         RecSolvablePolynomial<C> C = ring.getZERO().copy();
         if (this.isZERO()) {
             return C;

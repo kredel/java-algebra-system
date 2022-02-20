@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.QuotPair;
@@ -220,7 +220,8 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                         Cps = rsp;
                     } else { // b.denominator() != 1
                         if (debug)
-                            logger.info("coeff-num: Cps = {}, num = {}, den = {}", Cps, b.numerator(), b.denominator());
+                            logger.info("coeff-num: Cps = {}, num = {}, den = {}", Cps, b.numerator(),
+                                            b.denominator());
                         RingFactory<C> bfq = (RingFactory<C>) b.factory();
                         Cps = new QLRSolvablePolynomial<C, D>(ring, bfq.getONE(), e);
 
@@ -356,7 +357,8 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
      * @return S*this*T.
      */
     // not @Override
-    public QLRSolvablePolynomial<C, D> multiply(QLRSolvablePolynomial<C, D> S, QLRSolvablePolynomial<C, D> T) {
+    public QLRSolvablePolynomial<C, D> multiply(QLRSolvablePolynomial<C, D> S,
+                    QLRSolvablePolynomial<C, D> T) {
         if (S.isZERO() || T.isZERO() || this.isZERO()) {
             return ring.getZERO();
         }
@@ -587,7 +589,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
 
 
     /**
-     * QLRSolvablePolynomial multiplication with exponent vector. 
+     * QLRSolvablePolynomial multiplication with exponent vector.
      * @param f exponent vector.
      * @return B*f, where * is commutative multiplication.
      */

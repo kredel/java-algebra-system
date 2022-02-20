@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.Scripting;
@@ -23,21 +23,20 @@ import edu.jas.structure.RingFactory;
 
 
 /**
- * RecSolvablePolynomialRing generic recursive solvable polynomial
- * factory implementing RingFactory and extending
- * GenSolvablePolynomialRing factory.  Factory for n-variate ordered
- * solvable polynomials over solvable polynomial coefficients. The
- * non-commutative multiplication relations are maintained in a
- * relation table and the non-commutative multiplication relations
- * between the coefficients and the variables are maintained in a
- * coefficient-polynomial relation table. Almost immutable object,
- * except variable names and relation table contents.
+ * RecSolvablePolynomialRing generic recursive solvable polynomial factory
+ * implementing RingFactory and extending GenSolvablePolynomialRing factory.
+ * Factory for n-variate ordered solvable polynomials over solvable polynomial
+ * coefficients. The non-commutative multiplication relations are maintained in
+ * a relation table and the non-commutative multiplication relations between the
+ * coefficients and the variables are maintained in a coefficient-polynomial
+ * relation table. Almost immutable object, except variable names and relation
+ * table contents.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */
 
-public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
-                GenSolvablePolynomialRing<GenPolynomial<C>> {
+public class RecSolvablePolynomialRing<C extends RingElem<C>>
+                extends GenSolvablePolynomialRing<GenPolynomial<C>> {
 
 
     /**
@@ -356,7 +355,8 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
 
 
     /**
-     * Get a (constant) RecSolvablePolynomial&lt;C&gt; element from a coefficient value.
+     * Get a (constant) RecSolvablePolynomial&lt;C&gt; element from a
+     * coefficient value.
      * @param a coefficient.
      * @return a RecSolvablePolynomial&lt;C&gt;.
      */
@@ -378,8 +378,8 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
 
 
     /**
-     * Get a RecSolvablePolynomial&lt;C&gt; element from a coeffcient and an exponent
-     * vector.
+     * Get a RecSolvablePolynomial&lt;C&gt; element from a coeffcient and an
+     * exponent vector.
      * @param a coefficient.
      * @param e exponent vector.
      * @return a RecSolvablePolynomial&lt;C&gt;.
@@ -391,8 +391,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
 
 
     /**
-     * Get a (constant) RecSolvablePolynomial&lt;C&gt; element from a long
-     * value
+     * Get a (constant) RecSolvablePolynomial&lt;C&gt; element from a long value
      * @param a long.
      * @return a RecSolvablePolynomial&lt;C&gt;.
      */
@@ -610,7 +609,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
      */
     @Override
     public RecSolvablePolynomialRing<C> extend(int i) {
-        return extend(i,false);
+        return extend(i, false);
     }
 
 
@@ -644,7 +643,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
         return extend(vs, false);
     }
 
-    
+
     /**
      * Extend variables. Used e.g. in module embedding. Extend number of
      * variables by length(vn). New variables commute with the exiting
@@ -712,7 +711,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
      * Distributive representation as polynomial with all main variables.
      * @return distributive polynomial ring factory.
      */
-    @SuppressWarnings({"cast","unchecked"})
+    @SuppressWarnings({ "cast", "unchecked" })
     public static <C extends RingElem<C>> // must be static because of types
     GenSolvablePolynomialRing<C> distribute(RecSolvablePolynomialRing<C> rf) {
         // setup solvable polynomial ring
@@ -738,7 +737,8 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>> extends
         if (!coeffTable.isEmpty()) {
             throw new UnsupportedOperationException("permutation with coeff relations: " + this);
         }
-        GenSolvablePolynomialRing<GenPolynomial<C>> pfac = (GenSolvablePolynomialRing<GenPolynomial<C>>) super.permutation(P);
+        GenSolvablePolynomialRing<GenPolynomial<C>> pfac = (GenSolvablePolynomialRing<GenPolynomial<C>>) super.permutation(
+                        P);
         return pfac;
     }
 

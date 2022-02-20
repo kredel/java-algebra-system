@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.RingElem;
 
@@ -25,8 +25,8 @@ import edu.jas.structure.RingElem;
  * @author Heinz Kredel
  */
 
-public class RecSolvableWordPolynomial<C extends RingElem<C>> extends
-                GenSolvablePolynomial<GenWordPolynomial<C>> {
+public class RecSolvableWordPolynomial<C extends RingElem<C>>
+                extends GenSolvablePolynomial<GenWordPolynomial<C>> {
 
 
     /**
@@ -68,7 +68,8 @@ public class RecSolvableWordPolynomial<C extends RingElem<C>> extends
      * @param c coefficient polynomial.
      * @param e exponent.
      */
-    public RecSolvableWordPolynomial(RecSolvableWordPolynomialRing<C> r, GenWordPolynomial<C> c, ExpVector e) {
+    public RecSolvableWordPolynomial(RecSolvableWordPolynomialRing<C> r, GenWordPolynomial<C> c,
+                    ExpVector e) {
         this(r);
         if (c != null && !c.isZERO()) {
             val.put(e, c);
