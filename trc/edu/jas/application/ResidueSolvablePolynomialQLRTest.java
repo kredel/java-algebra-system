@@ -9,12 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
-
 import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -30,6 +24,10 @@ import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
 import edu.jas.poly.WeylRelationsIterated;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 
 /**
  * BigRational coefficients ResidueSolvablePolynomial QLR representation tests
@@ -44,7 +42,7 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        
+
         junit.textui.TestRunner.run(suite());
     }
 
@@ -338,8 +336,8 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
         c = ring.random(kl, ll, el, q);
 
         d = a.multiply((QLRSolvablePolynomial<SolvableResidue<BigRational>, BigRational>) b.sum(c));
-        e = (QLRSolvablePolynomial<SolvableResidue<BigRational>, BigRational>) a.multiply(b).sum(
-                        a.multiply(c));
+        e = (QLRSolvablePolynomial<SolvableResidue<BigRational>, BigRational>) a.multiply(b)
+                        .sum(a.multiply(c));
         assertEquals("a(b+c) = ab+ac", d, e);
     }
 
@@ -382,10 +380,10 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
                 //System.out.println("gens:" + a + " * " + b + " = " + c);
                 ExpVector ev = a.leadingExpVector().sum(b.leadingExpVector());
                 assertTrue("LT(a)*LT(b) == LT(c)", c.leadingExpVector().equals(ev));
-                ev = a.leadingBaseCoefficient().val.leadingExpVector().sum(
-                                b.leadingBaseCoefficient().val.leadingExpVector());
-                assertTrue("LT(lc(a))*LT(lc(b)) == LT(lc(c))", c.leadingBaseCoefficient().val
-                                .leadingExpVector().equals(ev));
+                ev = a.leadingBaseCoefficient().val.leadingExpVector()
+                                .sum(b.leadingBaseCoefficient().val.leadingExpVector());
+                assertTrue("LT(lc(a))*LT(lc(b)) == LT(lc(c))",
+                                c.leadingBaseCoefficient().val.leadingExpVector().equals(ev));
             }
         }
         //System.out.println("ring = " + ring.toScript());
@@ -523,13 +521,13 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
      * Test recursive for iterated Weyl relations.
      */
     public void testRecursiveIteratedWeyl() {
-        String[] svars = new String[] { "w", "x","y", "z" };
-        GenSolvablePolynomialRing<BigRational> sring =
-           new GenSolvablePolynomialRing<BigRational>(cfac, tord, svars);
+        String[] svars = new String[] { "w", "x", "y", "z" };
+        GenSolvablePolynomialRing<BigRational> sring = new GenSolvablePolynomialRing<BigRational>(cfac, tord,
+                        svars);
         RelationGenerator<BigRational> wlc = new WeylRelationsIterated<BigRational>();
         wlc.generate(sring);
         assertFalse("isCommutative()", sring.isCommutative());
-        assertTrue("isAssociative()",  sring.isAssociative());
+        assertTrue("isAssociative()", sring.isAssociative());
         //System.out.println("sring = " + sring.toScript());
 
         GenSolvablePolynomialRing<GenPolynomial<BigRational>> rsring = sring.recursive(2); // 1,2,3
