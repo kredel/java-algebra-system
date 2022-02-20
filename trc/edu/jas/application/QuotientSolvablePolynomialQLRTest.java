@@ -123,14 +123,14 @@ public class QuotientSolvablePolynomialQLRTest extends TestCase {
         ring = new QLRSolvablePolynomialRing<SolvableQuotient<BigRational>, BigRational>(qcring, tord, vars);
         RelationGenerator<SolvableQuotient<BigRational>> wl = new WeylRelations<SolvableQuotient<BigRational>>();
         ring.addRelations(wl);
-        System.out.println("ring  = " + ring.toScript());
+        //System.out.println("ring  = " + ring.toScript());
         a = b = c = d = e = null;
     }
 
 
     @Override
     protected void tearDown() {
-        System.out.println("*ring  = " + ring.toScript() + "\n");
+        //System.out.println("*ring  = " + ring.toScript() + "\n");
         ring = null;
         a = b = c = d = e = null;
     }
