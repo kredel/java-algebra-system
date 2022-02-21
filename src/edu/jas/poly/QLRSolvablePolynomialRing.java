@@ -260,20 +260,18 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
             s.append(",rel=");
             s.append(rel);
         }
-        /*
-        if (polCoeff.coeffTable.size() > 0) {
-            String crel = polCoeff.coeffTable.toScript();
-            s.append(",coeffrel=");
-            s.append(crel);
-        }
-        if (polCoeff.table.size() > 0) { // should not be printed
-            String polrel = polCoeff.table.toScript();
-            if (!rel.equals(polrel)) {
-                s.append(",polrel=");
-                s.append(polrel);
-            }
-        }
-        */
+        // if (polCoeff.coeffTable.size() > 0) {
+        //     String crel = polCoeff.coeffTable.toScript();
+        //     s.append(",coeffrel=");
+        //     s.append(crel);
+        // }
+        // if (polCoeff.table.size() > 0) { // should not be printed
+        //     String polrel = polCoeff.table.toScript();
+        //     if (!rel.equals(polrel)) {
+        //         s.append(",polrel=");
+        //         s.append(polrel);
+        //     }
+        // }
         s.append(")");
         String cpol = polCoeff.toScript();
         s.append("\n  # ");

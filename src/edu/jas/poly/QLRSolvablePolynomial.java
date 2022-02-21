@@ -240,7 +240,7 @@ public class QLRSolvablePolynomial<C extends GcdRingElem<C> & QuotPair<GenPolyno
                         //System.out.println("vr = " + vr + ", qdeni = " + qdeni);
                         // recursion with smaller head term:
                         if (qv.leadingExpVector().equals(vr.leadingExpVector())) {
-                            throw new IllegalArgumentException("qr !> vr: qv = " + qv + ", vr = " + vr);
+                            throw new IllegalArgumentException("qv !> vr: qv = " + qv + ", vr = " + vr);
                         }
                         QLRSolvablePolynomial<C, D> rq = vr.multiply(qdeni);
                         qp = (QLRSolvablePolynomial<C, D>) qv.subtract(rq);

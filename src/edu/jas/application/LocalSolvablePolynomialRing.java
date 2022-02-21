@@ -270,12 +270,15 @@ public class LocalSolvablePolynomialRing<C extends GcdRingElem<C>> extends
             s.append(",rel=");
             s.append(rel);
         }
-        if (polCoeff.coeffTable.size() > 0) {
-            String rel = polCoeff.coeffTable.toScript();
-            s.append(",coeffrel=");
-            s.append(rel);
-        }
+        // if (polCoeff.coeffTable.size() > 0) {
+        //     String rel = polCoeff.coeffTable.toScript();
+        //     s.append(",coeffrel=");
+        //     s.append(rel);
+        // }
         s.append(")");
+        String cpol = polCoeff.toScript();
+        s.append("\n  # ");
+        s.append(cpol);
         return s.toString();
     }
 
