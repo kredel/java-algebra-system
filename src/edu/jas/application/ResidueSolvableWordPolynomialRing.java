@@ -53,12 +53,6 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
                 GenSolvablePolynomialRing<WordResidue<C>> {
 
 
-    /*
-     * The solvable multiplication relations between variables and coefficients.
-     */
-    //public final RelationTable<WordResidue<C>> coeffTable;
-
-
     /**
      * Recursive solvable polynomial ring with polynomial coefficients.
      */
@@ -184,14 +178,14 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
         //if (rt == null) { // handled in super }
         WordResidueRing<C> cfring = (WordResidueRing<C>) cf; // == coFac
         polCoeff = new RecSolvableWordPolynomialRing<C>(cfring.ring, n, t, v);
-        if (table.size() > 0) { // TODO
-            ExpVector e = null;
-            ExpVector f = null;
-            GenSolvablePolynomial<GenWordPolynomial<C>> p = null;
-            polCoeff.table.update(e, f, p); // from rt
-            throw new RuntimeException("TODO");
+        if (table.size() > 0) {
+            List<GenSolvablePolynomial<GenWordPolynomial<C>>> nt
+		= new ArrayList<GenSolvablePolynomial<GenWordPolynomial<C>>>(); 
+            for (GenSolvablePolynomial<WordResidue<C>> q : table.relationList()) {
+                nt.add( this.toPolyCoefficients(q) ); // only with den == 1
+            }
+            polCoeff.table.addSolvRelations(nt);
         }
-        //coeffTable = new RelationTable<WordResidue<C>>(this, true);
         ZERO = new ResidueSolvableWordPolynomial<C>(this);
         WordResidue<C> coeff = coFac.getONE();
         //evzero = ExpVector.create(nvar); // from super

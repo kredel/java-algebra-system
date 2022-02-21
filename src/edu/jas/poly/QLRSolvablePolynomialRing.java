@@ -199,12 +199,13 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
         qpfac = (QuotPairFactory<GenPolynomial<D>, C>) cf; // crucial part of type
         RingFactory<GenPolynomial<D>> cfring = qpfac.pairFactory(); // == coFac.ring
         polCoeff = new RecSolvablePolynomialRing<D>(cfring, n, t, v);
-        if (table.size() > 0) { // TODO
-            ExpVector e = null;
-            ExpVector f = null;
-            GenSolvablePolynomial<GenPolynomial<D>> p = null;
-            polCoeff.table.update(e, f, p); // from rt
-            throw new RuntimeException("TODO");
+        if (table.size() > 0) {
+            List<GenSolvablePolynomial<GenPolynomial<D>>> nt
+		= new ArrayList<GenSolvablePolynomial<GenPolynomial<D>>>(); 
+            for (GenSolvablePolynomial<C> q : table.relationList()) {
+                nt.add( this.toPolyCoefficients(q) ); // only with den == 1
+            }
+            polCoeff.table.addSolvRelations(nt);
         }
         ZERO = new QLRSolvablePolynomial<C, D>(this);
         C coeff = coFac.getONE();

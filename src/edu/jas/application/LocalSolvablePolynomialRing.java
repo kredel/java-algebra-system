@@ -52,12 +52,6 @@ public class LocalSolvablePolynomialRing<C extends GcdRingElem<C>> extends
                 GenSolvablePolynomialRing<SolvableLocal<C>> {
 
 
-    /*
-     * The solvable multiplication relations between variables and coefficients.
-     */
-    //public final RelationTable<GenPolynomial<C>> coeffTable;
-
-
     /**
      * Recursive solvable polynomial ring with polynomial coefficients.
      */
@@ -183,14 +177,14 @@ public class LocalSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         //if (rt == null) { // handled in super }
         SolvableLocalRing<C> cfring = (SolvableLocalRing<C>) cf; // == coFac
         polCoeff = new RecSolvablePolynomialRing<C>(cfring.ring, n, t, v);
-        if (table.size() > 0) { // TODO
-            ExpVector e = null;
-            ExpVector f = null;
-            GenSolvablePolynomial<GenPolynomial<C>> p = null;
-            polCoeff.table.update(e, f, p); // from rt
-            throw new RuntimeException("TODO");
+        if (table.size() > 0) {
+            List<GenSolvablePolynomial<GenPolynomial<C>>> nt
+		= new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>(); 
+            for (GenSolvablePolynomial<SolvableLocal<C>> q : table.relationList()) {
+                nt.add( this.toPolyCoefficients(q) ); // only with den == 1
+            }
+            polCoeff.table.addSolvRelations(nt);
         }
-        //coeffTable = polCoeff.coeffTable; //new RelationTable<GenPolynomial<C>>(polCoeff, true);
         ZERO = new LocalSolvablePolynomial<C>(this);
         SolvableLocal<C> coeff = coFac.getONE();
         //evzero = ExpVector.create(nvar); // from super
