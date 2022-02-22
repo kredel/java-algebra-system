@@ -4342,12 +4342,12 @@ class SolvPolyRing(SolvableRing):
                 else:
                    if resWord:
                       print "ResWordSolvablePolynomialRing: " + cfs;
-                      ring = GenSolvablePolynomialRing.new(cf,nv,to,names);
-                      #ring = RecSolvableWordPolynomialRing.new(cf,nv,to,names);
-                      #ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
-                      print "ring = " + str(ring.toScript());
+                      #ring = GenSolvablePolynomialRing(cf,nv,to,names); # ??
+                      #ring = RecSolvableWordPolynomialRing(cf,nv,to,names);
+                      ring = ResidueSolvableWordPolynomialRing(cf,nv,to,names);
+                      #print "ring = " + str(ring.toScript());
                       table = ring.table;
-                      #coeffTable = ring.polCoeff.coeffTable;
+                      coeffTable = ring.polCoeff.coeffTable;
                       #coeffTable = ring.coeffTable;
                    else:
                       if quotSolv:
@@ -4363,6 +4363,7 @@ class SolvPolyRing(SolvableRing):
                             coeffTable = ring.polCoeff.coeffTable;
                          else:
                             if locresSolv:
+                               #ring = LocalResidueSolvablePolynomialRing(cf,nv,to,names);
                                ring = QLRSolvablePolynomialRing(cf,nv,to,names);
                                table = ring.table;
                                coeffTable = ring.polCoeff.coeffTable;
@@ -4378,8 +4379,8 @@ class SolvPolyRing(SolvableRing):
                   coeffTable.update( L[i], L[i+1], L[i+2] );
                else: 
                   if resSolv:
-                     coeffTable.update(ring.toPolyCoefficients(L[i]), 
-                                       ring.toPolyCoefficients(L[i+1]), 
+                     coeffTable.update(ring.toPolyCoefficients(L[i]),
+                                       ring.toPolyCoefficients(L[i+1]),
                                        ring.toPolyCoefficients(L[i+2]) );
                   else:
                      if recSolvWord:
@@ -4387,21 +4388,24 @@ class SolvPolyRing(SolvableRing):
                      else:
                         if resWord:
                            print "cf = " + cfs;
+                           coeffTable.update(ring.toPolyCoefficients(L[i]),
+                                             ring.toPolyCoefficients(L[i+1]),
+                                             ring.toPolyCoefficients(L[i+2]) );
                            #coeffTable.update(L[i],L[i+1],L[i+2]);
                         else: 
                            if quotSolv:
-                              coeffTable.update(ring.toPolyCoefficients(L[i]), 
-                                                ring.toPolyCoefficients(L[i+1]), 
+                              coeffTable.update(ring.toPolyCoefficients(L[i]),
+                                                ring.toPolyCoefficients(L[i+1]),
                                                 ring.toPolyCoefficients(L[i+2]) );
                            else:
                               if locSolv:
-                                 coeffTable.update(ring.toPolyCoefficients(L[i]), 
-                                                   ring.toPolyCoefficients(L[i+1]), 
+                                 coeffTable.update(ring.toPolyCoefficients(L[i]),
+                                                   ring.toPolyCoefficients(L[i+1]),
                                                    ring.toPolyCoefficients(L[i+2]) );
                               else:
                                  if locresSolv:
-                                    coeffTable.update(ring.toPolyCoefficients(L[i]), 
-                                                      ring.toPolyCoefficients(L[i+1]), 
+                                    coeffTable.update(ring.toPolyCoefficients(L[i]),
+                                                      ring.toPolyCoefficients(L[i+1]),
                                                       ring.toPolyCoefficients(L[i+2]) );
             else:
                 #print "L[i], L[i+1], L[i+2]: " + str(L[i]) + ", " + str(L[i+1]) + ", " + str(L[i+2]);

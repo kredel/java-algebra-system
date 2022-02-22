@@ -4145,11 +4145,9 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
            coeffTable = ring.coeffTable;
         elsif resWord
            puts "ResWordSolvablePolynomialRing: " + cfs;
-           #ring = GenSolvablePolynomialRing.new(cf,nv,to,names);
            #ring = RecSolvableWordPolynomialRing.new(cf,nv,to,names);
-           #ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
            ring = ResidueSolvableWordPolynomialRing.new(cf,nv,to,names);
-           puts "ring = #{ring.toScript()}";
+           #puts "ring = #{ring.toScript()}";
            table = ring.table;
            coeffTable = ring.polCoeff.coeffTable;
         elsif resSolv
@@ -4171,7 +4169,8 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
            table = ring.table;
            coeffTable = ring.polCoeff.coeffTable;
         elsif locresSolv
-           puts "QLRSolvablePolynomialRing: " + cfs;
+           puts "LocalResidueSolvablePolynomialRing: " + cfs;
+           #puts "QLRSolvablePolynomialRing: " + cfs;
            ring = QLRSolvablePolynomialRing.new(cf,nv,to,names);
            table = ring.table;
            coeffTable = ring.polCoeff.coeffTable;
