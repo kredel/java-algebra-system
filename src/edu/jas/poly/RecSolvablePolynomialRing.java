@@ -184,6 +184,28 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
 
 
     /**
+     * Generate the coefficient relation table of the solvable
+     * polynomial ring from a polynomial list of relations.
+     * @param rel polynomial list of relations [..., ei, fj, pij, ... ] with ei
+     *            * fj = pij.
+     */
+    public void addCoeffRelations(List<GenPolynomial<GenPolynomial<C>>> rel) {
+        coeffTable.addRelations(rel);
+    }
+
+
+    /**
+     * Generate the coefficient relation table of the solvable
+     * polynomial ring from a solvable polynomial list of relations.
+     * @param rel solvable polynomial list of relations [..., ei, fj, pij, ... ]
+     *            with ei * fj = pij.
+     */
+    public void addSolvCoeffRelations(List<GenSolvablePolynomial<GenPolynomial<C>>> rel) {
+        coeffTable.addSolvRelations(rel);
+    }
+
+
+    /**
      * Get the String representation.
      * @see java.lang.Object#toString()
      */
