@@ -901,7 +901,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                     } else {
                         fx = f.reverse(k);
                     }
-                    // todo check relevant vars
+                    // todo check non-com / relevant vars for change
                     //int[] ed = ex.dependencyOnVariables(); // = e
                     //if (ed.length == 0 || ed[0] >= k) { // k >= 0
                     //    change = false; 
