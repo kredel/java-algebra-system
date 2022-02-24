@@ -134,8 +134,8 @@ public class SolvablePseudoReductionTest extends TestCase {
         e = sred.leftNormalform(L, c);
         assertTrue("isZERO( e )", e.isZERO());
 
-        // e = Reduction.leftNormalform( L, a );
-        // assertTrue("isZERO( e )", e.isZERO() ); 
+        e = sred.leftNormalform( L, a );
+        assertTrue("isZERO( e )", e.isZERO() );
 
         e = sred.leftNormalform(L, d);
         assertTrue("isZERO( e )", e.isZERO());
@@ -337,5 +337,181 @@ public class SolvablePseudoReductionTest extends TestCase {
         assertTrue("isZERO( e ) some times", e.isZERO() ); 
     }
      */
+
+
+    /**
+     * Right test constants and empty list reduction.
+     */
+    public void testIntRightReduction0() {
+        L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
+
+        a = fac.random(kl, ll, el, q);
+        c = fac.getONE();
+        d = fac.getZERO();
+
+        e = sred.rightNormalform(L, c);
+        assertTrue("isONE( e )", e.isONE());
+
+        e = sred.rightNormalform(L, d);
+        assertTrue("isZERO( e )", e.isZERO());
+
+
+        L.add(c);
+        e = sred.rightNormalform(L, c);
+        assertTrue("isZERO( e )", e.isZERO());
+
+        e = sred.rightNormalform( L, a );
+        assertTrue("isZERO( e )", e.isZERO() );
+
+        e = sred.rightNormalform(L, d);
+        assertTrue("isZERO( e )", e.isZERO());
+
+
+        L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
+        L.add(d);
+        e = sred.rightNormalform(L, c);
+        assertTrue("isONE( e )", e.isONE());
+
+        e = sred.rightNormalform(L, d);
+        assertTrue("isZERO( e )", e.isZERO());
+    }
+
+
+    /**
+     * Right test constants and empty list reduction.
+     */
+    public void testWeylIntRightReduction0() {
+        L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
+        RelationGenerator<BigInteger> wl = new WeylRelations<BigInteger>();
+        wl.generate(fac);
+
+        a = fac.random(kl, ll, el, q);
+        c = fac.getONE();
+        d = fac.getZERO();
+
+        e = sred.rightNormalform(L, c);
+        assertTrue("isONE( e )", e.isONE());
+
+        e = sred.rightNormalform(L, d);
+        assertTrue("isZERO( e )", e.isZERO());
+
+
+        L.add(c);
+        e = sred.rightNormalform(L, c);
+        assertTrue("isZERO( e )", e.isZERO());
+
+        e = sred.rightNormalform(L, a);
+        assertTrue("isZERO( e )", e.isZERO());
+
+        e = sred.rightNormalform(L, d);
+        assertTrue("isZERO( e )", e.isZERO());
+
+
+        L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
+        L.add(d);
+        e = sred.rightNormalform(L, c);
+        assertTrue("isONE( e )", e.isONE());
+
+        e = sred.rightNormalform(L, d);
+        assertTrue("isZERO( e )", e.isZERO());
+    }
+
+
+    /**
+     * Right test Int reduction.
+     */
+    public void testIntRightReduction() {
+        a = fac.random(kl, ll, el, q);
+        b = fac.random(kl, ll, el, q);
+        assertTrue("not isZERO( a )", !a.isZERO());
+
+        L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
+        L.add(a);
+
+        e = sred.rightNormalform(L, a);
+        assertTrue("isZERO( e )", e.isZERO());
+
+        assertTrue("not isZERO( b )", !b.isZERO());
+
+        L.add(b);
+        e = sred.rightNormalform(L, a);
+        assertTrue("isZERO( e ) some times", e.isZERO());
+    }
+
+
+    /**
+     * Right test Weyl Integer reduction.
+     */
+    public void testWeylIntRightReduction() {
+        L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
+
+        RelationGenerator<BigInteger> wl = new WeylRelations<BigInteger>();
+        wl.generate(fac);
+
+        a = fac.random(kl, ll, el, q);
+        b = fac.random(kl, ll, el, q);
+
+        assertTrue("not isZERO( a )", !a.isZERO());
+
+        L.add(a);
+
+        e = sred.rightNormalform(L, a);
+        assertTrue("isZERO( e )", e.isZERO());
+
+        assertTrue("not isZERO( b )", !b.isZERO());
+
+        L.add(b);
+        e = sred.rightNormalform(L, a);
+        assertTrue("isZERO( e ) some times", e.isZERO());
+    }
+
+
+    /**
+     * Right test Int reduction recording.
+     */
+    public void testIntRightReductionRecording() {
+        List<GenSolvablePolynomial<BigInteger>> row = null;
+        PseudoReductionEntry<BigInteger> mf;
+
+        a = fac.random(kl, ll, el, q);
+        b = fac.random(kl, ll, el, q);
+        c = fac.random(kl, ll, el, q);
+        d = fac.random(kl, ll, el, q);
+
+        assertTrue("not isZERO( a )", !a.isZERO());
+
+        L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
+
+        L.add(a);
+        mf = sred.rightNormalformFactor(L, a);
+        f = a.multiply(mf.multiplicator);
+        row = ListUtil.<GenSolvablePolynomial<BigInteger>> fill(L.size(), fac.getZERO());
+        //d = sred.rightNormalform( row, L, a );
+        d = sred.rightNormalform(row, L, f);
+        assertTrue("isZERO( d )", d.isZERO());
+        assertTrue("is rightReduction ", sred.isRightReductionNF(row, L, f, d));
+
+        L.add(b);
+        mf = sred.rightNormalformFactor(L, b);
+        f = b.multiply(mf.multiplicator);
+        row = ListUtil.<GenSolvablePolynomial<BigInteger>> fill(L.size(), fac.getZERO());
+        //e = sred.rightNormalform( row, L, b );
+        d = sred.rightNormalform(row, L, f);
+        assertTrue("is rightReduction ", sred.isRightReductionNF(row, L, f, d));
+
+        L.add(c);
+        mf = sred.rightNormalformFactor(L, c);
+        f = c.multiply(mf.multiplicator);
+        row = ListUtil.<GenSolvablePolynomial<BigInteger>> fill(L.size(), fac.getZERO());
+        d = sred.rightNormalform(row, L, f);
+        assertTrue("is rightReduction ", sred.isRightReductionNF(row, L, f, d));
+
+        L.add(d);
+        mf = sred.rightNormalformFactor(L, d);
+        f = d.multiply(mf.multiplicator);
+        row = ListUtil.<GenSolvablePolynomial<BigInteger>> fill(L.size(), fac.getZERO());
+        e = sred.rightNormalform(row, L, f);
+        assertTrue("is rightReduction ", sred.isRightReductionNF(row, L, f, e));
+    }
 
 }

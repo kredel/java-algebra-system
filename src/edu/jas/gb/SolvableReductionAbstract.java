@@ -433,6 +433,60 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
 
 
     /**
+     * Is right reduction of normal form.
+     * @param row recording matrix.
+     * @param Pp a solvable polynomial list for reduction.
+     * @param Ap a solvable polynomial.
+     * @param Np nf(Pp,Ap), a left normal form of Ap wrt. Pp.
+     * @return true, if Np + sum( Pp[i]*row[i] ) == Ap, else false.
+     */
+    @SuppressWarnings("unchecked")
+    public boolean isRightReductionNF(List<GenSolvablePolynomial<C>> row, List<GenSolvablePolynomial<C>> Pp,
+                    GenSolvablePolynomial<C> Ap, GenSolvablePolynomial<C> Np) {
+        if (row == null && Pp == null) {
+            if (Ap == null) {
+                return Np == null;
+            }
+            return Ap.equals(Np);
+        }
+        if (row == null || Pp == null) {
+            return false;
+        }
+        if (row.size() != Pp.size()) {
+            return false;
+        }
+        GenSolvablePolynomial<C> t = Np;
+        GenSolvablePolynomial<C> r;
+        GenSolvablePolynomial<C> p;
+        for (int m = 0; m < Pp.size(); m++) {
+            r = row.get(m);
+            p = Pp.get(m);
+            if (r != null && p != null) {
+                if (t == null) {
+                    t = p.multiply(r); //right
+                } else {
+                    t = (GenSolvablePolynomial<C>) t.sum(p.multiply(r)); //right
+                }
+            }
+            //System.out.println("r = " + r );
+            //System.out.println("p = " + p );
+        }
+        if (debug) {
+            logger.info("t = {}", t);
+            logger.info("a = {}", Ap);
+        }
+        if (t == null) {
+            if (Ap == null) {
+                return true;
+            }
+            return Ap.isZERO();
+        }
+        t = (GenSolvablePolynomial<C>) t.subtract(Ap);
+        return t.isZERO();
+    }
+
+
+    /**
      * Two-sided Normalform.
      * @param Ap solvable polynomial.
      * @param Pp solvable polynomial list.
