@@ -459,7 +459,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
      * @param Pp polynomial list.
      * @return nf(Ap) with respect to Pp. 
      */
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> Pp,
                     GenSolvablePolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
@@ -552,6 +552,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
      * @param Pp recursive polynomial list.
      * @return nf(Ap) with respect to Pp. <!--b>Note: not implemented;</b-->
      */
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<GenPolynomial<C>> rightNormalformRecursive(
                     List<GenSolvablePolynomial<GenPolynomial<C>>> Pp,
                     GenSolvablePolynomial<GenPolynomial<C>> Ap) {
@@ -687,6 +688,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      *         <!--b>Note: </b> not implemented; </b-->
      */
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> row,
                     List<GenSolvablePolynomial<C>> Pp, GenSolvablePolynomial<C> Ap) {
         if (row == null || Pp == null || Ap == null) {
@@ -794,6 +796,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
      * @return ( nf(Ap), mf ) with respect to Pp and mf as multiplication factor
      *         for Ap. <!--b>Note: not implemented; </b-->
      */
+    @SuppressWarnings("unchecked")
     public PseudoReductionEntry<C> rightNormalformFactor(List<GenSolvablePolynomial<C>> Pp,
                     GenSolvablePolynomial<C> Ap) {
         //throw new UnsupportedOperationException();
