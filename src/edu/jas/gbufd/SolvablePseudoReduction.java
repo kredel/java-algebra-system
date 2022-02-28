@@ -34,7 +34,7 @@ public interface SolvablePseudoReduction<C extends RingElem<C>> extends Solvable
                     GenSolvablePolynomial<C> Ap);
 
 
-    /*
+    /**
      * Right normalform with multiplication factor.
      * @param Pp polynomial list.
      * @param Ap polynomial.
@@ -56,7 +56,7 @@ public interface SolvablePseudoReduction<C extends RingElem<C>> extends Solvable
                     GenSolvablePolynomial<GenPolynomial<C>> Ap);
 
 
-    /*
+    /**
      * Right normalform recursive.
      * @param Ap recursive polynomial.
      * @param Pp recursive polynomial list.
