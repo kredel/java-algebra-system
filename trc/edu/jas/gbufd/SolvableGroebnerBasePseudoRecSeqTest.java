@@ -8,33 +8,29 @@ package edu.jas.gbufd;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
 import edu.jas.arith.BigInteger;
-import edu.jas.kern.ComputerThreads;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.RelationGenerator;
-import edu.jas.poly.RelationTable;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 
 /**
- * Solvable Groebner base pseudo sequential tests with JUnit.
+ * Solvable Groebner base pseudo recursive sequential tests with JUnit.
  * @author Heinz Kredel
  */
 
 public class SolvableGroebnerBasePseudoRecSeqTest extends TestCase {
-
-
 
 
     /**
@@ -110,7 +106,7 @@ public class SolvableGroebnerBasePseudoRecSeqTest extends TestCase {
         String[] cvars = new String[] { "a", "b" };
         String[] vars = new String[] { "x", "y" };
         GenPolynomialRing<BigInteger> cring;
-          cring = new GenPolynomialRing<BigInteger>(cfac, tord, cvars);
+        cring = new GenPolynomialRing<BigInteger>(cfac, tord, cvars);
         ring = new GenSolvablePolynomialRing<GenPolynomial<BigInteger>>(cring, tord, vars);
         //table = ring.table;
         a = b = c = d = e = null;
@@ -118,8 +114,8 @@ public class SolvableGroebnerBasePseudoRecSeqTest extends TestCase {
 
         a = ring.random(kl, ll, el, q);
         b = ring.random(kl, ll, el, q);
-        c = ring.random(kl, ll-1, el-1, q);
-        d = ring.random(kl, ll-1, el-1, q);
+        c = ring.random(kl, ll - 1, el - 1, q);
+        d = ring.random(kl, ll - 1, el - 1, q);
         e = d; //ring.random(kl, ll, el, q );
     }
 
@@ -151,7 +147,7 @@ public class SolvableGroebnerBasePseudoRecSeqTest extends TestCase {
         //System.out.println("L = " + L);
         assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(L));
 
-        L.add(c); 
+        L.add(c);
         L = sbb.leftGB(L);
         //System.out.println("L = " + L);
         assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(L));
@@ -181,8 +177,8 @@ public class SolvableGroebnerBasePseudoRecSeqTest extends TestCase {
 
         a = ring.random(kl, ll, el, q);
         b = ring.random(kl, ll, el, q);
-        c = ring.random(kl, ll-1, el-1, q);
-        d = ring.random(kl, ll-1, el-1, q);
+        c = ring.random(kl, ll - 1, el - 1, q);
+        d = ring.random(kl, ll - 1, el - 1, q);
         e = d; //ring.random(kl, ll, el, q );
 
         L = new ArrayList<GenSolvablePolynomial<GenPolynomial<BigInteger>>>();
@@ -258,8 +254,8 @@ public class SolvableGroebnerBasePseudoRecSeqTest extends TestCase {
 
         a = ring.random(kl, ll, el, q);
         b = ring.random(kl, ll, el, q);
-        c = ring.random(kl, ll-1, el-1, q);
-        d = ring.random(kl, ll-1, el-1, q);
+        c = ring.random(kl, ll - 1, el - 1, q);
+        d = ring.random(kl, ll - 1, el - 1, q);
         e = d; //ring.random(kl, ll, el, q );
 
         L = new ArrayList<GenSolvablePolynomial<GenPolynomial<BigInteger>>>();

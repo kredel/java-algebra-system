@@ -8,14 +8,9 @@ package edu.jas.gbufd;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
 import edu.jas.arith.BigInteger;
-import edu.jas.kern.ComputerThreads;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.PolynomialList;
@@ -24,6 +19,10 @@ import edu.jas.poly.RelationTable;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 
 /**
  * Solvable Groebner base pseudo sequential tests with JUnit.
@@ -31,8 +30,6 @@ import edu.jas.poly.WeylRelations;
  */
 
 public class SolvableGroebnerBasePseudoSeqTest extends TestCase {
-
-
 
 
     /**

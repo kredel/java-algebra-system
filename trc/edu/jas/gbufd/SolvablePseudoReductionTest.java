@@ -8,11 +8,6 @@ package edu.jas.gbufd;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
 import edu.jas.arith.BigInteger;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -22,6 +17,10 @@ import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.WeylRelations;
 import edu.jas.util.ListUtil;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -79,6 +78,7 @@ public class SolvablePseudoReductionTest extends TestCase {
 
     //SolvablePseudoReduction<BigInteger> sredpar;
 
+
     int rl = 4;
 
 
@@ -134,8 +134,8 @@ public class SolvablePseudoReductionTest extends TestCase {
         e = sred.leftNormalform(L, c);
         assertTrue("isZERO( e )", e.isZERO());
 
-        e = sred.leftNormalform( L, a );
-        assertTrue("isZERO( e )", e.isZERO() );
+        e = sred.leftNormalform(L, a);
+        assertTrue("isZERO( e )", e.isZERO());
 
         e = sred.leftNormalform(L, d);
         assertTrue("isZERO( e )", e.isZERO());
@@ -292,51 +292,52 @@ public class SolvablePseudoReductionTest extends TestCase {
 
     /*
      * Test Int reduction parallel.
-    public void testIntReductionPar() {
-        a = fac.random(kl, ll, el, q );
-        b = fac.random(kl, ll, el, q );
+     public void testIntReductionPar() {
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
 
-        assertTrue("not isZERO( a )", !a.isZERO() );
+     assertTrue("not isZERO( a )", !a.isZERO() );
 
-        L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
-        L.add(a);
+     L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
+     L.add(a);
 
-        e = sredpar.leftNormalform( L, a );
-        assertTrue("isZERO( e )", e.isZERO() );
+     e = sredpar.leftNormalform( L, a );
+     assertTrue("isZERO( e )", e.isZERO() );
 
-        assertTrue("not isZERO( b )", !b.isZERO() );
+     assertTrue("not isZERO( b )", !b.isZERO() );
 
-        L.add(b);
-        e = sredpar.leftNormalform( L, a );
-        assertTrue("isZERO( e ) some times", e.isZERO() ); 
-    }
-     */
+     L.add(b);
+     e = sredpar.leftNormalform( L, a );
+     assertTrue("isZERO( e ) some times", e.isZERO() );
+     }
+    */
+
 
     /*
      * Test Weyl Integer reduction parallel.
-    public void testWeylIntReductionPar() {
-        L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
+     public void testWeylIntReductionPar() {
+     L = new ArrayList<GenSolvablePolynomial<BigInteger>>();
 
-        RelationGenerator<BigInteger> wl = new WeylRelations<BigInteger>();
-        wl.generate(fac);
+     RelationGenerator<BigInteger> wl = new WeylRelations<BigInteger>();
+     wl.generate(fac);
 
-        a = fac.random(kl, ll, el, q );
-        b = fac.random(kl, ll, el, q );
+     a = fac.random(kl, ll, el, q );
+     b = fac.random(kl, ll, el, q );
 
-        assertTrue("not isZERO( a )", !a.isZERO() );
+     assertTrue("not isZERO( a )", !a.isZERO() );
 
-        L.add(a);
+     L.add(a);
 
-        e = sredpar.leftNormalform( L, a );
-        assertTrue("isZERO( e )", e.isZERO() );
+     e = sredpar.leftNormalform( L, a );
+     assertTrue("isZERO( e )", e.isZERO() );
 
-        assertTrue("not isZERO( b )", !b.isZERO() );
+     assertTrue("not isZERO( b )", !b.isZERO() );
 
-        L.add(b);
-        e = sredpar.leftNormalform( L, a );
-        assertTrue("isZERO( e ) some times", e.isZERO() ); 
-    }
-     */
+     L.add(b);
+     e = sredpar.leftNormalform( L, a );
+     assertTrue("isZERO( e ) some times", e.isZERO() );
+     }
+    */
 
 
     /**
@@ -360,8 +361,8 @@ public class SolvablePseudoReductionTest extends TestCase {
         e = sred.rightNormalform(L, c);
         assertTrue("isZERO( e )", e.isZERO());
 
-        e = sred.rightNormalform( L, a );
-        assertTrue("isZERO( e )", e.isZERO() );
+        e = sred.rightNormalform(L, a);
+        assertTrue("isZERO( e )", e.isZERO());
 
         e = sred.rightNormalform(L, d);
         assertTrue("isZERO( e )", e.isZERO());
