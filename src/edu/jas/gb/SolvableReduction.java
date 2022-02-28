@@ -101,7 +101,8 @@ public interface SolvableReduction<C extends RingElem<C>> extends Serializable {
      * @param Bp solvable polynomial.
      * @return right-spol(Ap,Bp) the right S-polynomial of Ap and Bp.
      */
-    public GenSolvablePolynomial<C> rightSPolynomial(GenSolvablePolynomial<C> Ap, GenSolvablePolynomial<C> Bp);
+    public GenSolvablePolynomial<C> rightSPolynomial(GenSolvablePolynomial<C> Ap,
+                    GenSolvablePolynomial<C> Bp);
 
 
     /**
@@ -126,8 +127,8 @@ public interface SolvableReduction<C extends RingElem<C>> extends Serializable {
 
 
     /**
-     * Is top reducible. Condition is lt(B) | lt(A) for some B in F.
-     * Is left right symetric.
+     * Is top reducible. Condition is lt(B) | lt(A) for some B in F. Is left
+     * right symetric.
      * @param A polynomial.
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.

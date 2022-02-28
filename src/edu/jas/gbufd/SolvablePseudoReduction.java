@@ -41,7 +41,8 @@ public interface SolvablePseudoReduction<C extends RingElem<C>> extends Solvable
      * @return ( nf(Ap), mf ) with respect to Pp and mf as multiplication factor
      *         for Ap.
      */
-    public PseudoReductionEntry<C> rightNormalformFactor(List<GenSolvablePolynomial<C>> Pp, GenSolvablePolynomial<C> Ap);
+    public PseudoReductionEntry<C> rightNormalformFactor(List<GenSolvablePolynomial<C>> Pp,
+                    GenSolvablePolynomial<C> Ap);
 
 
     /**
@@ -61,6 +62,8 @@ public interface SolvablePseudoReduction<C extends RingElem<C>> extends Solvable
      * @param Pp recursive polynomial list.
      * @return nf(Ap) with respect to Pp.
      */
-    public GenSolvablePolynomial<GenPolynomial<C>> rightNormalformRecursive(List<GenSolvablePolynomial<GenPolynomial<C>>> Pp, GenSolvablePolynomial<GenPolynomial<C>> Ap);
+    public GenSolvablePolynomial<GenPolynomial<C>> rightNormalformRecursive(
+                    List<GenSolvablePolynomial<GenPolynomial<C>>> Pp,
+                    GenSolvablePolynomial<GenPolynomial<C>> Ap);
 
 }

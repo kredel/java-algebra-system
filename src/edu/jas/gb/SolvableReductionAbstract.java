@@ -10,14 +10,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
-import edu.jas.poly.ModuleList;
-import edu.jas.poly.PolynomialList;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.ModuleList;
+import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingElem;
 
 
@@ -50,7 +50,8 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
      * @param Bp solvable polynomial.
      * @return left-spol(Ap,Bp) the left S-polynomial of Ap and Bp.
      */
-    public GenSolvablePolynomial<C> leftSPolynomial(GenSolvablePolynomial<C> Ap, GenSolvablePolynomial<C> Bp) {
+    public GenSolvablePolynomial<C> leftSPolynomial(GenSolvablePolynomial<C> Ap,
+                    GenSolvablePolynomial<C> Bp) {
         if (logger.isInfoEnabled()) {
             if (Bp == null || Bp.isZERO()) {
                 if (Ap != null) {
@@ -166,7 +167,7 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
         return leftNormalform(Pp, Ap, false);
     }
 
-    
+
     /**
      * Module left normalform set.
      * @param Ap module list.
@@ -196,7 +197,7 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
         return Nr;
     }
 
-    
+
     /**
      * Left irreducible set.
      * @param Pp solvable polynomial list.
@@ -314,7 +315,8 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
      * @return right-spol(Ap,Bp) the right S-polynomial of Ap and Bp.
      */
     @SuppressWarnings("unchecked")
-    public GenSolvablePolynomial<C> rightSPolynomial(GenSolvablePolynomial<C> Ap, GenSolvablePolynomial<C> Bp) {
+    public GenSolvablePolynomial<C> rightSPolynomial(GenSolvablePolynomial<C> Ap,
+                    GenSolvablePolynomial<C> Bp) {
         if (logger.isInfoEnabled()) {
             if (Bp == null || Bp.isZERO()) {
                 if (Ap != null) {

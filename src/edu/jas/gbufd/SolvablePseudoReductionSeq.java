@@ -8,8 +8,8 @@ package edu.jas.gbufd;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.SolvableReductionAbstract;
 import edu.jas.poly.ExpVector;
@@ -254,8 +254,8 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
     /**
      * Left normalform with recording. <b>Note:</b> Only meaningful if all
      * divisions are exact. Compute first the multiplication factor
-     * <code>mf</code> with <code>(nf,mf) = normalformfactor(Pp,Ap)</code>, then call this
-     * method with <code>normalform(row,Pp,mf*Ap)</code>.
+     * <code>mf</code> with <code>(nf,mf) = normalformfactor(Pp,Ap)</code>, then
+     * call this method with <code>normalform(row,Pp,mf*Ap)</code>.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
@@ -457,7 +457,7 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
      * Right normalform.
      * @param Ap polynomial.
      * @param Pp polynomial list.
-     * @return nf(Ap) with respect to Pp. 
+     * @return nf(Ap) with respect to Pp.
      */
     @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> Pp,
@@ -677,16 +677,16 @@ public class SolvablePseudoReductionSeq<C extends GcdRingElem<C>> extends Solvab
 
 
     /**
-     * Right normalform with recording. <b>Note:</b> Only meaningful
-     * if all divisions are exact. Compute first the multiplication
-     * factor <code>mf</code> with <code>(nf, mf) =
+     * Right normalform with recording. <b>Note:</b> Only meaningful if all
+     * divisions are exact. Compute first the multiplication factor
+     * <code>mf</code> with <code>(nf, mf) =
      * normalformfactor(Pp,Ap)</code>, then call this method with
      * <code>normalform(row,Pp,mf*Ap)</code>.
      * @param row recording matrix, is modified.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
-     * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
-     *         <!--b>Note: </b> not implemented; </b-->
+     * @return nf(Pp,Ap), the normal form of Ap wrt. Pp. <!--b>Note: </b> not
+     *         implemented; </b-->
      */
     @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> rightNormalform(List<GenSolvablePolynomial<C>> row,

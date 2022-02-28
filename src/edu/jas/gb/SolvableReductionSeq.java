@@ -8,8 +8,8 @@ package edu.jas.gb;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -212,7 +212,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 if (fac == null) {
                     //fac = (GenSolvablePolynomial<C>) zero.sum(a, e);
                     fac = Ap.ring.valueOf(a, e);
-                } else { 
+                } else {
                     //fac = (GenSolvablePolynomial<C>) fac.sum(a, e);
                     fac.doAddTo(a, e);
                 }
@@ -397,7 +397,7 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
                 if (fac == null) {
                     //fac = (GenSolvablePolynomial<C>) zero.sum(a, e);
                     fac = Ap.ring.valueOf(a, e);
-                } else { 
+                } else {
                     //fac = (GenSolvablePolynomial<C>) fac.sum(a, e);
                     fac.doAddTo(a, e);
                 }
