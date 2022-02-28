@@ -131,6 +131,15 @@ public class OrderedPairlist<C extends RingElem<C>> implements PairList<C> {
 
 
     /**
+     * Get polynomial ring.
+     * @return the polynomial ring.
+     */
+    public GenPolynomialRing<C> getRing() {
+        return ring;
+    }
+
+
+    /**
      * toString.
      */
     @Override

@@ -19,8 +19,12 @@ import edu.jas.gb.SolvableExtendedGB;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
-// import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.RecSolvablePolynomialRing;
+import edu.jas.poly.QLRSolvablePolynomialRing;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
+import edu.jas.structure.QuotPair;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.GCDFactory;
@@ -93,20 +97,30 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
      * @param rf coefficient ring factory.
      * @param pl pair selection strategy
      */
+    @SuppressWarnings("unchecked")
     public SolvableGroebnerBasePseudoSeq(SolvablePseudoReduction<C> red, RingFactory<C> rf, PairList<C> pl) {
         super(red, pl);
         this.sred = red;
+        GenSolvablePolynomialRing<C> ring = (GenSolvablePolynomialRing<C>) pl.getRing();
         cofac = rf;
         if (!cofac.isCommutative()) {
             logger.warn("right reduction not correct for {}", cofac); //.toScript()
             engine = new GreatestCommonDivisorFake<C>(); // only for Ore conditions
-            // TODO check that also coeffTable is empty for recursive solvable poly ring
             //System.out.println("stack trace = "); 
             //Exception e = new RuntimeException("get stack trace");
             //e.printStackTrace();
+        } else if (ring != null && ring instanceof QLRSolvablePolynomialRing) { // others?
+            // check that also coeffTable is empty for recursive solvable poly ring
+            QLRSolvablePolynomialRing qring = (QLRSolvablePolynomialRing) ring;
+            RecSolvablePolynomialRing<C> rring = (RecSolvablePolynomialRing<C>) qring.polCoeff;
+            if (!rring.coeffTable.isEmpty()) {
+               logger.warn("right reduction not correct for {}", rring.coeffTable);
+               engine = new GreatestCommonDivisorFake<C>(); // only for Ore conditions
+            } else {
+               engine = GCDFactory.<C> getImplementation(cofac);
+            }
         } else {
-            //engine = GCDFactory.<C> getImplementation(rf);
-            engine = GCDFactory.<C> getProxy(rf);
+            engine = GCDFactory.<C> getProxy(cofac);
         }
     }
 

@@ -38,6 +38,13 @@ public interface PairList<C extends RingElem<C> > extends Serializable {
 
 
     /**
+     * Get polynomial ring.
+     * @return the polynomial ring.
+     */
+    public GenPolynomialRing<C> getRing();
+
+
+    /**
      * toString.
      */
     @Override

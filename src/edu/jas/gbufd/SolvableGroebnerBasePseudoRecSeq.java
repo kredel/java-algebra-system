@@ -22,6 +22,7 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.QLRSolvablePolynomialRing;
+import edu.jas.poly.RecSolvablePolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
@@ -122,13 +123,22 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         this.sred = (SolvablePseudoReduction<GenPolynomial<C>>) (SolvablePseudoReduction) red;
         sredRec = red;
         //this.red = sred;
+        GenSolvablePolynomialRing<GenPolynomial<C>> ring = (GenSolvablePolynomialRing<GenPolynomial<C>>) pl.getRing();
         cofac = (GenPolynomialRing<C>) rf;
         if (!cofac.isCommutative()) {
             logger.warn("right reduction not correct for {}", cofac); //.toScript()
             engine = new GreatestCommonDivisorFake<C>();
-            // TODO check that also coeffTable is empty for recursive solvable poly ring
+        } else if (ring != null && ring instanceof QLRSolvablePolynomialRing) { // others?
+            // check that also coeffTable is empty for recursive solvable poly ring
+            QLRSolvablePolynomialRing qring = (QLRSolvablePolynomialRing) ring;
+            RecSolvablePolynomialRing<C> rring = (RecSolvablePolynomialRing<C>) qring.polCoeff;
+            if (!rring.coeffTable.isEmpty()) {
+               logger.warn("right reduction not correct for {}", rring.coeffTable);
+               engine = new GreatestCommonDivisorFake<C>(); // only for Ore conditions
+            } else {
+               engine = GCDFactory.<C> getImplementation(cofac.coFac);
+            }
         } else {
-            //engine = GCDFactory.<C> getImplementation(cofac.coFac);
             engine = GCDFactory.<C> getProxy(cofac.coFac);
         }
     }
