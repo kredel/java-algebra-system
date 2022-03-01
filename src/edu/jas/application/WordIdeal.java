@@ -891,8 +891,11 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         if (h.isUnit()) {
             return h.inverse();
         }
+        if (isUnit(h)) {
+            logger.warn("{} is invertable, but inverse not computed", h);
+        }
         throw new UnsupportedOperationException("inverse of " + h);
-        /* TODO together with isUnit
+        /* TODO compute inverse
         doGB();
         List<GenWordPolynomial<C>> F = new ArrayList<GenWordPolynomial<C>>(1 + list.list.size());
         F.add(h);
@@ -956,8 +959,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         if (h.isUnit()) {
             return true;
         }
-        /* TODO together with inverse
-        // test this + (h) == 1
+        // test this + (h) == 1: then ex p, q: pp*this**qq + p*h*q = 1
         List<GenWordPolynomial<C>> F = new ArrayList<GenWordPolynomial<C>>(1 + list.size());
         F.add(h);
         F.addAll(getList());
@@ -973,7 +975,6 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
                 return true;
             }
         }
-        */
         return false;
     }
 
@@ -1038,14 +1039,6 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
      * zero dimensional ideal(G).
      * @return list of univariate word polynomial of minimal degree in each
      *         variable in ideal(G)
-    public List<GenWordPolynomial<C>> constructUnivariate() {
-        List<GenWordPolynomial<C>> univs = new ArrayList<GenWordPolynomial<C>>();
-        for (int i = ring.alphabet.length() - 1; i >= 0; i--) {
-            GenWordPolynomial<C> u = constructUnivariate(i);
-            univs.add(u);
-        }
-        return univs;
-    }
      */
 
 
@@ -1055,10 +1048,6 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
      * @param i variable index.
      * @return univariate word polynomial of minimal degree in variable i in
      *         ideal(G)
-    public GenWordPolynomial<C> constructUnivariate(int i) {
-        doGB();
-        return bb.constructUnivariate(i, getList());
-    }
      */
 
 }
