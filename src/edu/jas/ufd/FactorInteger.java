@@ -115,11 +115,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         if (P.degree(0) <= 1L) { // linear or constant is irreducible
             return true;
         }
-        BigInteger rcont = engine.baseContent(P.reductum());
-        if (rcont.isZERO() || rcont.isONE()) { // case x**n
+        GenPolynomial<BigInteger> Pred = P.reductum();
+        BigInteger rcont = engine.baseContent(Pred);
+        if (rcont.isZERO() || rcont.isONE()) { // case x**n + Pred
             return false;
         }
-        // todo test
         if (rcont.compareTo(BigInteger.valueOf(PrimeInteger.BETA)) >= 0) { // integer too big
             return false;
         }
@@ -127,6 +127,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         BigInteger lc = P.leadingBaseCoefficient().abs();
         BigInteger tc = P.trailingBaseCoefficient().abs();
         SortedMap<Long, Integer> fac = PrimeInteger.factors(lcont);
+        // test divisiblity
         for (Long p : fac.keySet()) {
             BigInteger pi = BigInteger.valueOf(p);
             if (!lc.remainder(pi).isZERO() && !tc.remainder(pi.power(2)).isZERO()) {
