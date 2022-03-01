@@ -116,7 +116,7 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
      *            of PseudoReductionSeq.
      * @param pl pair selection strategy
      */
-    @SuppressWarnings({ "cast", "unchecked" })
+    @SuppressWarnings("unchecked")
     public SolvableGroebnerBasePseudoRecSeq(RingFactory<GenPolynomial<C>> rf, SolvablePseudoReduction<C> red,
                     PairList<GenPolynomial<C>> pl) {
         super((SolvablePseudoReduction<GenPolynomial<C>>) (SolvablePseudoReduction) red, pl);

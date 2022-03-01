@@ -4184,35 +4184,12 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         (0..ll.size-1).step(3) { |i|
             puts "adding relation: " + str(ll[i]) + " * " + str(ll[i+1]) + " = " + str(ll[i+2]);
             if ll[i+1].isConstant() 
-               if recSolv
+               if recSolv or recSolvWord
                   #puts "r coeff type " + str(ll[i].class);
                   #coeffTable.update( ll[i], ll[i+1].leadingBaseCoefficient(), ll[i+2] );
                   coeffTable.update( ll[i], ll[i+1], ll[i+2] );
-               elsif recSolvWord
+               elsif resWord or resSolv or quotSolv or locSolv or locresSolv
                   #puts "rw coeff type " + str(ll[i].class);
-                  coeffTable.update( ll[i], ll[i+1], ll[i+2] );
-               elsif resWord
-                  #puts "rw coeff type " + str(ll[i].class);
-                  coeffTable.update( ring.toPolyCoefficients(ll[i]),
-                                     ring.toPolyCoefficients(ll[i+1]), 
-                                     ring.toPolyCoefficients(ll[i+2]) );
-               elsif resSolv
-                  #puts "ri coeff type " + str(ll[i].class);
-                  coeffTable.update( ring.toPolyCoefficients(ll[i]),
-                                     ring.toPolyCoefficients(ll[i+1]), 
-                                     ring.toPolyCoefficients(ll[i+2]) );
-                elsif quotSolv
-                  #puts "q coeff type " + str(ll[i].class);
-                  coeffTable.update( ring.toPolyCoefficients(ll[i]), 
-                                     ring.toPolyCoefficients(ll[i+1]), 
-                                     ring.toPolyCoefficients(ll[i+2]) );
-                elsif locSolv
-                  #puts "l coeff type " + str(ll[i].class);
-                  coeffTable.update( ring.toPolyCoefficients(ll[i]),
-                                     ring.toPolyCoefficients(ll[i+1]), 
-                                     ring.toPolyCoefficients(ll[i+2]) );
-                elsif locresSolv
-                  #puts "lr coeff type " + str(ll[i].class);
                   coeffTable.update( ring.toPolyCoefficients(ll[i]),
                                      ring.toPolyCoefficients(ll[i+1]), 
                                      ring.toPolyCoefficients(ll[i+2]) );
