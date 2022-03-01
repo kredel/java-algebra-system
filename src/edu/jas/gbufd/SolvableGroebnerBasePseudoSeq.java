@@ -109,10 +109,10 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
             //System.out.println("stack trace = "); 
             //Exception e = new RuntimeException("get stack trace");
             //e.printStackTrace();
-        } else if (ring != null && ring instanceof QLRSolvablePolynomialRing) { // others?
+        } else if (ring instanceof QLRSolvablePolynomialRing) { // others ?
             // check that also coeffTable is empty for recursive solvable poly ring
             QLRSolvablePolynomialRing qring = (QLRSolvablePolynomialRing) ring;
-            RecSolvablePolynomialRing<C> rring = (RecSolvablePolynomialRing<C>) qring.polCoeff;
+            RecSolvablePolynomialRing<C> rring = qring.polCoeff;
             if (!rring.coeffTable.isEmpty()) {
                logger.warn("right reduction not correct for {}", rring.coeffTable);
                engine = new GreatestCommonDivisorFake<C>(); // only for Ore conditions

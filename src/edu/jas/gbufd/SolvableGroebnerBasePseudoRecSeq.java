@@ -128,10 +128,10 @@ public class SolvableGroebnerBasePseudoRecSeq<C extends GcdRingElem<C>> extends
         if (!cofac.isCommutative()) {
             logger.warn("right reduction not correct for {}", cofac); //.toScript()
             engine = new GreatestCommonDivisorFake<C>();
-        } else if (ring != null && ring instanceof QLRSolvablePolynomialRing) { // others?
+        } else if (ring instanceof QLRSolvablePolynomialRing) { // others ?
             // check that also coeffTable is empty for recursive solvable poly ring
             QLRSolvablePolynomialRing qring = (QLRSolvablePolynomialRing) ring;
-            RecSolvablePolynomialRing<C> rring = (RecSolvablePolynomialRing<C>) qring.polCoeff;
+            RecSolvablePolynomialRing<C> rring = qring.polCoeff;
             if (!rring.coeffTable.isEmpty()) {
                logger.warn("right reduction not correct for {}", rring.coeffTable);
                engine = new GreatestCommonDivisorFake<C>(); // only for Ore conditions
