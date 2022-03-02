@@ -19,8 +19,6 @@ import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.Power;
 
-//import edu.jas.commons.math.Roots;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -294,7 +292,7 @@ public class RootUtilTest extends TestCase {
         ////List<Complex<BigDecimal>> cd = linalg.complexRoots(a);
         ////System.out.println("cd = " + cd);
 
-        // some real roots not detected under complex roots // todo
+        // some real roots eventually not detected under complex roots
         assertTrue("#roots == degree(f): " + r, r >= a.degree());
     }
 
