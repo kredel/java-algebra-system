@@ -182,13 +182,14 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>>
         //if (rt == null) { // handled in super }
         SolvableQuotientRing<C> cfring = (SolvableQuotientRing<C>) cf; // == coFac
         polCoeff = new RecSolvablePolynomialRing<C>(cfring.ring, n, t, v);
-        if (table.size() > 0) { // TODO
-            ExpVector e = null;
-            ExpVector f = null;
-            GenSolvablePolynomial<GenPolynomial<C>> p = null;
-            polCoeff.table.update(e, f, p); // from rt
+        if (table.size() > 0) {
+            List<GenSolvablePolynomial<GenPolynomial<C>>> nt
+		= new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>();
+            for (GenSolvablePolynomial<SolvableQuotient<C>> q : table.relationList()) {
+                nt.add( this.toPolyCoefficients(q) ); // only with den == 1
+            }
+            polCoeff.table.addSolvRelations(nt);
         }
-        //coeffTable = polCoeff.coeffTable; //new RelationTable<GenPolynomial<C>>(polCoeff, true);
         ZERO = new QuotSolvablePolynomial<C>(this);
         SolvableQuotient<C> coeff = coFac.getONE();
         //evzero = ExpVector.create(nvar); // from super
@@ -350,7 +351,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>>
         if (polCoeff.coeffTable.size() == 0) {
             return super.isCommutative();
         }
-        // todo: check structure of relations
+        // check structure of relations?
         return false;
     }
 
