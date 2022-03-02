@@ -35,7 +35,7 @@ public class IntegerProgram implements java.io.Serializable {
     private static final Logger logger = LogManager.getLogger(IntegerProgram.class);
 
 
-    private static boolean DEBUG = logger.isDebugEnabled(); //false;
+    private static boolean debug = logger.isDebugEnabled(); //false;
 
 
     private boolean negVars;
@@ -93,11 +93,11 @@ public class IntegerProgram implements java.io.Serializable {
 
 
     /**
-     * Set DEBUG flag to parameter value.
+     * Set debug flag to parameter value.
      * @param b
      */
     public void setDebug(boolean b) {
-        DEBUG = b;
+        debug = b;
     }
 
 
@@ -208,7 +208,7 @@ public class IntegerProgram implements java.io.Serializable {
             }
             sb.append(") ");
         }
-        if (DEBUG) {
+        if (debug) {
             logger.debug("list = {}", sb);
         }
 
@@ -225,7 +225,7 @@ public class IntegerProgram implements java.io.Serializable {
             e.printStackTrace();
             return;
         }
-        if (DEBUG) {
+        if (debug) {
             logger.debug("F = {}", F);
         }
         I = new Ideal<BigInteger>(F);
@@ -278,7 +278,7 @@ public class IntegerProgram implements java.io.Serializable {
         }
         long[] l;
         this.B = Arrays.copyOf(B, B.length);
-        if (DEBUG) {
+        if (debug) {
             logger.debug("GB = {}", GB);
         }
         if (negVars) {
@@ -317,9 +317,8 @@ public class IntegerProgram implements java.io.Serializable {
             }
         }
         if (success) {
-            if (DEBUG) {
-		final long[] ll = returnMe;
-                logger.debug("The solution is: {}", () -> Arrays.toString(ll));
+            if (debug) {
+                logger.debug("The solution is: {}", Arrays.toString(returnMe)); // or () -> toString(ll)
             }
         } else {
             logger.warn("The Problem does not have a feasible solution.");
