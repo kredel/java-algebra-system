@@ -178,9 +178,9 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         GenPolynomial<Complex<C>> sp = engine.squarefreePart(a);
         SortedMap<GenPolynomial<Complex<C>>, Long> sa = new TreeMap<GenPolynomial<Complex<C>>, Long>();
         sa.put(sp, 1L);
-        //SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a); // BUG to addAll 
-        //System.out.println("squarefree factors = " + sa);
-        for (Map.Entry<GenPolynomial<Complex<C>>, Long> me : sa.entrySet()) { // todo fix addAll
+        ///SortedMap<GenPolynomial<Complex<C>>, Long> sa = engine.squarefreeFactors(a); // see below
+        ///System.out.println("squarefree factors = " + sa + ", of a = " + a + ", deg(a) = " + a.degree());
+        for (Map.Entry<GenPolynomial<Complex<C>>, Long> me : sa.entrySet()) { // see below
             GenPolynomial<Complex<C>> p = me.getKey();
             Complex<C> Mb = rootBound(p);
             C M = Mb.getRe();
@@ -196,7 +196,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
             corner[3] = new Complex<C>(cr, M, M); // ne
             Rectangle<C> rect = new Rectangle<C>(corner);
             try {
-                List<Rectangle<C>> rs = complexRoots(rect, p);
+                List<Rectangle<C>> rs = complexRoots(rect, p); // TODO: need [,] also for a
                 long e = me.getValue(); // sa.get(p);
                 for (int i = 0; i < e; i++) { // add with multiplicity
                     roots.addAll(rs);
@@ -206,6 +206,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                 throw new RuntimeException("this should never happen " + e);
             }
         }
+        //System.out.println("#roots = " + roots.size() + ", roots = " + roots);
         return roots;
     }
 
@@ -226,8 +227,8 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         if (debug) {
             w = complexRootCount(root, a);
             if (w != 1) {
-                System.out.println("#root = " + w);
-                System.out.println("root = " + root);
+                System.out.println("#root  = " + w + ", root = " + root);
+                System.out.println("deg(a) = " + a.degree() + ", a = " + a);
                 throw new ArithmeticException("no initial isolating rectangle " + rect);
             }
         }
@@ -246,7 +247,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                         //System.out.println("delta = " + toDecimal(delta)); 
                     }
                     Complex<C> center = root.corners[1].sum(delta);
-                    //System.out.println("refine center = " + toDecimal(center)); 
+                    //System.out.println("refine center = " + toDecimal(center));
                     if (debug) {
                         logger.info("new center = {}", center);
                     }
