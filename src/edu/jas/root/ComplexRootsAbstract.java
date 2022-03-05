@@ -205,6 +205,7 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
         //System.out.println("squarefree factors = " + sa + ", of a = " + a + ", deg(a) = " + a.degree());
         for (Map.Entry<GenPolynomial<Complex<C>>, Long> me : sa.entrySet()) {
             GenPolynomial<Complex<C>> p = me.getKey(); // is squarefree
+            long d = p.degree(0);
             if (p.isConstant() || p.isZERO()) {
                 continue;
             }
@@ -224,6 +225,10 @@ public abstract class ComplexRootsAbstract<C extends RingElem<C> & Rational> imp
                         roots.add(rsi);
                     }
                     rit.remove(); // rsi // removes last object from next()
+                    d--;
+                    if (d <= 0L) {
+                        break; // all roots identified
+                    }
                 }
             }
         }
