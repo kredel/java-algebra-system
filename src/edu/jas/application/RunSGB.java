@@ -173,6 +173,10 @@ public class RunSGB {
             runParallel(S, threads, action, plusextra);
         }
         ComputerThreads.terminate();
+        try {
+            problem.close();
+        } catch (IOException ignored) {
+        }
     }
 
 

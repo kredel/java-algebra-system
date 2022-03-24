@@ -228,7 +228,10 @@ public class RunGB {
             runGB(S, gb);
         }
         ComputerThreads.terminate();
-        //System.exit(0);
+        try {
+            problem.close();
+        } catch (IOException ignored) {
+        }
     }
 
 

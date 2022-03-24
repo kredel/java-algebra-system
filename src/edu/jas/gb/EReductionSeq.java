@@ -239,7 +239,7 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
      */
     @Override
     @SuppressWarnings("unchecked")
-    // not jet working
+    // not jet working: TODO
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> row, List<GenPolynomial<C>> Pp,
                     GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
