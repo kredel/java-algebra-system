@@ -444,9 +444,10 @@ findbugs-low:
 # jan 2018 SVNSRT=5787
 # jan 2019 SVNSRT=5966
 # jan 2020 SVNSRT=5990
-SVNREV=120
+SVNREV=130
 GITREV=$(SVNREV)
-GITSINCE=2019-01-01
+GITSINCE=2021-01-01
+#GITSINCE=2019-01-01
 #GITSINCE=2016-03-26
 
 # git archive --format=tar --prefix=$(VERSION)/ HEAD | (cd ~/jas-versions/ && tar -xf -)
