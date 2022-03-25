@@ -26,7 +26,7 @@ import edu.jas.poly.PolynomialList;
 
 
 /**
- * Reduction tests with JUnit.
+ * Reduction / normalform tests with JUnit.
  * @author Heinz Kredel
  */
 
@@ -60,15 +60,10 @@ public class ReductionTest extends TestCase {
 
     GenPolynomialRing<BigRational> fac;
 
-    GenPolynomial<BigRational> a;
-    GenPolynomial<BigRational> b;
-    GenPolynomial<BigRational> c;
-    GenPolynomial<BigRational> d;
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
     List<GenPolynomial<BigRational>> L;
-    PolynomialList<BigRational> F;
-    PolynomialList<BigRational> G;
+    PolynomialList<BigRational> F, G;
 
     ReductionSeq<BigRational> red;
     Reduction<BigRational> redpar;
@@ -172,10 +167,8 @@ public class ReductionTest extends TestCase {
 
     /**
      * Test rational coefficient reduction.
-     * 
      */
     public void testRatReduction() {
-
         a = fac.random(kl, ll, el, q );
         b = fac.random(kl, ll, el, q );
 
@@ -215,10 +208,8 @@ public class ReductionTest extends TestCase {
 
     /**
      * Test rational coefficient parallel reduction.
-     * 
      */
     public void testRatReductionPar() {
-
         a = fac.random(kl, ll, el, q );
         b = fac.random(kl, ll, el, q );
      
@@ -252,10 +243,8 @@ public class ReductionTest extends TestCase {
 
     /**
      * Test complex coefficient reduction.
-     * 
      */
     public void testComplexReduction() {
-
         GenPolynomialRing<BigComplex> fac 
             = new GenPolynomialRing<BigComplex>( new BigComplex(0), rl );
 
@@ -297,12 +286,9 @@ public class ReductionTest extends TestCase {
 
     /**
      * Test rational coefficient reduction with recording.
-     * 
      */
     public void testRatReductionRecording() {
-
         List<GenPolynomial<BigRational>> row = null;
-
 
         a = fac.random(kl, ll, el, q );
         b = fac.random(kl, ll, el, q );
@@ -351,10 +337,8 @@ public class ReductionTest extends TestCase {
 
     /**
      * Test integer coefficient e-reduction.
-     * 
      */
     public void testIntegerEReduction() {
-
         BigInteger bi = new BigInteger(0);
         GenPolynomialRing<BigInteger> fac 
             = new GenPolynomialRing<BigInteger>( bi, rl );
@@ -432,11 +416,77 @@ public class ReductionTest extends TestCase {
 
 
     /**
+     * Test integer coefficient e-reduction recording.
+     */
+    public void testIntegerEReductionRecording() {
+        BigInteger bi = new BigInteger(0);
+        GenPolynomialRing<BigInteger> fac
+            = new GenPolynomialRing<BigInteger>( bi, rl );
+
+        GenPolynomial<BigInteger> a, b, c, d, e;
+
+        EReductionSeq<BigInteger> ered = new EReductionSeq<BigInteger>();
+
+        List<GenPolynomial<BigInteger>> row = null;
+        List<GenPolynomial<BigInteger>> L
+            = new ArrayList<GenPolynomial<BigInteger>>();
+
+        a = fac.random(kl, ll, el, q ).abs();
+        b = fac.random(kl, ll, el, q ).abs();
+
+        assertTrue("not isZERO( a )", !a.isZERO() );
+
+        L.add(a);
+        row = new ArrayList<GenPolynomial<BigInteger>>( L.size() );
+        for ( int m = 0; m < L.size(); m++ ) {
+            row.add(null);
+        }
+        e = ered.normalform( row, L, a );
+        System.out.println("a = " + a);
+        System.out.println("e = " + e);
+        System.out.println("L = " + L);
+        System.out.println("row = " + row);
+        assertTrue("isZERO( e )", e.isZERO() );
+        assertTrue("is Reduction ", ered.isReductionNF(row,L,a,e) );
+
+        row = new ArrayList<GenPolynomial<BigInteger>>( L.size() );
+        for ( int m = 0; m < L.size(); m++ ) {
+            row.add(null);
+        }
+        c = fac.getONE();
+        a = a.sum(c);
+        e = ered.normalform( row, L, a );
+        assertTrue("isONE( e ) some times", e.isONE() );
+        assertTrue("is Reduction ", ered.isReductionNF(row,L,a,e) );
+        System.out.println("a = " + a);
+        System.out.println("e = " + e);
+        System.out.println("L = " + L);
+        System.out.println("row = " + row);
+
+        row = new ArrayList<GenPolynomial<BigInteger>>( L.size() );
+        for ( int m = 0; m < L.size(); m++ ) {
+            row.add(null);
+        }
+        L = new ArrayList<GenPolynomial<BigInteger>>();
+        a = c.multiply( bi.fromInteger(4) );
+        b = c.multiply( bi.fromInteger(5) );
+
+        L.add( a );
+        e = ered.normalform( row, L, b );
+        assertTrue("isONE( e )", e.isONE() );
+        assertTrue("is Reduction ", ered.isReductionNF(row,L,b,e) );
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("e = " + e);
+        System.out.println("L = " + L);
+        System.out.println("row = " + row);
+    }
+
+
+    /**
      * Test integer coefficient d-reduction.
-     * 
      */
     public void testIntegerDReduction() {
-
         BigInteger bi = new BigInteger(0);
         GenPolynomialRing<BigInteger> fac 
             = new GenPolynomialRing<BigInteger>( bi, rl );

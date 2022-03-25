@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.RingElem;
 
 
@@ -178,8 +179,9 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
         C a = null;
         C b = null;
         C r = null;
-        GenPolynomial<C> R = Ap.ring.getZERO();
-        //GenPolynomial<C> T = Ap.ring.getZERO();
+        GenPolynomialRing<C> pfac = Ap.ring;
+        GenPolynomial<C> R = pfac.getZERO();
+        //GenPolynomial<C> T = pfac.getZERO();
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
         //try { // required to avoid a compiler error in the while loop
@@ -195,7 +197,7 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
                     //logger.info("red div = {}", f);
                     r = a.remainder(lbc[i]);
                     b = a.divide(lbc[i]);
-                    if (f == null) { // compiler produced this case
+                    if (f == null) { // compiler produced this case ??? still ?
                         System.out.println("f = null: " + e + ", " + htl[i]);
                         Q = p[i].multiply(b);
                     } else {
@@ -209,7 +211,7 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
                     }
                 }
             }
-            if (!a.isZERO()) { //! mt ) { 
+            if (!a.isZERO()) { //! mt ) {
                 //logger.debug("irred");
                 R = R.sum(a, e);
                 //S = S.subtract( a, e ); 
@@ -218,14 +220,6 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
             //System.out.println(" R = " + R);
             //System.out.println(" S = " + S);
         }
-        //} catch (Exception ex) {
-        //    System.out.println("R = " + R);
-        //    System.out.println("S = " + S);
-        //    System.out.println("f = " + f + ", " + e + ", " + htl[i]);
-        //    System.out.println("a = " + a + ", " + b + ", " + r + ", " + lbc[i]);
-        //    //throw ex;
-        //    return T;
-        //}
         return R.abs();
     }
 
@@ -239,7 +233,6 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
      */
     @Override
     @SuppressWarnings("unchecked")
-    // not jet working: TODO
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> row, List<GenPolynomial<C>> Pp,
                     GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
@@ -248,19 +241,20 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
         if (Ap == null || Ap.isZERO()) {
             return Ap;
         }
-        throw new UnsupportedOperationException("not jet implemented");
-        /*
-        int l = Pp.size();
-        GenPolynomial<C>[] P = new GenPolynomial[l];
+        //throw new UnsupportedOperationException("not jet implemented");
+        int l;
+        GenPolynomial<C>[] P;
         synchronized (Pp) {
+            l = Pp.size();
+            P = (GenPolynomial<C>[]) new GenPolynomial[l];
             //P = Pp.toArray();
             for ( int i = 0; i < Pp.size(); i++ ) {
-                P[i] = Pp.get(i);
+                P[i] = Pp.get(i).abs();
             }
         }
         ExpVector[] htl = new ExpVector[ l ];
-        Object[] lbc = new Object[ l ]; // want <C>
-        GenPolynomial<C>[] p = new GenPolynomial[ l ];
+        C[] lbc = (C[]) new RingElem[ l ]; // want <C>
+        GenPolynomial<C>[] p = (GenPolynomial<C>[]) new GenPolynomial[ l ];
         Map.Entry<ExpVector,C> m;
         int j = 0;
         int i;
@@ -275,47 +269,59 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
             }
         }
         l = j;
-        ExpVector e;
-        C a;
-        boolean mt = false;
-        GenPolynomial<C> zero = Ap.ring.getZERO();
-        GenPolynomial<C> R = Ap.ring.getZERO();
+        ExpVector e = null;
+        ExpVector f = null;
+        C a = null;
+        C b = null;
+        C r = null;
+        GenPolynomialRing<C> pfac = Ap.ring;
+        GenPolynomial<C> R = pfac.getZERO();
+        GenPolynomial<C> zero = pfac.getZERO();
 
         GenPolynomial<C> fac = null;
         // GenPolynomial<C> T = null;
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
-        while ( S.length() > 0 ) { 
+        while ( S.length() > 0 ) {
+            boolean mt = false;
             m = S.leadingMonomial();
             e = m.getKey();
             a = m.getValue();
             for ( i = 0; i < l; i++ ) {
                 mt =  e.multipleOf( htl[i] );
-                if ( mt ) break; 
-            }
-            if ( ! mt ) { 
-                //logger.debug("irred");
-                R = R.sum( a, e );
-                S = S.subtract( a, e ); 
-                // System.out.println(" S = " + S);
-            } else { 
-                e =  e.subtract( htl[i] );
-                //logger.info("red div = {}", e);
-                C c = (C)lbc[i];
-                a = a.divide( c );
-                Q = p[i].multiply( a, e );
-                S = S.subtract( Q );
-                fac = row.get(i);
-                if ( fac == null ) {
-                    fac = zero.sum( a, e );
-                } else {
-                    fac = fac.sum( a, e );
+                if (mt) {
+                    f = e.subtract( htl[i] );
+                    //logger.info("red div = {}", f);
+                    r = a.remainder(lbc[i]);
+                    b = a.divide(lbc[i]);
+                    if (f == null) { // compiler produced this case ??? still ?
+                        System.out.println("f = null: " + e + ", " + htl[i]);
+                        f = pfac.evzero;
+                    }
+                    Q = p[i].multiply( b, f );
+                    S = S.subtract( Q );
+                    fac = row.get(i);
+                    if ( fac == null ) {
+                        fac = zero.sum( b, f );
+                    } else {
+                        fac = fac.sum( b, f );
+                    }
+                    row.set(i,fac);
+                    System.out.println("r = " + r);
+                    a = r;
+                    if (r.isZERO()) {
+                        break;
+                    }
                 }
-                row.set(i,fac);
+            }
+            if (!a.isZERO()) { //! mt ) {
+                //logger.debug("irred");
+                R = R.sum(a, e);
+                //S = S.subtract( a, e );
+                S = S.reductum();
             }
         }
         return R;
-        */
     }
 
 
