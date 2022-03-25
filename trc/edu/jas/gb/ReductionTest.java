@@ -432,7 +432,6 @@ public class ReductionTest extends TestCase {
             = new ArrayList<GenPolynomial<BigInteger>>();
 
         a = fac.random(kl, ll, el, q ).abs();
-        b = fac.random(kl, ll, el, q ).abs();
 
         assertTrue("not isZERO( a )", !a.isZERO() );
 
@@ -442,10 +441,10 @@ public class ReductionTest extends TestCase {
             row.add(null);
         }
         e = ered.normalform( row, L, a );
-        System.out.println("a = " + a);
-        System.out.println("e = " + e);
-        System.out.println("L = " + L);
-        System.out.println("row = " + row);
+        //System.out.println("a = " + a);
+        //System.out.println("e = " + e);
+        //System.out.println("L = " + L);
+        //System.out.println("row = " + row);
         assertTrue("isZERO( e )", e.isZERO() );
         assertTrue("is Reduction ", ered.isReductionNF(row,L,a,e) );
 
@@ -458,10 +457,10 @@ public class ReductionTest extends TestCase {
         e = ered.normalform( row, L, a );
         assertTrue("isONE( e ) some times", e.isONE() );
         assertTrue("is Reduction ", ered.isReductionNF(row,L,a,e) );
-        System.out.println("a = " + a);
-        System.out.println("e = " + e);
-        System.out.println("L = " + L);
-        System.out.println("row = " + row);
+        //System.out.println("a = " + a);
+        //System.out.println("e = " + e);
+        //System.out.println("L = " + L);
+        //System.out.println("row = " + row);
 
         row = new ArrayList<GenPolynomial<BigInteger>>( L.size() );
         for ( int m = 0; m < L.size(); m++ ) {
@@ -475,11 +474,33 @@ public class ReductionTest extends TestCase {
         e = ered.normalform( row, L, b );
         assertTrue("isONE( e )", e.isONE() );
         assertTrue("is Reduction ", ered.isReductionNF(row,L,b,e) );
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("e = " + e);
-        System.out.println("L = " + L);
-        System.out.println("row = " + row);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("e = " + e);
+        //System.out.println("L = " + L);
+        //System.out.println("row = " + row);
+
+        a = fac.random(kl, ll, el, q ).abs();
+        b = fac.random(kl, ll/2, el/2, q ).abs();
+        c = fac.random(kl, ll*2, el*2, q*1.0f ).abs();
+        assertTrue("not isZERO( a )", !a.isZERO() );
+
+        L = new ArrayList<GenPolynomial<BigInteger>>();
+        L.add(b);
+        L.add(a);
+        row = new ArrayList<GenPolynomial<BigInteger>>( L.size() );
+        for ( int m = 0; m < L.size(); m++ ) {
+            row.add(null);
+        }
+        e = ered.normalform( row, L, c );
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
+        //System.out.println("e = " + e);
+        //System.out.println("L = " + L);
+        //System.out.println("row = " + row);
+        //assertTrue("isZERO( e )", e.isZERO() );
+        assertTrue("is Reduction ", ered.isReductionNF(row,L,c,e) );
     }
 
 

@@ -287,6 +287,7 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
             m = S.leadingMonomial();
             e = m.getKey();
             a = m.getValue();
+            //System.out.println("e = " + e);
             for ( i = 0; i < l; i++ ) {
                 mt =  e.multipleOf( htl[i] );
                 if (mt) {
@@ -307,7 +308,8 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
                         fac = fac.sum( b, f );
                     }
                     row.set(i,fac);
-                    System.out.println("r = " + r);
+                    //System.out.println("i = " + i);
+                    //System.out.println("r = " + r);
                     a = r;
                     if (r.isZERO()) {
                         break;
