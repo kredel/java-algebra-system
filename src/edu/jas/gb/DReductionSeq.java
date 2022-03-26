@@ -142,6 +142,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
      * @return d-nf(Ap) with respect to Pp.
      */
     @SuppressWarnings("unchecked")
+    @Override
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
@@ -267,6 +268,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
      * @param Bp polynomial.
      * @return gpol(Ap,Bp) the g-polynomial of Ap and Bp.
      */
+    @Override
     public GenPolynomial<C> GPolynomial(GenPolynomial<C> Ap, GenPolynomial<C> Bp) {
         if (logger.isInfoEnabled()) {
             if (Bp == null || Bp.isZERO()) {
@@ -327,6 +329,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
      * @param Bp a polynomial.
      * @return gpol(Ap, Bp), the g-Polynomial for Ap and Bp.
      */
+    @Override
     public GenPolynomial<C> GPolynomial(List<GenPolynomial<C>> S, int i, GenPolynomial<C> Ap, int j,
                     GenPolynomial<C> Bp) {
         throw new UnsupportedOperationException("not yet implemented");
@@ -413,6 +416,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
      * @return nf(Pp,Ap), the normal form of Ap wrt. Pp.
      */
     @SuppressWarnings("unchecked")
+    @Override
     public GenPolynomial<C> normalform(List<GenPolynomial<C>> row, List<GenPolynomial<C>> Pp,
                     GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
@@ -421,7 +425,6 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
         if (Ap == null || Ap.isZERO()) {
             return Ap;
         }
-        //throw new UnsupportedOperationException("not yet implemented");
         int l;
         GenPolynomial<C>[] P;
         synchronized (Pp) {

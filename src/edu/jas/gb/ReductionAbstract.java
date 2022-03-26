@@ -51,6 +51,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param B polynomial.
      * @return spol(A,B) the S-polynomial of A and B.
      */
+    @Override
     public GenPolynomial<C> SPolynomial(GenPolynomial<C> A, GenPolynomial<C> B) {
         if (B == null || B.isZERO()) {
             if (A == null) {
@@ -97,6 +98,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param B a polynomial.
      * @return Spol(A, B), the S-Polynomial for A and B.
      */
+    @Override
     public GenPolynomial<C> SPolynomial(List<GenPolynomial<C>> S, int i, GenPolynomial<C> A, int j,
                     GenPolynomial<C> B) {
         if (debug) {
@@ -147,6 +149,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param B polynomial.
      * @return true if the module S-polynomial(i,j) is required.
      */
+    @Override
     public boolean moduleCriterion(int modv, GenPolynomial<C> A, GenPolynomial<C> B) {
         if (modv == 0) {
             return true;
@@ -164,6 +167,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param ej ExpVector.
      * @return true if the module S-polynomial(i,j) is required.
      */
+    @Override
     public boolean moduleCriterion(int modv, ExpVector ei, ExpVector ej) {
         if (modv == 0) {
             return true;
@@ -182,6 +186,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param e = lcm(ht(A),ht(B))
      * @return true if the S-polynomial(i,j) is required, else false.
      */
+    @Override
     public boolean criterion4(GenPolynomial<C> A, GenPolynomial<C> B, ExpVector e) {
         if (logger.isInfoEnabled()) {
             if (!A.ring.equals(B.ring)) {
@@ -205,6 +210,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param e = lcm(ei,ej)
      * @return true if the S-polynomial(i,j) is required, else false.
      */
+    @Override
     public boolean criterion4(ExpVector ei, ExpVector ej, ExpVector e) {
         ExpVector g = ei.sum(ej);
         ExpVector h = g.subtract(e);
@@ -219,6 +225,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param B polynomial.
      * @return true if the S-polynomial(i,j) is required, else false.
      */
+    @Override
     public boolean criterion4(GenPolynomial<C> A, GenPolynomial<C> B) {
         if (logger.isInfoEnabled()) {
             if (!A.ring.isCommutative() || !B.ring.isCommutative()) { // A instanceof GenSolvablePolynomial
@@ -252,6 +259,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param Pp polynomial list.
      * @return list of nf(a) with respect to Pp for all a in Ap.
      */
+    @Override
     public List<GenPolynomial<C>> normalform(List<GenPolynomial<C>> Pp, List<GenPolynomial<C>> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return Ap;
@@ -313,6 +321,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.
      */
+    @Override
     public boolean isTopReducible(List<GenPolynomial<C>> P, GenPolynomial<C> A) {
         if (P == null || P.isEmpty()) {
             return false;
@@ -338,6 +347,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param Pp polynomial list.
      * @return true if Ap is reducible with respect to Pp.
      */
+    @Override
     public boolean isReducible(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
         return !isNormalform(Pp, Ap);
     }
@@ -350,6 +360,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @return true if Ap is in normalform with respect to Pp.
      */
     @SuppressWarnings("unchecked")
+    @Override
     public boolean isNormalform(List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap) {
         if (Pp == null || Pp.isEmpty()) {
             return true;
@@ -400,6 +411,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param Pp polynomial list.
      * @return true if each Ap in Pp is in normalform with respect to Pp\{Ap}.
      */
+    @Override
     public boolean isNormalform(List<GenPolynomial<C>> Pp) {
         if (Pp == null || Pp.isEmpty()) {
             return true;
@@ -424,6 +436,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @return a list P of monic polynomials which are in normalform wrt. P and
      *         with ideal(Pp) = ideal(P).
      */
+    @Override
     public List<GenPolynomial<C>> irreducibleSet(List<GenPolynomial<C>> Pp) {
         ArrayList<GenPolynomial<C>> P = new ArrayList<GenPolynomial<C>>();
         for (GenPolynomial<C> a : Pp) {
@@ -487,6 +500,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param Np nf(Pp,Ap), a normal form of Ap wrt. Pp.
      * @return true, if Np + sum( row[i]*Pp[i] ) == Ap, else false.
      */
+    @Override
     public boolean isReductionNF(List<GenPolynomial<C>> row, List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap,
                     GenPolynomial<C> Np) {
         if (row == null && Pp == null) {
