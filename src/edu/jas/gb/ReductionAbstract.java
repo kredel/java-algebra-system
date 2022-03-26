@@ -10,14 +10,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.Monomial;
 import edu.jas.poly.ModuleList;
+import edu.jas.poly.Monomial;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingElem;
 
@@ -131,6 +131,9 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         GenPolynomial<C> zero = A.ring.getZERO();
         GenPolynomial<C> As = zero.sum(b.negate(), e1);
         GenPolynomial<C> Bs = zero.sum(a /*correct .negate()*/, f1);
+        if ((S.get(i) != null && !S.get(i).isZERO()) || (S.get(j) != null && !S.get(j).isZERO())) {
+            throw new IllegalArgumentException("S(i), S(j): " + S.get(i) + ", " + S.get(j));
+        }
         S.set(i, As);
         S.set(j, Bs);
         return Cp;
@@ -275,7 +278,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         return normalform(Pp, Ap, false);
     }
 
-    
+
     /**
      * Module normalform set.
      * @param Ap module list.
@@ -303,7 +306,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         return Nr;
     }
 
-    
+
     /**
      * Is top reducible.
      * @param A polynomial.
