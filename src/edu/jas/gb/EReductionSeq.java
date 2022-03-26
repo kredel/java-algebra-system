@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -247,20 +247,20 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
             l = Pp.size();
             P = (GenPolynomial<C>[]) new GenPolynomial[l];
             //P = Pp.toArray();
-            for ( int i = 0; i < Pp.size(); i++ ) {
+            for (int i = 0; i < Pp.size(); i++) {
                 P[i] = Pp.get(i).abs();
             }
         }
-        ExpVector[] htl = new ExpVector[ l ];
-        C[] lbc = (C[]) new RingElem[ l ]; // want <C>
-        GenPolynomial<C>[] p = (GenPolynomial<C>[]) new GenPolynomial[ l ];
-        Map.Entry<ExpVector,C> m;
+        ExpVector[] htl = new ExpVector[l];
+        C[] lbc = (C[]) new RingElem[l]; // want <C>
+        GenPolynomial<C>[] p = (GenPolynomial<C>[]) new GenPolynomial[l];
+        Map.Entry<ExpVector, C> m;
         int j = 0;
         int i;
-        for ( i = 0; i < l; i++ ) { 
+        for (i = 0; i < l; i++) {
             p[i] = P[i];
             m = p[i].leadingMonomial();
-            if ( m != null ) { 
+            if (m != null) {
                 p[j] = p[i];
                 htl[j] = m.getKey();
                 lbc[j] = m.getValue();
@@ -281,16 +281,16 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
         // GenPolynomial<C> T = null;
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
-        while ( S.length() > 0 ) {
+        while (S.length() > 0) {
             boolean mt = false;
             m = S.leadingMonomial();
             e = m.getKey();
             a = m.getValue();
             //System.out.println("e = " + e);
-            for ( i = 0; i < l; i++ ) {
-                mt =  e.multipleOf( htl[i] );
+            for (i = 0; i < l; i++) {
+                mt = e.multipleOf(htl[i]);
                 if (mt) {
-                    f = e.subtract( htl[i] );
+                    f = e.subtract(htl[i]);
                     //logger.info("red div = {}", f);
                     r = a.remainder(lbc[i]);
                     b = a.divide(lbc[i]);
@@ -298,15 +298,15 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
                         System.out.println("f = null: " + e + ", " + htl[i]);
                         f = pfac.evzero;
                     }
-                    Q = p[i].multiply( b, f );
-                    S = S.subtract( Q );
+                    Q = p[i].multiply(b, f);
+                    S = S.subtract(Q);
                     fac = row.get(i);
-                    if ( fac == null ) {
-                        fac = zero.sum( b, f );
+                    if (fac == null) {
+                        fac = zero.sum(b, f);
                     } else {
-                        fac = fac.sum( b, f );
+                        fac = fac.sum(b, f);
                     }
-                    row.set(i,fac);
+                    row.set(i, fac);
                     //System.out.println("i = " + i);
                     //System.out.println("r = " + r);
                     a = r;

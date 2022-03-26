@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -303,6 +303,22 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
 
 
     /**
+     * S-Polynomial with recording.
+     * @param S recording matrix, is modified.
+     * @param i index of Ap in basis list.
+     * @param Ap a polynomial.
+     * @param j index of Bp in basis list.
+     * @param Bp a polynomial.
+     * @return spol(Ap, Bp), the s-Polynomial for Ap and Bp.
+     */
+    @Override
+    public GenPolynomial<C> SPolynomial(List<GenPolynomial<C>> S, int i, GenPolynomial<C> Ap, int j,
+                    GenPolynomial<C> Bp) {
+        throw new UnsupportedOperationException("not yet implemented");
+    }
+
+
+    /**
      * G-Polynomial with recording.
      * @param S recording matrix, is modified.
      * @param i index of Ap in basis list.
@@ -412,20 +428,20 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
             l = Pp.size();
             P = (GenPolynomial<C>[]) new GenPolynomial[l];
             //P = Pp.toArray();
-            for ( int i = 0; i < Pp.size(); i++ ) {
+            for (int i = 0; i < Pp.size(); i++) {
                 P[i] = Pp.get(i);
             }
         }
-        ExpVector[] htl = new ExpVector[ l ];
-        C[] lbc = (C[]) new RingElem[ l ]; // want <C>
-        GenPolynomial<C>[] p = (GenPolynomial<C>[]) new GenPolynomial[ l ];
-        Map.Entry<ExpVector,C> m;
+        ExpVector[] htl = new ExpVector[l];
+        C[] lbc = (C[]) new RingElem[l]; // want <C>
+        GenPolynomial<C>[] p = (GenPolynomial<C>[]) new GenPolynomial[l];
+        Map.Entry<ExpVector, C> m;
         int j = 0;
         int i;
-        for ( i = 0; i < l; i++ ) { 
+        for (i = 0; i < l; i++) {
             p[i] = P[i];
             m = p[i].leadingMonomial();
-            if ( m != null ) { 
+            if (m != null) {
                 p[j] = p[i];
                 htl[j] = m.getKey();
                 lbc[j] = m.getValue();
@@ -446,25 +462,26 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
         // GenPolynomial<C> T = null;
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
-        while ( S.length() > 0 ) { 
+        while (S.length() > 0) {
             boolean mt = false;
             m = S.leadingMonomial();
             e = m.getKey();
             a = m.getValue();
-            for ( i = 0; i < l; i++ ) {
-                mt =  e.multipleOf( htl[i] );
+            for (i = 0; i < l; i++) {
+                mt = e.multipleOf(htl[i]);
                 if (mt) {
-		    r = a.remainder(lbc[i]);
+                    r = a.remainder(lbc[i]);
                     mt = r.isZERO();
                 }
-                if ( mt ) break; 
+                if (mt)
+                    break;
             }
-            if ( ! mt ) { 
+            if (!mt) {
                 //logger.debug("irred");
-                R = R.sum( a, e );
-                S = S.subtract( a, e );
+                R = R.sum(a, e);
+                S = S.subtract(a, e);
                 //System.out.println("a = " + a + ", e = " + e);
-            } else { 
+            } else {
                 //logger.info("red div = {}", e);
                 f = e.subtract(htl[i]);
                 b = a.divide(lbc[i]);
@@ -473,12 +490,12 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
                 Q = p[i].multiply(b, f);
                 S = S.reductum().subtract(Q.reductum()); // ok also with reductum
                 fac = row.get(i);
-                if ( fac == null ) {
-                    fac = zero.sum( b, f );
+                if (fac == null) {
+                    fac = zero.sum(b, f);
                 } else {
-                    fac = fac.sum( b, f );
+                    fac = fac.sum(b, f);
                 }
-                row.set(i,fac);
+                row.set(i, fac);
             }
         }
         return R;

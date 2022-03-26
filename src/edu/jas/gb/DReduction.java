@@ -4,22 +4,20 @@
 
 package edu.jas.gb;
 
-import java.util.List;
 
+import java.util.List;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.RingElem;
 
 
 /**
- * Polynomial D Reduction interface.
- * Defines additionally G-Polynomial.
+ * Polynomial D Reduction interface. Defines additionally G-Polynomial.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
-public interface DReduction<C extends RingElem<C>> 
-                 extends Reduction<C> {
+public interface DReduction<C extends RingElem<C>> extends Reduction<C> {
 
 
     /**
@@ -28,8 +26,7 @@ public interface DReduction<C extends RingElem<C>>
      * @param Bp polynomial.
      * @return gpol(Ap,Bp) the g-polynomial of Ap and Bp.
      */
-    public GenPolynomial<C> GPolynomial(GenPolynomial<C> Ap, 
-                                        GenPolynomial<C> Bp);
+    public GenPolynomial<C> GPolynomial(GenPolynomial<C> Ap, GenPolynomial<C> Bp);
 
 
     /**
@@ -41,11 +38,7 @@ public interface DReduction<C extends RingElem<C>>
      * @param Bp a polynomial.
      * @return gpol(Ap, Bp), the g-Polynomial for Ap and Bp.
      */
-    public GenPolynomial<C> 
-           GPolynomial(List<GenPolynomial<C>> S,
-                       int i,
-                       GenPolynomial<C> Ap, 
-                       int j,
-                       GenPolynomial<C> Bp);
+    public GenPolynomial<C> GPolynomial(List<GenPolynomial<C>> S, int i, GenPolynomial<C> Ap, int j,
+                    GenPolynomial<C> Bp);
 
 }
