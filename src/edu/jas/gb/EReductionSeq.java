@@ -43,7 +43,6 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.
      */
-    //SuppressWarnings("unchecked") // not jet working
     @Override
     public boolean isTopReducible(List<GenPolynomial<C>> P, GenPolynomial<C> A) {
         if (P == null || P.isEmpty()) {
@@ -382,5 +381,10 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
         //System.out.println();
         return P;
     }
+
+
+    // inherit is okay:
+    //public boolean isReductionNF(List<GenPolynomial<C>> row, List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap,
+    //                 GenPolynomial<C> Np) {
 
 }

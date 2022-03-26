@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.structure.RingElem;
 
@@ -46,7 +47,6 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.
      */
-    //SuppressWarnings("unchecked") // not jet working
     @Override
     public boolean isTopReducible(List<GenPolynomial<C>> P, GenPolynomial<C> A) {
         if (P == null || P.isEmpty()) {
@@ -207,7 +207,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
                 //logger.info("red div = {}", e);
                 ExpVector f = e.subtract(htl[i]);
                 C b = a.divide(lbc[i]);
-                R = R.sum(r, e);
+                // r == 0: R = R.sum(r, e);
                 Q = p[i].multiply(b, f);
                 S = S.reductum().subtract(Q.reductum()); // ok also with reductum
             }
@@ -303,7 +303,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
 
 
     /**
-     * D-Polynomial with recording.
+     * G-Polynomial with recording.
      * @param S recording matrix, is modified.
      * @param i index of Ap in basis list.
      * @param Ap a polynomial.
@@ -405,19 +405,20 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
         if (Ap == null || Ap.isZERO()) {
             return Ap;
         }
-        throw new UnsupportedOperationException("not yet implemented");
-        /*
-        int l = Pp.size();
-        GenPolynomial<C>[] P = new GenPolynomial[l];
+        //throw new UnsupportedOperationException("not yet implemented");
+        int l;
+        GenPolynomial<C>[] P;
         synchronized (Pp) {
+            l = Pp.size();
+            P = (GenPolynomial<C>[]) new GenPolynomial[l];
             //P = Pp.toArray();
             for ( int i = 0; i < Pp.size(); i++ ) {
                 P[i] = Pp.get(i);
             }
         }
         ExpVector[] htl = new ExpVector[ l ];
-        Object[] lbc = new Object[ l ]; // want <C>
-        GenPolynomial<C>[] p = new GenPolynomial[ l ];
+        C[] lbc = (C[]) new RingElem[ l ]; // want <C>
+        GenPolynomial<C>[] p = (GenPolynomial<C>[]) new GenPolynomial[ l ];
         Map.Entry<ExpVector,C> m;
         int j = 0;
         int i;
@@ -432,47 +433,55 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
             }
         }
         l = j;
-        ExpVector e;
-        C a;
-        boolean mt = false;
-        GenPolynomial<C> zero = Ap.ring.getZERO();
-        GenPolynomial<C> R = Ap.ring.getZERO();
+        ExpVector e = null;
+        ExpVector f = null;
+        C a = null;
+        C b = null;
+        C r = null;
+        GenPolynomialRing<C> pfac = Ap.ring;
+        GenPolynomial<C> R = pfac.getZERO();
+        GenPolynomial<C> zero = pfac.getZERO();
 
         GenPolynomial<C> fac = null;
         // GenPolynomial<C> T = null;
         GenPolynomial<C> Q = null;
         GenPolynomial<C> S = Ap;
         while ( S.length() > 0 ) { 
+            boolean mt = false;
             m = S.leadingMonomial();
             e = m.getKey();
             a = m.getValue();
             for ( i = 0; i < l; i++ ) {
                 mt =  e.multipleOf( htl[i] );
+                if (mt) {
+		    r = a.remainder(lbc[i]);
+                    mt = r.isZERO();
+                }
                 if ( mt ) break; 
             }
             if ( ! mt ) { 
                 //logger.debug("irred");
                 R = R.sum( a, e );
-                S = S.subtract( a, e ); 
-                // System.out.println(" S = " + S);
+                S = S.subtract( a, e );
+                //System.out.println("a = " + a + ", e = " + e);
             } else { 
-                e =  e.subtract( htl[i] );
                 //logger.info("red div = {}", e);
-                C c = (C)lbc[i];
-                a = a.divide( c );
-                Q = p[i].multiply( a, e );
-                S = S.subtract( Q );
+                f = e.subtract(htl[i]);
+                b = a.divide(lbc[i]);
+                //System.out.println("b = " + b + ", f = " + f);
+                // r == 0: R = R.sum(r, f);
+                Q = p[i].multiply(b, f);
+                S = S.reductum().subtract(Q.reductum()); // ok also with reductum
                 fac = row.get(i);
                 if ( fac == null ) {
-                    fac = zero.sum( a, e );
+                    fac = zero.sum( b, f );
                 } else {
-                    fac = fac.sum( a, e );
+                    fac = fac.sum( b, f );
                 }
                 row.set(i,fac);
             }
         }
         return R;
-        */
     }
 
 

@@ -484,7 +484,6 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param Np nf(Pp,Ap), a normal form of Ap wrt. Pp.
      * @return true, if Np + sum( row[i]*Pp[i] ) == Ap, else false.
      */
-
     public boolean isReductionNF(List<GenPolynomial<C>> row, List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap,
                     GenPolynomial<C> Np) {
         if (row == null && Pp == null) {
