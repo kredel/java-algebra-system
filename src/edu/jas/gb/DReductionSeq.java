@@ -248,16 +248,18 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
 
         C a = ma.getValue();
         C b = mb.getValue();
+
+        //c = lcm(a,b)
         C c = a.gcd(b);
         C m = a.multiply(b);
-        C l = m.divide(c); // = lcm(a,b)
-
+        C l = m.divide(c);
         C a1 = l.divide(a);
         C b1 = l.divide(b);
 
-        GenPolynomial<C> App = Ap.multiply(a1, e1);
-        GenPolynomial<C> Bpp = Bp.multiply(b1, f1);
-        GenPolynomial<C> Cp = App.subtract(Bpp);
+        //GenPolynomial<C> App = Ap.multiply(a1, e1);
+        //GenPolynomial<C> Bpp = Bp.multiply(b1, f1);
+        //GenPolynomial<C> Cp = App.subtract(Bpp);
+        GenPolynomial<C> Cp = Ap.scaleSubtractMultiple(a1, e1, b1, f1, Bp);
         return Cp;
     }
 
@@ -293,13 +295,14 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
 
         C a = ma.getValue();
         C b = mb.getValue();
+
         C[] c = a.egcd(b);
-
         //System.out.println("egcd[0] " + c[0]);
-
-        GenPolynomial<C> App = Ap.multiply(c[1], e1);
-        GenPolynomial<C> Bpp = Bp.multiply(c[2], f1);
-        GenPolynomial<C> Cp = App.sum(Bpp);
+        //GenPolynomial<C> App = Ap.multiply(c[1], e1);
+        //GenPolynomial<C> Bpp = Bp.multiply(c[2], f1);
+        //GenPolynomial<C> Cp = App.sum(Bpp);
+        //Cp = A + c[1] e1 * B * c[2] f1 = A - c[1] e1 * B * -c[2] f1
+        GenPolynomial<C> Cp = Ap.scaleSubtractMultiple(c[1], e1, c[2].negate(), f1, Bp);
         return Cp;
     }
 
@@ -553,5 +556,10 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
         //System.out.println();
         return P;
     }
+
+
+    // inherit is okay:
+    //public boolean isReductionNF(List<GenPolynomial<C>> row, List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap,
+    //                 GenPolynomial<C> Np) {
 
 }

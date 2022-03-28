@@ -80,9 +80,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         C a = ma.getValue();
         C b = mb.getValue();
 
-        //GenPolynomial<C> App = A.multiply(b, e1);
-        //GenPolynomial<C> Bpp = B.multiply(a, f1);
-        //GenPolynomial<C> Cp = App.subtract(Bpp);
+        //Cp = A - b e1 * B * a f1;
         GenPolynomial<C> Cp = A.scaleSubtractMultiple(b, e1, a, f1, B);
         return Cp;
     }
@@ -92,9 +90,9 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * S-Polynomial with recording.
      * @param S recording matrix, is modified. <b>Note</b> the negative
      *            S-polynomial is recorded as required by all applications.
-     * @param i index of Ap in basis list.
+     * @param i index of A in basis list.
      * @param A a polynomial.
-     * @param j index of Bp in basis list.
+     * @param j index of B in basis list.
      * @param B a polynomial.
      * @return Spol(A, B), the S-Polynomial for A and B.
      */
@@ -111,6 +109,9 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
             if (!A.ring.equals(B.ring)) {
                 logger.error("rings not equal {}, {}", A.ring, B.ring);
             }
+            if ((S.get(i) != null && !S.get(i).isZERO()) || (S.get(j) != null && !S.get(j).isZERO())) {
+                throw new IllegalArgumentException("S(i), S(j): " + S.get(i) + ", " + S.get(j));
+            }
         }
         Map.Entry<ExpVector, C> ma = A.leadingMonomial();
         Map.Entry<ExpVector, C> mb = B.leadingMonomial();
@@ -125,17 +126,12 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         C a = ma.getValue();
         C b = mb.getValue();
 
-        //GenPolynomial<C> App = A.multiply(b, e1);
-        //GenPolynomial<C> Bpp = B.multiply(a, f1);
-        //GenPolynomial<C> Cp = App.subtract(Bpp);
+        //Cp = A - b e1 * B * a f1;
         GenPolynomial<C> Cp = A.scaleSubtractMultiple(b, e1, a, f1, B);
 
         GenPolynomial<C> zero = A.ring.getZERO();
         GenPolynomial<C> As = zero.sum(b.negate(), e1);
         GenPolynomial<C> Bs = zero.sum(a /*correct .negate()*/, f1);
-        if ((S.get(i) != null && !S.get(i).isZERO()) || (S.get(j) != null && !S.get(j).isZERO())) {
-            throw new IllegalArgumentException("S(i), S(j): " + S.get(i) + ", " + S.get(j));
-        }
         S.set(i, As);
         S.set(j, Bs);
         return Cp;
