@@ -17,9 +17,9 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Basic linear algebra methods. Implements Basic linear algebra computations
- * and tests. <b>Note:</b> will use wrong method dispatch in JRE when used with
- * GenSolvablePolynomial.
+ * Basic linear algebra methods. Implements Basic linear algebra
+ * computations and tests. <b>Note:</b> will eventually use wrong
+ * method dispatch in JRE when used with GenSolvablePolynomial.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -154,6 +154,45 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
         if (it.hasNext() || jt.hasNext()) {
             logger.error("vectorAdd wrong sizes");
         }
+        return V;
+    }
+
+
+    /**
+     * Combination of vectors of ring elements.
+     * @param a a ring element list.
+     * @param b a ring element list.
+     * @return (-a)+(-b), the vector sum of -a and -b, with one entry
+     * more.
+     */
+    public List<C> vectorCombine(List<C> a, List<C> b) {
+        if (a == null || b == null) {
+            throw new IllegalArgumentException("a and b may not be empty");
+        }
+        if (a.size() != b.size()) {
+            throw new IllegalArgumentException("#a != #b");
+        }
+        List<C> V = new ArrayList<C>(a.size()+1);
+        Iterator<C> it = a.iterator();
+        Iterator<C> jt = b.iterator();
+        while (it.hasNext() && jt.hasNext()) {
+            C x = it.next();
+            C y = jt.next();
+            if (x != null) {
+                x = x.negate();
+            }
+            if (y != null) {
+                y = y.negate();
+            }
+            if (x == null) {
+                x = y;
+            } else {
+                x = x.sum(y);
+            }
+            V.add(x);
+        }
+        V.add(null);
+        //System.out.println("vectorCombine" + V);
         return V;
     }
 

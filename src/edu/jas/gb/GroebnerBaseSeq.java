@@ -164,8 +164,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
      * @return a container for an extended Groebner base of F.
      */
     @Override
-    public ExtendedGB<C> 
-        extGB( int modv, List<GenPolynomial<C>> F ) {  
+    public ExtendedGB<C> extGB(int modv, List<GenPolynomial<C>> F) {
         if ( F == null || F.isEmpty() ) {
             throw new IllegalArgumentException("null or empty F not allowed");
         }
@@ -291,31 +290,32 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                 logger.debug("ht(H) = {}", H.leadingExpVector() );
             }
 
-            row = new ArrayList<GenPolynomial<C>>( G.size()+1 );
-            for ( int m = 0; m < G.size(); m++ ) {
-                x = rows.get(m);
-                if ( x != null ) {
-                    //System.out.println("ms = " + m + " " + x);
-                    x = x.negate();
-                }
-                y = rowh.get(m);
-                if ( y != null ) {
-                    y = y.negate();
-                    //System.out.println("mh = " + m + " " + y);
-                }
-                if ( x == null ) {
-                    x = y;
-                } else {
-                    x = x.sum( y );
-                }
-                //System.out.println("mx = " + m + " " + x);
-                row.add( x );
-            }
-            if ( debug ) {
-                logger.debug("is reduction 0+sum(row,G) == H : " 
-                             + red.isReductionNF( row, G, H, ring.getZERO() ) );
-            }
-            row.add( null );
+            row = blas.vectorCombine(rows,rowh);
+            // 	new ArrayList<GenPolynomial<C>>( G.size()+1 );
+            // for ( int m = 0; m < G.size(); m++ ) {
+            //     x = rows.get(m);
+            //     if ( x != null ) {
+            //         //System.out.println("ms = " + m + " " + x);
+            //         x = x.negate();
+            //     }
+            //     y = rowh.get(m);
+            //     if ( y != null ) {
+            //         y = y.negate();
+            //         //System.out.println("mh = " + m + " " + y);
+            //     }
+            //     if ( x == null ) {
+            //         x = y;
+            //     } else {
+            //         x = x.sum( y );
+            //     }
+            //     //System.out.println("mx = " + m + " " + x);
+            //     row.add( x );
+            // }
+            // if ( debug ) {
+            //     logger.debug("is reduction 0+sum(row,G) == H : "
+            //                  + red.isReductionNF( row, G, H, ring.getZERO() ) );
+            // }
+            // row.add( null );
 
 
             //  H = H.monic();

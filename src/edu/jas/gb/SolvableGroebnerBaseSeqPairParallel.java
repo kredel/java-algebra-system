@@ -284,17 +284,6 @@ public class SolvableGroebnerBaseSeqPairParallel<C extends RingElem<C>> extends
 
 
     /**
-     * Solvable Extended Groebner base using critical pair class.
-     * @param modv module variable number.
-     * @param F solvable polynomial list.
-     * @return a container for an extended left Groebner base of F.
-     */
-    public SolvableExtendedGB<C> extLeftGB(int modv, List<GenSolvablePolynomial<C>> F) {
-        throw new UnsupportedOperationException("parallel extLeftGB not implemented");
-    }
-
-
-    /**
      * Twosided Groebner base using pairlist class.
      * @param modv number of module variables.
      * @param Fp solvable polynomial list.

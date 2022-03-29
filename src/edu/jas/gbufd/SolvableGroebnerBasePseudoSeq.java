@@ -356,18 +356,4 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
         return G;
     }
 
-
-    /**
-     * Solvable Extended Groebner base using critical pair class.
-     * @param modv module variable number.
-     * @param F solvable polynomial list.
-     * @return a container for an extended left Groebner base of F. <b>Note:
-     *         </b> not implemented;
-     */
-    //@SuppressWarnings("unchecked")
-    @Override
-    public SolvableExtendedGB<C> extLeftGB(int modv, List<GenSolvablePolynomial<C>> F) {
-        throw new UnsupportedOperationException(); // TODO
-    }
-
 }

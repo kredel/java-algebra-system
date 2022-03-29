@@ -284,31 +284,32 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 logger.debug("ht(H) = {}", H.leadingExpVector());
             }
 
-            row = new ArrayList<GenSolvablePolynomial<C>>(G.size() + 1);
-            for (int m = 0; m < G.size(); m++) {
-                x = rows.get(m);
-                if (x != null) {
-                    //System.out.println("ms = " + m + " " + x);
-                    x = (GenSolvablePolynomial<C>) x.negate();
-                }
-                y = rowh.get(m);
-                if (y != null) {
-                    y = (GenSolvablePolynomial<C>) y.negate();
-                    //System.out.println("mh = " + m + " " + y);
-                }
-                if (x == null) {
-                    x = y;
-                } else {
-                    x = (GenSolvablePolynomial<C>) x.sum(y);
-                }
-                //System.out.println("mx = " + m + " " + x);
-                row.add(x);
-            }
-            if (debug) {
-                logger.debug("is reduction 0+sum(row,G) == H : "
-                                + sred.isLeftReductionNF(row, G, H, ring.getZERO()));
-            }
-            row.add(null);
+            row = PolynomialList.<C>castToSolvableList(blas.vectorCombine(PolynomialList.<C>castToList(rows),PolynomialList.<C>castToList(rowh)));
+            // row = new ArrayList<GenSolvablePolynomial<C>>(G.size() + 1);
+            // for (int m = 0; m < G.size(); m++) {
+            //     x = rows.get(m);
+            //     if (x != null) {
+            //         //System.out.println("ms = " + m + " " + x);
+            //         x = (GenSolvablePolynomial<C>) x.negate();
+            //     }
+            //     y = rowh.get(m);
+            //     if (y != null) {
+            //         y = (GenSolvablePolynomial<C>) y.negate();
+            //         //System.out.println("mh = " + m + " " + y);
+            //     }
+            //     if (x == null) {
+            //         x = y;
+            //     } else {
+            //         x = (GenSolvablePolynomial<C>) x.sum(y);
+            //     }
+            //     //System.out.println("mx = " + m + " " + x);
+            //     row.add(x);
+            // }
+            // if (debug) {
+            //     logger.debug("is reduction 0+sum(row,G) == H : "
+            //                     + sred.isLeftReductionNF(row, G, H, ring.getZERO()));
+            // }
+            // row.add(null);
 
             //  H = H.monic();
             C c = H.leadingBaseCoefficient();
