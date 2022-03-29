@@ -33,7 +33,6 @@ import edu.jas.vector.BasicLinAlg;
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
-
 public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implements SolvableGroebnerBase<C> {
 
 

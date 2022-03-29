@@ -23,7 +23,6 @@ import edu.jas.structure.RingElem;
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
-
 public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
 
 
@@ -135,7 +134,6 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
      * @param b a ring element list.
      * @return a+b, the vector sum of a and b.
      */
-
     public List<C> vectorAdd(List<C> a, List<C> b) {
         if (a == null) {
             return b;
@@ -155,6 +153,52 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
         //System.out.println("vectorAdd" + V);
         if (it.hasNext() || jt.hasNext()) {
             logger.error("vectorAdd wrong sizes");
+        }
+        return V;
+    }
+
+
+    /**
+     * Generation of a vector of ring elements.
+     * @param n length of vector.
+     * @param a a ring element to fill vector entries.
+     * @return V, a vector of length n and entries a.
+     */
+    public List<C> genVector(int n, C a) {
+        List<C> V = new ArrayList<C>(n);
+        if (n == 0) {
+            return V;
+        }
+        for (int i = 0; i < n; i++) {
+            V.add(a);
+        }
+        return V;
+    }
+
+
+    /**
+     * Generation of a vector of ring elements.
+     * @param n length of vector.
+     * @param a a ring element to fill vector entries.
+     * @param A vector of starting first entries.
+     * @return V, a vector of length n and entries a, respectively A.
+     */
+    public List<C> genVector(int n, C a, List<C> A) {
+        List<C> V = new ArrayList<C>(n);
+        if (n == 0) {
+            return V;
+        }
+        int i = 0;
+        for (C b : A) {
+            if (i < n) {
+                V.add(b);
+            } else {
+                break;
+            }
+            i++;
+        }
+        for (int j = A.size(); j < n; j++) {
+            V.add(a);
         }
         return V;
     }

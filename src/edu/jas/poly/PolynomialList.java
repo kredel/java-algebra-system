@@ -357,10 +357,14 @@ public class PolynomialList<C extends RingElem<C>> implements Comparable<Polynom
         slist = new ArrayList<GenSolvablePolynomial<C>>(list.size());
         GenSolvablePolynomial<C> s;
         for (GenPolynomial<C> p : list) {
-            if (!(p instanceof GenSolvablePolynomial)) {
-                throw new IllegalArgumentException("no solvable polynomial " + p);
+            if (p == null) {
+                s = null;
+            } else {
+                if (!(p instanceof GenSolvablePolynomial)) {
+                    throw new IllegalArgumentException("no solvable polynomial " + p);
+                }
+                s = (GenSolvablePolynomial<C>) p;
             }
-            s = (GenSolvablePolynomial<C>) p;
             slist.add(s);
         }
         return slist;

@@ -16,6 +16,7 @@ import edu.jas.gb.OrderedPairlist;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.vector.BasicLinAlg;
 
 
 /**
@@ -197,10 +198,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
         while ( it.hasNext() ) { 
             p = it.next();
             if ( p.length() > 0 ) {
-                row = new ArrayList<GenPolynomial<C>>( nzlen );
-                for ( int j = 0; j < nzlen; j++ ) {
-                    row.add(null);
-                }
+                row = blas.genVector(nzlen, null);
                 //C c = p.leadingBaseCoefficient();
                 //c = c.inverse();
                 //p = p.multiply( c );
@@ -231,10 +229,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
         if ( len <= 1 || oneInGB ) {
             // adjust F2G
             for ( GenPolynomial<C> f : F ) {
-                row = new ArrayList<GenPolynomial<C>>( G.size() );
-                for ( int j = 0; j < G.size(); j++ ) {
-                    row.add(null);
-                }
+                row = blas.genVector(G.size(), null);
                 H = red.normalform( row, G, f );
                 if ( ! H.isZERO() ) {
                     logger.error("nonzero H = {}", H );
@@ -268,10 +263,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                 logger.info("j, pj    = {}, {}", j, pj );
             }
 
-            rows = new ArrayList<GenPolynomial<C>>( G.size() );
-            for ( int m = 0; m < G.size(); m++ ) {
-                rows.add(null);
-            }
+            rows = blas.genVector(G.size(), null);
             S = red.SPolynomial( rows, i, pi, j, pj );
             if ( debug ) {
                 logger.debug("is reduction S = " 
@@ -285,10 +277,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                 logger.debug("ht(S) = {}", S.leadingExpVector() );
             }
 
-            rowh = new ArrayList<GenPolynomial<C>>( G.size() );
-            for ( int m = 0; m < G.size(); m++ ) {
-                rowh.add(null);
-            }
+            rowh = blas.genVector(G.size(), null);
             H = red.normalform( rowh, G, S );
             if ( debug ) {
                 logger.debug("is reduction H = " 
@@ -367,10 +356,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
         logger.info("{}", pairlist);
         // setup matrices F and F2G
         for ( GenPolynomial<C> f : F ) {
-            row = new ArrayList<GenPolynomial<C>>( G.size() );
-            for ( int m = 0; m < G.size(); m++ ) {
-                row.add(null);
-            }
+            row = blas.genVector(G.size(), null);
             H = red.normalform( row, G, f );
             if ( ! H.isZERO() ) {
                 logger.error("nonzero H = {}", H );

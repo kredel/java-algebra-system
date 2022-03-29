@@ -191,10 +191,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
         while (it.hasNext()) {
             p = it.next();
             if (p.length() > 0) {
-                row = new ArrayList<GenSolvablePolynomial<C>>(nzlen);
-                for (int j = 0; j < nzlen; j++) {
-                    row.add(null);
-                }
+                row = PolynomialList.<C> castToSolvableList( blas.genVector(nzlen, null) );
                 //C c = p.leadingBaseCoefficient();
                 //c = c.inverse();
                 //p = p.multiply( c );
@@ -224,10 +221,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
         if (len <= 1 || oneInGB) {
             // adjust F2G
             for (GenSolvablePolynomial<C> f : F) {
-                row = new ArrayList<GenSolvablePolynomial<C>>(G.size());
-                for (int j = 0; j < G.size(); j++) {
-                    row.add(null);
-                }
+                row = PolynomialList.<C> castToSolvableList( blas.genVector(G.size(), null) );
                 H = sred.leftNormalform(row, G, f);
                 if (!H.isZERO()) {
                     logger.error("nonzero H = {}", H);
@@ -259,10 +253,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 logger.info("j, pj    = {}, {}", j, pj);
             }
 
-            rows = new ArrayList<GenSolvablePolynomial<C>>(G.size());
-            for (int m = 0; m < G.size(); m++) {
-                rows.add(null);
-            }
+            rows = PolynomialList.<C> castToSolvableList( blas.genVector(G.size(), null) );
             S = sred.leftSPolynomial(rows, i, pi, j, pj);
             if (debug) {
                 logger.debug("is reduction S = {}", sred.isLeftReductionNF(rows, G, ring.getZERO(), S));
@@ -277,10 +268,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 logger.debug("ht(S) = {}", S.leadingExpVector());
             }
 
-            rowh = new ArrayList<GenSolvablePolynomial<C>>(G.size());
-            for (int m = 0; m < G.size(); m++) {
-                rowh.add(null);
-            }
+            rowh = PolynomialList.<C> castToSolvableList( blas.genVector(G.size(), null) );
             H = sred.leftNormalform(rowh, G, S);
             if (debug) {
                 //System.out.println("H = " + H);
@@ -364,17 +352,14 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
         logger.info("end {}", pairlist);
         // setup matrices F and F2G
         for (GenSolvablePolynomial<C> f : F) {
-            row = new ArrayList<GenSolvablePolynomial<C>>(G.size());
-            for (int m = 0; m < G.size(); m++) {
-                row.add(null);
-            }
+            row = PolynomialList.<C> castToSolvableList( blas.genVector(G.size(), null) );
             H = sred.leftNormalform(row, G, f);
             if (!H.isZERO()) {
                 logger.error("nonzero H = {}", H);
             }
             F2G.add(row);
         }
-        logger.info("extGB end");
+        logger.info("extLeftGB end");
         return new SolvableExtendedGB<C>(F, G, F2G, G2F);
     }
 

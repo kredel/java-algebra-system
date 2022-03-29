@@ -590,6 +590,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
     /**
      * Normalize M. Make all rows the same size and make certain column elements
      * zero.
+     * @param flen length of rows.
      * @param M a reduction matrix.
      * @return normalized M.
      */
@@ -605,10 +606,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
         int len = M.get(M.size() - 1).size(); // longest row
         // pad / extend rows
         for (List<GenPolynomial<C>> row : M) {
-            List<GenPolynomial<C>> nrow = new ArrayList<GenPolynomial<C>>(row);
-            for (int i = row.size(); i < len; i++) {
-                nrow.add(null);
-            }
+            List<GenPolynomial<C>> nrow = blas.genVector(len, null, row);
             N.add(nrow);
         }
         // System.out.println("norm N fill = " + N);
@@ -646,10 +644,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
         // truncate 
         N.clear();
         for (List<GenPolynomial<C>> row : K) {
-            List<GenPolynomial<C>> tr = new ArrayList<GenPolynomial<C>>();
-            for (int i = 0; i < flen; i++) {
-                tr.add(row.get(i));
-            }
+            List<GenPolynomial<C>> tr = blas.genVector(flen, null, row);
             N.add(tr);
         }
         K = N;
@@ -660,6 +655,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
 
     /**
      * Minimal extended groebner basis.
+     * @param flen length of rows.
      * @param Gp a Groebner base.
      * @param M a reduction matrix, is modified.
      * @return a (partially) reduced Groebner base of Gp in a container.
