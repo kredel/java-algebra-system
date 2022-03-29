@@ -115,34 +115,6 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
         GenPolynomialRing<C> ring = G.get(0).ring;
         OrderedDPairlist<C> pairlist = new OrderedDPairlist<C>(modv, ring);
         pairlist.put(G);
-        /*
-          int l = G.size();
-          GenPolynomial<C> p;
-          //new ArrayList<GenPolynomial<C>>();
-          ListIterator<GenPolynomial<C>> it = F.listIterator();
-          while (it.hasNext()) {
-          p = it.next();
-          if (!p.isZERO()) {
-          p = p.abs(); // not monic
-          if (p.isONE()) {
-          G.clear();
-          G.add(p);
-          return G; // since no threads are activated
-          }
-          G.add(p); //G.add( 0, p ); //reverse list
-          if (pairlist == null) {
-          pairlist = new OrderedDPairlist<C>(modv, p.ring);
-          }
-          // putOne not required
-          pairlist.put(p);
-          } else {
-          l--;
-          }
-          }
-          if (l <= 1) {
-          return G; // since no threads are activated
-          }
-        */
 
         Pair<C> pair;
         GenPolynomial<C> pi, pj, S, D, H;

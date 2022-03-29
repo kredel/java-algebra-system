@@ -3353,6 +3353,28 @@ Compute a e-normal form of p with respect to this ideal.
     end
 
 =begin rdoc
+Compute a e-normal form with recording in row of p with respect to this ideal.
+=end
+    def eReductionRec(row, p)
+        s = @pset;
+        gg = s.list;
+        row = rbarray2arraylist(row,nil,rec=1)
+        if p.is_a? RingElem
+            p = p.elem;
+        end
+        #puts "p   = " + str(p);
+        #puts "gg  = " + str(gg);
+        #puts "row_1 = " + str(row);
+        t = System.currentTimeMillis();
+        n = EReductionSeq.new().normalform(row,gg,p);
+        t = System.currentTimeMillis() - t;
+        #puts "row_2 = " + str(row);
+        puts "sequential eReduction executed in " + str(t) + " ms";
+        #row = row.map{|a| RingElem.new(a) };
+        return row, RingElem.new(n);
+    end
+
+=begin rdoc
 Compute a normal form of this ideal with respect to reducer.
 =end
     def NF(reducer)
