@@ -495,21 +495,21 @@ public class ReductionTest extends TestCase {
         L = new ArrayList<GenPolynomial<BigInteger>>();
         L.add(a);
         L.add(b);
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
         row = blas.genVector(2, null);
         c = ered.GPolynomial(row, 0, a, 1, b);
-        System.out.println("c = " + c);
-        System.out.println("row = " + row);
+        //System.out.println("c = " + c);
+        //System.out.println("row = " + row);
+
         BigInteger ci = a.leadingBaseCoefficient().gcd(b.leadingBaseCoefficient());
         assertEquals("gcd(lbc(a),lbc(b)) = lbc(c) ", ci, c.leadingBaseCoefficient());
-
         assertTrue("is eGpol recording: " + c, ered.isReductionNF(row, L, c, fac.getZERO()));
 
         row = blas.genVector(2, null);
         e = ered.SPolynomial(row, 0, a, 1, b);
-        System.out.println("e = " + e);
-        System.out.println("row = " + row);
+        //System.out.println("e = " + e);
+        //System.out.println("row = " + row);
 
         ExpVector ce = a.leadingExpVector().lcm(b.leadingExpVector());
         assertEquals("lcm(lt(a),lt(b)) == lt(c) ", ce, c.leadingExpVector());
@@ -678,12 +678,13 @@ public class ReductionTest extends TestCase {
         L = new ArrayList<GenPolynomial<BigInteger>>();
         L.add(a);
         L.add(b);
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
         row = blas.genVector(2, null);
         c = dred.GPolynomial(row, 0, a, 1, b);
-        System.out.println("c = " + c);
-        System.out.println("row = " + row);
+        //System.out.println("c = " + c);
+        //System.out.println("row = " + row);
+
         BigInteger ci = a.leadingBaseCoefficient().gcd(b.leadingBaseCoefficient());
         assertEquals("gcd(lbc(a),lbc(b)) = lbc(c) ", ci, c.leadingBaseCoefficient());
 
@@ -691,8 +692,9 @@ public class ReductionTest extends TestCase {
 
         row = blas.genVector(2, null);
         e = dred.SPolynomial(row, 0, a, 1, b);
-        System.out.println("e = " + e);
-        System.out.println("row = " + row);
+        //System.out.println("e = " + e);
+        //System.out.println("row = " + row);
+
         ExpVector ce = a.leadingExpVector().lcm(b.leadingExpVector());
         assertEquals("lcm(lt(a),lt(b)) == lt(c) ", ce, c.leadingExpVector());
         assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals(e.leadingExpVector()));
