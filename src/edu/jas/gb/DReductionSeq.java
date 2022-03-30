@@ -301,7 +301,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
         //GenPolynomial<C> App = Ap.multiply(c[1], e1);
         //GenPolynomial<C> Bpp = Bp.multiply(c[2], f1);
         //GenPolynomial<C> Cp = App.sum(Bpp);
-        //Cp = A + c[1] e1 * B * c[2] f1 = A - c[1] e1 * B * -c[2] f1
+        //Cp = c[1] e1 * A + c[2] f1 * B = c[1] e1 * A - (-c[2]) f1 * B
         GenPolynomial<C> Cp = Ap.scaleSubtractMultiple(c[1], e1, c[2].negate(), f1, Bp);
         return Cp;
     }
@@ -309,7 +309,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
 
     /**
      * S-Polynomial with recording.
-     * @param S recording matrix, is modified.
+     * @param row recording vector, is modified.
      * @param i index of Ap in basis list.
      * @param Ap a polynomial.
      * @param j index of Bp in basis list.
@@ -317,15 +317,57 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
      * @return spol(Ap, Bp), the s-Polynomial for Ap and Bp.
      */
     @Override
-    public GenPolynomial<C> SPolynomial(List<GenPolynomial<C>> S, int i, GenPolynomial<C> Ap, int j,
+    public GenPolynomial<C> SPolynomial(List<GenPolynomial<C>> row, int i, GenPolynomial<C> Ap, int j,
                     GenPolynomial<C> Bp) {
-        throw new UnsupportedOperationException("not yet implemented");
+        //throw new UnsupportedOperationException("not yet implemented");
+        if (logger.isInfoEnabled()) {
+            if (Bp == null || Bp.isZERO()) {
+                return Ap.ring.getZERO();
+            }
+            if (Ap == null || Ap.isZERO()) {
+                return Bp.ring.getZERO();
+            }
+            if (!Ap.ring.equals(Bp.ring)) {
+                logger.error("rings not equal");
+            }
+            if ((row.get(i) != null && !row.get(i).isZERO()) || (row.get(j) != null && !row.get(j).isZERO())) {
+                throw new IllegalArgumentException("row(i), row(j): " + row.get(i) + ", " + row.get(j));
+            }
+        }
+        Map.Entry<ExpVector, C> ma = Ap.leadingMonomial();
+        Map.Entry<ExpVector, C> mb = Bp.leadingMonomial();
+
+        ExpVector e = ma.getKey();
+        ExpVector f = mb.getKey();
+
+        ExpVector g = e.lcm(f);
+        ExpVector e1 = g.subtract(e);
+        ExpVector f1 = g.subtract(f);
+
+        C a = ma.getValue();
+        C b = mb.getValue();
+
+        //c = lcm(a,b)
+        C c = a.gcd(b);
+        C m = a.multiply(b);
+        C l = m.divide(c);
+        C a1 = l.divide(a);
+        C b1 = l.divide(b);
+        //Cp = a1 e1 * A + b1 f1 * B
+        GenPolynomial<C> Cp = Ap.scaleSubtractMultiple(a1, e1, b1, f1, Bp);
+
+        GenPolynomial<C> zero = Ap.ring.getZERO();
+        GenPolynomial<C> As = zero.sum(a1.negate(), e1);
+        GenPolynomial<C> Bs = zero.sum(b1 /*correct .negate()*/, f1);
+        row.set(i, As);
+        row.set(j, Bs);
+        return Cp;
     }
 
 
     /**
      * G-Polynomial with recording.
-     * @param S recording matrix, is modified.
+     * @param row recording matrix, is modified.
      * @param i index of Ap in basis list.
      * @param Ap a polynomial.
      * @param j index of Bp in basis list.
@@ -333,9 +375,50 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
      * @return gpol(Ap, Bp), the g-Polynomial for Ap and Bp.
      */
     @Override
-    public GenPolynomial<C> GPolynomial(List<GenPolynomial<C>> S, int i, GenPolynomial<C> Ap, int j,
+    public GenPolynomial<C> GPolynomial(List<GenPolynomial<C>> row, int i, GenPolynomial<C> Ap, int j,
                     GenPolynomial<C> Bp) {
-        throw new UnsupportedOperationException("not yet implemented");
+        //throw new UnsupportedOperationException("not yet implemented");
+        if (logger.isInfoEnabled()) {
+            if (Bp == null || Bp.isZERO()) {
+                return Ap.ring.getZERO();
+            }
+            if (Ap == null || Ap.isZERO()) {
+                return Bp.ring.getZERO();
+            }
+            if (!Ap.ring.equals(Bp.ring)) {
+                logger.error("rings not equal");
+            }
+            if ((row.get(i) != null && !row.get(i).isZERO()) || (row.get(j) != null && !row.get(j).isZERO())) {
+                throw new IllegalArgumentException("row(i), row(j): " + row.get(i) + ", " + row.get(j));
+            }
+        }
+        Map.Entry<ExpVector, C> ma = Ap.leadingMonomial();
+        Map.Entry<ExpVector, C> mb = Bp.leadingMonomial();
+
+        ExpVector e = ma.getKey();
+        ExpVector f = mb.getKey();
+
+        ExpVector g = e.lcm(f);
+        ExpVector e1 = g.subtract(e);
+        ExpVector f1 = g.subtract(f);
+
+        C a = ma.getValue();
+        C b = mb.getValue();
+
+        C[] c = a.egcd(b);
+        //System.out.println("egcd[0] " + c[0]);
+        //GenPolynomial<C> App = Ap.multiply(c[1], e1);
+        //GenPolynomial<C> Bpp = Bp.multiply(c[2], f1);
+        //GenPolynomial<C> Cp = App.sum(Bpp);
+        //Cp = c[1] e1 * A + c[2] f1 * B = c[1] e1 * A - (-c[2]) f1 * B
+        GenPolynomial<C> Cp = Ap.scaleSubtractMultiple(c[1], e1, c[2].negate(), f1, Bp);
+
+        GenPolynomial<C> zero = Ap.ring.getZERO();
+        GenPolynomial<C> As = zero.sum(c[1], e1);
+        GenPolynomial<C> Bs = zero.sum(c[2], f1);
+        row.set(i, As);
+        row.set(j, Bs);
+        return Cp;
     }
 
 

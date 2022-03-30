@@ -15,6 +15,7 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
+import edu.jas.vector.BasicLinAlg;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -304,6 +305,7 @@ public class ReductionTest extends TestCase {
      * Test rational coefficient reduction with recording.
      */
     public void testRatReductionRecording() {
+        BasicLinAlg<GenPolynomial<BigRational>> blas = new BasicLinAlg<GenPolynomial<BigRational>>();
         List<GenPolynomial<BigRational>> row = null;
 
         a = fac.random(kl, ll, el, q);
@@ -316,36 +318,24 @@ public class ReductionTest extends TestCase {
         L = new ArrayList<GenPolynomial<BigRational>>();
 
         L.add(a);
-        row = new ArrayList<GenPolynomial<BigRational>>(L.size());
-        for (int m = 0; m < L.size(); m++) {
-            row.add(null);
-        }
+        row = blas.genVector(L.size(), null);
         e = red.normalform(row, L, a);
         assertTrue("isZERO( e )", e.isZERO());
         assertTrue("not isZERO( b )", !b.isZERO());
         assertTrue("is Reduction ", red.isReductionNF(row, L, a, e));
 
         L.add(b);
-        row = new ArrayList<GenPolynomial<BigRational>>(L.size());
-        for (int m = 0; m < L.size(); m++) {
-            row.add(null);
-        }
+        row = blas.genVector(L.size(), null);
         e = red.normalform(row, L, b);
         assertTrue("is Reduction ", red.isReductionNF(row, L, b, e));
 
         L.add(c);
-        row = new ArrayList<GenPolynomial<BigRational>>(L.size());
-        for (int m = 0; m < L.size(); m++) {
-            row.add(null);
-        }
+        row = blas.genVector(L.size(), null);
         e = red.normalform(row, L, c);
         assertTrue("is Reduction ", red.isReductionNF(row, L, c, e));
 
         L.add(d);
-        row = new ArrayList<GenPolynomial<BigRational>>(L.size());
-        for (int m = 0; m < L.size(); m++) {
-            row.add(null);
-        }
+        row = blas.genVector(L.size(), null);
         e = red.normalform(row, L, d);
         assertTrue("is Reduction ", red.isReductionNF(row, L, d, e));
     }
@@ -439,6 +429,7 @@ public class ReductionTest extends TestCase {
 
         EReductionSeq<BigInteger> ered = new EReductionSeq<BigInteger>();
 
+        BasicLinAlg<GenPolynomial<BigInteger>> blas = new BasicLinAlg<GenPolynomial<BigInteger>>();
         List<GenPolynomial<BigInteger>> row = null;
         List<GenPolynomial<BigInteger>> L = new ArrayList<GenPolynomial<BigInteger>>();
 
@@ -447,10 +438,7 @@ public class ReductionTest extends TestCase {
         assertTrue("not isZERO( a )", !a.isZERO());
 
         L.add(a);
-        row = new ArrayList<GenPolynomial<BigInteger>>(L.size());
-        for (int m = 0; m < L.size(); m++) {
-            row.add(null);
-        }
+        row = blas.genVector(L.size(), null);
         e = ered.normalform(row, L, a);
         //System.out.println("a = " + a);
         //System.out.println("e = " + e);
@@ -459,10 +447,7 @@ public class ReductionTest extends TestCase {
         assertTrue("isZERO( e )", e.isZERO());
         assertTrue("is Reduction ", ered.isReductionNF(row, L, a, e));
 
-        row = new ArrayList<GenPolynomial<BigInteger>>(L.size());
-        for (int m = 0; m < L.size(); m++) {
-            row.add(null);
-        }
+        row = blas.genVector(L.size(), null);
         c = fac.getONE();
         a = a.sum(c);
         e = ered.normalform(row, L, a);
@@ -473,10 +458,7 @@ public class ReductionTest extends TestCase {
         //System.out.println("L = " + L);
         //System.out.println("row = " + row);
 
-        row = new ArrayList<GenPolynomial<BigInteger>>(L.size());
-        for (int m = 0; m < L.size(); m++) {
-            row.add(null);
-        }
+        row = blas.genVector(L.size(), null);
         L = new ArrayList<GenPolynomial<BigInteger>>();
         a = c.multiply(bi.fromInteger(4));
         b = c.multiply(bi.fromInteger(5));
@@ -499,10 +481,7 @@ public class ReductionTest extends TestCase {
         L = new ArrayList<GenPolynomial<BigInteger>>();
         L.add(b);
         L.add(a);
-        row = new ArrayList<GenPolynomial<BigInteger>>(L.size());
-        for (int m = 0; m < L.size(); m++) {
-            row.add(null);
-        }
+        row = blas.genVector(L.size(), null);
         e = ered.normalform(row, L, c);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
@@ -512,6 +491,31 @@ public class ReductionTest extends TestCase {
         //System.out.println("row = " + row);
         //assertTrue("isZERO( e )", e.isZERO() );
         assertTrue("is Reduction ", ered.isReductionNF(row, L, c, e));
+
+        L = new ArrayList<GenPolynomial<BigInteger>>();
+        L.add(a);
+        L.add(b);
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        row = blas.genVector(2, null);
+        c = ered.GPolynomial(row, 0, a, 1, b);
+        System.out.println("c = " + c);
+        System.out.println("row = " + row);
+        BigInteger ci = a.leadingBaseCoefficient().gcd(b.leadingBaseCoefficient());
+        assertEquals("gcd(lbc(a),lbc(b)) = lbc(c) ", ci, c.leadingBaseCoefficient());
+
+        assertTrue("is eGpol recording: " + c, ered.isReductionNF(row, L, c, fac.getZERO()));
+
+        row = blas.genVector(2, null);
+        e = ered.SPolynomial(row, 0, a, 1, b);
+        System.out.println("e = " + e);
+        System.out.println("row = " + row);
+
+        ExpVector ce = a.leadingExpVector().lcm(b.leadingExpVector());
+        assertEquals("lcm(lt(a),lt(b)) == lt(c) ", ce, c.leadingExpVector());
+        assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals(e.leadingExpVector()));
+
+        assertTrue("is eSpol recording: " + e, ered.isReductionNF(row, L, e.negate(), fac.getZERO()));
     }
 
 
@@ -603,6 +607,7 @@ public class ReductionTest extends TestCase {
 
         DReductionSeq<BigInteger> dred = new DReductionSeq<BigInteger>();
 
+        BasicLinAlg<GenPolynomial<BigInteger>> blas = new BasicLinAlg<GenPolynomial<BigInteger>>();
         List<GenPolynomial<BigInteger>> row = null;
         List<GenPolynomial<BigInteger>> L = new ArrayList<GenPolynomial<BigInteger>>();
 
@@ -611,10 +616,7 @@ public class ReductionTest extends TestCase {
         assertTrue("not isZERO( a )", !a.isZERO());
 
         L.add(a);
-        row = new ArrayList<GenPolynomial<BigInteger>>(L.size());
-        for (int m = 0; m < L.size(); m++) {
-            row.add(null);
-        }
+        row = blas.genVector(L.size(), null);
         e = dred.normalform(row, L, a);
         //System.out.println("a = " + a);
         //System.out.println("e = " + e);
@@ -624,10 +626,7 @@ public class ReductionTest extends TestCase {
         assertTrue("isZERO( e )", e.isZERO());
         assertTrue("is Reduction ", dred.isReductionNF(row, L, a, e));
 
-        row = new ArrayList<GenPolynomial<BigInteger>>(L.size());
-        for (int m = 0; m < L.size(); m++) {
-            row.add(null);
-        }
+        row = blas.genVector(L.size(), null);
         c = fac.getONE();
         a = a.sum(c);
         e = dred.normalform(row, L, a);
@@ -639,10 +638,7 @@ public class ReductionTest extends TestCase {
         //System.out.println("row = " + row);
         //System.out.println("dred.isReductionNF(row,L,a,e) = " + dred.isReductionNF(row,L,a,e));
 
-        row = new ArrayList<GenPolynomial<BigInteger>>(L.size());
-        for (int m = 0; m < L.size(); m++) {
-            row.add(null);
-        }
+        row = blas.genVector(L.size(), null);
         L = new ArrayList<GenPolynomial<BigInteger>>();
         a = c.multiply(bi.fromInteger(4));
         b = c.multiply(bi.fromInteger(5));
@@ -667,10 +663,7 @@ public class ReductionTest extends TestCase {
         L = new ArrayList<GenPolynomial<BigInteger>>();
         L.add(b);
         L.add(a);
-        row = new ArrayList<GenPolynomial<BigInteger>>(L.size());
-        for (int m = 0; m < L.size(); m++) {
-            row.add(null);
-        }
+        row = blas.genVector(L.size(), null);
         e = dred.normalform(row, L, c);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
@@ -681,6 +674,30 @@ public class ReductionTest extends TestCase {
         //System.out.println("dred.isReductionNF(row,L,c,e) = " + dred.isReductionNF(row,L,c,e));
         assertTrue("isZERO( e )", e.isZERO());
         assertTrue("is Reduction ", dred.isReductionNF(row, L, c, e));
+
+        L = new ArrayList<GenPolynomial<BigInteger>>();
+        L.add(a);
+        L.add(b);
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        row = blas.genVector(2, null);
+        c = dred.GPolynomial(row, 0, a, 1, b);
+        System.out.println("c = " + c);
+        System.out.println("row = " + row);
+        BigInteger ci = a.leadingBaseCoefficient().gcd(b.leadingBaseCoefficient());
+        assertEquals("gcd(lbc(a),lbc(b)) = lbc(c) ", ci, c.leadingBaseCoefficient());
+
+        assertTrue("is dGpol recording: " + c, dred.isReductionNF(row, L, c, fac.getZERO()));
+
+        row = blas.genVector(2, null);
+        e = dred.SPolynomial(row, 0, a, 1, b);
+        System.out.println("e = " + e);
+        System.out.println("row = " + row);
+        ExpVector ce = a.leadingExpVector().lcm(b.leadingExpVector());
+        assertEquals("lcm(lt(a),lt(b)) == lt(c) ", ce, c.leadingExpVector());
+        assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals(e.leadingExpVector()));
+
+        assertTrue("is dSpol recording: " + e, dred.isReductionNF(row, L, e.negate(), fac.getZERO()));
     }
 
 }

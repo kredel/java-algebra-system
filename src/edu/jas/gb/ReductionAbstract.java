@@ -80,7 +80,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         C a = ma.getValue();
         C b = mb.getValue();
 
-        //Cp = A - b e1 * B * a f1;
+        //Cp = b e1 * A - a f1 * B;
         GenPolynomial<C> Cp = A.scaleSubtractMultiple(b, e1, a, f1, B);
         return Cp;
     }
