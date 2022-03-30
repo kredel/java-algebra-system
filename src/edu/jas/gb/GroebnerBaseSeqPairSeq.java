@@ -185,10 +185,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
         while (it.hasNext()) {
             p = it.next();
             if (p.length() > 0) {
-                row = new ArrayList<GenPolynomial<C>>(nzlen);
-                for (int j = 0; j < nzlen; j++) {
-                    row.add(null);
-                }
+                row = blas.genVector(nzlen, null);
                 //C c = p.leadingBaseCoefficient();
                 //c = c.inverse();
                 //p = p.multiply( c );
@@ -217,10 +214,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
         if (len <= 1 || oneInGB) {
             // adjust F2G
             for (GenPolynomial<C> f : F) {
-                row = new ArrayList<GenPolynomial<C>>(G.size());
-                for (int j = 0; j < G.size(); j++) {
-                    row.add(null);
-                }
+                row = blas.genVector(G.size(), null);
                 H = red.normalform(row, G, f);
                 if (!H.isZERO()) {
                     logger.error("nonzero H = {}", H);
@@ -355,10 +349,7 @@ public class GroebnerBaseSeqPairSeq<C extends RingElem<C>> extends GroebnerBaseA
         logger.info("{}", pairlist);
         // setup matrices F and F2G
         for (GenPolynomial<C> f : F) {
-            row = new ArrayList<GenPolynomial<C>>(G.size());
-            for (int m = 0; m < G.size(); m++) {
-                row.add(null);
-            }
+            row = blas.genVector(G.size(), null);
             H = red.normalform(row, G, f);
             if (!H.isZERO()) {
                 logger.error("nonzero H = {}", H);

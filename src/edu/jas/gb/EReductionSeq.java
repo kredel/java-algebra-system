@@ -275,7 +275,7 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
         GenPolynomialRing<C> pfac = Ap.ring;
         GenPolynomial<C> R = pfac.getZERO();
         GenPolynomial<C> zero = pfac.getZERO();
-        System.out.println("row_in = " + row);
+        //System.out.println("row_in = " + row);
 
         GenPolynomial<C> fac = null;
         // GenPolynomial<C> T = null;
