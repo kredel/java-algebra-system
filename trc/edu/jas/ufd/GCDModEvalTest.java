@@ -455,7 +455,7 @@ public class GCDModEvalTest extends TestCase {
             er = PolyUtil.<ModInteger> recursiveSparsePseudoRemainder(dr, cr);
             //System.out.println("er = " + er);
 
-            assertTrue("c | gcd(ac,bc) " + er, er.isZERO());
+            assertTrue("c | gcd(ac,bc), gcd, c " + er + ", " + dr + ", " + cr, er.isZERO());
         }
     }
 

@@ -312,11 +312,9 @@ public class ReductionTest extends TestCase {
         b = fac.random(kl, ll, el, q);
         c = fac.random(kl, ll, el, q);
         d = fac.random(kl, ll, el, q);
-
         assertTrue("not isZERO( a )", !a.isZERO());
 
         L = new ArrayList<GenPolynomial<BigRational>>();
-
         L.add(a);
         row = blas.genVector(L.size(), null);
         e = red.normalform(row, L, a);
@@ -338,6 +336,20 @@ public class ReductionTest extends TestCase {
         row = blas.genVector(L.size(), null);
         e = red.normalform(row, L, d);
         assertTrue("is Reduction ", red.isReductionNF(row, L, d, e));
+
+        L = new ArrayList<GenPolynomial<BigRational>>();
+        L.add(a);
+        L.add(b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        row = blas.genVector(L.size(), null);
+        e = red.SPolynomial(row, 0, a, 1, b);
+        //System.out.println("e = " + e);
+        //System.out.println("row = " + row);
+
+        ExpVector ce = a.leadingExpVector().lcm(b.leadingExpVector());
+        assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals(e.leadingExpVector()));
+        assertTrue("is Spol recording: " + e, red.isReductionNF(row, L, e.negate(), fac.getZERO()));
     }
 
 

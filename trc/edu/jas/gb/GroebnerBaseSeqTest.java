@@ -27,7 +27,6 @@ import edu.jas.poly.PolynomialList;
  * Groebner base sequential tests with JUnit.
  * @author Heinz Kredel
  */
-
 public class GroebnerBaseSeqTest extends TestCase {
 
 
@@ -189,9 +188,7 @@ public class GroebnerBaseSeqTest extends TestCase {
      * Test sequential extended GBase.
      */
     public void testSequentialExtendedGBase() {
-
         L = new ArrayList<GenPolynomial<BigRational>>();
-
         ExtendedGB<BigRational> exgb;
 
         a = fac.random(kl, ll, el, q);
