@@ -568,7 +568,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
         for (List<GenPolynomial<C>> row : Mg) {
             boolean t = red.isReductionNF(row, F, G.get(k), null);
             if (!t) {
-                logger.error("F isReductionMatrix s, k = {}, {}", F.size(), k);
+                logger.error("F isReductionMatrix row, F, G(k), k = {}, {}, {}, {}", row, F, G.get(k), k);
                 return false;
             }
             k++;
@@ -578,7 +578,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
         for (List<GenPolynomial<C>> row : Mf) {
             boolean t = red.isReductionNF(row, G, F.get(k), null);
             if (!t) {
-                logger.error("G isReductionMatrix s, k = {}, {}", G.size(), k);
+                logger.error("G isReductionMatrix row, G, K(k), k = {}, {}, {}, {}", row, G, F.get(k), k);
                 return false;
             }
             k++;

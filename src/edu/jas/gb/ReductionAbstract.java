@@ -493,8 +493,8 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param row recording matrix.
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
-     * @param Np nf(Pp,Ap), a normal form of Ap wrt. Pp.
-     * @return true, if Np + sum( row[i]*Pp[i] ) == Ap, else false.
+     * @param Np = nf(Pp,Ap), a normal form of Ap wrt. Pp.
+     * @return true, if Np + sum( row[i]*Pp[i] ) == Ap, else false. //??
      */
     @Override
     public boolean isReductionNF(List<GenPolynomial<C>> row, List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap,
@@ -508,7 +508,8 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         if (row == null || Pp == null) {
             return false;
         }
-        if (row.size() != Pp.size()) {
+        if (row.size() < Pp.size()) {
+            logger.info("#r < #p = {}, {}", row.size(), Pp.size());
             return false;
         }
         GenPolynomial<C> t = Np;
@@ -528,18 +529,19 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
             //System.out.println("r = " + r );
             //System.out.println("p = " + p );
         }
-        //System.out.println("t+ = " + t );
+        //System.out.println("t+ = " + t);
         if (t == null) {
-            if (Ap == null) {
+            if (Np == null) {
                 return true;
             }
             return Ap.isZERO();
         }
         r = t.subtract(Ap);
+        System.out.println("r = " + r);
         boolean z = r.isZERO();
         if (!z) {
             logger.info("t = {}", t);
-            logger.info("a = {}", Ap);
+            logger.info("a, n = {}, {}", Ap, Np);
             logger.info("t-a = {}", r);
         }
         return z;

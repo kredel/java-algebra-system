@@ -169,9 +169,9 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
         if (a == null || b == null) {
             throw new IllegalArgumentException("a and b may not be empty");
         }
-        if (a.size() != b.size()) {
-            throw new IllegalArgumentException("#a != #b");
-        }
+        // if (a.size() != b.size()) {
+        //     throw new IllegalArgumentException("#a != #b");
+        // }
         List<C> V = new ArrayList<C>(a.size()+1);
         Iterator<C> it = a.iterator();
         Iterator<C> jt = b.iterator();
