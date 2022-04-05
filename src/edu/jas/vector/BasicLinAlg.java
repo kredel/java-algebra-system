@@ -159,13 +159,45 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
 
 
     /**
-     * Combination of vectors of ring elements.
+     * Combination of vectors for reduction representation.
      * @param a a ring element list.
      * @param b a ring element list.
-     * @return (-a)+(-b), the vector sum of -a and -b, with one entry
+     * @return a+b, the vector sum of a and b, with one entry more.
+     */
+    public List<C> vectorCombineRep(List<C> a, List<C> b) {
+        if (a == null || b == null) {
+            throw new IllegalArgumentException("a and b may not be empty");
+        }
+        // if (a.size() != b.size()) {
+        //     throw new IllegalArgumentException("#a != #b");
+        // }
+        List<C> V = new ArrayList<C>(a.size()+1);
+        Iterator<C> it = a.iterator();
+        Iterator<C> jt = b.iterator();
+        while (it.hasNext() && jt.hasNext()) {
+            C x = it.next();
+            C y = jt.next();
+            if (x == null) {
+                x = y;
+            } else {
+                x = x.subtract(y);
+            }
+            V.add(x);
+        }
+        V.add(null);
+        //System.out.println("vectorCombineRep" + V);
+        return V;
+    }
+
+
+    /**
+     * Combination of vectors for syzygy representation.
+     * @param a a ring element list.
+     * @param b a ring element list.
+     * @return (-a)+b, the vector sum of -a and b, with one entry
      * more.
      */
-    public List<C> vectorCombine(List<C> a, List<C> b) {
+    public List<C> vectorCombineSyz(List<C> a, List<C> b) {
         if (a == null || b == null) {
             throw new IllegalArgumentException("a and b may not be empty");
         }
@@ -181,9 +213,6 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
             if (x != null) {
                 x = x.negate();
             }
-            if (y != null) {
-                y = y.negate();
-            }
             if (x == null) {
                 x = y;
             } else {
@@ -192,7 +221,7 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
             V.add(x);
         }
         V.add(null);
-        //System.out.println("vectorCombine" + V);
+        //System.out.println("vectorCombineSyz" + V);
         return V;
     }
 

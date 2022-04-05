@@ -130,8 +130,8 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         GenPolynomial<C> Cp = A.scaleSubtractMultiple(b, e1, a, f1, B);
 
         GenPolynomial<C> zero = A.ring.getZERO();
-        GenPolynomial<C> As = zero.sum(b.negate(), e1);
-        GenPolynomial<C> Bs = zero.sum(a /*correct .negate()*/, f1);
+        GenPolynomial<C> As = zero.sum(b.negate(), e1); /*not correct .negate()*/
+        GenPolynomial<C> Bs = zero.sum(a, f1); /*correct .negate()*/
         S.set(i, As);
         S.set(j, Bs);
         return Cp;
@@ -494,7 +494,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
      * @param Pp a polynomial list for reduction.
      * @param Ap a polynomial.
      * @param Np = nf(Pp,Ap), a normal form of Ap wrt. Pp.
-     * @return true, if Np + sum( row[i]*Pp[i] ) == Ap, else false. //??
+     * @return true, if Ap == sum( row[i]*Pp[i] ) + Np, else false. //??
      */
     @Override
     public boolean isReductionNF(List<GenPolynomial<C>> row, List<GenPolynomial<C>> Pp, GenPolynomial<C> Ap,

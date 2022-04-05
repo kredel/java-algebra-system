@@ -294,11 +294,11 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
         C a = ma.getValue();
         C b = mb.getValue();
 
-        C[] c = a.egcd(b);
+        C[] c = a.egcd(b); // c[0] = c[1] a + c[2] b
         //System.out.println("egcd[0] " + c[0]);
         //Cp = c[1] e1 * A + c[2] f1 * B = c[1] e1 * A - (-c[2]) f1 * B
         GenPolynomial<C> Cp = Ap.scaleSubtractMultiple(c[1], e1, c[2].negate(), f1, Bp);
-        return Cp;
+        return Cp; // .negate() -
     }
 
 
@@ -352,8 +352,8 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
         GenPolynomial<C> Cp = Ap.scaleSubtractMultiple(a1, e1, b1, f1, Bp);
 
         GenPolynomial<C> zero = Ap.ring.getZERO();
-        GenPolynomial<C> As = zero.sum(a1.negate(), e1);
-        GenPolynomial<C> Bs = zero.sum(b1 /*correct .negate()*/, f1);
+        GenPolynomial<C> As = zero.sum(a1, e1);          /*not correct .negate()*/
+        GenPolynomial<C> Bs = zero.sum(b1.negate(), f1); /*correct */
         row.set(i, As);
         row.set(j, Bs);
         return Cp;
@@ -400,17 +400,17 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
         C a = ma.getValue();
         C b = mb.getValue();
 
-        C[] c = a.egcd(b);
+        C[] c = a.egcd(b); // c[0] = c[1] a + c[2] b
         //System.out.println("egcd[0] " + c[0]);
         //Cp = c[1] e1 * A + c[2] f1 * B = c[1] e1 * A - (-c[2]) f1 * B
         GenPolynomial<C> Cp = Ap.scaleSubtractMultiple(c[1], e1, c[2].negate(), f1, Bp);
 
         GenPolynomial<C> zero = Ap.ring.getZERO();
-        GenPolynomial<C> As = zero.sum(c[1], e1);
-        GenPolynomial<C> Bs = zero.sum(c[2], f1);
+        GenPolynomial<C> As = zero.sum(c[1], e1); // .negate() -
+        GenPolynomial<C> Bs = zero.sum(c[2], f1); // .negate() -
         row.set(i, As);
         row.set(j, Bs);
-        return Cp;
+        return Cp; // .negate() -
     }
 
 
