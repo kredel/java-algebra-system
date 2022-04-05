@@ -30,7 +30,6 @@ import edu.jas.poly.PolynomialList;
  * DGroebner base sequential tests with JUnit.
  * @author Heinz Kredel
  */
-
 public class DGroebnerBaseSeqTest extends TestCase {
 
 
@@ -104,6 +103,7 @@ public class DGroebnerBaseSeqTest extends TestCase {
         a = b = c = d = e = null;
         fac = null;
         bb = null;
+        ComputerThreads.terminate();
     }
 
 
@@ -111,7 +111,6 @@ public class DGroebnerBaseSeqTest extends TestCase {
      * Test sequential GBase.
      */
     public void testSequentialGBase() {
-
         L = new ArrayList<GenPolynomial<BigInteger>>();
 
         a = fac.random(kl, ll, el, q); //.abs();
@@ -160,7 +159,7 @@ public class DGroebnerBaseSeqTest extends TestCase {
      * Test Trinks7 GBase over Z.
      */
     @SuppressWarnings("unchecked")
-    public void xtestTrinks7GBaseZ() {
+    public void xtestTrinks7GBaseZ() { // too long
         String exam = "Z(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
                         + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
@@ -189,7 +188,7 @@ public class DGroebnerBaseSeqTest extends TestCase {
      * Test Trinks7 GBase over Z(B).
      */
     @SuppressWarnings("unchecked")
-    public void xtestTrinks7GBaseZ_B() {
+    public void testTrinks7GBaseZ_B() {
         String exam = "IntFunc{ B } (S,T,Z,P,W) G " + "( " + "( { 45 } P + { 35 } S - { 165 B } - { 36 } ), "
                         + "( { 35 } P + { 40 } Z + { 25 } T - { 27 } S ), "
                         + "( { 15 } W + { 25 } S P + { 30 } Z - { 18 } T - { 165 B**2 } ), "
@@ -208,7 +207,7 @@ public class DGroebnerBaseSeqTest extends TestCase {
         } catch (IOException e) {
             fail("" + e);
         }
-        System.out.println("F = " + F);
+        //System.out.println("F = " + F);
 
         List<GenPolynomial<GenPolynomial<BigRational>>> Fp = new ArrayList<GenPolynomial<GenPolynomial<BigRational>>>(
                         F.list.size());
@@ -228,9 +227,8 @@ public class DGroebnerBaseSeqTest extends TestCase {
         }
         PolynomialList<GenPolynomial<BigRational>> trinks = new PolynomialList<GenPolynomial<BigRational>>(
                         F.ring, Gp);
-        System.out.println("G = " + trinks);
-        System.out.println("G.size() = " + Gp.size());
-        ComputerThreads.terminate();
+        //System.out.println("G = " + trinks);
+        //System.out.println("G.size() = " + Gp.size());
         assertTrue("isGB( GB(Trinks7) )", bb.isGB(G));
         //assertEquals("#GB(Trinks7) == 1", 1, G.size() );
     }
