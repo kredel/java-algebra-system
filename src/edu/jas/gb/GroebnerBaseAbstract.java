@@ -658,31 +658,27 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
      * @param flen length of rows.
      * @param Gp a Groebner base.
      * @param M a reduction matrix, is modified.
-     * @return a (partially) reduced Groebner base of Gp in a container.
+     * @return a (partially) reduced Groebner base of Gp in a (fake) container.
      */
     public ExtendedGB<C> minimalExtendedGB(int flen, List<GenPolynomial<C>> Gp, List<List<GenPolynomial<C>>> M) {
         if (Gp == null) {
             return null; //new ExtendedGB<C>(null,Gp,null,M);
         }
-        if (Gp.size() <= 1) {
-            return new ExtendedGB<C>(null, Gp, null, M);
-        }
-        List<GenPolynomial<C>> G;
-        List<GenPolynomial<C>> F;
+        //if (Gp.size() <= 1) {
+        //    return new ExtendedGB<C>(null, Gp, null, M);
+        //}
+        List<GenPolynomial<C>> G, F;
         G = new ArrayList<GenPolynomial<C>>(Gp);
         F = new ArrayList<GenPolynomial<C>>(Gp.size());
 
-        List<List<GenPolynomial<C>>> Mg;
-        List<List<GenPolynomial<C>>> Mf;
+        List<List<GenPolynomial<C>>> Mg, Mf;
         Mg = new ArrayList<List<GenPolynomial<C>>>(M.size());
         Mf = new ArrayList<List<GenPolynomial<C>>>(M.size());
-        List<GenPolynomial<C>> row;
         for (List<GenPolynomial<C>> r : M) {
             // must be copied also
-            row = new ArrayList<GenPolynomial<C>>(r);
+            List<GenPolynomial<C>> row = new ArrayList<GenPolynomial<C>>(r);
             Mg.add(row);
         }
-        row = null;
 
         GenPolynomial<C> a;
         ExpVector e;
@@ -691,7 +687,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
         boolean mt;
         ListIterator<GenPolynomial<C>> it;
         ArrayList<Integer> ix = new ArrayList<Integer>();
-        ArrayList<Integer> jx = new ArrayList<Integer>();
+        //??ArrayList<Integer> jx = new ArrayList<Integer>();
         int k = 0;
         //System.out.println("flen, Gp, M = " + flen + ", " + Gp.size() + ", " + M.size() );
         while (G.size() > 0) {
@@ -715,14 +711,14 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             if (!mt) {
                 F.add(a);
                 ix.add(k);
-            } else { // drop polynomial and corresponding row and column
+                //} else { // drop polynomial and corresponding row and column
                 // F.add( a.ring.getZERO() );
-                jx.add(k);
+                //??jx.add(k);
             }
             k++;
         }
         if (debug) {
-            logger.debug("ix, #M, jx = {}, {}, {}", ix, Mg.size(), jx);
+            logger.debug("ix, #M = {}, {}", ix, Mg.size()); //??, jx);
         }
         int fix = -1; // copied polys
         // copy Mg to Mf as indicated by ix
@@ -733,7 +729,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             }
             //System.out.println("copy u, fix = " + u + ", " + fix);
             if (u >= 0) {
-                row = Mg.get(u);
+                List<GenPolynomial<C>> row = Mg.get(u);
                 Mf.add(row);
             }
         }

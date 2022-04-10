@@ -318,8 +318,8 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
             if (!a.isZERO()) { //! mt ) {
                 //logger.debug("irred");
                 R = R.sum(a, e);
-                //S = S.subtract( a, e );
-                S = S.reductum();
+                S = S.subtract(a, e);
+                //??S = S.reductum();
             }
         }
         return R;

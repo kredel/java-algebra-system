@@ -325,9 +325,9 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
             if (!Ap.ring.equals(Bp.ring)) {
                 logger.error("rings not equal");
             }
-            if ((row.get(i) != null && !row.get(i).isZERO()) || (row.get(j) != null && !row.get(j).isZERO())) {
-                throw new IllegalArgumentException("row(i), row(j): " + row.get(i) + ", " + row.get(j));
-            }
+            //if ((row.get(i) != null && !row.get(i).isZERO()) || (row.get(j) != null && !row.get(j).isZERO())) {
+            //    throw new IllegalArgumentException("row(i), row(j): " + row.get(i) + ", " + row.get(j));
+            //}
         }
         Map.Entry<ExpVector, C> ma = Ap.leadingMonomial();
         Map.Entry<ExpVector, C> mb = Bp.leadingMonomial();
