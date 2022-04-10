@@ -247,7 +247,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                     break;
                 }
                 G.add(p);
-                logger.info("p row = {}", row);
+                //logger.info("p row = {}", row);
                 G2F.add(row);
                 if (pairlist == null) {
                     //pairlist = strategy.create(modv, p.ring);
@@ -295,7 +295,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
             j = pair.j;
             pi = pair.pi;
             pj = pair.pj;
-            if (true||debug) {
+            if (debug) {
                 logger.info("i, pi    = {}, {}", i, pi );
                 logger.info("j, pj    = {}, {}", j, pj );
             }
@@ -305,7 +305,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
             rows = blas.genVector(G.size(), null);
             D = dred.GPolynomial(rows, i, pi, j, pj);
             logger.info("Gpol = {}", D);
-            if (true||debug) {
+            if (debug) {
                 logger.info("is reduction D = "
                             + dred.isReductionNF(rows, G, D, ring.getZERO()) );
             }
@@ -313,14 +313,14 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                 //continue;
                 rowh = blas.genVector(G.size(), null);
                 H = dred.normalform(rowh, G, D);
-                if (true||debug) {
+                if (debug) {
                     logger.info("is reduction H = "
                                 + dred.isReductionNF(rowh, G, D, H) );
                 }
                 //H = H.monic();
                 int s = H.leadingBaseCoefficient().signum();
                 if (s < 0) {
-                    logger.info("negate: H_D rowd, rowh = {}, {}", rows, rowh);
+                    logger.debug("negate: H_D rowd, rowh = {}, {}", rows, rowh);
                     H = H.negate();
                     rows = blas.vectorNegate(rows);
                     rowh = blas.vectorNegate(rowh);
@@ -333,12 +333,12 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                     G.add(H);
                     pairlist.put(H);
                 }
-                System.out.println("rowd = " + rows);
-                System.out.println("rowh = " + rowh);
+                //System.out.println("rowd = " + rows);
+                //System.out.println("rowh = " + rowh);
                 row = blas.vectorCombineRep(rows,rowh);
-                logger.info("H_G row = {}", row);
+                logger.debug("H_G row = {}", row);
                 G2F.add(row);
-                if (true||debug) {
+                if (debug) {
                     logger.debug("ht(H) = {}", H.leadingExpVector() );
                     logger.info("is reduction D,H = "
                                 + dred.isReductionNF(row, G, H, ring.getZERO()) );
@@ -349,7 +349,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
             rows = blas.genVector(G.size(), null);
             S = dred.SPolynomial(rows, i, pi, j, pj);
             logger.info("Spol = {}", S);
-            if (true||debug) {
+            if (debug) {
                 logger.info("is reduction S = "
                             + dred.isReductionNF(rows, G, S, ring.getZERO()) );
             }
@@ -357,21 +357,21 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
             if (!S.isZERO()) { //&& !dred.isTopReducible(G, S)
                 //continue;
                 H = dred.normalform(rowh, G, S);
-                logger.info("Spol_red = {}", H);
-                if (true||debug) {
+                if (debug) {
+                    logger.info("Spol_red = {}", H);
                     logger.info("is reduction H = "
                                 + dred.isReductionNF(rowh, G, S, H) );
                 }
                 //H = H.monic();
                 int s = H.leadingBaseCoefficient().signum();
                 if (s < 0) {
-                    logger.info("negate: H_S rows, rowh = {}, {}", rows, rowh);
+                    logger.debug("negate: H_S rows, rowh = {}, {}", rows, rowh);
                     H = H.negate();
                     //rowh = rowh.negate(); //rowh.set(G.size(), one.negate());
                     rows = blas.vectorNegate(rows);
                     rowh = blas.vectorNegate(rowh);
                 }
-                logger.info("Spol_red_norm = {}", H);
+                //logger.info("Spol_red_norm = {}", H);
                 if (H.isONE()) {
                     G.clear();
                     G.add(H);
@@ -380,12 +380,12 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                     G.add(H);
                     pairlist.put(H);
                 }
-                System.out.println("rows = " + rows);
-                System.out.println("rowh = " + rowh);
+                //System.out.println("rows = " + rows);
+                //System.out.println("rowh = " + rowh);
                 row = blas.vectorCombineRep(rows,rowh);
-                logger.info("H_S row = {}", row);
+                logger.debug("H_S row = {}", row);
                 G2F.add(row);
-                if (true||debug) {
+                if (debug) {
                     logger.debug("ht(H) = {}", H.leadingExpVector() );
                     logger.info("is reduction S,H = "
                                 + dred.isReductionNF(row, G, H, ring.getZERO()) );

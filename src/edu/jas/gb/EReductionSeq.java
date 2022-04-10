@@ -294,10 +294,10 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
                     //logger.info("red div = {}", f);
                     r = a.remainder(lbc[i]);
                     b = a.divide(lbc[i]);
-                    if (f == null) { // compiler produced this case ??? still ?
-                        System.out.println("f = null: " + e + ", " + htl[i]);
-                        f = pfac.evzero;
-                    }
+                    //if (f == null) { // compiler produced this case ??? still ?
+                    //    System.out.println("f = null: " + e + ", " + htl[i]);
+                    //    f = pfac.evzero;
+                    //}
                     Q = p[i].multiply(b, f);
                     S = S.subtract(Q);
                     fac = row.get(i);

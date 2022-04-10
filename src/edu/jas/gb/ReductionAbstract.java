@@ -537,7 +537,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
             return Ap.isZERO();
         }
         r = t.subtract(Ap);
-        System.out.println("r = " + r);
+        //System.out.println("r = " + r);
         boolean z = r.isZERO();
         if (!z) {
             logger.info("t = {}", t);
