@@ -143,7 +143,8 @@ fi
 #
 #JAVA_OPTS="-J-verbose:gc -J-Xms1100M -J-Xmx1900M"
 #JAVA_OPTS="-J-verbose:gc -J-Xms350M -J-Xmx800M"
-JAVA_OPTS="-J-Xms350M -J-Xmx800M"
+#JAVA_OPTS="-J-Xms350M -J-Xmx800M"
+JAVA_OPTS=""
 LANGOPT=0
 SCRIPT_OPTS=
 #
@@ -156,7 +157,8 @@ do
     case "$1" in
     # use python
     -py*|-jy*) 
-         SCRIPT_LANG="python" 
+         SCRIPT_LANG="python"
+         # old: 
          LANGOPT=`jython -h 2>&1|grep '\-J\-'| grep -v '\-Jarg' -c`
          ;;
     # use ruby
@@ -261,13 +263,14 @@ fi
 if [ "$SCRIPT_LANG" = "python" ]; then
    if [[ $LANGOPT > 0 ]] ; then
       JAVA_LIBS="-J-cp $JAVA_LIBS"
+      [[ $DEBUG > 0 ]] && echo JAVA_LIBS: $JAVA_LIBS
    else
-      export JAVA_OPTIONS="${JAVA_OPTS//-J/}"
       export CLASSPATH=$CLASSPATH:$JAVA_LIBS
+      JAVA_LIBS="-Dpython.path=$JAVA_LIBS"
+      export JAVA_OPTIONS="${JAVA_OPTS//-J/}"
       [[ $DEBUG > 0 ]] && echo CLASSPATH: $CLASSPATH
       [[ $DEBUG > 0 ]] && echo JAVA_OPTIONS: $JAVA_OPTIONS
-      JAVA_OPTS=
-      JAVA_LIBS=
+      [[ $DEBUG > 0 ]] && echo JAVA_LIBS: $JAVA_LIBS
    fi
    #[[ $DEBUG > 0 ]] && jython --print $SCRIPT_OPTS "$JAVA_LIBS" $JAVA_OPTS $* 
    [[ $DEBUG > 0 ]] && echo jython $SCRIPT_OPTS $JAVA_LIBS $JAVA_OPTS $* 
