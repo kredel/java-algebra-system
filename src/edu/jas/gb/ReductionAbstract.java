@@ -501,7 +501,10 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
                     GenPolynomial<C> Np) {
         if (row == null && Pp == null) {
             if (Ap == null) {
-                return Np == null;
+                return Np == null || Np.isZERO();
+            }
+            if (Np == null) {
+                return Ap == null || Ap.isZERO();
             }
             return Ap.equals(Np);
         }
@@ -510,13 +513,14 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
         }
         if (row.size() < Pp.size()) {
             logger.info("#r < #p = {}, {}", row.size(), Pp.size());
-            return false;
+            //return false;
         }
         GenPolynomial<C> t = Np;
         //System.out.println("t0 = " + t );
         GenPolynomial<C> r;
         GenPolynomial<C> p;
-        for (int m = 0; m < Pp.size(); m++) {
+        int mm = Math.min(row.size(), Pp.size());
+        for (int m = 0; m < mm; m++) {
             r = row.get(m);
             p = Pp.get(m);
             if (r != null && p != null) {
@@ -530,19 +534,20 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
             //System.out.println("p = " + p );
         }
         //System.out.println("t+ = " + t);
-        if (t == null) {
-            if (Np == null) {
+        if (t == null) { // then also Np == null
+            if (Ap == null) {
                 return true;
             }
             return Ap.isZERO();
         }
         r = t.subtract(Ap);
-        //System.out.println("r = " + r);
+        System.out.println("NF_r = " + r);
         boolean z = r.isZERO();
         if (!z) {
-            logger.info("t = {}", t);
             logger.info("a, n = {}, {}", Ap, Np);
-            logger.info("t-a = {}", r);
+            logger.info("t, t-a = {}, {}", t, r);
+            logger.info("row = {}", row);
+            logger.info("Pp  = {}", Pp);
         }
         return z;
     }
