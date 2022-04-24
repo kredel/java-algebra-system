@@ -553,32 +553,60 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
 
 
     /**
+     * Test if minimal reduction matrix.
+     * @param exgb an ExtendedGB container.
+     * @return true, if exgb contains a minimal reduction matrix, else false.
+     */
+    public boolean isMinReductionMatrix(ExtendedGB<C> exgb) {
+        if (exgb == null) {
+            return true;
+        }
+        return isMinReductionMatrix(exgb.F, exgb.G, exgb.F2G, exgb.G2F);
+    }
+
+
+    /**
      * Test if reduction matrix.
      * @param F a polynomial list.
-     * @param G a Groebner base.
+     * @param G a Groebner base, G starting with +/- elements of F.
      * @param Mf a possible reduction matrix.
      * @param Mg a possible reduction matrix.
      * @return true, if Mg and Mf are reduction matrices, else false.
      */
     public boolean isReductionMatrix(List<GenPolynomial<C>> F, List<GenPolynomial<C>> G,
-                    List<List<GenPolynomial<C>>> Mf, List<List<GenPolynomial<C>>> Mg) {
+                                     List<List<GenPolynomial<C>>> Mf, List<List<GenPolynomial<C>>> Mg) {
+        final int flen;
+        if (F == null) {
+            flen = -1;
+        } else {
+            flen = F.size();
+        }
         // no more check G and Mg: G * Mg[i] == 0
-        // check F and Mg: F * Mg[i] == G[i]
+        // i < #F:  check F and Mg: Mg[i] * F == G[i]
+        // i >= #F: check G and Mg: Mg[i] * G == G[i]
         int k = 0;
         for (List<GenPolynomial<C>> row : Mg) {
-            boolean t = red.isReductionNF(row, F, G.get(k), null);
+            boolean t;
+            if (k < flen) {
+                t = red.isReductionNF(row, F, G.get(k), null);
+                //logger.info("{} isReductionMatrix row, F, G(k), k = {}, {}, {}, {}", t, row, F, G.get(k), k);
+            } else {
+                t = red.isReductionNF(row, G, G.get(k), null);
+                //logger.info("{} isReductionMatrix row, G, G(k), k = {}, {}, {}, {}", t, row, G, G.get(k), k);
+            }
             if (!t) {
-                logger.error("F isReductionMatrix row, F, G(k), k = {}, {}, {}, {}", row, F, G.get(k), k);
+                logger.error("isReductionMatrix row, F, G, k = {}, {}, {}, {}", row, F, G, k);
                 return false;
             }
             k++;
         }
-        // check G and Mf: G * Mf[i] == F[i]
+        // check G and Mf: Mf[i] * G == F[i]
         k = 0;
         for (List<GenPolynomial<C>> row : Mf) {
             boolean t = red.isReductionNF(row, G, F.get(k), null);
+            //logger.info("{} isMinReductionMatrix row, G, F(k), k = {}, {}, {}, {}", t, row, G, F.get(k), k);
             if (!t) {
-                logger.error("G isReductionMatrix row, G, K(k), k = {}, {}, {}, {}", row, G, F.get(k), k);
+                logger.error("G isReductionMatrix row, G, F(k), k = {}, {}, {}, {}", row, G, F.get(k), k);
                 return false;
             }
             k++;
@@ -588,8 +616,50 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
 
 
     /**
-     * Normalize M. Make all rows the same size and make certain column elements
-     * zero.
+     * Test if minimal reduction matrix.
+     * @param F a polynomial list.
+     * @param G a minimal Groebner base of F.
+     * @param Mf a possible reduction matrix.
+     * @param Mg a possible reduction matrix.
+     * @return true, if Mg and Mf are reduction matrices, else false.
+     */
+    public boolean isMinReductionMatrix(List<GenPolynomial<C>> F, List<GenPolynomial<C>> G,
+                                     List<List<GenPolynomial<C>>> Mf, List<List<GenPolynomial<C>>> Mg) {
+        if (F == null || G == null) {
+            throw new IllegalArgumentException("F or G may not be null or empty");
+        }
+        //final int flen = F.size();
+        // no more check G and Mg: G * Mg[i] == 0
+        // check F and Mg: Mg[i] * F == G[i]
+        int k = 0;
+        for (List<GenPolynomial<C>> row : Mg) {
+            boolean t = red.isReductionNF(row, F, G.get(k), null);
+            //logger.info("{} isMinReductionMatrix row, F, G(k), k = {}, {}, {}, {}", t, row, F, G.get(k), k);
+            if (!t) {
+                logger.error("isMinReductionMatrix row, F, G, k = {}, {}, {}, {}", row, F, G, k);
+                return false;
+            }
+            k++;
+        }
+        // check G and Mf: Mf[i] * G == F[i]
+        k = 0;
+        for (List<GenPolynomial<C>> row : Mf) {
+            boolean t = red.isReductionNF(row, G, F.get(k), null);
+            //logger.info("{} isMinReductionMatrix row, G, F(k), k = {}, {}, {}, {}", t, row, G, F.get(k), k);
+            if (!t) {
+                logger.error("G isMinReductionMatrix row, G, F(k), k = {}, {}, {}, {}", row, G, F.get(k), k);
+                return false;
+            }
+            k++;
+        }
+        return true;
+    }
+
+
+    /**
+     * Normalize M. Scale and shift right triangular matrix (new G
+     * elements) to left and make all right column elements zero.
+     * Then truncate all rows to the size of F.
      * @param flen length of rows.
      * @param M a reduction matrix.
      * @return normalized M.
@@ -603,35 +673,34 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
         }
         List<List<GenPolynomial<C>>> N = new ArrayList<List<GenPolynomial<C>>>();
         List<List<GenPolynomial<C>>> K = new ArrayList<List<GenPolynomial<C>>>();
-        int len = M.get(M.size() - 1).size(); // longest row
+        int mlen = M.get(M.size() - 1).size(); // longest row
+        //System.out.println("norm M pre reduc = " + M);
         // pad / extend rows
         for (List<GenPolynomial<C>> row : M) {
-            List<GenPolynomial<C>> nrow = blas.genVector(len, null, row);
+            List<GenPolynomial<C>> nrow = blas.genVector(mlen, null, row);
             N.add(nrow);
         }
         // System.out.println("norm N fill = " + N);
-        // make zero columns
-        int k = flen;
+        // make zero right columns
+        int k = flen; // right part
         for (int i = 0; i < N.size(); i++) { // 0
             List<GenPolynomial<C>> row = N.get(i);
             if (debug) {
                 logger.info("row = {}", row);
             }
             K.add(row);
-            if (i < flen) { // skip identity part
-                continue;
+            if (i < flen) { // skip identity part??
+                continue; // what with -1 ?
             }
-            List<GenPolynomial<C>> xrow;
-            GenPolynomial<C> a;
-            //System.out.println("norm i = " + i);
+            //System.out.println("norm i = " + i + ", row = " + row);
             for (int j = i + 1; j < N.size(); j++) {
                 List<GenPolynomial<C>> nrow = N.get(j);
-                //System.out.println("nrow j = " +j + ", " + nrow);
+                //System.out.println("nrow j = " + j + ", nrow = " + nrow);
                 if (k < nrow.size()) { // always true
-                    a = nrow.get(k);
+                    GenPolynomial<C> a = nrow.get(k); // right matrix k ~ flen+i
                     //System.out.println("k, a = " + k + ", " + a);
                     if (a != null && !a.isZERO()) {
-                        xrow = blas.scalarProduct(a, row);
+                        List<GenPolynomial<C>> xrow = blas.scalarProduct(a, row);
                         xrow = blas.vectorAdd(xrow, nrow);
                         //System.out.println("xrow = " + xrow);
                         N.set(j, xrow);
@@ -680,10 +749,8 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             Mg.add(row);
         }
 
-        GenPolynomial<C> a;
-        ExpVector e;
-        ExpVector f;
-        GenPolynomial<C> p;
+        GenPolynomial<C> a, p;
+        ExpVector e, f;
         boolean mt;
         ListIterator<GenPolynomial<C>> it;
         ArrayList<Integer> ix = new ArrayList<Integer>();
