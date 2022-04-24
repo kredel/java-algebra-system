@@ -153,7 +153,7 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
             P = (GenPolynomial<C>[]) new GenPolynomial[l];
             //P = Pp.toArray();
             for (int i = 0; i < Pp.size(); i++) {
-                P[i] = Pp.get(i).abs();
+                P[i] = Pp.get(i); //.abs();
             }
         }
         Map.Entry<ExpVector, C> m;
@@ -219,7 +219,7 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
             //System.out.println(" R = " + R);
             //System.out.println(" S = " + S);
         }
-        return R.abs();
+        return R; //.abs(); not ok with e-reduction
     }
 
 
@@ -247,7 +247,7 @@ public class EReductionSeq<C extends RingElem<C>> extends DReductionSeq<C> imple
             P = (GenPolynomial<C>[]) new GenPolynomial[l];
             //P = Pp.toArray();
             for (int i = 0; i < Pp.size(); i++) {
-                P[i] = Pp.get(i).abs();
+                P[i] = Pp.get(i); //.abs();
             }
         }
         ExpVector[] htl = new ExpVector[l];

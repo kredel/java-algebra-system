@@ -76,7 +76,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
             if (P[i] == null) {
                 continue;
             }
-            p[i] = P[i].abs();
+            p[i] = P[i]; //.abs();
             m = p[i].leadingMonomial();
             if (m != null) {
                 p[j] = p[i];
@@ -135,7 +135,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
                 S = S.reductum();
             }
         }
-        return R.abs(); // not monic if not boolean closed
+        return R; //.abs(); // not monic if not boolean closed
     }
 
 
@@ -180,7 +180,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
             if (P[i] == null) {
                 continue;
             }
-            p[i] = P[i].abs();
+            p[i] = P[i]; //.abs();
             m = p[i].leadingMonomial();
             if (m != null) {
                 p[j] = p[i];

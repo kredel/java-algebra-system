@@ -157,7 +157,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
             P = (GenPolynomial<C>[]) new GenPolynomial[l];
             //P = Pp.toArray();
             for (int i = 0; i < Pp.size(); i++) {
-                P[i] = Pp.get(i).abs();
+                P[i] = Pp.get(i); //.abs();
             }
         }
         //System.out.println("l = " + l);
@@ -213,7 +213,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
                 S = S.reductum().subtract(Q.reductum()); // ok also with reductum
             }
         }
-        return R.abs();
+        return R.abs(); // ok with d-reduction
     }
 
 

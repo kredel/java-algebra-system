@@ -213,7 +213,7 @@ public class RReductionSeq<C extends RegularRingElem<C>> extends ReductionAbstra
             if (P[i] == null) {
                 continue;
             }
-            p[i] = P[i].abs();
+            p[i] = P[i]; //.abs();
             m = p[i].leadingMonomial();
             if (m != null) {
                 p[j] = p[i];
