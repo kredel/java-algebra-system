@@ -70,7 +70,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
     PolynomialList<BigInteger> F;
 
 
-    GroebnerBase<BigInteger> bb;
+    GroebnerBaseAbstract<BigInteger> bb;
 
 
     GenPolynomial<BigInteger> a, b, c, d, e;
@@ -112,7 +112,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
     /**
      * Test sequential GBase.
      */
-    public void xtestSequentialGBase() {
+    public void testSequentialGBase() {
         L = new ArrayList<GenPolynomial<BigInteger>>();
 
         a = fac.random(kl, ll, el, q).abs();
@@ -161,7 +161,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
      * Test Trinks7 GBase over Z.
      */
     @SuppressWarnings("unchecked")
-    public void xtestTrinks7GBaseZ() { // needs 20 sec
+    public void testTrinks7GBaseZ() { // needs 20 sec
         String exam = "Z(B,S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - 165 B - 36 ), "
                         + "( 35 P + 40 Z + 25 T - 27 S ), " + "( 15 W + 25 S P + 30 Z - 18 T - 165 B**2 ), "
                         + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - 11 B**3 ), "
@@ -190,7 +190,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
      * Test Trinks7 GBase over Z(B).
      */
     @SuppressWarnings("unchecked")
-    public void xtestTrinks7GBaseZ_B() {
+    public void testTrinks7GBaseZ_B() {
         String exam = "IntFunc{ B } (S,T,Z,P,W) G " + "( " + "( { 45 } P + { 35 } S - { 165 B } - { 36 } ), "
                         + "( { 35 } P + { 40 } Z + { 25 } T - { 27 } S ), "
                         + "( { 15 } W + { 25 } S P + { 30 } Z - { 18 } T - { 165 B**2 } ), "
@@ -261,7 +261,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
         exgb = bb.extGB(L);
         System.out.println("exgb 1 = " + exgb);
         assertTrue("isGB( { a } )", bb.isGB(exgb.G));
-        assertTrue("isRmat( { a } )", bb.isReductionMatrix(exgb));
+        assertTrue("isRmat( { a } )", bb.isMinReductionMatrix(exgb));
 
         assertTrue("not isZERO( b )", !b.isZERO());
         L.add(b);
@@ -270,7 +270,7 @@ public class EGroebnerBaseSeqTest extends TestCase {
         exgb = bb.extGB(L);
         System.out.println("exgb 2 = " + exgb);
         assertTrue("isGB( { a, b } )", bb.isGB(exgb.G));
-        assertTrue("isRmat( { a, b } )", bb.isReductionMatrix(exgb));
+        assertTrue("isRmat( { a, b } )", bb.isMinReductionMatrix(exgb));
 
         assertTrue("not isZERO( c )", !c.isZERO());
         L.add(c);
@@ -279,17 +279,17 @@ public class EGroebnerBaseSeqTest extends TestCase {
         exgb = bb.extGB(L);
         System.out.println("exgb 3 = " + exgb );
         assertTrue("isGB( { a, b, c } )", bb.isGB(exgb.G));
-        assertTrue("isRmat( { a, b, c } )", bb.isReductionMatrix(exgb));
-	if (true) { return; }
+        assertTrue("isRmat( { a, b, c } )", bb.isMinReductionMatrix(exgb));
+        //if (true) { return; }
 
         assertTrue("not isZERO( d )", !d.isZERO());
         L.add(d);
         System.out.println("L4 = " + L);
 
         exgb = bb.extGB(L);
-        //System.out.println("exgb = " + exgb );
+        System.out.println("exgb 4 = " + exgb );
         assertTrue("isGB( { a, b, c, d } )", bb.isGB(exgb.G));
-        assertTrue("isRmat( { a, b, c, d } )", bb.isReductionMatrix(exgb));
+        assertTrue("isRmat( { a, b, c, d } )", bb.isMinReductionMatrix(exgb));
 
 
         assertTrue("not isZERO( e )", !e.isZERO());
@@ -297,9 +297,9 @@ public class EGroebnerBaseSeqTest extends TestCase {
         System.out.println("L5 = " + L);
 
         exgb = bb.extGB(L);
-        //System.out.println("exgb = " + exgb );
+        System.out.println("exgb 5 = " + exgb );
         assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(exgb.G));
-        assertTrue("isRmat( { a, b, c, d, e } )", bb.isReductionMatrix(exgb));
+        assertTrue("isRmat( { a, b, c, d, e } )", bb.isMinReductionMatrix(exgb));
     }
 
 }
