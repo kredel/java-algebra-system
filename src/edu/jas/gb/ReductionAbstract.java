@@ -512,8 +512,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
             return false;
         }
         if (row.size() < Pp.size()) {
-            logger.info("#r < #p = {}, {}", row.size(), Pp.size());
-            //return false;
+            logger.debug("#r < #p = {}, {}", row.size(), Pp.size());
         }
         GenPolynomial<C> t = Np;
         //System.out.println("t0 = " + t );
@@ -541,7 +540,7 @@ public abstract class ReductionAbstract<C extends RingElem<C>> implements Reduct
             return Ap.isZERO();
         }
         r = t.subtract(Ap);
-        System.out.println("NF_r = " + r);
+        //System.out.println("NF_r = " + r);
         boolean z = r.isZERO();
         if (!z) {
             logger.info("a, n = {}, {}", Ap, Np);
