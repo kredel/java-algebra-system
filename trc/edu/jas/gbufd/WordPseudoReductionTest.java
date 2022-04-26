@@ -230,7 +230,7 @@ public class WordPseudoReductionTest extends TestCase {
         //System.out.println("e = " + e);
         //System.out.println("lrow = " + lrow);
         //System.out.println("rrow = " + rrow);
-        assertTrue("isReduction " + e, red.isReductionNF(lrow, rrow, L, b, e));
+        assertTrue("isReduction " + e + " of " + b, red.isReductionNF(lrow, rrow, L, b, e));
 
         L.add(c);
         lrow = new ArrayList<GenWordPolynomial<BigInteger>>(L.size());
@@ -244,7 +244,7 @@ public class WordPseudoReductionTest extends TestCase {
         //System.out.println("e = " + e);
         //System.out.println("lrow = " + lrow);
         //System.out.println("rrow = " + rrow);
-        assertTrue("is Reduction " + e, red.isReductionNF(lrow, rrow, L, c, e));
+        assertTrue("is Reduction " + e + " of " + c, red.isReductionNF(lrow, rrow, L, c, e));
 
         L.add(d);
         lrow = new ArrayList<GenWordPolynomial<BigInteger>>(L.size());
@@ -262,7 +262,7 @@ public class WordPseudoReductionTest extends TestCase {
         //System.out.println("e = " + e);
         //System.out.println("lrow = " + lrow);
         //System.out.println("rrow = " + rrow);
-        assertTrue("is Reduction " + e, red.isReductionNF(lrow, rrow, L, d, e));
+        assertTrue("is Reduction " + e + " of " + d, red.isReductionNF(lrow, rrow, L, d, e));
     }
 
 

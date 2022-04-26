@@ -271,6 +271,65 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
 
 
     /**
+     * Combination of vectors for old representation.
+     * @param a a ring element list.
+     * @param b a ring element list.
+     * @return -a-b, the vector difference of -a and b, with one entry more.
+     */
+    public List<C> vectorCombineOld(List<C> a, List<C> b) {
+        if (a == null || b == null) {
+            throw new IllegalArgumentException("a and b may not be empty");
+        }
+        // if (a.size() != b.size()) {
+        //     throw new IllegalArgumentException("#a != #b");
+        // }
+        List<C> V = new ArrayList<C>(a.size()+1);
+        Iterator<C> it = a.iterator();
+        Iterator<C> jt = b.iterator();
+        while (it.hasNext() && jt.hasNext()) {
+            C x = it.next();
+            C y = jt.next();
+            if (x != null) {
+                //System.out.println("ms = " + m + " " + x);
+                x = x.negate();
+            }
+            if (y != null) {
+                y = y.negate();
+                //System.out.println("mh = " + m + " " + y);
+            }
+            if (x == null) {
+                x = y;
+            } else if (y != null) {
+                x = x.sum(y);
+            }
+            //System.out.println("mx = " + m + " " + x);
+
+            // if (x == null) {
+            //     if (y == null) {
+            //         //x = y;
+            //     } else {
+            //         x = y.negate();
+            //     }
+            // } else {
+            //     if (y == null) {
+            //         //x = y;
+            //     } else {
+            //         x = x.subtract(y);
+            //     }
+            // }
+            V.add(x);
+        }
+        if (it.hasNext() || jt.hasNext()) {
+            logger.error("vectorCombineOld wrong sizes: it = {}, jt = {}", it, jt);
+            //throw new RuntimeException("it = " + it + ", jt = " + jt);
+        }
+        V.add(null);
+        //System.out.println("vectorCombineOld" + V);
+        return V;
+    }
+
+
+    /**
      * Generation of a vector of ring elements.
      * @param n length of vector.
      * @param a a ring element to fill vector entries.

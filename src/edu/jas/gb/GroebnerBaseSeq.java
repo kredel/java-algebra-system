@@ -290,7 +290,7 @@ public class GroebnerBaseSeq<C extends RingElem<C>>
                 logger.debug("ht(H) = {}", H.leadingExpVector() );
             }
 
-            row = blas.vectorCombine(rows,rowh);
+            row = blas.vectorCombineOld(rows,rowh);
             // 	new ArrayList<GenPolynomial<C>>( G.size()+1 );
             // for ( int m = 0; m < G.size(); m++ ) {
             //     x = rows.get(m);

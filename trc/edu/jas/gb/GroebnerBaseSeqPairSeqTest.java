@@ -67,7 +67,7 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
     PolynomialList<BigRational> F;
 
 
-    GroebnerBase<BigRational> bb; // do interface
+    GroebnerBaseAbstract<BigRational> bb; // not interface
 
 
     GenPolynomial<BigRational> a, b, c, d, e;
@@ -210,7 +210,7 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
         exgb = bb.extGB(L);
         // System.out.println("exgb = " + exgb );
         assertTrue("isGB( { a } )", bb.isGB(exgb.G));
-        assertTrue("isRmat( { a } )", bb.isReductionMatrix(exgb));
+        assertTrue("isRmat( { a } )", bb.isMinReductionMatrix(exgb));
 
         assertTrue("not isZERO( b )", !b.isZERO());
         L.add(b);
@@ -219,7 +219,7 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
         exgb = bb.extGB(L);
         //System.out.println("exgb = " + exgb );
         assertTrue("isGB( { a, b } )", bb.isGB(exgb.G));
-        assertTrue("isRmat( { a, b } )", bb.isReductionMatrix(exgb));
+        assertTrue("isRmat( { a, b } )", bb.isMinReductionMatrix(exgb));
 
         assertTrue("not isZERO( c )", !c.isZERO());
         L.add(c);
@@ -227,7 +227,7 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
         exgb = bb.extGB(L);
         //System.out.println("exgb = " + exgb );
         assertTrue("isGB( { a, b, c } )", bb.isGB(exgb.G));
-        assertTrue("isRmat( { a, b, c } )", bb.isReductionMatrix(exgb));
+        assertTrue("isRmat( { a, b, c } )", bb.isMinReductionMatrix(exgb));
 
         assertTrue("not isZERO( d )", !d.isZERO());
         L.add(d);
@@ -235,7 +235,7 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
         exgb = bb.extGB(L);
         //System.out.println("exgb = " + exgb );
         assertTrue("isGB( { a, b, c, d } )", bb.isGB(exgb.G));
-        assertTrue("isRmat( { a, b, c, d } )", bb.isReductionMatrix(exgb));
+        assertTrue("isRmat( { a, b, c, d } )", bb.isMinReductionMatrix(exgb));
 
 
         assertTrue("not isZERO( e )", !e.isZERO());
@@ -244,12 +244,12 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
         exgb = bb.extGB(L);
         //System.out.println("exgb = " + exgb );
         assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(exgb.G));
-        assertTrue("isRmat( { a, b, c, d, e } )", bb.isReductionMatrix(exgb));
+        assertTrue("isRmat( { a, b, c, d, e } )", bb.isMinReductionMatrix(exgb));
     }
 
 
     /**
-     * Test Trinks7 GBase.
+     * Test Trinks7 extended GBase.
      */
     @SuppressWarnings("unchecked")
     public void testTrinks7ExtendedGBase() {
@@ -275,7 +275,7 @@ public class GroebnerBaseSeqPairSeqTest extends TestCase {
         //System.out.println("exgb = " + exgb );
         assertTrue("isGB( GB(Trinks7) )", bb.isGB(exgb.G));
         //assertEquals("#GB(Trinks7) == 6", 6, exgb.G.size() );
-        assertTrue("isRmat( GB(Trinks7) )", bb.isReductionMatrix(exgb));
+        assertTrue("isRmat( GB(Trinks7) )", bb.isMinReductionMatrix(exgb));
         //PolynomialList<BigRational> trinks = new PolynomialList<BigRational>(F.ring,G);
         //System.out.println("G = " + trinks);
 

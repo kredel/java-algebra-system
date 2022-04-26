@@ -527,7 +527,7 @@ public class ReductionTest extends TestCase {
         assertEquals("lcm(lt(a),lt(b)) == lt(c) ", ce, c.leadingExpVector());
         assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals(e.leadingExpVector()));
 
-        assertTrue("is eSpol recording: " + e, ered.isReductionNF(row, L, e.negate(), fac.getZERO()));
+        assertTrue("is eSpol recording: " + e, ered.isReductionNF(row, L, e, fac.getZERO()));
     }
 
 
@@ -711,7 +711,7 @@ public class ReductionTest extends TestCase {
         assertEquals("lcm(lt(a),lt(b)) == lt(c) ", ce, c.leadingExpVector());
         assertFalse("lcm(lt(a),lt(b)) != lt(e) ", ce.equals(e.leadingExpVector()));
 
-        assertTrue("is dSpol recording: " + e, dred.isReductionNF(row, L, e.negate(), fac.getZERO()));
+        assertTrue("is dSpol recording: " + e, dred.isReductionNF(row, L, e, fac.getZERO()));
     }
 
 }

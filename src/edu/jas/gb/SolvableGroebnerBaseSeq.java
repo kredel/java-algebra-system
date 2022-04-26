@@ -284,7 +284,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 logger.debug("ht(H) = {}", H.leadingExpVector());
             }
 
-            row = PolynomialList.<C>castToSolvableList(blas.vectorCombine(PolynomialList.<C>castToList(rows),PolynomialList.<C>castToList(rowh)));
+            row = PolynomialList.<C>castToSolvableList(blas.vectorCombineOld(PolynomialList.<C>castToList(rows),PolynomialList.<C>castToList(rowh)));
             // row = new ArrayList<GenSolvablePolynomial<C>>(G.size() + 1);
             // for (int m = 0; m < G.size(); m++) {
             //     x = rows.get(m);
