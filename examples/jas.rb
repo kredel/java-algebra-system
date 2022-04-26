@@ -3369,9 +3369,30 @@ Compute a e-normal form with recording in row of p with respect to this ideal.
         n = EReductionSeq.new().normalform(row,gg,p);
         t = System.currentTimeMillis() - t;
         #puts "row_2 = " + str(row);
-        puts "sequential eReduction executed in " + str(t) + " ms";
+        puts "sequential eReduction recording executed in " + str(t) + " ms";
         #row = row.map{|a| RingElem.new(a) };
         return row, RingElem.new(n);
+    end
+
+=begin rdoc
+Test if n is a e-normalform with recording in row of p with respect to this ideal.
+=end
+    def iseReductionRec(row, p, n)
+        s = @pset;
+        gg = s.list;
+        row = rbarray2arraylist(row,nil,rec=1)
+        if p.is_a? RingElem
+            p = p.elem;
+        end
+        if n.is_a? RingElem
+            n = n.elem;
+        end
+        #puts "p   = " + str(p);
+        #puts "gg  = " + str(gg);
+        #puts "row_1 = " + str(row);
+        b = EReductionSeq.new().isReductionNF(row,gg,p,n);
+        #puts "row_2 = " + str(row);
+        return b;
     end
 
 =begin rdoc
