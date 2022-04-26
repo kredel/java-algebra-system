@@ -256,48 +256,48 @@ public class EGroebnerBaseSeqTest extends TestCase {
 
         assertTrue("not isZERO( a )", !a.isZERO());
         L.add(a);
-        System.out.println("L1 = " + L);
+        //System.out.println("L1 = " + L);
 
         exgb = bb.extGB(L);
-        System.out.println("exgb 1 = " + exgb);
+        //System.out.println("exgb 1 = " + exgb);
         assertTrue("isGB( { a } )", bb.isGB(exgb.G));
         assertTrue("isRmat( { a } )", bb.isMinReductionMatrix(exgb));
 
         assertTrue("not isZERO( b )", !b.isZERO());
         L.add(b);
-        System.out.println("L2 = " + L);
+        //System.out.println("L2 = " + L);
 
         exgb = bb.extGB(L);
-        System.out.println("exgb 2 = " + exgb);
+        //System.out.println("exgb 2 = " + exgb);
         assertTrue("isGB( { a, b } )", bb.isGB(exgb.G));
         assertTrue("isRmat( { a, b } )", bb.isMinReductionMatrix(exgb));
 
         assertTrue("not isZERO( c )", !c.isZERO());
         L.add(c);
-        System.out.println("L3 = " + L);
+        //System.out.println("L3 = " + L);
 
         exgb = bb.extGB(L);
-        System.out.println("exgb 3 = " + exgb );
+        //System.out.println("exgb 3 = " + exgb );
         assertTrue("isGB( { a, b, c } )", bb.isGB(exgb.G));
         assertTrue("isRmat( { a, b, c } )", bb.isMinReductionMatrix(exgb));
         //if (true) { return; }
 
         assertTrue("not isZERO( d )", !d.isZERO());
         L.add(d);
-        System.out.println("L4 = " + L);
+        //System.out.println("L4 = " + L);
 
         exgb = bb.extGB(L);
-        System.out.println("exgb 4 = " + exgb );
+        //System.out.println("exgb 4 = " + exgb );
         assertTrue("isGB( { a, b, c, d } )", bb.isGB(exgb.G));
         assertTrue("isRmat( { a, b, c, d } )", bb.isMinReductionMatrix(exgb));
 
 
         assertTrue("not isZERO( e )", !e.isZERO());
         L.add(e);
-        System.out.println("L5 = " + L);
+        //System.out.println("L5 = " + L);
 
         exgb = bb.extGB(L);
-        System.out.println("exgb 5 = " + exgb );
+        //System.out.println("exgb 5 = " + exgb );
         assertTrue("isGB( { a, b, c, d, e } )", bb.isGB(exgb.G));
         assertTrue("isRmat( { a, b, c, d, e } )", bb.isMinReductionMatrix(exgb));
     }

@@ -270,7 +270,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                 F2G.add(row);
             }
             exgb = new ExtendedGB<C>(F,G,F2G,G2F);
-            System.out.println("exgb #1 = " + exgb);
+            //System.out.println("exgb #1 = " + exgb);
             return exgb;
         }
 
@@ -370,8 +370,9 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                 }
                 //logger.info("Spol_red_norm = {}", H);
                 if (H.isONE()) {
-                    G.clear();
+                    //G.clear();
                     G.add(H);
+                    oneInGB = true;
                 } else if (!H.isZERO()) {
                     logger.info("H_S red = {}", H);
                     G.add(H);
@@ -400,7 +401,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
             }
         }
         G2F = normalizeMatrix(F.size(), G2F);
-        if (true||debug) {
+        if (debug) {
             exgb = new ExtendedGB<C>(F, G, F2G, G2F);
             boolean t = isReductionMatrix(exgb);
             if (!t) {
@@ -431,7 +432,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
             F2G.add(row);
         }
         exgb = new ExtendedGB<C>(F,G,F2G,G2F);
-        if (true||debug) {
+        if (debug) {
             boolean t = isMinReductionMatrix(exgb);
             if (!t) {
                 logger.info("exgb +F+F2G = {}", exgb);
