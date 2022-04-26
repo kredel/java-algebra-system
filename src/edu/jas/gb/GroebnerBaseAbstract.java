@@ -595,7 +595,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
                 //logger.info("{} isReductionMatrix row, G, G(k), k = {}, {}, {}, {}", t, row, G, G.get(k), k);
             }
             if (!t) {
-                logger.error("isReductionMatrix row, F, G, k = {}, {}, {}, {}", row, F, G, k);
+                logger.warn("isReductionMatrix row, F, G, k = {}, {}, {}, {}", row, F, G, k);
                 return false;
             }
             k++;
@@ -606,7 +606,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             boolean t = red.isReductionNF(row, G, F.get(k), null);
             //logger.info("{} isMinReductionMatrix row, G, F(k), k = {}, {}, {}, {}", t, row, G, F.get(k), k);
             if (!t) {
-                logger.error("G isReductionMatrix row, G, F(k), k = {}, {}, {}, {}", row, G, F.get(k), k);
+                logger.warn("G isReductionMatrix row, G, F(k), k = {}, {}, {}, {}", row, G, F.get(k), k);
                 return false;
             }
             k++;
@@ -636,7 +636,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             boolean t = red.isReductionNF(row, F, G.get(k), null);
             //logger.info("{} isMinReductionMatrix row, F, G(k), k = {}, {}, {}, {}", t, row, F, G.get(k), k);
             if (!t) {
-                logger.error("isMinReductionMatrix row, F, G, k = {}, {}, {}, {}", row, F, G, k);
+                logger.warn("isMinReductionMatrix row, F, G, k = {}, {}, {}, {}", row, F, G, k);
                 return false;
             }
             k++;
@@ -647,7 +647,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
             boolean t = red.isReductionNF(row, G, F.get(k), null);
             //logger.info("{} isMinReductionMatrix row, G, F(k), k = {}, {}, {}, {}", t, row, G, F.get(k), k);
             if (!t) {
-                logger.error("G isMinReductionMatrix row, G, F(k), k = {}, {}, {}, {}", row, G, F.get(k), k);
+                logger.warn("G isMinReductionMatrix row, G, F(k), k = {}, {}, {}, {}", row, G, F.get(k), k);
                 return false;
             }
             k++;

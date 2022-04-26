@@ -26,10 +26,15 @@
 <dt>2022, ????? </dt> <!-- 2.7.130 -->
 <dd>
 
- Add missing methods for normalform, S-polynomial, G-Polynomial with
- recording in <code>DReduction</code>, <code>EReduction</code>
- interfaces and <code>DReductionSeq</code>,
- <code>EReductionSeq</code> classes.
+ New method <code>extGB()</code> for d- and e-GrOebner Bases in
+ classes <code>DGroebnerBaseSeq</code> and via new reduction methods
+ automatically in <code>EGroebnerBasesSeq</code>. Test can reuse
+ methods <code>isReductionMatrix()</code> and
+ <code>isMinReductionMatrix()</code> from
+ <code>GroebnerBaseAbstract</code>.  Added missing methods for
+ normalform, S-polynomial, G-Polynomial with recording in
+ <code>DReduction</code>, <code>EReduction</code> interfaces and
+ <code>DReductionSeq</code>, <code>EReductionSeq</code> classes.
 
  JAS compiles and runs with Java 17, no switch to Java 17 at the
  moment.  JAS debian package build on Debian 11 bullseye with Java 17
@@ -2920,7 +2925,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Wed Apr 20 13:18:27 CEST 2022
+Last modified: Tue Apr 26 11:50:32 CEST 2022
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
