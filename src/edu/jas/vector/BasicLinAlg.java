@@ -303,20 +303,6 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
                 x = x.sum(y);
             }
             //System.out.println("mx = " + m + " " + x);
-
-            // if (x == null) {
-            //     if (y == null) {
-            //         //x = y;
-            //     } else {
-            //         x = y.negate();
-            //     }
-            // } else {
-            //     if (y == null) {
-            //         //x = y;
-            //     } else {
-            //         x = x.subtract(y);
-            //     }
-            // }
             V.add(x);
         }
         if (it.hasNext() || jt.hasNext()) {
