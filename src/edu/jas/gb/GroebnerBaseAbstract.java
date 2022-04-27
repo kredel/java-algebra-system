@@ -14,8 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -337,10 +337,10 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
      * @return true, if M is a Groebner base, else false.
      */
     public boolean isGB(ModuleList<C> M) {
-        return isGB(M,false);
+        return isGB(M, false);
     }
 
-    
+
     /**
      * isGB.
      * @param M a module basis.
@@ -366,10 +366,10 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
      * @return GB(M), a Groebner base of M.
      */
     public ModuleList<C> GB(ModuleList<C> M) {
-        return GB(M,false);
+        return GB(M, false);
     }
 
-    
+
     /**
      * GB.
      * @param M a module basis.
@@ -412,7 +412,8 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
      *         back-and-forth transformations.
      */
     public ExtendedGB<C> extGB(int modv, List<GenPolynomial<C>> F) {
-        throw new UnsupportedOperationException("extGB not implemented in " + this.getClass().getSimpleName());
+        throw new UnsupportedOperationException(
+                        "extGB not implemented in " + this.getClass().getSimpleName());
     }
 
 
@@ -574,7 +575,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
      * @return true, if Mg and Mf are reduction matrices, else false.
      */
     public boolean isReductionMatrix(List<GenPolynomial<C>> F, List<GenPolynomial<C>> G,
-                                     List<List<GenPolynomial<C>>> Mf, List<List<GenPolynomial<C>>> Mg) {
+                    List<List<GenPolynomial<C>>> Mf, List<List<GenPolynomial<C>>> Mg) {
         final int flen;
         if (F == null) {
             flen = -1;
@@ -624,7 +625,7 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
      * @return true, if Mg and Mf are reduction matrices, else false.
      */
     public boolean isMinReductionMatrix(List<GenPolynomial<C>> F, List<GenPolynomial<C>> G,
-                                     List<List<GenPolynomial<C>>> Mf, List<List<GenPolynomial<C>>> Mg) {
+                    List<List<GenPolynomial<C>>> Mf, List<List<GenPolynomial<C>>> Mg) {
         if (F == null || G == null) {
             throw new IllegalArgumentException("F or G may not be null or empty");
         }
@@ -657,9 +658,9 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
 
 
     /**
-     * Normalize M. Scale and shift right triangular matrix (new G
-     * elements) to left and make all right column elements zero.
-     * Then truncate all rows to the size of F.
+     * Normalize M. Scale and shift right triangular matrix (new G elements) to
+     * left and make all right column elements zero. Then truncate all rows to
+     * the size of F.
      * @param flen length of rows.
      * @param M a reduction matrix.
      * @return normalized M.
@@ -729,7 +730,8 @@ public abstract class GroebnerBaseAbstract<C extends RingElem<C>> implements Gro
      * @param M a reduction matrix, is modified.
      * @return a (partially) reduced Groebner base of Gp in a (fake) container.
      */
-    public ExtendedGB<C> minimalExtendedGB(int flen, List<GenPolynomial<C>> Gp, List<List<GenPolynomial<C>>> M) {
+    public ExtendedGB<C> minimalExtendedGB(int flen, List<GenPolynomial<C>> Gp,
+                    List<List<GenPolynomial<C>>> M) {
         if (Gp == null) {
             return null; //new ExtendedGB<C>(null,Gp,null,M);
         }

@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -217,7 +217,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
         GenPolynomial<C> p;
 
         int nzlen = 0;
-        for (GenPolynomial<C> f : F ) {
+        for (GenPolynomial<C> f : F) {
             if (f.length() > 0) {
                 nzlen++;
             }
@@ -235,8 +235,10 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                 row.set(k, one);
                 k++;
                 if (p.isUnit()) {
-                    G.clear(); G.add(p);
-                    G2F.clear(); G2F.add(row);
+                    G.clear();
+                    G.add(p);
+                    G2F.clear();
+                    G2F.add(row);
                     oneInGB = true;
                     break;
                 }
@@ -263,13 +265,13 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
             for (GenPolynomial<C> f : F) {
                 row = blas.genVector(G.size(), null);
                 H = dred.normalform(row, G, f);
-                if (! H.isZERO()) {
-                    logger.error("nonzero H = {}", H );
+                if (!H.isZERO()) {
+                    logger.error("nonzero H = {}", H);
                 }
                 logger.info("f row = {}", row);
                 F2G.add(row);
             }
-            exgb = new ExtendedGB<C>(F,G,F2G,G2F);
+            exgb = new ExtendedGB<C>(F, G, F2G, G2F);
             //System.out.println("exgb #1 = " + exgb);
             return exgb;
         }
@@ -278,9 +280,8 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
         int i, j;
         GenPolynomial<C> pi, pj;
         GenPolynomial<C> S, D;
-        GenPolynomial<C> x, y;
         k = 0;
-        while (pairlist.hasNext() && ! oneInGB) {
+        while (pairlist.hasNext() && !oneInGB) {
             pair = pairlist.removeNext();
             if (pair == null) {
                 continue;
@@ -290,26 +291,24 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
             pi = pair.pi;
             pj = pair.pj;
             if (debug) {
-                logger.info("i, pi    = {}, {}", i, pi );
-                logger.info("j, pj    = {}, {}", j, pj );
+                logger.info("i, pi    = {}, {}", i, pi);
+                logger.info("j, pj    = {}, {}", j, pj);
             }
             H = null;
 
             // D-polynomial case ----------------------
-            rows = blas.genVector(G.size()+1, null);
+            rows = blas.genVector(G.size() + 1, null);
             D = dred.GPolynomial(rows, i, pi, j, pj);
             logger.info("Gpol = {}", D);
             if (debug) {
-                logger.info("is reduction D = "
-                            + dred.isReductionNF(rows, G, D, ring.getZERO()) );
+                logger.info("is reduction D = " + dred.isReductionNF(rows, G, D, ring.getZERO()));
             }
             if (!D.isZERO()) { //&& !dred.isTopReducible(G, D)
                 //continue;
-                rowh = blas.genVector(G.size()+1, null);
+                rowh = blas.genVector(G.size() + 1, null);
                 H = dred.normalform(rowh, G, D);
                 if (debug) {
-                    logger.info("is reduction H = "
-                                + dred.isReductionNF(rowh, G, D, H) );
+                    logger.info("is reduction H = " + dred.isReductionNF(rowh, G, D, H));
                 }
                 //H = H.monic();
                 int s = H.leadingBaseCoefficient().signum();
@@ -330,34 +329,31 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                 }
                 //System.out.println("rowd = " + rows);
                 //System.out.println("rowh = " + rowh);
-                row = blas.vectorCombineRep(rows,rowh);
+                row = blas.vectorCombineRep(rows, rowh);
                 logger.debug("H_G row = {}", row);
                 if (!H.isZERO()) {
                     G2F.add(row);
                 }
                 if (debug) {
-                    logger.debug("ht(H) = {}", H.leadingExpVector() );
-                    logger.info("is reduction D,H = "
-                                + dred.isReductionNF(row, G, H, ring.getZERO()) );
+                    logger.debug("ht(H) = {}", H.leadingExpVector());
+                    logger.info("is reduction D,H = " + dred.isReductionNF(row, G, H, ring.getZERO()));
                 }
             }
 
             // S-polynomial case ----------------------
-            rows = blas.genVector(G.size()+1, null);
+            rows = blas.genVector(G.size() + 1, null);
             S = dred.SPolynomial(rows, i, pi, j, pj);
             logger.info("Spol = {}", S);
             if (debug) {
-                logger.info("is reduction S = "
-                            + dred.isReductionNF(rows, G, S, ring.getZERO()) );
+                logger.info("is reduction S = " + dred.isReductionNF(rows, G, S, ring.getZERO()));
             }
-            rowh = blas.genVector(G.size()+1, null);
+            rowh = blas.genVector(G.size() + 1, null);
             if (!S.isZERO()) { //&& !dred.isTopReducible(G, S)
                 //continue;
                 H = dred.normalform(rowh, G, S);
                 if (debug) {
                     logger.info("Spol_red = {}", H);
-                    logger.info("is reduction H = "
-                                + dred.isReductionNF(rowh, G, S, H) );
+                    logger.info("is reduction H = " + dred.isReductionNF(rowh, G, S, H));
                 }
                 //H = H.monic();
                 int s = H.leadingBaseCoefficient().signum();
@@ -380,19 +376,18 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
                 }
                 //System.out.println("rows = " + rows);
                 //System.out.println("rowh = " + rowh);
-                row = blas.vectorCombineRep(rows,rowh);
+                row = blas.vectorCombineRep(rows, rowh);
                 logger.debug("H_S row = {}", row);
                 if (!H.isZERO()) {
                     G2F.add(row);
                 }
                 if (debug) {
-                    logger.debug("ht(H) = {}", H.leadingExpVector() );
-                    logger.info("is reduction S,H = "
-                                + dred.isReductionNF(row, G, H, ring.getZERO()) );
+                    logger.debug("ht(H) = {}", H.leadingExpVector());
+                    logger.info("is reduction S,H = " + dred.isReductionNF(row, G, H, ring.getZERO()));
                 }
             }
         }
-        if (true||debug) {
+        if (true || debug) {
             exgb = new ExtendedGB<C>(F, G, F2G, G2F);
             boolean t = isReductionMatrix(exgb);
             if (!t) {
@@ -412,26 +407,26 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
         exgb = minimalExtendedGB(F.size(), G, G2F);
         G = exgb.G;
         G2F = exgb.G2F;
-        if (true||debug) {
-            exgb = new ExtendedGB<C>(F,G,F2G,G2F);
+        if (true || debug) {
+            exgb = new ExtendedGB<C>(F, G, F2G, G2F);
             boolean t = isMinReductionMatrix(exgb);
             if (!t) {
                 logger.info("exgb minGB = {}", exgb);
                 logger.info("exgb t_3 = {}", t);
             }
         }
-        exgb = new ExtendedGB<C>(F,G,F2G,G2F);
+        exgb = new ExtendedGB<C>(F, G, F2G, G2F);
         // setup matrices F and F2G
         for (GenPolynomial<C> f : F) {
-            row = blas.genVector(G.size()+1, null);
+            row = blas.genVector(G.size() + 1, null);
             H = dred.normalform(row, G, f);
-            if (! H.isZERO()) {
+            if (!H.isZERO()) {
                 logger.error("nonzero H, G = {}, {}", H, G);
                 throw new RuntimeException("H != 0");
             }
             F2G.add(row);
         }
-        exgb = new ExtendedGB<C>(F,G,F2G,G2F);
+        exgb = new ExtendedGB<C>(F, G, F2G, G2F);
         if (debug) {
             boolean t = isMinReductionMatrix(exgb);
             if (!t) {
@@ -451,7 +446,8 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
      * @return a (partially) reduced Groebner base of Gp in a (fake) container.
      */
     @Override
-    public ExtendedGB<C> minimalExtendedGB(int flen, List<GenPolynomial<C>> Gp, List<List<GenPolynomial<C>>> M) {
+    public ExtendedGB<C> minimalExtendedGB(int flen, List<GenPolynomial<C>> Gp,
+                    List<List<GenPolynomial<C>>> M) {
         if (Gp == null) {
             return null; //new ExtendedGB<C>(null,Gp,null,M);
         }
@@ -475,7 +471,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
         int k = 0;
         //System.out.println("flen, Gp, M = " + flen + ", " + Gp.size() + ", " + M.size() );
         GenPolynomialRing<C> pfac = null;
-        GenPolynomial<C> pi, pj, s, d, t;
+        GenPolynomial<C> pi, pj;
         ExpVector ei, ej;
         C ai, aj, r;
         while (G.size() > 0) {
@@ -511,7 +507,7 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
             }
             T = new ArrayList<GenPolynomial<C>>(G);
             T.addAll(F);
-            t = dred.normalform(T,pi);
+            //GenPolynomial<C> t = dred.normalform(T, pi);
             //System.out.println("t, mt, t==0: " + t + ", " + mt + ", " + t.isZERO());
             if (!mt) {
                 F.add(pi);

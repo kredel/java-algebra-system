@@ -351,7 +351,7 @@ public class DReductionSeq<C extends RingElem<C>> extends ReductionAbstract<C> i
         GenPolynomial<C> Cp = Ap.scaleSubtractMultiple(a1, e1, b1, f1, Bp);
 
         GenPolynomial<C> zero = Ap.ring.getZERO();
-        GenPolynomial<C> As = zero.sum(a1, e1);          /*not correct .negate()*/
+        GenPolynomial<C> As = zero.sum(a1, e1); /*not correct .negate()*/
         GenPolynomial<C> Bs = zero.sum(b1.negate(), f1); /*correct */
         row.set(i, As);
         row.set(j, Bs);

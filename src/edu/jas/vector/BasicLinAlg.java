@@ -17,9 +17,9 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Basic linear algebra methods. Implements Basic linear algebra
- * computations and tests. <b>Note:</b> will eventually use wrong
- * method dispatch in JRE when used with GenSolvablePolynomial.
+ * Basic linear algebra methods. Implements Basic linear algebra computations
+ * and tests. <b>Note:</b> will eventually use wrong method dispatch in JRE when
+ * used with GenSolvablePolynomial.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -194,7 +194,7 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
         // if (a.size() != b.size()) {
         //     throw new IllegalArgumentException("#a != #b");
         // }
-        List<C> V = new ArrayList<C>(a.size()+1);
+        List<C> V = new ArrayList<C>(a.size() + 1);
         Iterator<C> it = a.iterator();
         Iterator<C> jt = b.iterator();
         while (it.hasNext() && jt.hasNext()) {
@@ -229,8 +229,7 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
      * Combination of vectors for syzygy representation.
      * @param a a ring element list.
      * @param b a ring element list.
-     * @return (-a)+b, the vector sum of -a and b, with one entry
-     * more.
+     * @return (-a)+b, the vector sum of -a and b, with one entry more.
      */
     public List<C> vectorCombineSyz(List<C> a, List<C> b) {
         if (a == null || b == null) {
@@ -239,7 +238,7 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
         // if (a.size() != b.size()) {
         //     throw new IllegalArgumentException("#a != #b");
         // }
-        List<C> V = new ArrayList<C>(a.size()+1);
+        List<C> V = new ArrayList<C>(a.size() + 1);
         Iterator<C> it = a.iterator();
         Iterator<C> jt = b.iterator();
         while (it.hasNext() && jt.hasNext()) {
@@ -283,7 +282,7 @@ public class BasicLinAlg<C extends RingElem<C>> implements Serializable {
         // if (a.size() != b.size()) {
         //     throw new IllegalArgumentException("#a != #b");
         // }
-        List<C> V = new ArrayList<C>(a.size()+1);
+        List<C> V = new ArrayList<C>(a.size() + 1);
         Iterator<C> it = a.iterator();
         Iterator<C> jt = b.iterator();
         while (it.hasNext() && jt.hasNext()) {
