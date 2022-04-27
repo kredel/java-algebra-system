@@ -808,6 +808,35 @@ class Ideal:
         print "sequential eReduction executed in %s ms" % t; 
         return RingElem(n);
 
+    def eReductionRec(self,row,p):
+        '''Compute a e-normal form with recording of p with respect to this ideal.
+        '''
+        s = self.pset;
+        G = s.list;
+        row = pylist2arraylist(row,None,rec=1);
+        if isinstance(p,RingElem):
+            p = p.elem;
+        t = System.currentTimeMillis();
+        n = EReductionSeq().normalform(row,G,p);
+        t = System.currentTimeMillis() - t;
+        print "sequential eReduction recording executed in %s ms" % t;
+        return row, RingElem(n);
+
+    def iseReductionRec(self, row, p, n):
+        '''Test if n is a e-normal form with recording of p with respect to this ideal.
+        '''
+        s = self.pset;
+        G = s.list;
+        row = pylist2arraylist(row,None,rec=1);
+        if isinstance(p,RingElem):
+            p = p.elem;
+        if isinstance(n,RingElem):
+            n = n.elem;
+        t = System.currentTimeMillis();
+        b = EReductionSeq().isReductionNF(row,G,p,n);
+        t = System.currentTimeMillis() - t;
+        return b;
+
     def reduction(self,p):
         '''Compute a normal form of p with respect to this ideal.
         '''

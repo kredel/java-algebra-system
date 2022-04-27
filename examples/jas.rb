@@ -3387,11 +3387,7 @@ Test if n is a e-normalform with recording in row of p with respect to this idea
         if n.is_a? RingElem
             n = n.elem;
         end
-        #puts "p   = " + str(p);
-        #puts "gg  = " + str(gg);
-        #puts "row_1 = " + str(row);
         b = EReductionSeq.new().isReductionNF(row,gg,p,n);
-        #puts "row_2 = " + str(row);
         return b;
     end
 
