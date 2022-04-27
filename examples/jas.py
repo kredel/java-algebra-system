@@ -707,6 +707,30 @@ class Ideal:
         print "is e-GB test executed in %s ms" % t; 
         return b;
 
+    def eExtGB(self):
+        '''Compute an extended e-Groebner base.
+        '''
+        s = self.pset;
+        cofac = s.ring.coFac;
+        F = s.list;
+        t = System.currentTimeMillis();
+        G = EGroebnerBaseSeq().extGB(F)
+        t = System.currentTimeMillis() - t;
+        print "sequential extended e-GB executed in %s ms" % t;
+        return G; #Ideal(self.ring,"",G);
+
+    def iseExtGB(self, eg):
+        '''Test if eg is an extended e-Groebner base.
+        '''
+        s = self.pset;
+        cofac = s.ring.coFac;
+        F = s.list;
+        t = System.currentTimeMillis();
+        b = EGroebnerBaseSeq().isMinReductionMatrix(eg)
+        t = System.currentTimeMillis() - t;
+        print "sequential test extended e-GB executed in %s ms" % t;
+        return b;
+
     def dGB(self):
         '''Compute an d-Groebner base.
         '''

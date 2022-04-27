@@ -3201,6 +3201,42 @@ Test if this is an e-Groebner base.
     end
 
 =begin rdoc
+Compute an extended e-Groebner base.
+=end
+    def eExtGB()
+        s = @pset;
+        cofac = s.ring.coFac;
+        ff = s.list;
+        t = System.currentTimeMillis();
+        if cofac.isField()
+            gg = GroebnerBaseSeq.new().extGB(ff);
+        else
+            gg = EGroebnerBaseSeq.new().extGB(ff)
+        end
+        t = System.currentTimeMillis() - t;
+        puts "sequential extended e-GB executed in #{t} ms\n";
+        return gg; #SimIdeal.new(@ring,"",gg);
+    end
+
+=begin rdoc
+Test if eg is an extended e-Groebner base.
+=end
+    def iseExtGB(eg)
+        s = @pset;
+        cofac = s.ring.coFac;
+        ff = s.list;
+        t = System.currentTimeMillis();
+        if cofac.isField()
+            b = GroebnerBaseSeq.new().isMinReductionMatrix(eg);
+        else
+            b = EGroebnerBaseSeq.new().isMinReductionMatrix(eg)
+        end
+        t = System.currentTimeMillis() - t;
+        #puts "sequential test extended e-GB executed in #{t} ms\n";
+        return b;
+    end
+
+=begin rdoc
 Compute an d-Groebner base.
 =end
     def dGB()
