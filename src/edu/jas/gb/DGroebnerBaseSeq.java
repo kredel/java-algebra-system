@@ -16,6 +16,7 @@ import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.RingElem;
+import edu.jas.structure.NotInvertibleException;
 
 
 /**
@@ -572,6 +573,62 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
         }
         // does Mf need renormalization?
         */
+    }
+
+
+    /**
+     * Inverse for element modulo ideal.
+     * @param h polynomial
+     * @param F polynomial list
+     * @return inverse of h with respect to ideal(F), if defined
+     */
+    public GenPolynomial<C> inverse(GenPolynomial<C> h, List<GenPolynomial<C>> F) {
+        if (h == null || h.isZERO()) {
+            throw new NotInvertibleException("zero not invertible");
+        }
+        if (F == null || F.size() == 0) {
+            throw new NotInvertibleException("zero ideal");
+        }
+        if (h.isUnit()) {
+            return h.inverse();
+        }
+        // prepare by GB precomputation
+        List<GenPolynomial<C>> G = GB(F);
+        List<GenPolynomial<C>> I = new ArrayList<GenPolynomial<C>>(1 + G.size());
+        I.add(h);
+        I.addAll(G);
+        // now compute extended gcd(h,G)
+        ExtendedGB<C> X = extGB(I);
+        List<GenPolynomial<C>> hG = X.G;
+        //System.out.println("hG = " + hG);
+        GenPolynomial<C> one = null;
+        int i = -1;
+        for (GenPolynomial<C> p : hG) {
+            i++;
+            if (p == null) {
+                continue;
+            }
+            if (p.isUnit()) {
+                one = p;
+                break;
+            }
+        }
+        if (one == null) {
+            throw new NotInvertibleException("h = " + h);
+        }
+        List<GenPolynomial<C>> row = X.G2F.get(i); // != -1
+        GenPolynomial<C> g = row.get(0);
+        if (g == null || g.isZERO()) {
+            throw new NotInvertibleException("h = " + h);
+        }
+        // adjust g to get g*h == 1 mod ideal(G)
+        GenPolynomial<C> f = g.multiply(h);
+        GenPolynomial<C> k = red.normalform(G, f);
+        if (k.signum() < 0) { // then is -1
+            //System.out.println("g.negate");
+            g = g.negate();
+        }
+        return g;
     }
 
 }
