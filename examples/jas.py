@@ -975,6 +975,24 @@ class Ideal:
         i = s.inverse(p);
         return RingElem(i);
 
+    def eInverse(self,p):
+        '''Compute the e-inverse polynomial modulo this e-ideal, if it exists.
+        '''
+        if isinstance(p,RingElem):
+            p = p.elem;
+        i = EGroebnerBaseSeq().inverse(p, self.list);
+        return RingElem(i);
+
+    def iseInverse(self,i,p):
+        '''Test if i is a e-inverse of p modulo this e-ideal.
+        '''
+        if isinstance(i,RingElem):
+            i = i.elem;
+        if isinstance(p,RingElem):
+            p = p.elem;
+        r = EReductionSeq().normalform(self.list, i.multiply(p));
+        return r.abs().isONE();
+
 
     def optimize(self):
         '''Optimize the term order on the variables.

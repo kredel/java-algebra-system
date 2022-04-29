@@ -3548,6 +3548,31 @@ Compute the inverse polynomial modulo this ideal, if it exists.
     end
 
 =begin rdoc
+Compute the e- inverse polynomial modulo this e-ideal, if it exists.
+=end
+    def eInverse(p)
+        if p.is_a? RingElem
+            p = p.elem;
+        end
+        i = EGroebnerBaseSeq.new().inverse(p, @list);
+        return RingElem.new(i);
+    end
+
+=begin rdoc
+Test if i is a e-inverse of p modulo this e-ideal.
+=end
+    def iseInverse(i, p)
+        if i.is_a? RingElem
+            i = i.elem;
+        end
+        if p.is_a? RingElem
+            p = p.elem;
+        end
+        r = EReductionSeq.new().normalform(@list, i.multiply(p));
+        return r.abs().isONE();
+    end
+
+=begin rdoc
 Optimize the term order on the variables.
 =end
     def optimize()
