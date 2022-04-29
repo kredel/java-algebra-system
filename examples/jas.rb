@@ -3572,6 +3572,7 @@ Test if i is a e-inverse of p modulo this e-ideal.
         return r.abs().isONE();
     end
 
+
 =begin rdoc
 Optimize the term order on the variables.
 =end
