@@ -198,7 +198,11 @@ public class BigDecimalTest extends TestCase {
     public void testMultiplication() {
         a = fac.random(kl);
         b = a.multiply(a);
-        c = b.divide(a);
+        if (a.isZERO()) {
+            c = a;
+        } else {
+            c = b.divide(a);
+        }
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);

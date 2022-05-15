@@ -729,7 +729,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
     /**
      * BigDecimal parse from String.
      * @param s String.
-     * @return Biginteger from s.
+     * @return BigDecimal from s.
      */
     public BigDecimal parse(String s) {
         int i = s.indexOf("/");
@@ -748,7 +748,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
     /**
      * BigDecimal parse from Reader.
      * @param r Reader.
-     * @return next Biginteger from r.
+     * @return next BigDecimal from r.
      */
     public BigDecimal parse(Reader r) {
         return parse(StringUtil.nextString(r));
