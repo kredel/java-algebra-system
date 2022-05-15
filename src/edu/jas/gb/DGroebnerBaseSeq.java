@@ -624,9 +624,10 @@ public class DGroebnerBaseSeq<C extends RingElem<C>> extends GroebnerBaseAbstrac
         // adjust g to get g*h == 1 mod ideal(G)
         GenPolynomial<C> f = g.multiply(h);
         GenPolynomial<C> k = red.normalform(G, f);
-        if (k.signum() < 0) { // then is -1
-            //System.out.println("g.negate");
-            g = g.negate();
+        //System.out.println("g = " + g + ", h = " + h + ", f = " + f + ", k = " + k);
+        if (k.signum() < 0) { // then is -1 or inv-G(0)
+            //System.out.println("k < 0: " + G);
+            g = g.sum(G.get(0)); //.negate();
         }
         return g;
     }

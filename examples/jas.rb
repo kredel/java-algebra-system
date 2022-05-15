@@ -3569,7 +3569,8 @@ Test if i is a e-inverse of p modulo this e-ideal.
             p = p.elem;
         end
         r = EReductionSeq.new().normalform(@list, i.multiply(p));
-        return r.abs().isONE();
+        #puts "r = " + str(r);
+        return r.isONE();
     end
 
 
