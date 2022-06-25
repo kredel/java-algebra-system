@@ -50,6 +50,28 @@ public class PolyUfdUtil {
 
 
     /**
+     * Derivation of a univariate rational function.
+     * @param r rational function
+     * @return dr/dx
+     */
+    public static <C extends GcdRingElem<C>> Quotient<C> derivative(Quotient<C> r) {
+        GenPolynomial<C> num = r.num;
+        GenPolynomial<C> den = r.den;
+        GenPolynomial<C> nump = PolyUtil.<C> baseDerivative(num);
+        if (den.isONE()) {
+            return new Quotient<C>(r.ring, nump, den);
+        }
+        GenPolynomial<C> denp = PolyUtil.<C> baseDerivative(den);
+
+        // (n/d)' = (n' d - n d')/ d**2
+        GenPolynomial<C> n = den.multiply(nump).subtract(num.multiply(denp));
+        GenPolynomial<C> d = den.multiply(den);
+        Quotient<C> der = new Quotient<C>(r.ring, n, d);
+        return der;
+    }
+
+
+    /**
      * Factors of Quotient rational function.
      * @param A rational function to be factored.
      * @return list of irreducible rational function parts.

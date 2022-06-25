@@ -438,21 +438,11 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
      * Derivation of a univariate rational function.
      * @param r rational function
      * @return dr/dx
+     * @deprecated(forRemoval=true) use PolyUfdUtil.derivative()
      */
+    @Deprecated
     public Quotient<C> derivative(Quotient<C> r) {
-        GenPolynomial<C> num = r.num;
-        GenPolynomial<C> den = r.den;
-        GenPolynomial<C> nump = PolyUtil.<C> baseDerivative(num);
-        if (den.isONE()) {
-            return new Quotient<C>(r.ring, nump, den);
-        }
-        GenPolynomial<C> denp = PolyUtil.<C> baseDerivative(den);
-
-        GenPolynomial<C> n = den.multiply(nump).subtract(num.multiply(denp));
-        GenPolynomial<C> d = den.multiply(den);
-
-        Quotient<C> der = new Quotient<C>(r.ring, n, d);
-        return der;
+        return PolyUfdUtil.<C> derivative(r);
     }
 
 
