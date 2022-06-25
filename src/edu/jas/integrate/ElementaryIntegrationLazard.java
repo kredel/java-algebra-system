@@ -81,8 +81,8 @@ public class ElementaryIntegrationLazard<C extends GcdRingElem<C>> extends Eleme
             return new LogIntegral<C>(A, P, cfactors, cdenom, afactors, adenom);
         }
 
-        // deriviative
-        GenPolynomial<C> Pp = PolyUtil.<C> baseDeriviative(P);
+        // derivative
+        GenPolynomial<C> Pp = PolyUtil.<C> baseDerivative(P);
         // no: Pp = Pp.monic();
         // System.out.println("\nP = " + P);
 

@@ -632,7 +632,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
                 C c;
                 if (i == 0) {
                     c = der.evaluate(a);
-                    der = der.deriviative();
+                    der = der.derivative();
                     return c;
                 }
                 if (i > 0) {
@@ -643,7 +643,7 @@ public class UnivPowerSeriesRing<C extends RingElem<C>> implements RingFactory<U
                 c = der.evaluate(a);
                 //System.out.println("n = " + n + ", i = " +i);
                 c = c.divide(coFac.fromInteger(n));
-                der = der.deriviative();
+                der = der.derivative();
                 return c;
             }
         });

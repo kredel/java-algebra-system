@@ -35,18 +35,18 @@ public interface TaylorFunction<C extends RingElem<C>> {
 
 
     /**
-     * Deriviative.
-     * @return deriviative of this.
+     * Derivative.
+     * @return derivative of this.
      */
-    public TaylorFunction<C> deriviative();
+    public TaylorFunction<C> derivative();
 
 
     /**
-     * Multi-partial deriviative.
+     * Multi-partial derivative.
      * @param i exponent vector.
-     * @return partial deriviative of this with respect to all variables.
+     * @return partial derivative of this with respect to all variables.
      */
-    public TaylorFunction<C> deriviative(ExpVector i);
+    public TaylorFunction<C> derivative(ExpVector i);
 
 
     /**

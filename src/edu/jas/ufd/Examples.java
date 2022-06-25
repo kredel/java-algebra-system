@@ -132,7 +132,7 @@ public class Examples {
 
         // ( 7 x^6 + 1 ) /  ( x^7 + x + 1 )
         GenPolynomial<BigRational> D = pfac.parse("x^7 + x + 1");
-        GenPolynomial<BigRational> N = PolyUtil.<BigRational> baseDeriviative(D);
+        GenPolynomial<BigRational> N = PolyUtil.<BigRational> baseDerivative(D);
 
         FactorRational engine = new FactorRational();
 

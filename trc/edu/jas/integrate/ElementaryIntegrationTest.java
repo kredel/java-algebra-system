@@ -99,7 +99,7 @@ public class ElementaryIntegrationTest extends TestCase {
 //             if ( a.isZERO() || a.isONE() ) {
 //                 continue;
 //             }
-            b = integrator.deriviative(a);
+            b = integrator.derivative(a);
             //System.out.println("b =  " + b);
             rint = integrator.integrate(b);
             //System.out.println("QuotIntegral: " + rint);
@@ -140,7 +140,7 @@ public class ElementaryIntegrationTest extends TestCase {
 //             if ( a.isZERO() || a.isONE() ) {
 //                 continue;
 //             }
-            GenPolynomial<BigRational> pp = PolyUtil.<BigRational> baseDeriviative(a.den);
+            GenPolynomial<BigRational> pp = PolyUtil.<BigRational> baseDerivative(a.den);
             b = new Quotient<BigRational>(qfac, pp ,a.den);
             //System.out.println("b =  " + b);
             rint = integrator.integrate(b);
@@ -162,10 +162,10 @@ public class ElementaryIntegrationTest extends TestCase {
 //                 continue;
 //             }
 
-            b = integrator.deriviative(a);
+            b = integrator.derivative(a);
             //System.out.println("b =  " + b);
 
-            GenPolynomial<BigRational> pp = PolyUtil.<BigRational> baseDeriviative(a.den);
+            GenPolynomial<BigRational> pp = PolyUtil.<BigRational> baseDerivative(a.den);
             c = new Quotient<BigRational>(qfac, pp ,a.den);
             //System.out.println("c =  " + c);
 
@@ -191,7 +191,7 @@ public class ElementaryIntegrationTest extends TestCase {
 //                 continue;
 //             }
 
-            b = integrator.deriviative(a);
+            b = integrator.derivative(a);
             //System.out.println("b =  " + b);
 
             d = new Quotient<BigRational>(qfac,qfac.getONE().num,a.den);
@@ -220,10 +220,10 @@ public class ElementaryIntegrationTest extends TestCase {
 //                 continue;
 //             }
 
-            b = integrator.deriviative(a);
+            b = integrator.derivative(a);
             //System.out.println("b =  " + b);
 
-            GenPolynomial<BigRational> pp = PolyUtil.<BigRational> baseDeriviative(a.den);
+            GenPolynomial<BigRational> pp = PolyUtil.<BigRational> baseDerivative(a.den);
             c = new Quotient<BigRational>(qfac, pp ,a.den);
             //System.out.println("c =  " + c);
 
@@ -264,7 +264,7 @@ public class ElementaryIntegrationTest extends TestCase {
             //             if ( a.isZERO() || a.isONE() ) {
             //                 continue;
             //             }
-            qb = qintegrator.deriviative(qa);
+            qb = qintegrator.derivative(qa);
             //System.out.println("qb =  " + qb);
             qrint = qintegrator.integrate(qb);
             //System.out.println("QuotIntegral: " + qrint);

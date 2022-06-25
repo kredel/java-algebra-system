@@ -51,7 +51,7 @@ public class RealRootsSturm<C extends RingElem<C> & Rational> extends RealRootsA
         }
         GenPolynomial<C> F = f;
         S.add(F);
-        GenPolynomial<C> G = PolyUtil.<C> baseDeriviative(f);
+        GenPolynomial<C> G = PolyUtil.<C> baseDerivative(f);
         while (!G.isZERO()) {
             GenPolynomial<C> r = F.remainder(G);
             F = G;

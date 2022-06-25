@@ -221,7 +221,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                 if (T0.isConstant() || T0.isZERO()) {
                     break;
                 }
-                Tp = PolyUtil.<C> baseDeriviative(T0);
+                Tp = PolyUtil.<C> baseDerivative(T0);
                 T = engine.baseGcd(T0, Tp);
                 T = T.monic();
                 V = PolyUtil.<C> basePseudoDivide(T0, T);
@@ -384,7 +384,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                 if (T0.isConstant() || T0.isZERO()) {
                     break;
                 }
-                Tp = PolyUtil.<C> recursiveDeriviative(T0);
+                Tp = PolyUtil.<C> recursiveDerivative(T0);
                 //System.out.println("iT0 = " + T0);
                 //System.out.println("iTp = " + Tp);
                 T = engine.recursiveUnivariateGcd(T0, Tp);

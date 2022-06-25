@@ -250,7 +250,7 @@ public class Examples {
 
         Quotient<BigRational> qi = qfac.random(7);
         //qi = qi.sum( qfac.random(5) );
-        q = eIntegrator.deriviative(qi);
+        q = eIntegrator.derivative(qi);
         System.out.println("qi =  " + qi);
         System.out.println("q  =  " + q);
         ret = eIntegrator.integrate(q);

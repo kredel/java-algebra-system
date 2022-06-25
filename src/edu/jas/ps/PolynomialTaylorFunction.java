@@ -69,31 +69,31 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
 
 
     /**
-     * Deriviative.
-     * @return deriviative of this.
+     * Derivative.
+     * @return derivative of this.
      */
     @Override
-    public TaylorFunction<C> deriviative() {
-        return new PolynomialTaylorFunction<C>(PolyUtil.<C> baseDeriviative(pol));
+    public TaylorFunction<C> derivative() {
+        return new PolynomialTaylorFunction<C>(PolyUtil.<C> baseDerivative(pol));
     }
 
 
     /*
-     * Partial deriviative.
+     * Partial derivative.
      * @param r index of the variable.
-     * @return partial deriviative of this with respect to variable r.
-    public TaylorFunction<C> deriviative(int r) {
-        return new PolynomialTaylorFunction<C>(PolyUtil. <C> baseDeriviative(pol,r)); 
+     * @return partial derivative of this with respect to variable r.
+    public TaylorFunction<C> derivative(int r) {
+        return new PolynomialTaylorFunction<C>(PolyUtil. <C> baseDerivative(pol,r)); 
     }
      */
 
 
     /**
-     * Multi-partial deriviative.
+     * Multi-partial derivative.
      * @param i exponent vector.
-     * @return partial deriviative of this with respect to all variables.
+     * @return partial derivative of this with respect to all variables.
      */
-    public TaylorFunction<C> deriviative(ExpVector i) {
+    public TaylorFunction<C> derivative(ExpVector i) {
         GenPolynomial<C> p = pol;
         long f = 1L;
         if (i.signum() == 0 || pol.isZERO()) {
@@ -106,7 +106,7 @@ public class PolynomialTaylorFunction<C extends RingElem<C>> implements TaylorFu
             }
             int jl = i.length() - 1 - j;
             for (long k = 0; k < e; k++) {
-                p = PolyUtil.<C> baseDeriviative(p, jl);
+                p = PolyUtil.<C> baseDerivative(p, jl);
                 f *= (k + 1);
                 if (p.isZERO()) {
                     return new PolynomialTaylorFunction<C>(p, f);

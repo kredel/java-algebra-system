@@ -499,7 +499,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
         }
         C a = P.leadingBaseCoefficient();
         a = a.inverse();
-        GenPolynomial<C> Pp = PolyUtil.<C> baseDeriviative(P);
+        GenPolynomial<C> Pp = PolyUtil.<C> baseDerivative(P);
         GenPolynomial<C> res = baseResultant(P, Pp);
         GenPolynomial<C> disc = res.multiply(a);
         long n = P.degree(0);

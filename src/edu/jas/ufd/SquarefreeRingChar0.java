@@ -85,7 +85,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>>
         if (pp.isConstant()) {
             return pp;
         }
-        GenPolynomial<C> d = PolyUtil.<C> baseDeriviative(pp);
+        GenPolynomial<C> d = PolyUtil.<C> baseDerivative(pp);
         d = engine.basePrimitivePart(d);
         GenPolynomial<C> g = engine.baseGcd(pp, d);
         g = engine.basePrimitivePart(g);
@@ -150,7 +150,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>>
                 if (T0.isConstant() || T0.isZERO()) {
                     break;
                 }
-                Tp = PolyUtil.<C> baseDeriviative(T0);
+                Tp = PolyUtil.<C> baseDerivative(T0);
                 T = engine.baseGcd(T0, Tp);
                 T = engine.basePrimitivePart(T);
                 V = PolyUtil.<C> basePseudoDivide(T0, T);
@@ -221,7 +221,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>>
             //System.out.println("Pc = " + Pc);
             return pp.multiply(Pc);
         }
-        GenPolynomial<GenPolynomial<C>> d = PolyUtil.<C> recursiveDeriviative(pp);
+        GenPolynomial<GenPolynomial<C>> d = PolyUtil.<C> recursiveDerivative(pp);
         //System.out.println("d = " + d);
         GenPolynomial<GenPolynomial<C>> g = engine.recursiveUnivariateGcd(pp, d);
         //System.out.println("g,rec = " + g);
@@ -305,7 +305,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>>
                 if (T0.isConstant() || T0.isZERO()) {
                     break;
                 }
-                Tp = PolyUtil.<C> recursiveDeriviative(T0);
+                Tp = PolyUtil.<C> recursiveDerivative(T0);
                 //System.out.println("iTp = " + Tp);
                 T = engine.recursiveUnivariateGcd(T0, Tp);
                 //System.out.println("iT = " + T);

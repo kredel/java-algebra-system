@@ -9,8 +9,8 @@ import java.util.ArrayList;
 // import java.util.Arrays;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Rational;
@@ -120,7 +120,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
         }
         GenPolynomial<C> F = f;
         S.add(F);
-        GenPolynomial<C> G = g; //PolyUtil.<C> baseDeriviative(f);
+        GenPolynomial<C> G = g; //PolyUtil.<C> baseDerivative(f);
         while (!G.isZERO()) {
             GenPolynomial<C> r = F.remainder(G);
             F = G;
@@ -251,7 +251,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
      * @param a univariate squarefree complex polynomial.
      * @return list of complex roots.
      */
-    @SuppressWarnings({"cast","unchecked"})
+    @SuppressWarnings({ "cast", "unchecked" })
     @Override
     public List<Rectangle<C>> complexRoots(Rectangle<C> rect, GenPolynomial<Complex<C>> a)
                     throws InvalidBoundaryException {
@@ -409,9 +409,8 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
 
 
     /**
-     * Exclude zero. If an axis intersects with the rectangle, it is shrinked 
-     * to exclude the axis.
-     * Not used.
+     * Exclude zero. If an axis intersects with the rectangle, it is shrinked to
+     * exclude the axis. Not used.
      * @param rect root isolating rectangle for f which contains exactly one
      *            root.
      * @return a new rectangle r such that re(r) &lt; 0 or (re)r &gt; 0 and

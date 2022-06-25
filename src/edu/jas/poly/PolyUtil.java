@@ -1605,9 +1605,9 @@ public class PolyUtil {
      * GenPolynomial polynomial derivative main variable.
      * @param <C> coefficient type.
      * @param P GenPolynomial.
-     * @return deriviative(P).
+     * @return derivative(P).
      */
-    public static <C extends RingElem<C>> GenPolynomial<C> baseDeriviative(GenPolynomial<C> P) {
+    public static <C extends RingElem<C>> GenPolynomial<C> baseDerivative(GenPolynomial<C> P) {
         if (P == null || P.isZERO()) {
             return P;
         }
@@ -1644,16 +1644,16 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param P GenPolynomial.
      * @param r variable for partial deriviate.
-     * @return deriviative(P,r).
+     * @return derivative(P,r).
      */
-    public static <C extends RingElem<C>> GenPolynomial<C> baseDeriviative(GenPolynomial<C> P, int r) {
+    public static <C extends RingElem<C>> GenPolynomial<C> baseDerivative(GenPolynomial<C> P, int r) {
         if (P == null || P.isZERO()) {
             return P;
         }
         GenPolynomialRing<C> pfac = P.ring;
         if (r < 0 || pfac.nvar <= r) {
             throw new IllegalArgumentException(
-                            P.getClass().getName() + " deriviative variable out of bound " + r);
+                            P.getClass().getName() + " derivative variable out of bound " + r);
         }
         int rp = pfac.nvar - 1 - r;
         RingFactory<C> rf = pfac.coFac;
@@ -1717,9 +1717,9 @@ public class PolyUtil {
      * GenPolynomial recursive polynomial derivative main variable.
      * @param <C> coefficient type.
      * @param P recursive GenPolynomial.
-     * @return deriviative(P).
+     * @return derivative(P).
      */
-    public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursiveDeriviative(
+    public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursiveDerivative(
                     GenPolynomial<GenPolynomial<C>> P) {
         if (P == null || P.isZERO()) {
             return P;
@@ -2081,10 +2081,10 @@ public class PolyUtil {
         if (pfac.nvar <= 1) {
             return A; //translationBase(A, H.get(0));
         }
-        if (H == null || pfac.nvar-1 != H.size()) {
+        if (H == null || pfac.nvar - 1 != H.size()) {
             throw new IllegalArgumentException(
-					       "number of translation points do not match number of variables " + (pfac.nvar-1)
-			    + " != " + H.size());
+                            "number of translation points do not match number of variables " + (pfac.nvar - 1)
+                                            + " != " + H.size());
         }
         C h = H.get(0);
         List<C> L = H.subList(1, H.size());
@@ -2512,7 +2512,7 @@ public class PolyUtil {
         s = s.sum(fa);
         long n = 1;
         long i = 0;
-        GenPolynomial<C> g = PolyUtil.<C> baseDeriviative(f);
+        GenPolynomial<C> g = PolyUtil.<C> baseDerivative(f);
         //GenPolynomial<C> p = fac.getONE();
         while (!g.isZERO()) {
             i++;
@@ -2522,7 +2522,7 @@ public class PolyUtil {
             q = q.multiply(fa);
             q = q.divide(fac.fromInteger(n));
             s = s.sum(q);
-            g = PolyUtil.<C> baseDeriviative(g);
+            g = PolyUtil.<C> baseDerivative(g);
         }
         //System.out.println("s = " + s);
         return s;
@@ -2958,7 +2958,8 @@ public class PolyUtil {
         if (tfac.equals(R)) { // check 
             return H;
         }
-        logger.warn("tfac != R: tfac = {}, R = {}, pdac = {}", tfac.toScript(), R.toScript(), pfac.toScript());
+        logger.warn("tfac != R: tfac = {}, R = {}, pdac = {}", tfac.toScript(), R.toScript(),
+                        pfac.toScript());
         // throw new RuntimeException("contract(pfac) != R");
         return H;
     }

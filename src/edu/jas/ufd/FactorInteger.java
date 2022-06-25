@@ -254,7 +254,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                     logger.info("unlucky prime (deg) = {}", p);
                     continue;
                 }
-                GenPolynomial<MOD> ap = PolyUtil.<MOD> baseDeriviative(am);
+                GenPolynomial<MOD> ap = PolyUtil.<MOD> baseDerivative(am);
                 if (ap.isZERO()) {
                     logger.info("unlucky prime (a')= {}", p);
                     continue;
@@ -1514,7 +1514,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         GenPolynomialRing<GenPolynomial<BigInteger>> rfac = pfac.recursive(1);
         GenPolynomial<GenPolynomial<BigInteger>> Pr = PolyUtil.<BigInteger> recursive(rfac, P);
-        GenPolynomial<GenPolynomial<BigInteger>> Ps = PolyUtil.<BigInteger> recursiveDeriviative(Pr);
+        GenPolynomial<GenPolynomial<BigInteger>> Ps = PolyUtil.<BigInteger> recursiveDerivative(Pr);
         System.out.println("Pr = " + Pr);
         System.out.println("Ps = " + Ps);
         GenPolynomial<GenPolynomial<BigInteger>> g = engine.recursiveUnivariateGcd(Pr, Ps);
@@ -1526,7 +1526,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         rfac = pfac.recursive(pfac.nvar - 1);
         Pr = PolyUtil.<BigInteger> recursive(rfac, P);
         Pr = PolyUtil.<BigInteger> switchVariables(Pr);
-        Ps = PolyUtil.<BigInteger> recursiveDeriviative(Pr);
+        Ps = PolyUtil.<BigInteger> recursiveDerivative(Pr);
         System.out.println("Pr = " + Pr);
         System.out.println("Ps = " + Ps);
         g = engine.recursiveUnivariateGcd(Pr, Ps);

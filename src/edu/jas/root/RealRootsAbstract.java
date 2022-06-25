@@ -413,7 +413,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
         if (f == null || f.isZERO() || f.isConstant()) { // ?
             return v;
         }
-        GenPolynomial<C> gp = PolyUtil.<C> baseDeriviative(g);
+        GenPolynomial<C> gp = PolyUtil.<C> baseDerivative(g);
         //System.out.println("g  = " + g);
         //System.out.println("gp = " + gp);
         C B = magnitudeBound(iv, gp);
@@ -533,7 +533,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
         // polynomials with decimal coefficients
         GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc, f.ring);
         GenPolynomial<BigDecimal> df = PolyUtil.<C> decimalFromRational(dfac, f);
-        GenPolynomial<C> fp = PolyUtil.<C> baseDeriviative(f);
+        GenPolynomial<C> fp = PolyUtil.<C> baseDerivative(f);
         GenPolynomial<BigDecimal> dfp = PolyUtil.<C> decimalFromRational(dfac, fp);
         // Newton Raphson iteration: x_{n+1} = x_n - f(x_n)/f'(x_n)
         int i = 0;
@@ -546,7 +546,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
             }
             BigDecimal fpx = PolyUtil.<BigDecimal> evaluateMain(dc, dfp, d); // f'(d)
             if (fpx.isZERO()) {
-                throw new NoConvergenceException("zero deriviative should not happen");
+                throw new NoConvergenceException("zero derivative should not happen");
             }
             BigDecimal x = fx.divide(fpx);
             BigDecimal dx = d.subtract(x);
@@ -639,7 +639,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
         // polynomials with decimal coefficients
         GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc, f.ring);
         GenPolynomial<BigDecimal> df = PolyUtil.<C> decimalFromRational(dfac, f);
-        GenPolynomial<C> fp = PolyUtil.<C> baseDeriviative(f);
+        GenPolynomial<C> fp = PolyUtil.<C> baseDerivative(f);
         GenPolynomial<BigDecimal> dfp = PolyUtil.<C> decimalFromRational(dfac, fp);
         //
         return isApproximateRoot(x, df, dfp, e);
@@ -650,7 +650,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
      * Test if x is an approximate real root.
      * @param x approximate real root.
      * @param f univariate polynomial, non-zero.
-     * @param fp univariate polynomial, non-zero, deriviative of f.
+     * @param fp univariate polynomial, non-zero, derivative of f.
      * @param eps requested interval length.
      * @return true if x is a decimal approximation of a real v with f(v) = 0
      *         with |d-v| &lt; eps, else false.
@@ -710,7 +710,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
         // polynomials with decimal coefficients
         GenPolynomialRing<BigDecimal> dfac = new GenPolynomialRing<BigDecimal>(dc, f.ring);
         GenPolynomial<BigDecimal> df = PolyUtil.<C> decimalFromRational(dfac, f);
-        GenPolynomial<C> fp = PolyUtil.<C> baseDeriviative(f);
+        GenPolynomial<C> fp = PolyUtil.<C> baseDerivative(f);
         GenPolynomial<BigDecimal> dfp = PolyUtil.<C> decimalFromRational(dfac, fp);
         for (BigDecimal x : R) {
             if (!isApproximateRoot(x, df, dfp, e)) {
@@ -735,7 +735,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
         GenPolynomial<C> F = f;
         S.add(F);
         while (d-- > 0) {
-            GenPolynomial<C> G = PolyUtil.<C> baseDeriviative(F);
+            GenPolynomial<C> G = PolyUtil.<C> baseDerivative(F);
             F = G;
             S.add(F);
         }
@@ -753,7 +753,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
      */
     public List<Integer> signSequence(GenPolynomial<C> f, Interval<C> v) {
         List<Integer> S = new ArrayList<Integer>();
-        GenPolynomial<C> fp = PolyUtil.<C> baseDeriviative(f);
+        GenPolynomial<C> fp = PolyUtil.<C> baseDerivative(f);
         List<GenPolynomial<C>> fs = fourierSequence(fp);
         for (GenPolynomial<C> p : fs) {
             int s = realSign(v, f, p);

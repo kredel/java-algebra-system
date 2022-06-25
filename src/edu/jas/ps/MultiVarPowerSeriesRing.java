@@ -795,7 +795,7 @@ public class MultiVarPowerSeriesRing<C extends RingElem<C>> implements RingFacto
                     c = der.evaluate(v);
                     return c;
                 }
-                TaylorFunction<C> pder = der.deriviative(i);
+                TaylorFunction<C> pder = der.derivative(i);
                 if (pder.isZERO()) {
                     return coFac.getZERO();
                 }

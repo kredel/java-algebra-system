@@ -38,22 +38,21 @@ public abstract class TaylorFunctionAdapter<C extends RingElem<C>> implements Ta
     }
 
 
-
     /**
-     * Deriviative.
-     * @return deriviative of this.
+     * Derivative.
+     * @return derivative of this.
      */
-    public TaylorFunction<C> deriviative() {
+    public TaylorFunction<C> derivative() {
         throw new UnsupportedOperationException("not implemented");
     }
 
 
     /**
-     * Multi-partial deriviative.
+     * Multi-partial derivative.
      * @param i exponent vector.
-     * @return partial deriviative of this with respect to all variables.
+     * @return partial derivative of this with respect to all variables.
      */
-    public TaylorFunction<C> deriviative(ExpVector i) {
+    public TaylorFunction<C> derivative(ExpVector i) {
         throw new UnsupportedOperationException("not implemented");
     }
 

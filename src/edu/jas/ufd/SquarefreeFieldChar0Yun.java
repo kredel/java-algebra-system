@@ -99,7 +99,7 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
         }
         GenPolynomial<C> Tp, T, W, Y, Z;
         long k = 1L; //0L
-        Tp = PolyUtil.<C> baseDeriviative(A);
+        Tp = PolyUtil.<C> baseDerivative(A);
         T = engine.baseGcd(A, Tp);
         T = T.monic();
         if (T.isConstant()) {
@@ -111,7 +111,7 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
         //    return sfactors;
         //}
         Y = PolyUtil.<C> basePseudoDivide(Tp, T);
-        GenPolynomial<C> Wp = PolyUtil.<C> baseDeriviative(W);
+        GenPolynomial<C> Wp = PolyUtil.<C> baseDerivative(W);
         Z = Y.subtract(Wp);
         while (!Z.isZERO()) {
             GenPolynomial<C> g = engine.baseGcd(W, Z);
@@ -123,7 +123,7 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
             //System.out.println("W = " + W);
             //System.out.println("g = " + g);
             Y = PolyUtil.<C> basePseudoDivide(Z, g);
-            Wp = PolyUtil.<C> baseDeriviative(W);
+            Wp = PolyUtil.<C> baseDerivative(W);
             Z = Y.subtract(Wp);
             k++;
         }
@@ -200,7 +200,7 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
         // factors of recursive polynomial
         GenPolynomial<GenPolynomial<C>> Tp, T, W, Y, Z;
         long k = 1L; //0L
-        Tp = PolyUtil.<C> recursiveDeriviative(P);
+        Tp = PolyUtil.<C> recursiveDerivative(P);
         T = engine.recursiveUnivariateGcd(P, Tp);
         T = PolyUtil.<C> monic(T);
         if (T.isConstant()) {
@@ -212,7 +212,7 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
         //    return sfactors;
         //}
         Y = PolyUtil.<C> recursivePseudoDivide(Tp, T);
-        GenPolynomial<GenPolynomial<C>> Wp = PolyUtil.<C> recursiveDeriviative(W);
+        GenPolynomial<GenPolynomial<C>> Wp = PolyUtil.<C> recursiveDerivative(W);
         Z = Y.subtract(Wp);
 
         while (!Z.isZERO()) {
@@ -225,7 +225,7 @@ public class SquarefreeFieldChar0Yun<C extends GcdRingElem<C>> extends Squarefre
             //System.out.println("W = " + W);
             //System.out.println("g = " + g);
             Y = PolyUtil.<C> recursivePseudoDivide(Z, g);
-            Wp = PolyUtil.<C> recursiveDeriviative(W);
+            Wp = PolyUtil.<C> recursiveDerivative(W);
             Z = Y.subtract(Wp);
             k++;
         }

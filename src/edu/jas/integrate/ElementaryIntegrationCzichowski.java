@@ -85,8 +85,8 @@ public class ElementaryIntegrationCzichowski<C extends GcdRingElem<C>> extends E
             return new LogIntegral<C>(A, P, cfactors, cdenom, afactors, adenom);
         }
 
-        // deriviative
-        GenPolynomial<C> Pp = PolyUtil.<C> baseDeriviative(P);
+        // derivative
+        GenPolynomial<C> Pp = PolyUtil.<C> baseDerivative(P);
         // no: Pp = Pp.monic();
         // System.out.println("Pp = " + Pp);
 
