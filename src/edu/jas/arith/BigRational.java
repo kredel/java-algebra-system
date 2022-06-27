@@ -570,6 +570,9 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
     public static BigRational RNRED(BigInteger n, BigInteger d) {
         BigInteger num;
         BigInteger den;
+        if (d.equals(BigInteger.ZERO)) {
+            throw new RuntimeException("rational number denominator is zero");
+        }
         if (n.equals(BigInteger.ZERO)) {
             num = n;
             den = BigInteger.ONE;
