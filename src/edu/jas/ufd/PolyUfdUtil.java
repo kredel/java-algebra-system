@@ -27,6 +27,7 @@ import edu.jas.poly.TermOrderByName;
 import edu.jas.ps.UnivPowerSeries;
 import edu.jas.ps.UnivPowerSeriesRing;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.Power;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -55,11 +56,14 @@ public class PolyUfdUtil {
      * @return dr/dx
      */
     public static <C extends GcdRingElem<C>> Quotient<C> derivative(Quotient<C> r) {
+        if (r == null || r.isZERO()) {
+            return r;
+        }
         GenPolynomial<C> num = r.num;
         GenPolynomial<C> den = r.den;
         GenPolynomial<C> nump = PolyUtil.<C> baseDerivative(num);
         if (den.isONE()) {
-            return new Quotient<C>(r.ring, nump, den);
+            return new Quotient<C>(r.ring, nump);
         }
         GenPolynomial<C> denp = PolyUtil.<C> baseDerivative(den);
 
@@ -67,7 +71,82 @@ public class PolyUfdUtil {
         GenPolynomial<C> n = den.multiply(nump).subtract(num.multiply(denp));
         GenPolynomial<C> d = den.multiply(den);
         Quotient<C> der = new Quotient<C>(r.ring, n, d);
+        //System.out.println("der = " + der);
         return der;
+    }
+
+
+    /**
+     * Polynomial quotient partial derivative variable r.
+     * @param <C> coefficient type.
+     * @param Q Quotient.
+     * @param r variable for partial deriviate.
+     * @return derivative(Q,r).
+     */
+    public static <C extends GcdRingElem<C>> Quotient<C> derivative(Quotient<C> Q, int r) {
+        if (Q == null || Q.isZERO()) {
+            return Q;
+        }
+        QuotientRing<C> qfac = Q.ring;
+        if (r < 0 || qfac.ring.nvar <= r) {
+            throw new IllegalArgumentException("derivative variable out of bound " + r);
+        }
+        GenPolynomial<C> num = Q.num;
+        GenPolynomial<C> den = Q.den;
+        GenPolynomial<C> nump = PolyUtil.<C> baseDerivative(num, r);
+        if (den.isONE()) {
+            return new Quotient<C>(Q.ring, nump);
+        }
+        GenPolynomial<C> denp = PolyUtil.<C> baseDerivative(den, r);
+
+        // (n/d)' = (n' d - n d')/ d**2
+        GenPolynomial<C> n = den.multiply(nump).subtract(num.multiply(denp));
+        GenPolynomial<C> d = den.multiply(den);
+        Quotient<C> der = new Quotient<C>(Q.ring, n, d);
+        return der;
+    }
+
+
+    /**
+     * Evaluate at main variable.
+     * @param <C> coefficient type.
+     * @param cfac coefficent polynomial ring factory.
+     * @param A polynomial quotient to be evaluated.
+     * @param a value to evaluate at.
+     * @return A( x_1, ..., x_{n-1}, a ).
+     */
+    public static <C extends GcdRingElem<C>> C evaluateMain(RingFactory<C> cfac,
+                    Quotient<C> A, C a) {
+        if (A == null || A.isZERO()) {
+            return cfac.getZERO();
+        }
+        C num = PolyUtil.<C> evaluateMain(cfac, A.num, a);
+        C den = PolyUtil.<C> evaluateMain(cfac, A.den, a);
+        if (den.isZERO()) {
+            throw new NotInvertibleException("den == 0");
+        }
+        return num.divide(den);
+    }
+
+
+    /**
+     * Evaluate all variables.
+     * @param <C> coefficient type.
+     * @param cfac coefficient ring factory.
+     * @param A polynomial quotient to be evaluated.
+     * @param a = (a_1, a_2, ..., a_n) a tuple of values to evaluate at.
+     * @return A(a_1, a_2, ..., a_n).
+     */
+    public static <C extends GcdRingElem<C>> C evaluateAll(RingFactory<C> cfac, Quotient<C> A, List<C> a) {
+        if (A == null || A.isZERO()) {
+            return cfac.getZERO();
+        }
+        C num = PolyUtil.<C> evaluateAll(cfac, A.num, a);
+        C den = PolyUtil.<C> evaluateAll(cfac, A.den, a);
+        if (den.isZERO()) {
+            throw new NotInvertibleException("den == 0");
+        }
+        return num.divide(den);
     }
 
 

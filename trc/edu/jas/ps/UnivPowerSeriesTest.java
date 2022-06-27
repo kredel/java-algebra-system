@@ -6,8 +6,11 @@ package edu.jas.ps;
 
 
 import edu.jas.arith.BigRational;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -75,12 +78,12 @@ public class UnivPowerSeriesTest extends TestCase {
         a = b = c = d = e = null;
         fac = null;
         cfac = null;
+        ComputerThreads.terminate();
     }
 
 
     /**
      * Test constructor and toString.
-     * 
      */
     public void testConstruction() {
         c = fac.getONE();
@@ -114,7 +117,6 @@ public class UnivPowerSeriesTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
         a = fac.random(kl);
@@ -136,7 +138,6 @@ public class UnivPowerSeriesTest extends TestCase {
 
     /**
      * Test multiplication.
-     * 
      */
     public void testMultiplication() {
         a = fac.random(kl);
@@ -175,7 +176,6 @@ public class UnivPowerSeriesTest extends TestCase {
 
     /**
      * Test distributive law.
-     * 
      */
     public void testDistributive() {
         a = fac.random(kl, q);
@@ -191,7 +191,6 @@ public class UnivPowerSeriesTest extends TestCase {
 
     /**
      * Test object quotient and remainder.
-     * 
      */
     public void testQuotRem() {
         fac = new UnivPowerSeriesRing<BigRational>(new BigRational(1));
@@ -221,7 +220,7 @@ public class UnivPowerSeriesTest extends TestCase {
         assertEquals("b = q a + r", b, e );
         */
 
-        // gcd tests -------------------------------
+        // gcd tests ---
         c = a.gcd(b);
         //System.out.println("gcd = " + c);
         assertTrue("a mod gcd(a,b) = 0", a.remainder(c).isZERO());
@@ -232,7 +231,6 @@ public class UnivPowerSeriesTest extends TestCase {
 
     /**
      * Test evaluation.
-     * 
      */
     public void testEvaluation() {
         a = fac.random(kl, q);
@@ -267,8 +265,7 @@ public class UnivPowerSeriesTest extends TestCase {
 
 
     /**
-     * Test Taylor series.
-     * 
+     * Test Taylor series of polynomials.
      */
     public void testTaylor() {
         BigRational br = new BigRational(0);
@@ -292,6 +289,44 @@ public class UnivPowerSeriesTest extends TestCase {
             //System.out.println("g   = " + g);
             //System.out.println("ps  = " + ps);
             pps = fac.fromPolynomial(g);
+            //System.out.println("pps = " + pps);
+            assertEquals("taylor(p) == p", ps, pps);
+        }
+    }
+
+
+    /**
+     * Test Taylor series of quotients of polynomials.
+     */
+    public void testQuotientTaylor() {
+        BigRational br = new BigRational(0);
+        GenPolynomialRing<BigRational> pr = fac.polyRing();
+        //System.out.println("pr  = " + pr);
+        QuotientRing<BigRational> qr = new QuotientRing<BigRational>(pr);
+        //System.out.println("qr  = " + qr.toScript());
+
+        Quotient<BigRational> p = qr.random(kl, 3, 3, q + q);
+        //System.out.println("p   = " + p);
+        //Quotient<BigRational> x = qr.generators().get(1);
+        //p = p.divide(x);
+        //System.out.println("p   = " + p);
+        if (p.den.trailingBaseCoefficient().isZERO()) { // divisible by x, evaluates to 0
+            return;
+        }
+        TaylorFunction<BigRational> F = new QuotientTaylorFunction<BigRational>(p);
+
+        UnivPowerSeries<BigRational> ps = fac.seriesOfTaylor(F, br);
+        //System.out.println("ps  = " + ps);
+        UnivPowerSeries<BigRational> pps = fac.fromPolynomial(p.num).divide(fac.fromPolynomial(p.den));
+        //System.out.println("pps = " + pps);
+        assertEquals("taylor(p) == p", ps, pps);
+
+        for (Quotient<BigRational> g : qr.generators()) {
+            F = new QuotientTaylorFunction<BigRational>(g);
+            ps = fac.seriesOfTaylor(F, br);
+            //System.out.println("g   = " + g);
+            //System.out.println("ps  = " + ps);
+            pps = fac.fromPolynomial(g.num).divide(fac.fromPolynomial(g.den));
             //System.out.println("pps = " + pps);
             assertEquals("taylor(p) == p", ps, pps);
         }
