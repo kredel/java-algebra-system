@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.ps;
+package edu.jas.application;
 
 
 import java.util.List;
@@ -10,6 +10,7 @@ import java.util.List;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.PolyUtil;
+import edu.jas.ps.TaylorFunction;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.ufd.Quotient;
