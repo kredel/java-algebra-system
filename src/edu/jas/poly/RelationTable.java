@@ -465,7 +465,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 if (!f.equals(lp)) { // check for suitable term order
                     logger.error("relation term order = {}", ring.tord);
                     logger.error("Coefficient RelationTable update f != lt(lfcd(p)): {}, f = {}, p = {}",
-				 sring.toScript(e), f, p.toScript());
+                                 sring.toScript(e), f, p.toScript());
                     throw new IllegalArgumentException("Coefficient RelationTable update f != lt(lfcd(p)): "
                                     + e + ", f = " + f + ", p = " + p);
                 }

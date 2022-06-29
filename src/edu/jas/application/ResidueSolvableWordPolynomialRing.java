@@ -180,7 +180,7 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
         polCoeff = new RecSolvableWordPolynomialRing<C>(cfring.ring, n, t, v);
         if (table.size() > 0) {
             List<GenSolvablePolynomial<GenWordPolynomial<C>>> nt
-		= new ArrayList<GenSolvablePolynomial<GenWordPolynomial<C>>>(); 
+                = new ArrayList<GenSolvablePolynomial<GenWordPolynomial<C>>>(); 
             for (GenSolvablePolynomial<WordResidue<C>> q : table.relationList()) {
                 nt.add( this.toPolyCoefficients(q) ); // only with den == 1
             }

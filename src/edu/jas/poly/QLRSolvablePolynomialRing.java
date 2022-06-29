@@ -201,7 +201,7 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
         polCoeff = new RecSolvablePolynomialRing<D>(cfring, n, t, v);
         if (table.size() > 0) {
             List<GenSolvablePolynomial<GenPolynomial<D>>> nt
-		= new ArrayList<GenSolvablePolynomial<GenPolynomial<D>>>(); 
+                = new ArrayList<GenSolvablePolynomial<GenPolynomial<D>>>(); 
             for (GenSolvablePolynomial<C> q : table.relationList()) {
                 nt.add( this.toPolyCoefficients(q) ); // only with den == 1
             }

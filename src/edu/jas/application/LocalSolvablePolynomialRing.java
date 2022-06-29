@@ -179,7 +179,7 @@ public class LocalSolvablePolynomialRing<C extends GcdRingElem<C>> extends
         polCoeff = new RecSolvablePolynomialRing<C>(cfring.ring, n, t, v);
         if (table.size() > 0) {
             List<GenSolvablePolynomial<GenPolynomial<C>>> nt
-		= new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>(); 
+                = new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>(); 
             for (GenSolvablePolynomial<SolvableLocal<C>> q : table.relationList()) {
                 nt.add( this.toPolyCoefficients(q) ); // only with den == 1
             }
