@@ -2,19 +2,14 @@
  * $Id$
  */
 
-package edu.jas.application;
+package edu.jas.ufd;
 
 
 import java.util.List;
 
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.PolyUtil;
 import edu.jas.ps.TaylorFunction;
-import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.ufd.Quotient;
-import edu.jas.ufd.PolyUfdUtil;
 
 
 /**
@@ -88,7 +83,7 @@ public class QuotientTaylorFunction<C extends GcdRingElem<C>> implements TaylorF
      * @return partial derivative of this with respect to variable r.
      */
     public TaylorFunction<C> derivative(int r) {
-        return new QuotientTaylorFunction<C>(PolyUfdUtil.<C> derivative(quo, r)); 
+        return new QuotientTaylorFunction<C>(PolyUfdUtil.<C> derivative(quo, r));
     }
 
 

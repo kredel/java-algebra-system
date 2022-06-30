@@ -2,7 +2,7 @@
  * $Id$
  */
 
-package edu.jas.application;
+package edu.jas.ufd;
 
 
 import edu.jas.arith.BigRational;
@@ -13,8 +13,6 @@ import edu.jas.ps.PolynomialTaylorFunction;
 import edu.jas.ps.TaylorFunction;
 import edu.jas.ps.UnivPowerSeries;
 import edu.jas.ps.UnivPowerSeriesRing;
-import edu.jas.ufd.Quotient;
-import edu.jas.ufd.QuotientRing;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -152,6 +150,34 @@ public class UnivPowerSeriesTaylorTest extends TestCase {
             //System.out.println("pps = " + pps);
             assertEquals("taylor(p) == p", ps, pps);
         }
+    }
+
+
+    /**
+     * Test Pade approximant of quotients of polynomials.
+     */
+    public void testQuotientPade() {
+        BigRational br = new BigRational(0);
+        GenPolynomialRing<BigRational> pr = fac.polyRing();
+        System.out.println("pr  = " + pr.toScript());
+        QuotientRing<BigRational> qr = new QuotientRing<BigRational>(pr);
+        System.out.println("qr  = " + qr.toScript());
+
+        Quotient<BigRational> p = qr.random(kl, 3, 3, q + q);
+        System.out.println("p   = " + p);
+        Quotient<BigRational> x = qr.generators().get(1);
+        while (p.den.trailingBaseCoefficient().isZERO()) { // divisible by x, evaluates to 0
+            p = p.multiply(x);
+            System.out.println("p   = " + p);
+        }
+        TaylorFunction<BigRational> F = new QuotientTaylorFunction<BigRational>(p);
+
+        Quotient<BigRational> pa = PolyUfdUtil.<BigRational> approximantOfPade(fac, F, br, 2, 3);
+        System.out.println("pa  = " + pa);
+        //UnivPowerSeries<BigRational> pps = fac.fromPolynomial(p.num).divide(fac.fromPolynomial(p.den));
+        //System.out.println("pps = " + pps);
+        //assertEquals("taylor(p) == p", ps, pps);
+
     }
 
 }
