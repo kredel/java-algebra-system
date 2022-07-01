@@ -159,35 +159,34 @@ public class UnivPowerSeriesTaylorTest extends TestCase {
     public void testQuotientPade() {
         BigRational br = new BigRational(0);
         GenPolynomialRing<BigRational> pr = fac.polyRing();
-        System.out.println("pr  = " + pr.toScript());
+        //System.out.println("pr  = " + pr.toScript());
         QuotientRing<BigRational> qr = new QuotientRing<BigRational>(pr);
-        System.out.println("qr  = " + qr.toScript());
+        //System.out.println("qr  = " + qr.toScript());
 
         final int M = 3, N = 4;
         Quotient<BigRational> p = qr.random(kl, M, N, q + q);
-        System.out.println("p   = " + p);
         Quotient<BigRational> x = qr.generators().get(1);
         while (p.den.trailingBaseCoefficient().isZERO()) { // divisible by x, evaluates to 0
             p = p.multiply(x);
-            System.out.println("p1  = " + p);
         }
         while (p.num.trailingBaseCoefficient().isZERO()) { // divisible by x, evaluates to 0
             p = p.divide(x);
-            System.out.println("p2  = " + p);
         }
+        //System.out.println("p   = " + p);
         TaylorFunction<BigRational> F = new QuotientTaylorFunction<BigRational>(p);
 
         int dm = (int)p.num.degree()+1, dn = (int)p.den.degree()+1;
-        System.out.println("[" + dm + "," + dn + "]");
+        //System.out.println("[" + dm + "," + dn + "]");
         Quotient<BigRational> pa = null;
         for (int m = 0; m < dm; m++) {
             for (int n = 0; n < dn; n++) { 
                 pa = PolyUfdUtil.<BigRational> approximantOfPade(fac, F, br, m, n);
-                System.out.println("pa[" + m + "," + n + "]  = " + pa + "\n");
+                //System.out.println("pa[" + m + "," + n + "]  = " + pa + "\n");
                 assertTrue("deg(num) <= m", pa.num.degree() <= m);
                 assertTrue("deg(den) <= n", pa.den.degree() <= n);
             }
         }
+        //System.out.println("pa[" + (dm-1) + "," + (dn-1) + "] = " + pa + "\n");
         assertEquals("p == pa: ", p, pa);
     }
 
