@@ -23,9 +23,20 @@
 
 <dl>
 
-<dt>2022, May </dt> <!-- 2.7.130 -->
+<dt>2022, xxx </dt> <!-- 2.7.140 -->
 <dd>
 
+ Fix spelling of <code>derivative</code> methods. Taylor series
+ expansion for polynomial quotients. Some code moved from
+ <code>edu.jas.ps</code> and <code>edu.jas.vector</code> to
+ <code>edu.jas.application<code> to clear package dependency cycles.
+ Pade approximation from Taylor series, in particular for polynomial
+ quotients.
+
+</dd>
+
+<dt>2022, May </dt> <!-- 2.7.130 -->
+<dd>
  New methods <code>extGB()</code> and <code>inverse()</code> for d-
  and e-Groebner Bases in classes <code>DGroebnerBaseSeq</code> and via
  new reduction methods automatically in
@@ -39,13 +50,11 @@
  scripting the respective methods <code>eExtGB</code>,
  <code>iseExtGB</code>, <code>eInverse</code> and
  <code>iseInverse</code> have been added to <code>Ideal</code>
- respectively <code>SimIdeal</code>.
-
- JAS can be compiled and run with Java 17, but no switch to Java 17
- class files at the moment.  The JAS debian package is build on Debian
- 11 bullseye with Java 17 and Jython 2.7.2, so <code>jas.py</code> and
- <code>jas -py</code> scripts can be used again in Debian.
-
+ respectively <code>SimIdeal</code>.  JAS can be compiled and run with
+ Java 17, but no switch to Java 17 class files at the moment.  The JAS
+ debian package is build on Debian 11 bullseye with Java 17 and Jython
+ 2.7.2, so <code>jas.py</code> and <code>jas -py</code> scripts can be
+ used again in Debian.
 </dd>
 
 <dt>2022, March </dt> <!-- 2.7.120 -->
@@ -2931,7 +2940,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Fri Apr 29 10:23:51 CEST 2022
+Last modified: Fri Jul  1 10:38:09 CEST 2022
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
