@@ -163,21 +163,32 @@ public class UnivPowerSeriesTaylorTest extends TestCase {
         QuotientRing<BigRational> qr = new QuotientRing<BigRational>(pr);
         System.out.println("qr  = " + qr.toScript());
 
-        Quotient<BigRational> p = qr.random(kl, 3, 3, q + q);
+        final int M = 3, N = 4;
+        Quotient<BigRational> p = qr.random(kl, M, N, q + q);
         System.out.println("p   = " + p);
         Quotient<BigRational> x = qr.generators().get(1);
         while (p.den.trailingBaseCoefficient().isZERO()) { // divisible by x, evaluates to 0
             p = p.multiply(x);
-            System.out.println("p   = " + p);
+            System.out.println("p1  = " + p);
+        }
+        while (p.num.trailingBaseCoefficient().isZERO()) { // divisible by x, evaluates to 0
+            p = p.divide(x);
+            System.out.println("p2  = " + p);
         }
         TaylorFunction<BigRational> F = new QuotientTaylorFunction<BigRational>(p);
 
-        Quotient<BigRational> pa = PolyUfdUtil.<BigRational> approximantOfPade(fac, F, br, 2, 3);
-        System.out.println("pa  = " + pa);
-        //UnivPowerSeries<BigRational> pps = fac.fromPolynomial(p.num).divide(fac.fromPolynomial(p.den));
-        //System.out.println("pps = " + pps);
-        //assertEquals("taylor(p) == p", ps, pps);
-
+        int dm = (int)p.num.degree()+1, dn = (int)p.den.degree()+1;
+        System.out.println("[" + dm + "," + dn + "]");
+        Quotient<BigRational> pa = null;
+        for (int m = 0; m < dm; m++) {
+            for (int n = 0; n < dn; n++) { 
+                pa = PolyUfdUtil.<BigRational> approximantOfPade(fac, F, br, m, n);
+                System.out.println("pa[" + m + "," + n + "]  = " + pa + "\n");
+                assertTrue("deg(num) <= m", pa.num.degree() <= m);
+                assertTrue("deg(den) <= n", pa.den.degree() <= n);
+            }
+        }
+        assertEquals("p == pa: ", p, pa);
     }
 
 }

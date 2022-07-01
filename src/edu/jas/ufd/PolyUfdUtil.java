@@ -24,6 +24,7 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrderByName;
+import edu.jas.ps.TaylorFunction;
 import edu.jas.ps.UnivPowerSeries;
 import edu.jas.ps.UnivPowerSeriesRing;
 import edu.jas.structure.GcdRingElem;
@@ -147,6 +148,137 @@ public class PolyUfdUtil {
             throw new NotInvertibleException("den == 0");
         }
         return num.divide(den);
+    }
+
+
+    /**
+     * Pade approximant [m/n] of function f. Computed using Taylor
+     * power series expansion of f.
+     * @see https://en.wikipedia.org/wiki/Pad%C3%A9_approximant
+     * @param upr univariate power series ring.
+     * @param f function.
+     * @param a expansion point.
+     * @param m degree of approximant numerator.
+     * @param n degree of approximant denominator.
+     * @return Pade approximation of f.
+     */
+    public static <C extends GcdRingElem<C>> Quotient<C> approximantOfPade(final UnivPowerSeriesRing<C> upr, final TaylorFunction<C> f, final C a, int m, int n) {
+        int mn = m + n;
+        GenPolynomialRing<C> pfac = upr.polyRing();
+        QuotientRing<C> qfac = new QuotientRing<C>(pfac);
+
+        UnivPowerSeries<C> tps = upr.seriesOfTaylor(f, a);
+        int t = mn + 1;
+        if (tps.truncate() != t) {
+            tps.setTruncate(t);
+            //System.out.println("t = " + t + ", default = " + tps.ring.DEFAULT_TRUNCATE);
+        }
+        if (tps.isZERO()) {
+            throw new IllegalArgumentException("Taylor series may not be zero: " + tps);
+        }
+        //System.out.println("tps = " + tps);
+        GenPolynomial<C> Tmn = tps.asPolynomial();
+        GenPolynomial<C> Xmn1 = pfac.univariate(0, mn+1);
+        //System.out.println("Tmn = " + Tmn);
+        //System.out.println("Xmn1 = " + Xmn1);
+
+        GenPolynomial<C>[] exg = PolyUfdUtil.<C> agcd(Tmn, Xmn1, n);
+        GenPolynomial<C> p = exg[0];
+        GenPolynomial<C> q = exg[1];
+        //System.out.println("a = " + exg[2]);
+        Quotient<C> pa = new Quotient<C>(qfac, p, q);
+        return pa;
+    }
+
+
+    /**
+     * GenPolynomial approximate common divisor. Only for univariate
+     * polynomials over fields.
+     * @param R GenPolynomial.
+     * @param S GenPolynomial.
+     * @param n maximal degree of a.
+     * @return [ gcd(R,S), a, b ] with a*R + b*S = gcd(R,S).
+     */
+    @SuppressWarnings("unchecked")
+    public static <C extends GcdRingElem<C>> GenPolynomial<C>[] agcd(GenPolynomial<C> R, GenPolynomial<C> S, int n) {
+        GenPolynomial<C>[] ret = new GenPolynomial[2];
+        ret[0] = null;
+        ret[1] = null;
+        if (R == null) {
+            return ret;
+        }
+        GenPolynomialRing<C> ring = R.ring;
+        if (R.isZERO()) {
+            ret[0] = S;
+            ret[1] = ring.getZERO();
+            //ret[2] = ring.getONE();
+            return ret;
+        }
+        if (S == null || S.isZERO()) {
+            ret[0] = R;
+            ret[1] = ring.getONE();
+            //ret[2] = ring.getZERO();
+            return ret;
+        }
+        if (ring.nvar != 1) {
+            throw new IllegalArgumentException("not univariate polynomials" + ring);
+        }
+        if (R.isConstant() && S.isConstant()) {
+            C t = R.leadingBaseCoefficient();
+            C s = S.leadingBaseCoefficient();
+            C[] gg = t.egcd(s);
+            //System.out.println("coeff gcd = " + Arrays.toString(gg));
+            GenPolynomial<C> z = R.ring.getZERO();
+            ret[0] = z.sum(gg[0]);
+            ret[1] = z.sum(gg[1]);
+            //ret[2] = z.sum(gg[2]);
+            return ret;
+        }
+        GenPolynomial<C>[] qr;
+        GenPolynomial<C> q = R;
+        GenPolynomial<C> r = S;
+        GenPolynomial<C> c1 = ring.getONE().copy();
+        GenPolynomial<C> d1 = ring.getZERO().copy();
+        GenPolynomial<C> c2 = ring.getZERO().copy();
+        GenPolynomial<C> d2 = ring.getONE().copy();
+        GenPolynomial<C> x1;
+        GenPolynomial<C> x2;
+        GenPolynomial<C> num = ring.getONE();
+        GenPolynomial<C> den = ring.getONE();
+        while (!r.isZERO()) {
+            qr = q.quotientRemainder(r);
+            q = qr[0];
+            x1 = c1.subtract(q.multiply(d1));
+            x2 = c2.subtract(q.multiply(d2));
+            c1 = d1;
+            c2 = d2;
+            d1 = x1;
+            d2 = x2;
+            q = r;
+            r = qr[1];
+            //System.out.println("q = " + q + ", c1 = " + c1);
+            if (c1.degree() <= n) {
+                num = q;
+                den = c1;
+            } else {
+                break;
+            }
+        }
+        // normalize ldcf(q) to 1, i.e. make monic
+        C g = num.leadingBaseCoefficient();
+        if (g.isUnit()) {
+            C h = g.inverse();
+            num = num.multiply(h);
+            den = den.multiply(h);
+            c2 = c2.multiply(h);
+        }
+        //System.out.println("num = " + num);
+        //System.out.println("den = " + den);
+        //assert ( ((c1.multiply(R)).sum( c2.multiply(S)).equals(q) ));
+        ret[0] = num; //q;
+        ret[1] = den; //c1;
+        //ret[2] = c2;
+        return ret;
     }
 
 
