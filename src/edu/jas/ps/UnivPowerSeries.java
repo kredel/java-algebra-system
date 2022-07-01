@@ -259,7 +259,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      */
     public GenPolynomial<C> asPolynomial() {
         GenPolynomial<C> p = ring.polyRing().getZERO();
-        for (int i = 0; i <= truncate; i++) {
+        for (int i = 0; i < truncate; i++) {
             C c = coefficient(i);
             ExpVector e = ExpVector.create(1, 0, i);
             p = p.sum(c, e);
@@ -516,13 +516,13 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      */
     public int order() {
         if (order < 0) { // compute it
-            for (int i = 0; i <= truncate; i++) {
+            for (int i = 0; i < truncate; i++) {
                 if (!coefficient(i).isZERO()) {
                     order = i;
                     return order;
                 }
             }
-            order = truncate + 1;
+            order = truncate/* + 1*/;
         }
         return order;
     }
@@ -574,7 +574,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
         do {
             s = coefficient(pos).compareTo(ps.coefficient(pos));
             pos++;
-        } while (s == 0 && pos <= truncate);
+        } while (s == 0 && pos < truncate);
         return s;
     }
 
@@ -628,7 +628,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
         int h = 0;
         //h = ( ring.hashCode() << 23 );
         //h += val.hashCode();
-        for (int i = 0; i <= truncate; i++) {
+        for (int i = 0; i < truncate; i++) {
             h += coefficient(i).hashCode();
             h = (h << 23);
         }
