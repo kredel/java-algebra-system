@@ -47,7 +47,7 @@
   <property name="dist"      value="../jas-versions/jas-2.7" />
   <property name="tmpdist"   value="../jas-versions/tmp" />
   <property name="artifactId" value="jas" />
-  <property name="svnrev"    value="130" />
+  <property name="svnrev"    value="140" />
   <property name="gitrev"    value="${svnrev}" />
   <!--property name="version"  value="2.7.${SVNREV}" /--> <!-- no more set in vorher-->
 
@@ -234,7 +234,7 @@
      <formatter type="plain" /> <!-- plain, xml, brief -->
      <batchtest todir="${test}" >
         <fileset dir="${build}">
-          <include name="edu/**/*Test.class"/>
+          <include name="edu/jas/**/*Test.class"/>
         </fileset>
      </batchtest>
   </junit>
@@ -315,6 +315,9 @@
       <classespath>
         <pathelement location="${bin}"/>
       </classespath>
+      <!--sourcespath>
+        <pathelement location="${src}"/>
+      </sourcespath-->
   </jdepend>
 </target>
 
