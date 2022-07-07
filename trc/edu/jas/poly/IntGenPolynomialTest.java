@@ -245,4 +245,52 @@ public class IntGenPolynomialTest extends TestCase {
         assertTrue(" not isZERO( absNorm(a) )", !r.isZERO() || a.isZERO() );
     }
 
+
+    /**
+     * Test max norm.
+     */
+    public void testMaxNorm() {
+        BigInteger r, s;
+        a = fac.getZERO();
+        //System.out.println("a = " + a);
+
+        r = a.maxNorm();
+        //System.out.println("r = " + r);
+        assertTrue("isONE( maxNorm(0) )", r.isZERO() );
+
+        r = a.sumNorm();
+        //System.out.println("r = " + r);
+        assertTrue("isONE( sumNorm(0) )", r.isZERO() );
+
+        a = fac.getONE().negate();
+        //System.out.println("a = " + a);
+
+        r = a.maxNorm();
+        //System.out.println("r = " + r);
+        assertTrue("isONE( maxNorm(-1) )", r.isONE() );
+
+        r = a.sumNorm();
+        //System.out.println("r = " + r);
+        assertTrue("isONE( sumNorm(-1) )", r.isONE() );
+
+        a = fac.random(kl*2, ll+2, el, q );
+        //System.out.println("a = " + a);
+
+        r = a.maxNorm();
+        //System.out.println("r = " + r);
+        assertTrue("not isZERO( maxNorm(a) )", !r.isZERO() || a.isZERO() );
+
+        //s = a.multiply(a).maxNorm();
+        //System.out.println("s = " + s + ", r*r = " + r.multiply(r));
+        //assertEquals("s*s == maxNorm(a*a) )", r.multiply(r), s );
+
+        r = a.sumNorm();
+        //System.out.println("r = " + r);
+        assertTrue("not isZERO( maxNorm(a) )", !r.isZERO() || a.isZERO() );
+
+        //s = a.multiply(a).sumNorm();
+        //System.out.println("s = " + s + ", r*r = " + r.multiply(r));
+        //assertEquals("s*s == sumNorm(a*a) ): ", r.multiply(r), s );
+    }
+
 }
