@@ -116,8 +116,7 @@ public class PolyUfdUtil {
      * @param a value to evaluate at.
      * @return A( x_1, ..., x_{n-1}, a ).
      */
-    public static <C extends GcdRingElem<C>> C evaluateMain(RingFactory<C> cfac,
-                    Quotient<C> A, C a) {
+    public static <C extends GcdRingElem<C>> C evaluateMain(RingFactory<C> cfac, Quotient<C> A, C a) {
         if (A == null || A.isZERO()) {
             return cfac.getZERO();
         }
@@ -152,8 +151,8 @@ public class PolyUfdUtil {
 
 
     /**
-     * Pade approximant [m/n] of function f. Computed using Taylor
-     * power series expansion of f.
+     * Pade approximant [m/n] of function f. Computed using Taylor power series
+     * expansion of f.
      * @see https://en.wikipedia.org/wiki/Pad%C3%A9_approximant
      * @param upr univariate power series ring.
      * @param f function.
@@ -162,7 +161,8 @@ public class PolyUfdUtil {
      * @param n degree of approximant denominator.
      * @return Pade approximation of f.
      */
-    public static <C extends GcdRingElem<C>> Quotient<C> approximantOfPade(final UnivPowerSeriesRing<C> upr, final TaylorFunction<C> f, final C a, int m, int n) {
+    public static <C extends GcdRingElem<C>> Quotient<C> approximantOfPade(final UnivPowerSeriesRing<C> upr,
+                    final TaylorFunction<C> f, final C a, int m, int n) {
         int mn = m + n;
         GenPolynomialRing<C> pfac = upr.polyRing();
         QuotientRing<C> qfac = new QuotientRing<C>(pfac);
@@ -178,7 +178,7 @@ public class PolyUfdUtil {
         }
         //System.out.println("tps = " + tps);
         GenPolynomial<C> Tmn = tps.asPolynomial();
-        GenPolynomial<C> Xmn1 = pfac.univariate(0, mn+1);
+        GenPolynomial<C> Xmn1 = pfac.univariate(0, mn + 1);
         //System.out.println("Tmn = " + Tmn);
         //System.out.println("Xmn1 = " + Xmn1);
 
@@ -192,15 +192,16 @@ public class PolyUfdUtil {
 
 
     /**
-     * GenPolynomial approximate common divisor. Only for univariate
-     * polynomials over fields.
+     * GenPolynomial approximate common divisor. Only for univariate polynomials
+     * over fields.
      * @param R GenPolynomial.
      * @param S GenPolynomial.
      * @param n maximal degree of a.
-     * @return [ gcd(R,S), a, b ] with a*R + b*S = gcd(R,S).
+     * @return [ agcd(R,S), a ] with a*R + b*S = agcd(R,S) and deg(a) &le; n.
      */
     @SuppressWarnings("unchecked")
-    public static <C extends GcdRingElem<C>> GenPolynomial<C>[] agcd(GenPolynomial<C> R, GenPolynomial<C> S, int n) {
+    public static <C extends GcdRingElem<C>> GenPolynomial<C>[] agcd(GenPolynomial<C> R, GenPolynomial<C> S,
+                    int n) {
         GenPolynomial<C>[] ret = new GenPolynomial[2];
         ret[0] = null;
         ret[1] = null;

@@ -422,7 +422,7 @@ public class HenselMultUtilTest extends TestCase {
                 for (GenPolynomial<ModInteger> sp : lift) {
                     Residue<ModInteger> apr = new Residue<ModInteger>(Yr, sp);
                     if (apr.isZERO()) {
-                        System.out.println("apr == 0: " + sp);
+                        //System.out.println("apr == 0: " + lift);
                         //return;
                     }
                     Spr.add(apr);
@@ -438,7 +438,7 @@ public class HenselMultUtilTest extends TestCase {
                 }
                 //System.out.println("cpr     = " + cpr);
                 //System.out.println("rpr     = " + rpr);
-                assertEquals("sum_i( br sr ) = cr ", cpr, rpr);
+                assertEquals("cr = sum_i( br sr ): ", cpr, rpr);
             } catch (ArithmeticException e) {
                 // ok, can happen
             } catch (NoLiftingException e) {
