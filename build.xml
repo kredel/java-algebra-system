@@ -21,6 +21,7 @@
   <property name="test"      value="test" />
 
   <property name="libs"      value="${basedir}/../lib" />
+  <property name="antlib"    value="/home/kredel/.ant/lib/" />
   <!--property name="log4j"     value="${libs}/log4j.jar" /-->
   <!--property name="log4j"     value="${libs}/mylog.jar" /-->
   <!--property name="log4j"     value="${libs}/nolog.jar" /-->
@@ -61,7 +62,7 @@
 
 <!--
   <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
-        <classpath path="${libs}/jacocoant.jar"/>
+        <classpath path="${antlib}/jacocoant.jar"/>
   </taskdef>
 -->
 
@@ -240,24 +241,6 @@
   </junit>
 </target>
 
-<target name="coverage" 
-        depends="vorher" >
-  <jacoco:coverage>
-  <junit printsummary="yes" 
-         fork="yes" 
-         showoutput="yes"
-         haltonfailure="no" >
-     <classpath path="${cp}" />
-     <formatter type="plain" /> <!-- plain, xml, brief -->
-     <batchtest todir="${test}" >
-        <fileset dir="${build}">
-          <include name="edu/**/*Test.class"/>
-        </fileset>
-     </batchtest>
-  </junit>
-  </jacoco:coverage>
-</target>
-
 <target name="exam" depends="compile" >
   <java classname="edu.jas.poly.Examples" classpath="${cp}" fork="yes" >
     <arg line="1" />
@@ -321,7 +304,25 @@
   </jdepend>
 </target>
 
-<target name="jacoco" depends="vorher" >
+<target name="coverage"
+        depends="vorher" >
+  <jacoco:coverage>
+  <junit printsummary="yes"
+         fork="yes"
+         showoutput="yes"
+         haltonfailure="no" >
+     <classpath path="${cp}" />
+     <formatter type="plain" /> <!-- plain, xml, brief -->
+     <batchtest todir="${test}" >
+        <fileset dir="${build}">
+          <include name="edu/**/*Test.class"/>
+        </fileset>
+     </batchtest>
+  </junit>
+  </jacoco:coverage>
+</target>
+
+<target name="jacoco" depends="vorher,coverage" >
   <jacoco:report>
     <executiondata>
         <file file="jacoco.exec"/>
