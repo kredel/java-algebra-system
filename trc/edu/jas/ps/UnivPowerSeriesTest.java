@@ -7,6 +7,8 @@ package edu.jas.ps;
 
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
+import edu.jas.vector.GenVector;
+import edu.jas.vector.GenVectorModul;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 
@@ -259,6 +261,52 @@ public class UnivPowerSeriesTest extends TestCase {
         //cv = c.evaluate(v);
         //dv = av.multiply(bv);
         //assertEquals("a(v)*b(v) = (a*b)(v) ", cv, dv);
+    }
+
+
+    /**
+     * Test polynomial constructions.
+     */
+    public void testPolynomial() {
+        GenPolynomialRing<BigRational> pr = fac.polyRing();
+        //System.out.println("pr = " + pr);
+
+        GenPolynomial<BigRational> p = pr.random(kl, 3, 3, q + q);
+        //System.out.println("p = " + p);
+
+        a = fac.fromPolynomial(p);
+        //System.out.println("a = " + a);
+
+        GenPolynomial<BigRational> s = a.asPolynomial();
+        //System.out.println("s = " + s);
+        assertEquals("asPolynomial(fromPolynomial(p)) = p ", p, s);
+
+        b = fac.fromPolynomial(s);
+        //System.out.println("b = " + b);
+        assertEquals("fromPolynomial(asPolynomial(s)) = s ", a, b);
+    }
+
+
+    /**
+     * Test vector constructions.
+     */
+    public void testVector() {
+        GenVectorModul<BigRational> pm = new GenVectorModul<BigRational>(fac.coFac, fac.truncate);
+        //System.out.println("pm = " + pm);
+
+        GenVector<BigRational> v = pm.random(kl, q);
+        //System.out.println("v = " + v);
+
+        a = fac.fromVector(v);
+        //System.out.println("a = " + a);
+
+        GenVector<BigRational> s = a.asVector();
+        //System.out.println("s = " + s);
+        assertEquals("asVector(fromVector(v)) = v ", v, s);
+
+        b = fac.fromVector(s);
+        //System.out.println("b = " + b);
+        assertEquals("fromVector(asVector(s)) = s ", a, b);
     }
 
 }

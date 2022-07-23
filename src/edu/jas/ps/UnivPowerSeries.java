@@ -4,10 +4,14 @@
 
 package edu.jas.ps;
 
+import java.util.List;
+import java.util.ArrayList;
 
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
+import edu.jas.vector.GenVector;
+import edu.jas.vector.GenVectorModul;
 import edu.jas.structure.BinaryFunctor;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.Selector;
@@ -265,6 +269,22 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
             p = p.sum(c, e);
         }
         return p;
+    }
+
+
+    /**
+     * Get a GenVector&lt;C&gt; from this.
+     * @return a GenVector&lt;C&gt; from this up to truncate parts.
+     */
+    public GenVector<C> asVector() {
+        GenVectorModul<C> vr = new GenVectorModul<C>(ring.coFac, truncate);
+        List<C> v = new ArrayList<>(truncate);
+        for (int i = 0; i < truncate; i++) {
+            C c = coefficient(i);
+            v.add(c);
+        }
+        GenVector<C> vv = new GenVector<C>(vr,v);
+        return vv;
     }
 
 

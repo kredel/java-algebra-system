@@ -100,8 +100,9 @@ public class MultiVarPowerSeriesTest extends TestCase {
         MultiVarCoefficients<BigRational> vars = new Vars(pring);
 
         int m = 5;
-        ExpVectorIterable eiter = new ExpVectorIterable(rl, true, m);
-        for (ExpVector e : eiter) {
+        ExpVectorIterable eitbl = new ExpVectorIterable(rl, true, m);
+        //System.out.println("eitbl 0 = " + eitbl.iterator().hasNext());
+        for (ExpVector e : eitbl) {
             BigRational c = zeros.get(e);
             //System.out.println("c = " + c + ", e = " + e);
             assertTrue("isZERO( c )", c.isZERO());
@@ -110,7 +111,8 @@ public class MultiVarPowerSeriesTest extends TestCase {
         //System.out.println("zeroCache  = " + zeros.zeroCache);
         assertTrue("coeffCache is one element", zeros.coeffCache.size() == (m + 1));
 
-        for (ExpVector e : eiter) {
+        //System.out.println("eitbl 1 = " + eitbl.iterator().hasNext());
+        for (ExpVector e : eitbl) {
             BigRational c = ones.get(e);
             //System.out.println("c = " + c + ", e = " + e);
             assertTrue("isONE( c )", c.isONE());
@@ -176,6 +178,7 @@ public class MultiVarPowerSeriesTest extends TestCase {
         a = fac.copy(c);
         b = c.copy();
         assertEquals("copy(c) == c.clone() ", a, b);
+        assertTrue("copy(c) == c.clone() ", a.equals(b));
 
         a = fac.fromInteger(1);
         assertEquals("1 == fromInteger(1) ", a, c);
@@ -191,11 +194,14 @@ public class MultiVarPowerSeriesTest extends TestCase {
 
 
     /**
-     * Test random polynomial.
+     * Test random power series.
      */
     public void testRandom() {
         for (int i = 0; i < 5; i++) {
             a = fac.random(i + 2);
+            if (a.isZERO()||a.isONE()) {
+                continue;
+            }
             //System.out.println("a = " + a);
             assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
             assertTrue(" not isONE( a" + i + " )", !a.isONE());
@@ -207,7 +213,6 @@ public class MultiVarPowerSeriesTest extends TestCase {
      * Test MultiVarCoefficients in power series.
      */
     public void testCoefficientsInPS() {
-
         MultiVarCoefficients<BigRational> zeros = new Zeros(fac);
         MultiVarCoefficients<BigRational> ones = new Ones(fac);
         MultiVarCoefficients<BigRational> vars = new Vars(fac);
@@ -217,8 +222,8 @@ public class MultiVarPowerSeriesTest extends TestCase {
         c = new MultiVarPowerSeries<BigRational>(fac, vars);
 
         int m = 5;
-        ExpVectorIterable eiter = new ExpVectorIterable(rl, true, m);
-        for (ExpVector e : eiter) {
+        ExpVectorIterable eitbl = new ExpVectorIterable(rl, true, m);
+        for (ExpVector e : eitbl) {
             BigRational r = a.coefficient(e);
             //System.out.println("r = " + r + ", e = " + e);
             assertTrue("isZERO( r )", r.isZERO());
@@ -227,7 +232,7 @@ public class MultiVarPowerSeriesTest extends TestCase {
         assertTrue("coeffCache is one element", a.lazyCoeffs.coeffCache.size() == (m + 1));
         assertTrue("isZERO( a )", a.isZERO()); // after previous
 
-        for (ExpVector e : eiter) {
+        for (ExpVector e : eitbl) {
             BigRational r = b.coefficient(e);
             //System.out.println("r = " + r + ", e = " + e);
             assertTrue("isONE( r )", r.isONE());
@@ -486,10 +491,10 @@ public class MultiVarPowerSeriesTest extends TestCase {
         GenPolynomial<BigRational> s = a.asPolynomial();
         //System.out.println("s = " + s);
         assertEquals("asPolynomial(fromPolynomial(p)) = p ", p, s);
-        //         if ( a.isUnit() ) {
-        //             b = a.inverse();
-        //             System.out.println("b = " + b);
-        //      }
+
+        b = fac.fromPolynomial(s);
+        //System.out.println("b = " + b);
+        assertEquals("fromPolynomial(asPolynomial(s)) = s ", a, b);
     }
 
 

@@ -73,7 +73,6 @@ public class IteratorsTest extends TestCase {
 
     /**
      * Test ExpVector iterator.
-     * 
      */
     public void testExpVector() {
         int n = 5;
@@ -110,7 +109,6 @@ public class IteratorsTest extends TestCase {
 
     /**
      * Test GenPolynomial iterator.
-     * 
      */
     public void testGenPolynomial() {
         ModIntegerRing mi = new ModIntegerRing(5, true);
@@ -141,7 +139,6 @@ public class IteratorsTest extends TestCase {
 
     /**
      * Test GenPolynomial monomial iterator.
-     * 
      */
     public void testGenPolynomialMonomial() {
         BigInteger bi = new BigInteger(1);
@@ -172,7 +169,6 @@ public class IteratorsTest extends TestCase {
 
     /**
      * Test total degree ExpVector iterator.
-     * 
      */
     public void testTotalDegExpVector() {
         int n = 4;
@@ -231,16 +227,15 @@ public class IteratorsTest extends TestCase {
 
     /**
      * Test total degree ExpVector iterator.
-     * 
      */
     public void testTotalDegExpVectorIteratorInf() {
         int n = 4;
 
         Set<ExpVector> set = new TreeSet<ExpVector>((new TermOrder()).getDescendComparator());
 
-        ExpVectorIterable eiter = new ExpVectorIterable(n);
+        ExpVectorIterable eitbl = new ExpVectorIterable(n);
         long t = 0;
-        for (ExpVector e : eiter) {
+        for (ExpVector e : eitbl) {
             //System.out.println("e = " + e + ", deg = " + e.totalDeg());
             t++;
             if (t > 500L) {
@@ -250,22 +245,20 @@ public class IteratorsTest extends TestCase {
             assertFalse("e in set", set.contains(e));
             set.add(e);
         }
-
     }
 
 
     /**
      * Test total degree ExpVector iterator.
-     * 
      */
     public void testTotalDegExpVectorIteratorFin() {
         int n = 4;
 
         Set<ExpVector> set = new TreeSet<ExpVector>((new TermOrder()).getDescendComparator());
 
-        ExpVectorIterable eiter = new ExpVectorIterable(n, 5);
+        ExpVectorIterable eitbl = new ExpVectorIterable(n, 5);
         long t = 0;
-        for (ExpVector e : eiter) {
+        for (ExpVector e : eitbl) {
             //System.out.println("e = " + e + ", deg = " + e.totalDeg());
             t++;
             if (t > 500L) {
@@ -281,16 +274,15 @@ public class IteratorsTest extends TestCase {
 
     /**
      * Test total degree ExpVector iterator.
-     * 
      */
     public void testTotalDegExpVectorIteratorAllFin() {
         int n = 4;
 
         Set<ExpVector> set = new TreeSet<ExpVector>((new TermOrder()).getDescendComparator());
 
-        ExpVectorIterable eiter = new ExpVectorIterable(n, true, 5);
+        ExpVectorIterable eitbl = new ExpVectorIterable(n, true, 5);
         long t = 0;
-        for (ExpVector e : eiter) {
+        for (ExpVector e : eitbl) {
             //System.out.println("e = " + e + ", deg = " + e.totalDeg());
             t++;
             if (t > 500L) {
@@ -300,7 +292,6 @@ public class IteratorsTest extends TestCase {
             assertFalse("e in set", set.contains(e));
             set.add(e);
         }
-
     }
 
 }
