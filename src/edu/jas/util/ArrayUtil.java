@@ -5,15 +5,16 @@
 package edu.jas.util;
 
 
-// import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
 
 
 /**
  * Array utilities. For example copyOf from Java 6. <b>Note:</b> unused at the
- * moment since it is not working in Java 5.
+ * moment since it is not working in Java 5, use java.util.Arrays.copyOf().
  * @author Heinz Kredel
+ * @deprecated(forRemoval=true)
  */
+@Deprecated
 public class ArrayUtil {
 
 
