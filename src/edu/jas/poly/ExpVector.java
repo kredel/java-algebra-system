@@ -73,7 +73,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector> {
      * Constructor for ExpVector.
      */
     public ExpVector() {
-        hash = 0;
+        //bug: hash = 0;
     }
 
 
@@ -535,8 +535,9 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector> {
     public int hashCode() {
         if (hash < 0) {
             int h = 0;
-            for (int i = 0; i < length(); i++) {
-                h = (h << 4) + (int) getVal(i);
+            int len = length();
+            for (int i = 0; i < len; i++) {
+                h = (h << 3) + (int) getVal(i);
             }
             hash = h;
         }
