@@ -1088,12 +1088,14 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
         //h += val.hashCode();
         for (ExpVector i : new ExpVectorIterable(ring.nvar, true, truncate)) {
             C c = coefficient(i);
+            //System.out.print(" i = " + i + " c = " + c);
+            //System.out.println(" #i = " + i.hashCode() + " #c = " + c.hashCode() + "# = " + h);
             if (!c.isZERO()) {
                 h += i.hashCode();
-                h = (h << 23);
+                h = Math.abs(h << 1);
             }
             h += c.hashCode();
-            h = (h << 23);
+            //h = Math.abs(h << 3);
         }
         return h;
     }
