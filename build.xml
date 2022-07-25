@@ -60,10 +60,10 @@
   </taskdef>
 -->
 
-<!--
   <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
         <classpath path="${antlib}/jacocoant.jar"/>
   </taskdef>
+<!--
 -->
 
 <target name="vorher" >
@@ -310,26 +310,31 @@
   <junit printsummary="yes"
          fork="yes"
          showoutput="yes"
+         timeout="20000"
          haltonfailure="no" >
      <classpath path="${cp}" />
      <formatter type="plain" /> <!-- plain, xml, brief -->
      <batchtest todir="${test}" >
         <fileset dir="${build}">
           <include name="edu/**/*Test.class"/>
+          <!--no junit constructor: include name="edu/**/*Examples*.class"/-->
         </fileset>
      </batchtest>
   </junit>
   </jacoco:coverage>
 </target>
 
-<target name="jacoco" depends="vorher,coverage" >
+<target name="jacoco" depends="vorher" > <!-- coverage -->
   <jacoco:report>
     <executiondata>
         <file file="jacoco.exec"/>
     </executiondata>
     <structure name="Java Algebra System Jacoco Report">
         <classfiles>
-            <fileset dir="edu"/>
+            <fileset dir="edu">
+               <exclude name="**/*Test.class"/>
+               <exclude name="**/*Examples*"/>
+            </fileset>
         </classfiles>
         <sourcefiles encoding="UTF-8">
             <fileset dir="src"/>
