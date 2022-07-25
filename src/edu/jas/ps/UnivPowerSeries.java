@@ -302,12 +302,19 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
      * @return this - leading monomial.
      */
     public UnivPowerSeries<C> reductum() {
+        final int m = order();
+        //System.out.println("order = " + m);
+
         return new UnivPowerSeries<C>(ring, new Coefficients<C>() {
 
 
             @Override
             public C generate(int i) {
-                return coefficient(i + 1);
+                if (m == i) {
+                    return ring.coFac.getZERO();
+                } else {
+                    return coefficient(i);
+                }
             }
         });
     }
@@ -649,8 +656,13 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
         //h = ( ring.hashCode() << 23 );
         //h += val.hashCode();
         for (int i = 0; i < truncate; i++) {
-            h += coefficient(i).hashCode();
-            h = (h << 23);
+            C c = coefficient(i);
+            if (!c.isZERO()) {
+                h += i;
+                h = Math.abs(h << 1);
+            }
+            h += c.hashCode();
+            h = Math.abs(h); // << 3);
         }
         return h;
     }

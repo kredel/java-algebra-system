@@ -319,27 +319,6 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
 
     /**
-     * Reductum.
-     * @param r variable for taking the reductum.
-     * @return this - leading monomial in the direction of r.
-     */
-    public MultiVarPowerSeries<C> reductum(final int r) {
-        if (r < 0 || ring.nvar < r) {
-            throw new IllegalArgumentException("variable index out of bound");
-        }
-        return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
-
-
-            @Override
-            public C generate(ExpVector i) {
-                ExpVector e = i.subst(r, i.getVal(r) + 1);
-                return coefficient(e);
-            }
-        });
-    }
-
-
-    /**
      * Prepend a new leading coefficient.
      * @param r variable for the direction.
      * @param h new coefficient.
@@ -391,6 +370,27 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 return coefficient(e);
             }
         }, nt);
+    }
+
+
+    /**
+     * Reductum.
+     * @param r variable for taking the reductum.
+     * @return this - leading monomial in the direction of r.
+     */
+    public MultiVarPowerSeries<C> reductum(final int r) {
+        if (r < 0 || ring.nvar < r) {
+            throw new IllegalArgumentException("variable index out of bound");
+        }
+        return new MultiVarPowerSeries<C>(ring, new MultiVarCoefficients<C>(ring) {
+
+
+            @Override
+            public C generate(ExpVector i) {
+                ExpVector e = i.subst(r, i.getVal(r) + 1);
+                return coefficient(e);
+            }
+        });
     }
 
 
@@ -1095,7 +1095,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
                 h = Math.abs(h << 1);
             }
             h += c.hashCode();
-            //h = Math.abs(h << 3);
+            h = Math.abs(h); // << 3);
         }
         return h;
     }

@@ -8,6 +8,8 @@ package edu.jas.ps;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 
 import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
@@ -85,6 +87,41 @@ public class MultiVarPowerSeriesTest extends TestCase {
     protected void tearDown() {
         a = b = c = d = e = null;
         fac = null;
+    }
+
+
+    /**
+     * Test generate.
+     */
+    public void testGenerate() {
+        String s = fac.toScript();
+        //System.out.println("fac.toScript: " + s + ", " + s.length());
+        assertTrue("#s == 17: " + s, s.length() == 17);
+
+        List<MultiVarPowerSeries<BigRational>> gens = fac.generators();
+        assertFalse("#gens != () ", gens.isEmpty());
+        //System.out.println("generators: " + gens);
+
+        // test equals
+        Set<MultiVarPowerSeries<BigRational>> set = new HashSet<MultiVarPowerSeries<BigRational>>(gens);
+        //System.out.println("gen set: " + set);
+        assertEquals("#gens == #set: ", gens.size(), set.size());
+
+        // test for elements 0, 1
+        a = fac.getZERO();
+        b = fac.getONE();
+        assertFalse("0 not in #set: ", set.contains(a));
+        assertTrue("1 in #set: ", set.contains(b));
+
+        // specific tests
+        assertEquals("#gens == rl+1 ", rl + 1, gens.size());
+        Set<Integer> iset = new HashSet<Integer>(set.size());
+        for (MultiVarPowerSeries<BigRational> p : gens) {
+            //System.out.println("p = " + p.toScript() + ", # = " + p.hashCode() + ", red = " + p.reductum());
+            assertTrue("red(p) == 0 ", p.reductum().isZERO());
+	    iset.add(p.hashCode());
+        }
+        assertEquals("#gens == #iset: ", gens.size(), iset.size());
     }
 
 
