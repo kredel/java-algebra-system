@@ -4,6 +4,9 @@
 
 package edu.jas.poly;
 
+import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -67,7 +70,7 @@ public class RatGenSolvablePolynomialTest extends TestCase {
     RelationTable<BigRational> table;
 
 
-    GenSolvablePolynomialRing<BigRational> ring;
+    GenSolvablePolynomialRing<BigRational> ring, fac;
 
 
     BigRational cfac;
@@ -77,6 +80,7 @@ public class RatGenSolvablePolynomialTest extends TestCase {
     protected void setUp() {
         cfac = new BigRational(1);
         ring = new GenSolvablePolynomialRing<BigRational>(cfac, rl);
+        fac = ring;
         table = ring.table;
         a = b = c = d = e = null;
     }
@@ -87,6 +91,41 @@ public class RatGenSolvablePolynomialTest extends TestCase {
         table = null;
         ring = null;
         a = b = c = d = e = null;
+    }
+
+
+    /**
+     * Test generate.
+     */
+    public void testGenerate() {
+        String s = fac.toScript();
+        //System.out.println("fac.toScript: " + s + ", " + s.length());
+        assertTrue("#s == 48: " + s, s.length() == 48);
+
+        List<GenPolynomial<BigRational>> gens = fac.generators();
+        assertFalse("#gens != () ", gens.isEmpty());
+        //System.out.println("generators: " + gens);
+
+        // test equals
+        Set<GenPolynomial<BigRational>> set = new HashSet<GenPolynomial<BigRational>>(gens);
+        //System.out.println("gen set: " + set);
+        assertEquals("#gens == #set: ", gens.size(), set.size());
+
+        // test for elements 0, 1
+        a = fac.getZERO();
+        b = fac.getONE();
+        assertFalse("0 not in #set: ", set.contains(a));
+        assertTrue("1 in #set: ", set.contains(b));
+
+        // specific tests
+        assertEquals("#gens == rl+1 ", rl + 1, gens.size());
+        Set<Integer> iset = new HashSet<Integer>(set.size());
+        for (GenPolynomial<BigRational> p : gens) {
+            //System.out.println("p = " + p.toScript() + ", # = " + p.hashCode() + ", red = " + p.reductum());
+            assertTrue("red(p) == 0 ", p.reductum().isZERO());
+	    iset.add(p.hashCode());
+        }
+        assertEquals("#gens == #iset: ", gens.size(), iset.size());
     }
 
 
