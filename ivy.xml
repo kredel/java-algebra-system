@@ -30,5 +30,8 @@
     <dependency org="junit" name="junit" rev="4.13.1" conf="runtime-&gt;default">
       <artifact name="junit" type="jar" ext="jar"/>
     </dependency>
+    <dependency org="org.junit.platform" name="junit-platform-console-standalone" rev="1.8.2" conf="runtime-&gt;default">
+      <artifact name="junit-platform-console-standalone" type="jar" ext="jar"/>
+    </dependency>
   </dependencies>
 </ivy-module>
