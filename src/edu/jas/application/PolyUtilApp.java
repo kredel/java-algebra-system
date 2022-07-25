@@ -703,6 +703,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             }
             //System.out.println("i   = " + i);
             //System.out.println("pi  = " + pi);
+            //System.out.println("pip = " + pip);
             logger.info("pi  = {}, pip = {}", pi, pip);
             int[] depi = pip.degreeVector().dependencyOnVariables();
             //System.out.println("depi = " + Arrays.toString(depi));
@@ -710,6 +711,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
                 throw new RuntimeException("wrong number of variables " + Arrays.toString(depi));
             }
             rra = RootFactory.<D> realAlgebraicNumbersIrred(pi);
+            //System.out.println("rra = " + rra);
             if (logger.isInfoEnabled()) {
                 List<Interval<D>> il = new ArrayList<Interval<D>>();
                 for (RealAlgebraicNumber<D> rr : rra) {
@@ -771,6 +773,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
             }
             ran = rn;
         }
+        //System.out.println("ran = " + ran);
         if (logger.isInfoEnabled()) {
             for (List<RealAlgebraicNumber<D>> rz : ran) {
                 List<Interval<D>> il = new ArrayList<Interval<D>>();

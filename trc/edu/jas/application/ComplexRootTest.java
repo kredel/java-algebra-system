@@ -76,19 +76,7 @@ public class ComplexRootTest extends TestCase {
     Complex<BigRational> ceps;
 
 
-    GenPolynomial<Complex<BigRational>> a;
-
-
-    GenPolynomial<Complex<BigRational>> b;
-
-
-    GenPolynomial<Complex<BigRational>> c;
-
-
-    GenPolynomial<Complex<BigRational>> d;
-
-
-    GenPolynomial<Complex<BigRational>> e;
+    GenPolynomial<Complex<BigRational>> a, b, c, d, e;
 
 
     int rl = 1;
@@ -158,12 +146,16 @@ public class ComplexRootTest extends TestCase {
         if (a.isZERO() || a.isONE()) {
             a = dfac.parse("z^6 - i3");
         }
+        //a = dfac.parse("z^3 - ( 1600/6123i-280/2041 )"); // fail, todo
+        //a = dfac.parse("z^3 - ( 1600/6123 )"); // fail, shows only one root
+        //a = dfac.parse("z^3 - ( 16/32i-280/2041 )"); // okay, 3 roots
         Squarefree<Complex<BigRational>> sqf = SquarefreeFactory
                         .<Complex<BigRational>> getImplementation(cfac);
         a = sqf.squarefreePart(a);
         //System.out.println("a = " + a);
         List<Complex<RealAlgebraicNumber<BigRational>>> roots;
         roots = RootFactoryApp.<BigRational> complexAlgebraicNumbersComplex(a);
+        //roots = RootFactoryApp.<BigRational> complexAlgebraicNumbersSquarefree(a);
         //System.out.println("a = " + a);
         //System.out.println("roots = " + roots);
         assertTrue("#roots == deg(a): " + (roots.size() - a.degree(0)) + ", a = " + a,
