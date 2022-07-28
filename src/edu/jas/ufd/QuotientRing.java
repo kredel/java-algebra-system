@@ -39,6 +39,23 @@ public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quoti
 
 
     /**
+     * Quotient polynomial normalization, simplification.
+     */
+    public static enum QuoNorm {
+        normNumLead,  // normalize ldcf(numerator) == 1
+        normNumTrail, // normalize trcf(numerator) == 1
+        normDenLead,  // normalize ldcf(denominator) == 1
+        normDenTrail  // normalize trcf(denominator) == 1
+    };
+
+
+    /**
+     * Default quotient polynomial normalization, simplification.
+     */
+    public final static QuoNorm quoNorm = QuoNorm.normDenLead; // must be the default
+    // see https://github.com/kredel/java-algebra-system/issues/29
+
+    /**
      * Polynomial ring of the factory.
      */
     public final GenPolynomialRing<C> ring;
@@ -138,7 +155,7 @@ public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quoti
      * @see edu.jas.structure.ElemFactory#isFinite()
      */
     public boolean isFinite() {
-        return false;
+        return ring.isFinite();
     }
 
 

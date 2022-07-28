@@ -109,11 +109,26 @@ public class Quotient<C extends GcdRingElem<C>>
                 d = ring.divide(d, gcd);
             }
         }
-        C lc = d.leadingBaseCoefficient();
-        if (!lc.isONE() && lc.isUnit()) {
-            lc = lc.inverse();
-            n = n.multiply(lc);
-            d = d.multiply(lc);
+        C coeff;
+        switch(ring.quoNorm) {
+        case normNumLead:
+            coeff = n.leadingBaseCoefficient();
+            break;
+        case normNumTrail:
+            coeff = n.trailingBaseCoefficient();
+            break;
+        case normDenTrail:
+            coeff = d.trailingBaseCoefficient();
+            break;
+        case normDenLead:
+        default:
+            coeff = d.leadingBaseCoefficient();
+            break;
+        }
+        if (!coeff.isONE() && coeff.isUnit()) {
+            coeff = coeff.inverse();
+            n = n.multiply(coeff);
+            d = d.multiply(coeff);
         }
         num = n;
         den = d;
