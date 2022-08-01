@@ -459,6 +459,35 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
 
     /**
+     * Test if this is a non-zero diagonal matrix.
+     * @return true if this is non-zero diagonal, else false.
+     */
+    public boolean isDiagonal() {
+        int z = 0;
+        int i = 0;
+        for (List<C> row : matrix) {
+            int j = 0;
+            for (C elem : row) {
+                if (i == j) {
+                    if (!elem.isZERO()) {
+                        z++;
+                    }
+                } else if (!elem.isZERO()) {
+                    //System.out.println("elem.isZERO = " + elem);
+                    return false;
+                }
+                j++;
+            }
+            i++;
+        }
+        if (z == 0) { // matrix is zero
+            return false;
+        }
+        return true;
+    }
+
+
+    /**
      * Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */

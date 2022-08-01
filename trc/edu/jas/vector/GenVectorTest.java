@@ -122,7 +122,6 @@ public class GenVectorTest extends TestCase {
 
     /**
      * Test addition.
-     * 
      */
     public void testAddition() {
         BigRational cfac = new BigRational(1);
@@ -163,7 +162,6 @@ public class GenVectorTest extends TestCase {
 
     /**
      * Test scalar multiplication.
-     * 
      */
     public void testMultiplication() {
         BigRational cfac = new BigRational(1);
@@ -240,7 +238,6 @@ public class GenVectorTest extends TestCase {
 
     /**
      * Test parse vector.
-     * 
      */
     public void testParse() {
         BigRational cfac = new BigRational(1);

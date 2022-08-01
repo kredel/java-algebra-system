@@ -167,6 +167,36 @@ public class GenMatrixTest extends TestCase {
             //System.out.println("c = " + c);
             assertEquals(" a^r^r == a ", a, c);
         }
+
+        for (int i = 0; i < 3; i++) {
+            a = mfac.randomUpper(kl, q);
+            //System.out.println("a = " + a);
+            if (a.isZERO()) {
+                continue;
+            }
+            assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
+            b = a.transpose(tfac);
+            //System.out.println("b = " + b);
+            assertTrue(" not isZERO( b" + i + " )", !b.isZERO());
+            c = b.transpose(mfac);
+            //System.out.println("c = " + c);
+            assertEquals(" a^r^r == a ", a, c);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            a = mfac.randomLower(kl, q);
+            //System.out.println("a = " + a);
+            if (a.isZERO()) {
+                continue;
+            }
+            assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
+            b = a.transpose(tfac);
+            //System.out.println("b = " + b);
+            assertTrue(" not isZERO( b" + i + " )", !b.isZERO());
+            c = b.transpose(mfac);
+            //System.out.println("c = " + c);
+            assertEquals(" a^r^r == a ", a, c);
+        }
     }
 
 
@@ -436,6 +466,7 @@ public class GenMatrixTest extends TestCase {
         //System.out.println("det = " + det + " ~= " + det.getDecimal());
         assertFalse("det(A) != 0: ", det.isZERO());
 
+        // test inverse and divide
         iA = lu.inverseLU(A, P);
         //System.out.println("iA = " + iA);
         AiA = Ap.multiply(iA);
@@ -458,6 +489,23 @@ public class GenMatrixTest extends TestCase {
         assertEquals("C == C/A*A: ", B, C);
         B = Ap.multiply(AC);
         assertEquals("C == A*A\\C: ", B, C);
+
+        // test upper / lower matrix
+        B = Ap.getUpper();
+        //System.out.println("b = " + B);
+        C = Ap.getLower();
+        //System.out.println("c = " + C);
+        GenMatrix<BigRational> bc = C.sum(B);
+        //System.out.println("bc = " + bc);
+
+        GenMatrix<BigRational> abc = Ap.subtract(bc);
+        //System.out.println("Ap = " + Ap);
+        //System.out.println("abc = " + abc);
+
+        assertTrue("abc is diagonal: ", abc.isDiagonal());
+        GenVector<BigRational> ad = abc.getDiagonal();
+        //System.out.println("ad = " + ad);
+        assertFalse("diag(abc) != 0: ", ad.isZERO());
     }
 
 
