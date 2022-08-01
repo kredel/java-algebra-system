@@ -61,7 +61,7 @@ public class RunSGB {
                                          }; // must be last
         String[] allmeth = new String[] { "irr", "left", "right", "two" };
 
-        String usage = "Usage: RunGB [ "
+        String usage = "Usage: RunSGB [ "
                         + join(allkinds, " | ") 
                         //+ "[port] ] " 
                         + " ] ["
