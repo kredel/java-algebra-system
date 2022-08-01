@@ -251,7 +251,7 @@ public class RealRootTest extends TestCase {
         //System.out.println("vm = " + vm);
         long rc = rr.realRootCount(vm,a);
         //System.out.println("rc = " + rc);
-        assertTrue("root number: R = " + R + ", rc = " + rc, rc == l);
+        assertTrue("root number: R = " + R + ", a = " + a + ", rc = " + rc, rc == l);
         long rn = rr.realRootNumber(a,vm);
         assertTrue("root number == " + rn, rn == l);
 

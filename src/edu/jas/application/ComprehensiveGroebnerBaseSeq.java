@@ -295,13 +295,16 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         //int j = 1;
         while (i < nv) {
             //j++;
-            GenPolynomial<C> p = ccf.random(3, 3, 3, 0.3f); //j + 1);
-            // System.out.println("p = " + p);
+            GenPolynomial<C> p = ccf.random(3, 2, 3, 0.43f).monic(); //j + 1);
+            //System.out.println("p = " + p);
             if (p.isConstant()) {
                 continue;
             }
             if (p.isZERO()) {
                 continue;
+            }
+            if (p.length() <= 1) {
+                p = p.sum(ccf.getONE());
             }
             p = engine.squarefreePart(p);
             il.add(p);
@@ -309,6 +312,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         }
         logger.info("random ideal = {}", il);
         Ideal<C> id = new Ideal<C>(ccf, il);
+        //System.out.println("random ideal = " + id.toScript());
         ResidueRing<C> r = new ResidueRing<C>(id);
         //GroebnerBase<Residue<C>> bb = new GroebnerBasePseudoSeq<Residue<C>>(r);
         List<GenPolynomial<Residue<C>>> list;
