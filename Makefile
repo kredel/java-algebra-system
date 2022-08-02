@@ -529,8 +529,9 @@ mkbench:
 runbench:
 	java -jar $(VERSION)-gbb-bin.jar seq katsura5.jas
 
+	#echo youngest revision `svnlook youngest $(SVNREPO)/jas`
 young:
-	echo youngest revision `svnlook youngest $(SVNREPO)/jas`
+	echo youngest revision `git rev-list -n1 HEAD`
 
 subst:
 	cd ~/jas-versions/$(VERSION); jas_dosed $(VERSION) $(GITREV) doc/download.html $(DEBVERSION)
