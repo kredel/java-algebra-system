@@ -19,6 +19,7 @@ import edu.jas.arith.BigQuaternion;
 import edu.jas.arith.BigQuaternionRing;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
 import edu.jas.arith.ModInt;
@@ -118,9 +119,9 @@ public class RingFactoryTokenizerTest extends TestCase {
                         + "( 1 x + x^3 + 1/3 y z - x^3 ) " + " )";
         source = new StringReader(exam);
         parser = new RingFactoryTokenizer(source);
-        PolynomialList<BigRational> f = null;
+        GenPolynomialRing<BigRational> f = null;
         try {
-            f = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+            f = (GenPolynomialRing<BigRational>) parser.nextPolynomialRing();
         } catch (IOException e) {
             fail("" + e);
         } catch (ClassCastException e) {
@@ -132,7 +133,7 @@ public class RingFactoryTokenizerTest extends TestCase {
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
         pfac = new GenPolynomialRing<BigRational>(fac, nvar, tord, vars);
-        assertEquals("pfac == f.ring", pfac, f.ring);
+        assertEquals("pfac == f", pfac, f);
     }
 
 
@@ -145,9 +146,9 @@ public class RingFactoryTokenizerTest extends TestCase {
                         + "( 1 x + x^3 + 3 y z - x^3 ) " + " )";
         source = new StringReader(exam);
         parser = new RingFactoryTokenizer(source);
-        PolynomialList<BigInteger> f = null;
+        GenPolynomialRing<BigInteger> f = null;
         try {
-            f = (PolynomialList<BigInteger>) parser.nextPolynomialSet();
+            f = (GenPolynomialRing<BigInteger>) parser.nextPolynomialRing();
         } catch (IOException e) {
             fail("" + e);
         } catch (ClassCastException e) {
@@ -159,7 +160,7 @@ public class RingFactoryTokenizerTest extends TestCase {
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
         pfac = new GenPolynomialRing<BigInteger>(fac, nvar, tord, vars);
-        assertEquals("pfac == f.ring", pfac, f.ring);
+        assertEquals("pfac == f", pfac, f);
     }
 
 
@@ -172,9 +173,9 @@ public class RingFactoryTokenizerTest extends TestCase {
                         + "( 1 x + x^3 + 3 y z - x^3 ) " + " )";
         source = new StringReader(exam);
         parser = new RingFactoryTokenizer(source);
-        PolynomialList<ModInteger> f = null;
+        GenPolynomialRing<ModInteger> f = null;
         try {
-            f = (PolynomialList<ModInteger>) parser.nextPolynomialSet();
+            f = (GenPolynomialRing<ModInteger>) parser.nextPolynomialRing();
         } catch (IOException e) {
             fail("" + e);
         } catch (ClassCastException e) {
@@ -188,11 +189,11 @@ public class RingFactoryTokenizerTest extends TestCase {
         pfac = new GenPolynomialRing<ModInt>(fac, nvar, tord, vars);
         //System.out.println("pfac   = " + pfac);
         //System.out.println("f.ring = " + f.ring);
-        assertEquals("pfac == f.ring", pfac, f.ring);
+        assertEquals("pfac == f", pfac, f);
 
         ModLongRing lfac = new ModLongRing(19);
         assertFalse("fac != lfac", fac.equals(lfac));
-        assertFalse("lfac != f.ring.coFac", lfac.equals(f.ring.coFac));
+        assertFalse("lfac != f.coFac", lfac.equals(f.coFac));
     }
 
 
@@ -205,9 +206,9 @@ public class RingFactoryTokenizerTest extends TestCase {
                         + "( 1i0 x + x^3 + 1i3 y z - x^3 ) " + " )";
         source = new StringReader(exam);
         parser = new RingFactoryTokenizer(source);
-        PolynomialList<BigComplex> f = null;
+        GenPolynomialRing<BigComplex> f = null;
         try {
-            f = (PolynomialList<BigComplex>) parser.nextPolynomialSet();
+            f = (GenPolynomialRing<BigComplex>) parser.nextPolynomialRing();
         } catch (IOException e) {
             fail("" + e);
         } catch (ClassCastException e) {
@@ -219,7 +220,7 @@ public class RingFactoryTokenizerTest extends TestCase {
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
         pfac = new GenPolynomialRing<BigComplex>(fac, nvar, tord, vars);
-        assertEquals("pfac == f.ring", pfac, f.ring);
+        assertEquals("pfac == f", pfac, f);
     }
 
 
@@ -232,9 +233,9 @@ public class RingFactoryTokenizerTest extends TestCase {
                         + "( 1 x + x^3 + 0.3333333333333333333333 y z - x^3 ) " + " )";
         source = new StringReader(exam);
         parser = new RingFactoryTokenizer(source);
-        PolynomialList<BigDecimal> f = null;
+        GenPolynomialRing<BigDecimal> f = null;
         try {
-            f = (PolynomialList<BigDecimal>) parser.nextPolynomialSet();
+            f = (GenPolynomialRing<BigDecimal>) parser.nextPolynomialRing();
         } catch (IOException e) {
             fail("" + e);
         } catch (ClassCastException e) {
@@ -246,7 +247,7 @@ public class RingFactoryTokenizerTest extends TestCase {
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
         pfac = new GenPolynomialRing<BigDecimal>(fac, nvar, tord, vars);
-        assertEquals("pfac == f.ring", pfac, f.ring);
+        assertEquals("pfac == f", pfac, f);
     }
 
 
@@ -259,9 +260,9 @@ public class RingFactoryTokenizerTest extends TestCase {
                         + "( 3/4i2j1k3 - 6/8i2j1k3 ), " + "( 1 x + x^3 + 1i2j3k4 y z - x^3 ) " + " )";
         source = new StringReader(exam);
         parser = new RingFactoryTokenizer(source);
-        PolynomialList<BigQuaternion> f = null;
+        GenPolynomialRing<BigQuaternion> f = null;
         try {
-            f = (PolynomialList<BigQuaternion>) parser.nextPolynomialSet();
+            f = (GenPolynomialRing<BigQuaternion>) parser.nextPolynomialRing();
         } catch (IOException e) {
             fail("" + e);
         } catch (ClassCastException e) {
@@ -273,12 +274,12 @@ public class RingFactoryTokenizerTest extends TestCase {
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
         pfac = new GenPolynomialRing<BigQuaternion>(fac, nvar, tord, vars);
-        assertEquals("pfac == f.ring", pfac, f.ring);
+        assertEquals("pfac == f", pfac, f);
     }
 
 
     /**
-     * Test rational function coefficients polynomial.
+     * Test rational function coefficients.
      */
     @SuppressWarnings("unchecked")
     public void testRationalFunction() {
@@ -286,9 +287,9 @@ public class RingFactoryTokenizerTest extends TestCase {
                         + "( 1 x + x^3 + 1/3 y z - x^3 ) " + " )";
         source = new StringReader(exam);
         parser = new RingFactoryTokenizer(source);
-        PolynomialList<Quotient<BigInteger>> f = null;
+        GenPolynomialRing<Quotient<BigInteger>> f = null;
         try {
-            f = (PolynomialList<Quotient<BigInteger>>) parser.nextPolynomialSet();
+            f = (GenPolynomialRing<Quotient<BigInteger>>) parser.nextPolynomialRing();
         } catch (IOException e) {
             fail("" + e);
         } catch (ClassCastException e) {
@@ -303,8 +304,69 @@ public class RingFactoryTokenizerTest extends TestCase {
 	
         QuotientRing<BigInteger> qfac = new QuotientRing<BigInteger>(pfac);
         //System.out.println("qfac = " + qfac.toScript());
-        //System.out.println("f.ring = " + f.ring.toScript());
-        assertEquals("qfac == f.ring", qfac, f.ring.coFac);
+        //System.out.println("f.coFac = " + f.ring.coFac.toScript());
+        assertEquals("qfac == f.coFac", qfac, f.coFac);
+    }
+
+
+    /**
+     * Test integral function coefficients.
+     */
+    @SuppressWarnings("unchecked")
+    public void testIntegralFunction() {
+        String exam = "IntFunc(x,y,z) L " + "( " + "( 1 ), " + "( 0 ), " + "( 3/4 - 6/8 ), "
+                        + "( 1 x + x^3 + 1/3 y z - x^3 ) " + " )";
+        source = new StringReader(exam);
+        parser = new RingFactoryTokenizer(source);
+        GenPolynomialRing<GenPolynomial<BigRational>> f = null;
+        try {
+            f = (GenPolynomialRing<GenPolynomial<BigRational>>) parser.nextPolynomialRing();
+        } catch (IOException e) {
+            fail("" + e);
+        } catch (ClassCastException e) {
+            fail("" + e);
+        }
+
+        BigRational fac = new BigRational(0);
+        TermOrder tord = new TermOrder(TermOrder.INVLEX);
+        String[] vars = new String[] { "x", "y", "z" };
+        int nvar = vars.length;
+        pfac = new GenPolynomialRing<BigRational>(fac, nvar, tord, vars);
+
+        //System.out.println("pfac = " + pfac.toScript());
+        //System.out.println("f.coFac = " + f.coFac.toScript());
+        assertEquals("pfac == f.coFac", pfac, f.coFac);
+    }
+
+
+    /**
+     * Test modular function coefficients.
+     */
+    @SuppressWarnings("unchecked")
+    public void testModularFunction() {
+        String exam = "ModFunc 32003 (x,y,z) L " + "( " + "( 1 ), " + "( 0 ), " + "( 3/4 - 6/8 ), "
+                        + "( 1 x + x^3 + 1/3 y z - x^3 ) " + " )";
+        source = new StringReader(exam);
+        parser = new RingFactoryTokenizer(source);
+        GenPolynomialRing<Quotient<ModInteger>> f = null;
+        try {
+            f = (GenPolynomialRing<Quotient<ModInteger>>) parser.nextPolynomialRing();
+        } catch (IOException e) {
+            fail("" + e);
+        } catch (ClassCastException e) {
+            fail("" + e);
+        }
+
+        ModIntegerRing fac = new ModIntegerRing(32003);
+        TermOrder tord = new TermOrder(TermOrder.INVLEX);
+        String[] vars = new String[] { "x", "y", "z" };
+        int nvar = vars.length;
+        pfac = new GenPolynomialRing<ModInteger>(fac, nvar, tord, vars);
+
+        QuotientRing<ModInteger> qfac = new QuotientRing<ModInteger>(pfac);
+        //System.out.println("qfac = " + qfac.toScript());
+        //System.out.println("f.coFac = " + f.ring.toScript());
+        assertEquals("qfac == f.coFac", qfac, f.coFac);
     }
 
 
@@ -318,9 +380,9 @@ public class RingFactoryTokenizerTest extends TestCase {
                         + " )";
         source = new StringReader(exam);
         parser = new RingFactoryTokenizer(source);
-        PolynomialList<BigRational> f = null;
+        GenSolvablePolynomialRing<BigRational> f = null;
         try {
-            f = (PolynomialList<BigRational>) parser.nextSolvablePolynomialSet();
+            f = (GenSolvablePolynomialRing<BigRational>) parser.nextSolvablePolynomialRing();
         } catch (IOException e) {
             fail("" + e);
         } catch (ClassCastException e) {
@@ -333,11 +395,11 @@ public class RingFactoryTokenizerTest extends TestCase {
         int nvar = vars.length;
         spfac = new GenSolvablePolynomialRing<BigRational>(fac, nvar, tord, vars);
         List<GenSolvablePolynomial<BigRational>> rel = new ArrayList<GenSolvablePolynomial<BigRational>>(3);
-        // rel.add(spfac.parse("z"));
-        // rel.add(spfac.parse("y"));
-        // rel.add(spfac.parse("y z - 1"));
+        rel.add(spfac.parse("z"));
+        rel.add(spfac.parse("y"));
+        rel.add(spfac.parse("y z - 1"));
         spfac.addSolvRelations(rel);
-        assertEquals("spfac == f.ring", spfac, f.ring);
+        assertEquals("spfac == f", spfac, f);
         //System.out.println("spfac = " + spfac);
         //System.out.println("spfac.table = " + spfac.table);
     }
@@ -353,9 +415,9 @@ public class RingFactoryTokenizerTest extends TestCase {
                         + " )";
         source = new StringReader(exam);
         parser = new RingFactoryTokenizer(source);
-        PolynomialList<ModInteger> f = null;
+        GenSolvablePolynomialRing<ModInteger> f = null;
         try {
-            f = (PolynomialList<ModInteger>) parser.nextSolvablePolynomialSet();
+            f = (GenSolvablePolynomialRing<ModInteger>) parser.nextSolvablePolynomialRing();
         } catch (IOException e) {
             fail("" + e);
         } catch (ClassCastException e) {
@@ -368,11 +430,11 @@ public class RingFactoryTokenizerTest extends TestCase {
         int nvar = vars.length;
         spfac = new GenSolvablePolynomialRing<ModInt>(fac, nvar, tord, vars);
         List<GenSolvablePolynomial<ModLong>> rel = new ArrayList<GenSolvablePolynomial<ModLong>>(3);
-        // rel.add(spfac.parse("z"));
-        // rel.add(spfac.parse("y"));
-        // rel.add(spfac.parse("y z - 1"));
+        rel.add(spfac.parse("z"));
+        rel.add(spfac.parse("y"));
+        rel.add(spfac.parse("y z - 1"));
         spfac.addSolvRelations(rel);
-        assertEquals("spfac == f.ring", spfac, f.ring);
+        assertEquals("spfac == f", spfac, f);
         //System.out.println("spfac = " + spfac);
         //System.out.println("spfac.table = " + spfac.table);
     }
@@ -387,9 +449,9 @@ public class RingFactoryTokenizerTest extends TestCase {
                         + "  ( 1 x + x^3 + 3 y z - x^3 ) " + " ), " + " ( ( 1 ), ( 0 ) ) " + ")";
         source = new StringReader(exam);
         parser = new RingFactoryTokenizer(source);
-        ModuleList<BigInteger> m = null;
+        GenPolynomialRing<BigInteger> m = null;
         try {
-            m = (ModuleList<BigInteger>) parser.nextSubModuleSet();
+            m = (GenPolynomialRing<BigInteger>) parser.nextSubModuleRing();
         } catch (IOException e) {
             fail("" + e);
         } catch (ClassCastException e) {
@@ -401,7 +463,7 @@ public class RingFactoryTokenizerTest extends TestCase {
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
         pfac = new GenPolynomialRing<BigInteger>(fac, nvar, tord, vars);
-        assertEquals("pfac == m.ring", pfac, m.ring);
+        assertEquals("pfac == m.ring", pfac, m);
     }
 
 
@@ -415,9 +477,9 @@ public class RingFactoryTokenizerTest extends TestCase {
                         + "  ( 1 x + x^3 + 1/3 y z - x^3 ) " + " ), " + " ( ( x ), ( 1 ), ( 0 ) ) " + " )";
         source = new StringReader(exam);
         parser = new RingFactoryTokenizer(source);
-        ModuleList<BigRational> m = null;
+        GenSolvablePolynomialRing<BigRational> m = null;
         try {
-            m = (ModuleList<BigRational>) parser.nextSolvableSubModuleSet();
+            m = (GenSolvablePolynomialRing<BigRational>) parser.nextSolvableSubModuleRing();
         } catch (IOException e) {
             fail("" + e);
         } catch (ClassCastException e) {
@@ -430,11 +492,11 @@ public class RingFactoryTokenizerTest extends TestCase {
         int nvar = vars.length;
         spfac = new GenSolvablePolynomialRing<BigRational>(fac, nvar, tord, vars);
         List<GenSolvablePolynomial<ModLong>> rel = new ArrayList<GenSolvablePolynomial<ModLong>>(3);
-        // rel.add(spfac.parse("z"));
-        // rel.add(spfac.parse("y"));
-        // rel.add(spfac.parse("y z - 1"));
+        rel.add(spfac.parse("z"));
+        rel.add(spfac.parse("y"));
+        rel.add(spfac.parse("y z - 1"));
         spfac.addSolvRelations(rel);
-        assertEquals("spfac == m.ring", spfac, m.ring);
+        assertEquals("spfac == m.ring", spfac, m);
     }
 
 
@@ -448,9 +510,9 @@ public class RingFactoryTokenizerTest extends TestCase {
                         + "( 1.0001 - 0.0001 + { 0.25 }**2 - 1/4^2 ) " + " )";
         source = new StringReader(exam);
         parser = new RingFactoryTokenizer(source);
-        PolynomialList<BigRational> f = null;
+        GenPolynomialRing<BigRational> f = null;
         try {
-            f = (PolynomialList<BigRational>) parser.nextPolynomialSet();
+            f = (GenPolynomialRing<BigRational>) parser.nextPolynomialRing();
         } catch (IOException e) {
             fail("" + e);
         } catch (ClassCastException e) {
@@ -462,7 +524,7 @@ public class RingFactoryTokenizerTest extends TestCase {
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
         pfac = new GenPolynomialRing<BigRational>(fac, nvar, tord, vars);
-        assertEquals("pfac == f.ring", pfac, f.ring);
+        assertEquals("pfac == f", pfac, f);
     }
 
 }

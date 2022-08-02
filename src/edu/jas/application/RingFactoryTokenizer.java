@@ -803,7 +803,7 @@ public class RingFactoryTokenizer {
      * Parsing method for polynomial ring. Syntax:
      *
      * <pre>
-     * coeffRing varList termOrderName polyList
+     * coeffRing varList termOrderName (no polyList)
      * </pre>
      *
      * @return the next polynomial ring.
@@ -839,7 +839,7 @@ public class RingFactoryTokenizer {
      * Parsing method for solvable polynomial ring. Syntax:
      *
      * <pre>
-     * varList termOrderName relationTable polyList
+     * varList termOrderName relationTable (no polyList)
      * </pre>
      *
      * @return the next solvable polynomial ring.
@@ -900,56 +900,18 @@ public class RingFactoryTokenizer {
     }
 
 
-    /*
-     * Parsing method for polynomial set. Syntax:
-     *
-     * <pre>
-     * coeffRing varList termOrderName (no polyList)
-     * </pre>
-     *
-     * @return the next polynomial set.
-     * @throws IOException
-     */
-    @SuppressWarnings("unchecked")
-    /*package only*/ PolynomialList nextPolynomialSet() throws IOException {
-        //String comments = "";
-        //comments += nextComment();
-        //if (debug) logger.debug("comment = {}", comments);
-
-        RingFactory coeff = nextCoefficientRing();
-        logger.info("coeff = {}", coeff.getClass().getSimpleName());
-
-        vars = nextVariableList();
-        logger.info("vars = {}", Arrays.toString(vars));
-        if (vars != null) {
-            nvars = vars.length;
-        }
-
-        tord = nextTermOrder();
-        logger.info("tord = {}", tord);
-        // check more TOs
-
-        initFactory(coeff, parsedCoeff); // global: nvars, tord, vars
-        List<GenPolynomial> s = null;
-        //s = nextPolynomialList();
-        //logger.info("s = {}", s);
-        // comments += nextComment();
-        return new PolynomialList(pfac, s);
-    }
-
-
     /**
-     * Parsing method for module set. Syntax:
+     * Parsing method for module ring. Syntax:
      *
      * <pre>
-     * coeffRing varList termOrderName moduleList
+     * coeffRing varList termOrderName (no moduleList)
      * </pre>
      *
-     * @return the next module set.
+     * @return the next module ring.
      * @throws IOException
      */
     @SuppressWarnings("unchecked")
-    /*package*/ ModuleList nextSubModuleSet() throws IOException {
+    public GenPolynomialRing nextSubModuleRing() throws IOException {
         //String comments = "";
         //comments += nextComment();
         //if (debug) logger.debug("comment = {}", comments);
@@ -968,72 +930,26 @@ public class RingFactoryTokenizer {
         // check more TOs
 
         initFactory(coeff, parsedCoeff); // global: nvars, tord, vars
-        List<List<GenPolynomial>> m = null;
+        //List<List<GenPolynomial>> m = null;
         //m = nextSubModuleList();
         //logger.info("m = {}", m);
-        // comments += nextComment();
 
-        return new ModuleList(pfac, m);
-    }
-
-
-    /*
-     * Parsing method for solvable polynomial set. Syntax:
-     *
-     * <pre>
-     * varList termOrderName (no relationTable polyList)
-     * </pre>
-     *
-     * @return the next solvable polynomial set.
-     * @throws IOException
-     */
-    @SuppressWarnings("unchecked")
-    /*package*/ PolynomialList nextSolvablePolynomialSet() throws IOException {
-        //String comments = "";
-        //comments += nextComment();
-        //if (debug) logger.debug("comment = {}", comments);
-
-        RingFactory coeff = nextCoefficientRing();
-        logger.info("coeff = {}", coeff.getClass().getSimpleName());
-
-        vars = nextVariableList();
-        logger.info("vars = {}", Arrays.toString(vars));
-        if (vars != null) {
-            nvars = vars.length;
-        }
-
-        tord = nextTermOrder();
-        logger.info("tord = {}", tord);
-        // check more TOs
-
-        initFactory(coeff, parsedCoeff); // must be because of symmetric read
-        initSolvableFactory(coeff, parsedCoeff); // global: nvars, tord, vars
-        //System.out.println("pfac = " + pfac);
-        //System.out.println("spfac = " + spfac);
-
-        //nextRelationTable();
-        //logger.info("table = {}", table);
-
-        List<GenSolvablePolynomial> s = null;
-        //s = nextSolvablePolynomialList();
-        //logger.info("s = {}", s);
-        // comments += nextComment();
-        return new PolynomialList(spfac, s); // Ordered ?
+        return pfac;
     }
 
 
     /**
-     * Parsing method for solvable module set. Syntax:
+     * Parsing method for solvable module ring. Syntax:
      *
      * <pre>
-     * varList termOrderName (no relationTable moduleList*)
+     * varList termOrderName relationTable (no moduleList*)
      * </pre>
      *
-     * @return the next solvable module set.
+     * @return the next solvable module ring.
      * @throws IOException
      */
     @SuppressWarnings("unchecked")
-    /*package*/ ModuleList nextSolvableSubModuleSet() throws IOException {
+    public GenSolvablePolynomialRing nextSolvableSubModuleRing() throws IOException {
         //String comments = "";
         //comments += nextComment();
         //if (debug) logger.debug("comment = {}", comments);
@@ -1056,16 +972,15 @@ public class RingFactoryTokenizer {
 
         //System.out.println("spfac = " + spfac);
 
-        //nextRelationTable();
-        //logger.info("table = {}", table);
+        nextRelationTable();
+        logger.info("table = {}", table);
 
-        List<List<GenSolvablePolynomial>> s = null;
+        //List<List<GenSolvablePolynomial>> s = null;
         //s = nextSolvableSubModuleList();
         //logger.info("s = {}", s);
-        // comments += nextComment();
-
         //return new OrderedModuleList(spfac, s); // Ordered
-        return new ModuleList(spfac, s); // Ordered
+
+        return spfac;
     }
 
 }
