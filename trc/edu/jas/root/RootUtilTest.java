@@ -284,8 +284,12 @@ public class RootUtilTest extends TestCase {
         //System.out.println("a = " + a);
 
         AlgebraicRoots<BigRational> lcn = RootFactory.<BigRational> algebraicRoots(a);
-        //System.out.println("lcn = " + lcn.toScript());
-        //System.out.println("lcn = " + lcn.toDecimalScript());
+        String ts = lcn.toScript();
+        //System.out.println("lcn = " + ts);
+        assertTrue("complex in lcn: " + ts, ts.indexOf("real") >= 0 || ts.indexOf("complex") >= 0);
+        ts = lcn.toDecimalScript();
+        //System.out.println("lcn = " + ts);
+        assertTrue("complex in lcn: " + ts, ts.indexOf("real") >= 0 || ts.indexOf("complex") >= 0 );
 
         long r = lcn.real.size() + lcn.complex.size();
         ////Roots<BigRational> linalg = new Roots<BigRational>();

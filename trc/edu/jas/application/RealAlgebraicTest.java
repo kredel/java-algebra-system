@@ -61,8 +61,6 @@ public class RealAlgebraicTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     RealAlgebraicRing<BigRational> fac;
 
 
@@ -162,6 +160,15 @@ public class RealAlgebraicTest extends TestCase {
         //assertTrue("length( d ) = 0", d.number.getVal().length() == 0);
         assertTrue("isZERO( d )", d.isZERO());
         assertTrue("isONE( d )", !d.isONE());
+
+        String ts = fac.toScript();
+        //System.out.println("ts = " + ts);
+        assertTrue("RealN in toScript", ts.indexOf("RealN") >= 0);
+        ts = fac.getRoot().toScript();
+        //System.out.println("ts = " + ts);
+        assertTrue("ts = [x,y]", ts.indexOf("[x,y]") >= 0);
+        assertTrue("#rat(root) = 2", fac.getRoot().getRational().size() == 2);
+        assertTrue("#dec(root) = 2", fac.getRoot().decimalMagnitude().size() == 2);
     }
 
 

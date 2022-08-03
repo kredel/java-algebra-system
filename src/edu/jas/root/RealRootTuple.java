@@ -67,6 +67,7 @@ public class RealRootTuple<C extends GcdRingElem<C> & Rational> implements Seria
             }
             sb.append(r.toScript());
         }
+        sb.append("]");
         return sb.toString();
     }
 
