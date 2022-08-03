@@ -73,21 +73,25 @@ public class StringUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return sw.toString();
+        return sw.toString().trim();
     }
 
 
     /**
      * Parse paired String with given delimiters from Reader.
      * @param b opposite delimiter.
-     * @param c delimiter.
+     * @param c delimiter, != b.
      * @param r Reader.
-     * @return next nested matching String up to c from r.
+     * @return next nested matching String from b up to c from r.
      */
     public static String nextPairedString(Reader r, char b, char c) {
+        if (b == c) {
+            throw new IllegalArgumentException("b == c, not allowed " + b);
+        }
         StringWriter sw = new StringWriter();
         try {
             int level = 0;
+            boolean first = true;
             char buffer;
             int i;
             // read chars != c, ignore new lines ?
@@ -95,19 +99,25 @@ public class StringUtil {
                 buffer = (char) i;
                 if (buffer == b) {
                     level++;
+                    if (first) { // skip first opening 'brace'
+                        first = false;
+                        continue;
+                    }
                 }
                 if (buffer == c) {
                     level--;
-                    if (level < 0) {
-                        break; // skip last closing 'brace' 
+                    if (level <= 0) {
+                        break; // skip last closing 'brace'
                     }
                 }
-                sw.write(buffer);
+                if (level > 0) {
+                    sw.write(buffer);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return sw.toString();
+        return sw.toString().trim();
     }
 
 
