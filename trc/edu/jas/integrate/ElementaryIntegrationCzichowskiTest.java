@@ -53,8 +53,6 @@ public class ElementaryIntegrationCzichowskiTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     TermOrder tord;
 
 
@@ -70,19 +68,7 @@ public class ElementaryIntegrationCzichowskiTest extends TestCase {
     QuotIntegral<BigRational> rint;
 
 
-    Quotient<BigRational> a;
-
-
-    Quotient<BigRational> b;
-
-
-    Quotient<BigRational> c;
-
-
-    Quotient<BigRational> d;
-
-
-    Quotient<BigRational> e;
+    Quotient<BigRational> a, b, c, d, e;
 
 
     int rl = 1; // only univariate polynomials
@@ -137,6 +123,8 @@ public class ElementaryIntegrationCzichowskiTest extends TestCase {
             //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
+            assertFalse("rint not empty: " + rint, rint.toString().isEmpty());
+            assertTrue("rint contains: " + rint, rint.toString().indexOf("integral") >= 0);
         }
     }
 
@@ -157,6 +145,8 @@ public class ElementaryIntegrationCzichowskiTest extends TestCase {
             //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
+            assertFalse("rint not empty: " + rint, rint.toString().isEmpty());
+            assertTrue("rint contains: " + rint, rint.toString().indexOf("integral") >= 0);
         }
     }
 
@@ -179,6 +169,8 @@ public class ElementaryIntegrationCzichowskiTest extends TestCase {
             //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
+            assertFalse("rint not empty: " + rint, rint.toString().isEmpty());
+            assertTrue("rint contains: " + rint, rint.toString().indexOf("integral") >= 0);
         }
     }
 
@@ -208,6 +200,8 @@ public class ElementaryIntegrationCzichowskiTest extends TestCase {
             //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
+            assertFalse("rint not empty: " + rint, rint.toString().isEmpty());
+            assertTrue("rint contains: " + rint, rint.toString().indexOf("integral") >= 0);
         }
     }
 
@@ -236,6 +230,8 @@ public class ElementaryIntegrationCzichowskiTest extends TestCase {
             //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
+            assertFalse("rint not empty: " + rint, rint.toString().isEmpty());
+            assertTrue("rint contains: " + rint, rint.toString().indexOf("integral") >= 0);
         }
     }
 
@@ -269,6 +265,8 @@ public class ElementaryIntegrationCzichowskiTest extends TestCase {
             //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
+            assertFalse("rint not empty: " + rint, rint.toString().isEmpty());
+            assertTrue("rint contains: " + rint, rint.toString().indexOf("integral") >= 0);
         }
     }
 
@@ -302,6 +300,8 @@ public class ElementaryIntegrationCzichowskiTest extends TestCase {
             //System.out.println("QuotIntegral: " + qrint);
 
             assertTrue("isIntegral ", qintegrator.isIntegral(qrint));
+            assertFalse("qrint not empty: " + qrint, qrint.toString().isEmpty());
+            assertTrue("qrint contains: " + qrint, qrint.toString().indexOf("integral") >= 0);
         }
     }
 
@@ -337,6 +337,8 @@ public class ElementaryIntegrationCzichowskiTest extends TestCase {
         rint = integrator.integrate(b);
         //System.out.println("QuotIntegral: " + rint);
         assertTrue("isIntegral ", integrator.isIntegral(rint));
+        assertFalse("rint not empty: " + rint, rint.toString().isEmpty());
+        assertTrue("rint contains: " + rint, rint.toString().indexOf("integral") >= 0);
     }
 
 }

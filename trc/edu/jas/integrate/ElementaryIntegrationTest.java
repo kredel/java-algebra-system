@@ -28,12 +28,14 @@ import edu.jas.kern.ComputerThreads;
 
 public class ElementaryIntegrationTest extends TestCase {
 
+
     /**
      * main.
      */
     public static void main (String[] args) {
         junit.textui.TestRunner.run( suite() );
     }
+
 
     /**
      * Constructs a <CODE>ElementaryIntegrationTest</CODE> object.
@@ -43,6 +45,7 @@ public class ElementaryIntegrationTest extends TestCase {
         super(name);
     }
 
+
     /**
      * suite.
      */ 
@@ -51,26 +54,31 @@ public class ElementaryIntegrationTest extends TestCase {
         return suite;
     }
 
-    //private final static int bitlen = 100;
 
     TermOrder tord;
+
     QuotientRing<BigRational> qfac;
+
     GenPolynomialRing<BigRational> mfac;
+
     ElementaryIntegration<BigRational> integrator;
+
     QuotIntegral<BigRational> rint;
 
-    Quotient< BigRational > a;
-    Quotient< BigRational > b;
-    Quotient< BigRational > c;
-    Quotient< BigRational > d;
-    Quotient< BigRational > e;
+    Quotient< BigRational > a, b, c, d, e;
 
     int rl = 1; // only univariate polynomials
+
     int kl = 5;
+
     int ll = 3; //6;
+
     int el = 4;
+
     float q = 0.4f;
 
+
+    @Override
     protected void setUp() {
         a = b = c = d = e = null;
         tord = new TermOrder( TermOrder.INVLEX );
@@ -81,6 +89,8 @@ public class ElementaryIntegrationTest extends TestCase {
         integrator = new ElementaryIntegration<BigRational>(br);
     }
 
+
+    @Override
     protected void tearDown() {
         a = b = c = d = e = null;
         //qfac.terminate();
@@ -105,6 +115,8 @@ public class ElementaryIntegrationTest extends TestCase {
             //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
+            assertFalse("rint not empty: " + rint, rint.toString().isEmpty());
+            assertTrue("rint contains: " + rint, rint.toString().indexOf("integral") >= 0);
         }
     }
 
@@ -125,13 +137,14 @@ public class ElementaryIntegrationTest extends TestCase {
             //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
+            assertFalse("rint not empty: " + rint, rint.toString().isEmpty());
+            assertTrue("rint contains: " + rint, rint.toString().indexOf("integral") >= 0);
         }
     }
 
 
     /**
      * Test p'/p pure logarithm integral.
-     * 
      */
     public void testPureLogarithmD() {
         for (int i = 0; i < 3; i++) {
@@ -147,6 +160,8 @@ public class ElementaryIntegrationTest extends TestCase {
             //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
+            assertFalse("rint not empty: " + rint, rint.toString().isEmpty());
+            assertTrue("rint contains: " + rint, rint.toString().indexOf("integral") >= 0);
         }
     }
 
@@ -176,6 +191,8 @@ public class ElementaryIntegrationTest extends TestCase {
             //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
+            assertFalse("rint not empty: " + rint, rint.toString().isEmpty());
+            assertTrue("rint contains: " + rint, rint.toString().indexOf("integral") >= 0);
         }
     }
 
@@ -204,13 +221,14 @@ public class ElementaryIntegrationTest extends TestCase {
             //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
+            assertFalse("rint not empty: " + rint, rint.toString().isEmpty());
+            assertTrue("rint contains: " + rint, rint.toString().indexOf("integral") >= 0);
         }
     }
 
 
     /**
      * Test mixed rational with p'/p + 1/p logarithm integral.
-     * 
      */
     public void testRationalWithLogarithm() {
         for (int i = 0; i < 3; i++) {
@@ -237,6 +255,8 @@ public class ElementaryIntegrationTest extends TestCase {
             //System.out.println("QuotIntegral: " + rint);
 
             assertTrue("isIntegral ", integrator.isIntegral(rint));
+            assertFalse("rint not empty: " + rint, rint.toString().isEmpty());
+            assertTrue("rint contains: " + rint, rint.toString().indexOf("integral") >= 0);
         }
     }
 
@@ -270,6 +290,8 @@ public class ElementaryIntegrationTest extends TestCase {
             //System.out.println("QuotIntegral: " + qrint);
 
             assertTrue("isIntegral ", qintegrator.isIntegral(qrint));
+            assertFalse("rint not empty: " + qrint, qrint.toString().isEmpty());
+            assertTrue("rint contains: " + qrint, qrint.toString().indexOf("integral") >= 0);
         }
     }
 
@@ -291,17 +313,19 @@ public class ElementaryIntegrationTest extends TestCase {
         Quotient<BigRational> a = new Quotient<BigRational>(qfac,n,d);
         //System.out.println("a = " + a);
 
-        QuotIntegral<BigRational> rint = integrator.integrate(a);
-        //System.out.println("QuotIntegral: " + rint);
-        assertTrue("isIntegral ", integrator.isIntegral(rint));
+        QuotIntegral<BigRational> qrint = integrator.integrate(a);
+        //System.out.println("QuotIntegral: " + qrint);
+        assertTrue("isIntegral ", integrator.isIntegral(qrint));
 
         Quotient<BigRational> b = qfac.parse("{ 3*x^16-19*x^15+43*x^14-20*x^13-91*x^12+183*x^11-81*x^10-166*x^9+271*x^8-101*x^7-127*x^6+168*x^5-53*x^4-31*x^3+41*x^2-2*x-2 | 4*x^14-20*x^13+28*x^12+24*x^11-108*x^10+84*x^9+76*x^8-176*x^7+76*x^6+84*x^5-108*x^4+24*x^3+28*x^2-20*x+4 }");
         //System.out.println("b = " + b);
         assertEquals("a == b: ", a, b);
 
-        rint = integrator.integrate(b);
-        //System.out.println("QuotIntegral: " + rint);
-        assertTrue("isIntegral ", integrator.isIntegral(rint));
+        qrint = integrator.integrate(b);
+        //System.out.println("QuotIntegral: " + qrint);
+        assertTrue("isIntegral ", integrator.isIntegral(qrint));
+        assertFalse("qrint not empty: " + qrint, qrint.toString().isEmpty());
+        assertTrue("qrint contains: " + qrint, qrint.toString().indexOf("integral") >= 0);
     }
 
 }
