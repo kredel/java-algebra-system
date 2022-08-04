@@ -70,7 +70,7 @@ public class RealAlgebraicTest extends TestCase {
     RealAlgebraicNumber<BigRational> a, b, c, d, e;
 
 
-    int rl = 1;
+    int rl = 2;
 
 
     int kl = 10;
@@ -90,6 +90,7 @@ public class RealAlgebraicTest extends TestCase {
         a = b = c = d = e = null;
         BigRational rfac = new BigRational();
         String[] vars = new String[] { "x", "y" };
+        rl = vars.length;
         TermOrder tord = new TermOrder(TermOrder.INVLEX);
         mfac = new GenPolynomialRing<BigRational>(rfac, tord, vars);
         //System.out.println("mfac = " + mfac);
@@ -167,8 +168,8 @@ public class RealAlgebraicTest extends TestCase {
         ts = fac.getRoot().toScript();
         //System.out.println("ts = " + ts);
         assertTrue("ts = [x,y]", ts.indexOf("[x,y]") >= 0);
-        assertTrue("#rat(root) = 2", fac.getRoot().getRational().size() == 2);
-        assertTrue("#dec(root) = 2", fac.getRoot().decimalMagnitude().size() == 2);
+        assertTrue("#rat(root) = 2", fac.getRoot().getRational().size() == rl);
+        assertTrue("#dec(root) = 2", fac.getRoot().decimalMagnitude().size() == rl);
     }
 
 

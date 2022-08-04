@@ -344,6 +344,9 @@ public class RootFactory {
         if (z.isZERO()) {
             return true;
         }
+        if (z.getIm().abs().compareTo(e) <= 0 && z.getRe().abs().compareTo(e) <= 0) {
+            return true;
+        }
         System.out.println("z != 0: " + z);
         return false;
     }

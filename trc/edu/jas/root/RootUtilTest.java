@@ -300,4 +300,26 @@ public class RootUtilTest extends TestCase {
         assertTrue("#roots == degree(f): " + r, r >= a.degree());
     }
 
+
+    /**
+     * Test decimal algebraic roots, i.e. real and complex decimal algebraic roots.
+     */
+    public void testDecimalRoots() {
+        a = dfac.random(kl, ll, el, q);
+        //a = a.multiply( dfac.univariate(0) );
+        //System.out.println("a = " + a);
+        int prec = BigDecimal.DEFAULT_PRECISION - 2;
+        BigRational eps = (new BigRational(1, 10)).power(prec);
+        //System.out.println("prec = " + prec + ", eps = " + eps);
+
+        DecimalRoots<BigRational> lcn = RootFactory.<BigRational> decimalRoots(a,eps);
+        String ts = lcn.toScript();
+        //System.out.println("lcn = " + ts);
+        assertTrue("complex in lcn: " + ts, ts.indexOf("real") >= 0 || ts.indexOf("complex") >= 0);
+
+        long r = lcn.real.size() + lcn.complex.size();
+        // some real roots eventually not detected under complex roots
+        assertTrue("#roots == degree(f): " + r, r >= a.degree());
+    }
+
 }
