@@ -131,6 +131,13 @@ public class QuotSolvablePolynomialTest extends TestCase {
         assertTrue("isZERO( a )", a.isZERO());
         assertTrue("isONE( a )", !a.isONE());
 
+        String ts = ring.toScript();
+        //System.out.println("ring = " + ts);
+        assertTrue("SolvPolyRing in ring: " + ts, ts.indexOf("SolvPolyRing") >= 0);
+        ts = ring.toString();
+        //System.out.println("ring = " + ts);
+        assertTrue("RatFunc in ring: " + ts, ts.indexOf("RatFunc") >= 0);
+
         c = ring.getONE();
         assertTrue("length( c ) = 1", c.length() == 1);
         assertTrue("isZERO( c )", !c.isZERO());
@@ -310,11 +317,56 @@ public class QuotSolvablePolynomialTest extends TestCase {
 
 
     /**
+     * Test converions.
+     */
+    public void testConversion() {
+        GenSolvablePolynomialRing<GenPolynomial<BigRational>> pring;
+        pring = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(cring, tord, vars);
+        RelationGenerator<GenPolynomial<BigRational>> pwl = new WeylRelations<GenPolynomial<BigRational>>();
+        pwl.generate(pring);
+
+        String ts = pring.toScript();
+        //System.out.println("pring = " + ts);
+        assertTrue("SolvPolyRing in pring: " + ts, ts.indexOf("SolvPolyRing") >= 0);
+        ts = pring.toString();
+        //System.out.println("pring = " + ts);
+        assertTrue("IntFunc in pring: " + ts, ts.indexOf("IntFunc") >= 0);
+
+        GenSolvablePolynomial<GenPolynomial<BigRational>> ap, bp, cp, dp;
+
+        ap = pring.random(kl, ll, el, q);
+        //System.out.println("ap = " + ap);
+        a = ring.fromPolyCoefficients(ap);
+        //System.out.println("a = " + a);
+        bp = ring.toPolyCoefficients(a);
+        //System.out.println("bp = " + bp);
+        assertEquals("poly(a) == ap", ap, bp);
+
+        //GenSolvablePolynomialRing<GenPolynomial<BigRational>> sring;
+        sring = new GenSolvablePolynomialRing<SolvableQuotient<BigRational>>(ring.coFac, tord, vars);
+        RelationGenerator<SolvableQuotient<BigRational>> swl = new WeylRelations<SolvableQuotient<BigRational>>();
+        swl.generate(sring);
+
+        ts = sring.toScript();
+        //System.out.println("sring = " + ts);
+        assertTrue("SolvPolyRing in sring: " + ts, ts.indexOf("SolvPolyRing") >= 0);
+
+        // //GenSolvablePolynomial<SolvableQuotient<BigRational>> as, bs, cs, ds;
+        // //as = sring.random(kl, ll, el, q);
+        // a = ring.fromPolyCoefficients(ap);
+        // //System.out.println("a = " + a);
+        // bp = ring.toPolyCoefficients(a);
+        // //System.out.println("bp = " + bp);
+        // assertEquals("poly(a) == ap", ap, bp);
+    }
+
+
+    /**
      * Test solvable coefficient ring.
      */
     public void testSolvableCoeffs() {
         GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac, tord,
-                        cvars);
+                                                                                                   cvars);
         //RelationGenerator<BigRational> wlc = new WeylRelations<BigRational>(csring); 
         //no: wlc.generate(csring);
         //assertTrue("# relations == 1", csring.table.size() == 1);

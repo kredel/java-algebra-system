@@ -702,10 +702,14 @@ public class SolvableQuotient<C extends GcdRingElem<C>>
         ret[2] = null;
         if (b == null || b.isZERO()) {
             ret[0] = this;
+            ret[1] = ring.getONE();
+            ret[2] = ring.getZERO();
             return ret;
         }
         if (this.isZERO()) {
             ret[0] = b;
+            ret[1] = ring.getZERO();
+            ret[2] = ring.getONE();
             return ret;
         }
         GenSolvablePolynomial<C> two = ring.ring.fromInteger(2);

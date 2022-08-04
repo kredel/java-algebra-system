@@ -305,10 +305,10 @@ public class RootUtilTest extends TestCase {
      * Test decimal algebraic roots, i.e. real and complex decimal algebraic roots.
      */
     public void testDecimalRoots() {
-        a = dfac.random(kl, ll, el, q);
+        a = dfac.random(kl, ll-1, el, q);
         //a = a.multiply( dfac.univariate(0) );
         //System.out.println("a = " + a);
-        int prec = BigDecimal.DEFAULT_PRECISION - 2;
+        int prec = BigDecimal.DEFAULT_PRECISION / 2;
         BigRational eps = (new BigRational(1, 10)).power(prec);
         //System.out.println("prec = " + prec + ", eps = " + eps);
 

@@ -5,12 +5,15 @@
 package edu.jas.fd;
 
 
+import java.util.Arrays;
 
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.PrettyPrint;
+import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.RelationGenerator;
+import edu.jas.poly.ExpVector;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
 
@@ -110,12 +113,24 @@ public class SolvableQuotientTest extends TestCase {
      * Test constructor and toString.
      */
     public void testConstruction() {
+        String ts = efac.toScript();
+        //System.out.println("efac = " + ts);
+        assertTrue("SRF in efac: " + ts, ts.indexOf("SRF") >= 0);
+        ts = efac.toString();
+        //System.out.println("efac = " + ts);
+        assertTrue("RatFunc in efac: " + ts, ts.indexOf("RatFunc") >= 0);
+
         c = efac.getONE();
         //System.out.println("c = " + c);
-        //System.out.println("c.val = " + c.val);
         assertTrue("length( c ) = 1", c.num.length() == 1);
         assertTrue("isZERO( c )", !c.isZERO());
         assertTrue("isONE( c )", c.isONE());
+        ts = c.toScript();
+        //System.out.println("c = " + ts);
+        assertTrue("1 in c: " + ts, ts.indexOf("1") >= 0);
+        //ts = c.toString();
+        //System.out.println("c = " + ts);
+        assertTrue("1 in c: " + ts, ts.indexOf("1") >= 0);
 
         d = efac.getZERO();
         //System.out.println("d = " + d);
@@ -232,6 +247,18 @@ public class SolvableQuotientTest extends TestCase {
             //System.out.println("d = " + d);
             assertTrue("a*1/a = 1", d.isONE());
         }
+
+        c = new SolvableQuotient<BigRational>(efac, mfac.univariate(1, 2));
+        //System.out.println("c = " + c.toScript());
+        GenSolvablePolynomial<BigRational> n = c.num;
+        d = a.multiply(n);
+        e = a.multiply(c);
+        assertEquals("a*c.n = a*c", d, e);
+
+        ExpVector ldt = n.leadingExpVector();
+        d = a.multiply(ldt);
+        //e = a.multiply(c);
+        assertEquals("a*ldt(c.n) = a*c", d, e);
     }
 
 
@@ -324,6 +351,33 @@ public class SolvableQuotientTest extends TestCase {
         //c = a.subtract(b);
         //System.out.println("c = " + c);
         assertEquals("parse(a.toSting()) = a", a, b);
+    }
+
+
+    /**
+     * Test egcd and fraction.
+     */
+    public void testEgcdFraction() {
+        a = efac.random(kl, ll, el, q);
+        b = efac.random(kl, ll, el, q);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+
+	SolvableQuotient<BigRational>[] egcd = a.egcd(b);
+        //System.out.println("egcd = " + Arrays.toString(egcd));
+	SolvableQuotient<BigRational> e0 = egcd[0];
+	SolvableQuotient<BigRational> e1 = egcd[1];
+	SolvableQuotient<BigRational> e2 = egcd[2];
+
+        c = a.multiply(e1).sum( b.multiply(e2) );
+        //System.out.println("c = " + c);
+        assertEquals("egcd[0] == c: " + e0 + "!=" + c, e0, c);
+
+        c = a.rightFraction();
+        //System.out.println("rf(a) = " + c);
+        assertTrue("isRightFraction: " + a + "rf" + c, a.isRightFraction(c) );
+        //System.out.println("a.num * c.den: " + a.num.multiply(c.den) );
+        //System.out.println("a.den * c.num: " + a.den.multiply(c.num) );
     }
 
 }
