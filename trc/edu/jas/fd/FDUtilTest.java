@@ -5,6 +5,10 @@
 package edu.jas.fd;
 
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
@@ -107,11 +111,12 @@ public class FDUtilTest extends TestCase {
         a = b = c = d = e = null;
         ar = br = cr = dr = er = null;
         String[] vars = new String[] { "a", "b", "c", "d" };
-        dfac = new GenSolvablePolynomialRing<BigInteger>(new BigInteger(1), rl, to, vars);
+        rl = vars.length;
+        dfac = new GenSolvablePolynomialRing<BigInteger>(new BigInteger(1), to, vars);
         RelationGenerator<BigInteger> wl = new WeylRelationsIterated<BigInteger>();
         dfac.addRelations(wl);
         rfac = dfac.recursive(1);
-        rdfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), rl, to, vars);
+        rdfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, vars);
         RelationGenerator<BigRational> wlr = new WeylRelationsIterated<BigRational>();
         rdfac.addRelations(wlr);
         rrfac = rdfac.recursive(1);
@@ -264,7 +269,7 @@ public class FDUtilTest extends TestCase {
         rdfac.addRelations(wl);
         rsfac = (RecSolvablePolynomialRing<BigRational>) rdfac.recursive(1);
 
-        // q = q;
+        q = 0.27f;
         kl = 1;
         ll = 3;
 
@@ -432,7 +437,7 @@ public class FDUtilTest extends TestCase {
     }
 
 
-    /*
+    /**
      * Test exact division of recursive polynomials.
      */
     @SuppressWarnings({ "cast" })
@@ -546,6 +551,64 @@ public class FDUtilTest extends TestCase {
                 break;
             }
         } while (i++ < max);
+    }
+
+
+    /**
+     * Test polynomial conversions.
+     */
+    //@SuppressWarnings({ "cast" })
+    public void testConversion() {
+        //System.out.println("dfac = " + dfac.toScript());
+        //System.out.println("rdfac = " + rdfac.toScript());
+        //System.out.println("rrfac = " + rrfac.toScript());
+
+        rfac = dfac.recursive(2); // avoid polCoeff
+        System.out.println("rfac = " + rfac.toScript());
+        assertFalse("isCommutative()", rfac.isCommutative());
+        assertTrue("isAssociative()", rfac.isAssociative());
+
+        GenSolvablePolynomialRing<BigInteger> ifac = (GenSolvablePolynomialRing<BigInteger>) rfac.coFac;
+        //System.out.println("ifac = " + ifac.toScript());
+
+        SolvableQuotientRing <BigInteger> qfac = new SolvableQuotientRing<BigInteger>(ifac);
+        //System.out.println("qfac = " + qfac.toScript());
+        GenSolvablePolynomialRing<SolvableQuotient<BigInteger>> iqfac = new GenSolvablePolynomialRing<SolvableQuotient<BigInteger>>(qfac, rfac);
+        //System.out.println("iqfac = " + iqfac.toScript());
+
+        List<GenSolvablePolynomial<GenPolynomial<BigInteger>>> irel = rfac.table.relationList();
+        //System.out.println("irel = " + irel);
+
+        List<GenSolvablePolynomial<SolvableQuotient<BigInteger>>> qrel;
+        qrel = FDUtil.<BigInteger> quotientFromIntegralCoefficients(iqfac, irel);
+        //System.out.println("qrel = " + qrel);
+        assertEquals("#irel == #qrel: ", irel.size(), qrel.size());
+        iqfac.table.addSolvRelations(qrel);
+        System.out.println("iqfac = " + iqfac.toScript());
+        assertFalse("isCommutative()", iqfac.isCommutative());
+        //assertTrue("isAssociative()", iqfac.isAssociative()); //extLeftGB is missing
+
+        List<GenSolvablePolynomial<GenPolynomial<BigInteger>>> iqrel;
+        iqrel = FDUtil.<BigInteger> integralFromQuotientCoefficients(rfac, qrel);
+        //System.out.println("iqrel = " + iqrel);
+        assertEquals("#qrel == #iqrel: ", qrel.size(), iqrel.size());
+        assertEquals("irel == iqrel: ", irel, iqrel);
+
+        kl = 1;
+        q = 0.25f;
+        if (kl == 1) {
+            return;
+        }
+        GenSolvablePolynomial<SolvableQuotient<BigInteger>> aq, bq, cq, dq;
+        do {
+            aq = iqfac.random(kl, ll, el, q);
+        } while (aq.isZERO());
+        System.out.println("aq = " + aq);
+
+        do {
+            bq = iqfac.random(kl, ll, el, q);
+        } while (bq.isZERO());
+        System.out.println("bq = " + bq);
     }
 
 }

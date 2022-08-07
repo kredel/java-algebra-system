@@ -141,6 +141,8 @@ public class QuotSolvablePolynomialTest extends TestCase {
         ts = ring.toString();
         //System.out.println("ring = " + ts);
         assertTrue("RatFunc in ring: " + ts, ts.indexOf("RatFunc") >= 0);
+        int h = ring.hashCode();
+        assertTrue("hashCode != 0", h != 0);
 
         c = ring.getONE();
         assertTrue("length( c ) = 1", c.length() == 1);
@@ -174,6 +176,8 @@ public class QuotSolvablePolynomialTest extends TestCase {
             assertTrue("length( a" + i + " ) <> 0", a.length() >= 0);
             assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
             assertTrue(" not isONE( a" + i + " )", !a.isONE());
+            int h = a.hashCode();
+            assertTrue("hashCode != 0", h != 0);
         }
     }
 
@@ -571,19 +575,19 @@ public class QuotSolvablePolynomialTest extends TestCase {
        //bd = sring.parse("-10/13 x "); //+ 413/150");
        //ad = (GenSolvablePolynomial<BigRational>) ad.monic();
        //bd = (GenSolvablePolynomial<BigRational>) bd.monic();
-       System.out.println("ad = " + ad);
-       System.out.println("bd = " + bd);
+       //System.out.println("ad = " + ad);
+       //System.out.println("bd = " + bd);
 
        cd = ad.multiply(bd);
-       System.out.println("cd = " + cd);
+       //System.out.println("cd = " + cd);
 
        ap = (GenPolynomial<GenPolynomial<BigRational>>) PolyUtil.<BigRational> recursive(rsring, ad);
        bp = (GenPolynomial<GenPolynomial<BigRational>>) PolyUtil.<BigRational> recursive(rsring, bd);
-       System.out.println("ap = " + ap);
-       System.out.println("bp = " + bp);
+       //System.out.println("ap = " + ap);
+       //System.out.println("bp = " + bp);
 
        cp = ap.multiply(bp);
-       System.out.println("cp = " + cp);
+       //System.out.println("cp = " + cp);
        //System.out.println("cp.ring = " + cp.ring.toScript());
 
        dp = (GenPolynomial<GenPolynomial<BigRational>>) PolyUtil.<BigRational> recursive(rsring, cd);
@@ -626,19 +630,19 @@ public class QuotSolvablePolynomialTest extends TestCase {
        //bd = sring.parse("-10/13 x "); //+ 413/150");
        //ad = (GenSolvablePolynomial<BigRational>) ad.monic();
        //bd = (GenSolvablePolynomial<BigRational>) bd.monic();
-       System.out.println("ad = " + ad);
-       System.out.println("bd = " + bd);
+       //System.out.println("ad = " + ad);
+       //System.out.println("bd = " + bd);
 
        cd = ad.multiply(bd);
-       System.out.println("cd = " + cd);
+       //System.out.println("cd = " + cd);
 
        ap = (GenPolynomial<GenPolynomial<BigRational>>) PolyUtil.<BigRational> recursive(rsring, ad);
        bp = (GenPolynomial<GenPolynomial<BigRational>>) PolyUtil.<BigRational> recursive(rsring, bd);
-       System.out.println("ap = " + ap);
-       System.out.println("bp = " + bp);
+       //System.out.println("ap = " + ap);
+       //System.out.println("bp = " + bp);
 
        cp = ap.multiply(bp);
-       System.out.println("cp = " + cp);
+       //System.out.println("cp = " + cp);
        //System.out.println("cp.ring = " + cp.ring.toScript());
 
        dp = (GenPolynomial<GenPolynomial<BigRational>>) PolyUtil.<BigRational> recursive(rsring, cd);

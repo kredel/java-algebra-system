@@ -628,7 +628,7 @@ public class SolvableQuotient<C extends GcdRingElem<C>>
             return this;
         }
         GenSolvablePolynomial<C> n = num.multiply(b);
-        return new SolvableQuotient<C>(ring, n, den, false);
+        return new SolvableQuotient<C>(ring, n, den, true);
     }
 
 

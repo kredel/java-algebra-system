@@ -119,6 +119,9 @@ public class SolvableQuotientTest extends TestCase {
         ts = efac.toString();
         //System.out.println("efac = " + ts);
         assertTrue("RatFunc in efac: " + ts, ts.indexOf("RatFunc") >= 0);
+        int h = efac.hashCode();
+        //System.out.println("efac.hashCode = " + h);
+        assertTrue("hashCode != 0", h != 0);
 
         c = efac.getONE();
         //System.out.println("c = " + c);
@@ -163,6 +166,9 @@ public class SolvableQuotientTest extends TestCase {
             assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
             assertTrue(" not isONE( a" + i + " )", !a.isONE());
             assertEquals("a == a: ", a, a);
+            int h = a.hashCode();
+            //System.out.println("a.hashCode = " + h);
+            assertTrue("hashCode != 0", h != 0);
         }
     }
 
@@ -259,6 +265,14 @@ public class SolvableQuotientTest extends TestCase {
         d = a.multiply(ldt);
         //e = a.multiply(c);
         assertEquals("a*ldt(c.n) = a*c", d, e);
+
+        BigRational ldcf = BigRational.ONE;
+        ldcf = ldcf.sum(ldcf);
+        d = a.multiply(ldcf);
+        e = d.multiply(BigRational.HALF);
+        //System.out.println("a = " + a);
+        //System.out.println("d = " + d);
+        assertEquals("a = (a*2)*1/2", a, e);
     }
 
 
