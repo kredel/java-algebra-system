@@ -7,8 +7,8 @@ package edu.jas.fd;
 
 import java.util.Arrays;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;

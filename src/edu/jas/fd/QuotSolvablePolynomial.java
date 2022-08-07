@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -24,14 +24,14 @@ import edu.jas.structure.GcdRingElem;
  * RingElem. n-variate ordered solvable polynomials over solvable polynomial
  * coefficients. Objects of this class are intended to be immutable. The
  * implementation is based on TreeMap respectively SortedMap from exponents to
- * coefficients by extension of GenPolynomial.
- * Will be deprecated use QLRSolvablePolynomial.
+ * coefficients by extension of GenPolynomial. Will be deprecated use
+ * QLRSolvablePolynomial.
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
-public class QuotSolvablePolynomial<C extends GcdRingElem<C>> extends
-                GenSolvablePolynomial<SolvableQuotient<C>> {
+public class QuotSolvablePolynomial<C extends GcdRingElem<C>>
+                extends GenSolvablePolynomial<SolvableQuotient<C>> {
 
 
     /**

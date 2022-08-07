@@ -183,10 +183,9 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>>
         SolvableQuotientRing<C> cfring = (SolvableQuotientRing<C>) cf; // == coFac
         polCoeff = new RecSolvablePolynomialRing<C>(cfring.ring, n, t, v);
         if (table.size() > 0) {
-            List<GenSolvablePolynomial<GenPolynomial<C>>> nt
-                = new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>();
+            List<GenSolvablePolynomial<GenPolynomial<C>>> nt = new ArrayList<GenSolvablePolynomial<GenPolynomial<C>>>();
             for (GenSolvablePolynomial<SolvableQuotient<C>> q : table.relationList()) {
-                nt.add( this.toPolyCoefficients(q) ); // only with den == 1
+                nt.add(this.toPolyCoefficients(q)); // only with den == 1
             }
             polCoeff.table.addSolvRelations(nt);
         }
