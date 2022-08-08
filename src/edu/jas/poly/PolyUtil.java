@@ -1090,8 +1090,8 @@ public class PolyUtil {
      * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
      */
     @SuppressWarnings("unchecked")
-    public static <C extends RingElem<C>> GenPolynomial<C>[] basePseudoQuotientRemainder(GenPolynomial<C> P,
-                    GenPolynomial<C> S) {
+    public static <C extends RingElem<C>> GenPolynomial<C>[] basePseudoQuotientRemainder(final GenPolynomial<C> P,
+                    final GenPolynomial<C> S) {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P.toString() + " division by zero " + S);
         }
@@ -1108,8 +1108,9 @@ public class PolyUtil {
             ret[1] = S.ring.getZERO();
             return ret;
         }
-        C c = S.leadingBaseCoefficient();
-        ExpVector e = S.leadingExpVector();
+        //logger.debug("P, S = " + P + ", " + S);
+        final C c = S.leadingBaseCoefficient();
+        final ExpVector e = S.leadingExpVector();
         GenPolynomial<C> h;
         GenPolynomial<C> r = P;
         GenPolynomial<C> q = S.ring.getZERO().copy();
@@ -1131,6 +1132,7 @@ public class PolyUtil {
                     h = S.multiply(a, f); // coeff c a
                 }
                 r = r.subtract(h);
+                //logger.debug("q, r = " + q + ", " + r);
             } else {
                 break;
             }
