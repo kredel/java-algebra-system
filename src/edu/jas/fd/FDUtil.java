@@ -119,7 +119,7 @@ public class FDUtil {
      */
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C>[] leftBasePseudoQuotientRemainder(
-                    GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
+                    final GenSolvablePolynomial<C> P, final GenSolvablePolynomial<C> S) {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P.toString() + " division by zero " + S);
         }
@@ -142,7 +142,7 @@ public class FDUtil {
             }
         }
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorFake<C>(P.ring.coFac);
-        ExpVector e = S.leadingExpVector();
+        final ExpVector e = S.leadingExpVector();
         GenSolvablePolynomial<C> h;
         GenSolvablePolynomial<C> r = P;
         GenSolvablePolynomial<C> q = S.ring.getZERO().copy();
@@ -157,15 +157,16 @@ public class FDUtil {
                 C[] oc = fd.leftOreCond(a, c);
                 C ga = oc[0];
                 C gc = oc[1];
+                //logger.debug("left ga, gc   = " + ga + ", " + gc);
                 r = r.multiplyLeft(ga); // coeff ga a, exp f
                 h = h.multiplyLeft(gc); // coeff gc c, exp f
                 q = q.multiplyLeft(ga); // c
                 q = (GenSolvablePolynomial<C>) q.sum(gc, f); // a
-                //System.out.println("q = " + q);
                 r = (GenSolvablePolynomial<C>) r.subtract(h);
             } else {
                 break;
             }
+            //System.out.println("left q, r   = " + q + ", " + r);
         }
         int sp = P.signum();
         int ss = S.signum();
