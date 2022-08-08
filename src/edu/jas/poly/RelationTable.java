@@ -846,7 +846,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                         logger.info("coeffTable: adding {}", qrs);
                     } else {
                         String qrs = ring.toScript(ec) + " * " + ring.toScript(fc) + " = " + qr.toScript();
-                        logger.info("no coeffTable: adding {}", qrs);
+                        logger.info("table: adding {}", qrs);
                     }
                     this.update(ec, fc, qr);
                 }

@@ -16,7 +16,7 @@ public class PreemptStatus {
     /**
      * Global status flag.
      */
-    private static boolean allowPreempt = true;
+    private static volatile boolean allowPreempt = true;
 
 
     /**
@@ -31,6 +31,7 @@ public class PreemptStatus {
      * @return true, preemtive interruption is allowed, else false.
      */
     public static boolean isAllowed() {
+        //System.out.println("allowPreempt: " + allowPreempt);
         return allowPreempt;
     }
 

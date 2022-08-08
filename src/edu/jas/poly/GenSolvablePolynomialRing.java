@@ -315,8 +315,9 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
             // Name        : java-11-openjdk-headless
             // Version     : 11.0.15.0
             // Release     : 150000.3.80.1
-            ZERO = new GenSolvablePolynomial<C>(this); // ???
-            logger.info("ZERO@get {}", ZERO);
+            GenSolvablePolynomial<C> x = ZERO;
+            ZERO = new GenSolvablePolynomial<C>(this);
+            logger.info("ZERO@get wrong: {} fix: {}", x, ZERO);
         }
         return ZERO;
     }

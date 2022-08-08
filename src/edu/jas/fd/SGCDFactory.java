@@ -81,6 +81,7 @@ public class SGCDFactory {
      * @return gcd algorithm implementation.
      */
     public static GreatestCommonDivisorAbstract<ModLong> getImplementation(ModLongRing fac) {
+        logger.info("fac = {}", fac.getClass().getName());
         GreatestCommonDivisorAbstract<ModLong> ufd;
         if (fac.isField()) {
             ufd = new GreatestCommonDivisorSimple<ModLong>(fac);
@@ -97,6 +98,7 @@ public class SGCDFactory {
      * @return gcd algorithm implementation.
      */
     public static GreatestCommonDivisorAbstract<ModLong> getProxy(ModLongRing fac) {
+        logger.info("fac = {}", fac.getClass().getName());
         GreatestCommonDivisorAbstract<ModLong> ufd1, ufd2;
         ufd1 = new GreatestCommonDivisorPrimitive<ModLong>(fac);
         if (fac.isField()) {
@@ -114,6 +116,7 @@ public class SGCDFactory {
      * @return gcd algorithm implementation.
      */
     public static GreatestCommonDivisorAbstract<ModInteger> getImplementation(ModIntegerRing fac) {
+        logger.info("fac = {}", fac.getClass().getName());
         GreatestCommonDivisorAbstract<ModInteger> ufd;
         if (fac.isField()) {
             ufd = new GreatestCommonDivisorSimple<ModInteger>(fac);
@@ -130,6 +133,7 @@ public class SGCDFactory {
      * @return gcd algorithm implementation.
      */
     public static GreatestCommonDivisorAbstract<ModInteger> getProxy(ModIntegerRing fac) {
+        logger.info("fac = {}", fac.getClass().getName());
         GreatestCommonDivisorAbstract<ModInteger> ufd1, ufd2;
         ufd1 = new GreatestCommonDivisorPrimitive<ModInteger>(fac);
         if (fac.isField()) {
@@ -149,6 +153,7 @@ public class SGCDFactory {
     @SuppressWarnings("unused")
     public static GreatestCommonDivisorAbstract<BigInteger> getImplementation(BigInteger fac) {
         GreatestCommonDivisorAbstract<BigInteger> ufd;
+        logger.info("fac = {}", fac.getClass().getName());
         if (true) {
             ufd = new GreatestCommonDivisorPrimitive<BigInteger>(fac);
         } else {
@@ -167,6 +172,7 @@ public class SGCDFactory {
         if (fac == null) {
             throw new IllegalArgumentException("fac == null not supported");
         }
+        logger.info("fac = {}", fac.getClass().getName());
         GreatestCommonDivisorAbstract<BigInteger> ufd1, ufd2;
         ufd1 = new GreatestCommonDivisorPrimitive<BigInteger>(fac);
         ufd2 = new GreatestCommonDivisorSyzygy<BigInteger>(fac);
@@ -183,6 +189,7 @@ public class SGCDFactory {
         if (fac == null) {
             throw new IllegalArgumentException("fac == null not supported");
         }
+        logger.info("fac = {}", fac.getClass().getName());
         GreatestCommonDivisorAbstract<BigRational> ufd;
         ufd = new GreatestCommonDivisorPrimitive<BigRational>(fac);
         return ufd;
@@ -198,6 +205,7 @@ public class SGCDFactory {
         if (fac == null) {
             throw new IllegalArgumentException("fac == null not supported");
         }
+        logger.info("fac = {}", fac.getClass().getName());
         GreatestCommonDivisorAbstract<BigRational> ufd1, ufd2;
         ufd1 = new GreatestCommonDivisorPrimitive<BigRational>(fac);
         ufd2 = new GreatestCommonDivisorSimple<BigRational>(fac);
@@ -214,7 +222,7 @@ public class SGCDFactory {
     public static <C extends GcdRingElem<C>> GreatestCommonDivisorAbstract<C> getImplementation(
                     RingFactory<C> fac) {
         GreatestCommonDivisorAbstract/*raw type<C>*/ ufd;
-        logger.debug("fac = {}", fac.getClass().getName());
+        logger.info("fac = {}", fac.getClass().getName());
         Object ofac = fac;
         if (ofac instanceof BigInteger) {
             ufd = new GreatestCommonDivisorPrimitive<C>(fac);
@@ -257,7 +265,7 @@ public class SGCDFactory {
             return SGCDFactory.<C> getImplementation(fac);
         }
         GreatestCommonDivisorAbstract/*raw type<C>*/ ufd;
-        logger.debug("fac = {}", fac.getClass().getName());
+        logger.info("fac = {}", fac.getClass().getName());
         Object ofac = fac;
         if (ofac instanceof BigInteger) {
             ufd = new SGCDParallelProxy<C>(fac, new GreatestCommonDivisorSimple<C>(fac),

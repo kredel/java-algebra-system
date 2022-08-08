@@ -128,7 +128,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
     /**
      * Flag to enable if preemptive interrrupt is checked.
      */
-    final boolean checkPreempt = PreemptStatus.isAllowed();
+    volatile boolean checkPreempt = PreemptStatus.isAllowed();
 
 
     /**
@@ -213,7 +213,6 @@ public class GenPolynomialRing<C extends RingElem<C>>
         } else {
             vars = Arrays.copyOf(v, v.length); // > Java-5
         }
-        C z = coFac.getZERO();
         C coeff = coFac.getONE();
         synchronized (this) {
            evzero = ExpVector.create(nvar);
