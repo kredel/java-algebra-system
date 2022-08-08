@@ -137,6 +137,13 @@ public class GenPolynomialTokenizer {
         } else {
             table = null;
         }
+        if (!pfac.getZERO().isZERO()) { // happened since May 5 2022
+            // Name        : java-11-openjdk-headless
+            // Version     : 11.0.15.0
+            // Release     : 150000.3.80.1
+            //System.out.println("thread@tokenizer: " + Thread.currentThread());
+            throw new RuntimeException("zero not 0: " + pfac.getZERO() + " " + pfac.getZERO().val);
+        }
     }
 
 
@@ -301,6 +308,7 @@ public class GenPolynomialTokenizer {
         ExpVector leer = pfac.evzero;
 
         if (debug) {
+            logger.debug("pfac = {}", pfac.toScript());
             logger.debug("a = {}", a);
             logger.debug("a1 = {}", a1);
         }
@@ -572,6 +580,7 @@ public class GenPolynomialTokenizer {
                 first = tok.sval.charAt(0);
                 if (digit(first)) {
                     e = Long.parseLong(tok.sval);
+                    logger.debug("exponent ^{}", e);
                     return e;
                 }
             }
@@ -585,6 +594,7 @@ public class GenPolynomialTokenizer {
                     first = tok.sval.charAt(0);
                     if (digit(first)) {
                         e = Long.parseLong(tok.sval);
+                        logger.debug("exponent **{}", e);
                         return e;
                     }
                 }
@@ -1328,11 +1338,11 @@ public class GenPolynomialTokenizer {
     @SuppressWarnings("unchecked")
     public GenSolvablePolynomial nextSolvablePolynomial() throws IOException {
         GenPolynomial p = nextPolynomial();
-        logger.info("nextSolvablePolynomial = {}", p);
+        //logger.info("nextPolynomial = {}", p);
         // comments += nextComment();
 
         GenSolvablePolynomial ps = new GenSolvablePolynomial(spfac, p.val);
-        //System.out.println("ps = " + ps);
+        logger.info("nextSolvablePolynomial = {}", ps);
         return ps;
     }
 

@@ -68,7 +68,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
     /**
      * True for partially reversed variables.
      */
-    protected boolean partial;
+    protected volatile boolean partial;
 
 
     /**
@@ -86,19 +86,19 @@ public class GenPolynomialRing<C extends RingElem<C>>
     /**
      * The constant polynomial 0 for this ring.
      */
-    public final GenPolynomial<C> ZERO;
+    public volatile GenPolynomial<C> ZERO;
 
 
     /**
      * The constant polynomial 1 for this ring.
      */
-    public final GenPolynomial<C> ONE;
+    public volatile GenPolynomial<C> ONE;
 
 
     /**
      * The constant exponent vector 0 for this ring.
      */
-    public final ExpVector evzero;
+    public volatile ExpVector evzero;
 
 
     /**
@@ -213,10 +213,15 @@ public class GenPolynomialRing<C extends RingElem<C>>
         } else {
             vars = Arrays.copyOf(v, v.length); // > Java-5
         }
-        ZERO = new GenPolynomial<C>(this);
+        C z = coFac.getZERO();
         C coeff = coFac.getONE();
-        evzero = ExpVector.create(nvar);
-        ONE = new GenPolynomial<C>(this, coeff, evzero);
+        synchronized (this) {
+           evzero = ExpVector.create(nvar);
+           ZERO = new GenPolynomial<C>(this);
+           ONE = new GenPolynomial<C>(this, coeff, evzero);
+        }
+        //logger.debug("ZERO {} {}", ZERO.toString(), ZERO.val);
+        //System.out.println("thread@ZERO: " + Thread.currentThread());
         if (vars == null) {
             if (PrettyPrint.isTrue()) {
                 vars = newVars("x", nvar);
@@ -492,7 +497,14 @@ public class GenPolynomialRing<C extends RingElem<C>>
      * Get the zero element.
      * @return 0 as GenPolynomial<C>.
      */
-    public GenPolynomial<C> getZERO() {
+    public synchronized GenPolynomial<C> getZERO() {
+        if (ZERO == null || !ZERO.isZERO()) { // happened since May 5 2022
+            // Name        : java-11-openjdk-headless
+            // Version     : 11.0.15.0
+            // Release     : 150000.3.80.1
+           ZERO = new GenPolynomial<C>(this);
+           logger.info("ZERO@get {}", ZERO);
+        }
         return ZERO;
     }
 
@@ -501,7 +513,11 @@ public class GenPolynomialRing<C extends RingElem<C>>
      * Get the one element.
      * @return 1 as GenPolynomial<C>.
      */
-    public GenPolynomial<C> getONE() {
+    public synchronized GenPolynomial<C> getONE() {
+        if (ONE == null || !ONE.isONE()) {
+           ONE = new GenPolynomial<C>(this, coFac.getONE(), evzero);
+           logger.info("ONE@get {}", ONE);
+        }
         return ONE;
     }
 

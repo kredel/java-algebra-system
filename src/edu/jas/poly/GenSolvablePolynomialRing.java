@@ -47,13 +47,13 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
     /**
      * The constant polynomial 0 for this ring. Hides super ZERO.
      */
-    public final GenSolvablePolynomial<C> ZERO;
+    public volatile GenSolvablePolynomial<C> ZERO;
 
 
     /**
      * The constant polynomial 1 for this ring. Hides super ONE.
      */
-    public final GenSolvablePolynomial<C> ONE;
+    public volatile GenSolvablePolynomial<C> ONE;
 
 
     private static final Logger logger = LogManager.getLogger(GenSolvablePolynomialRing.class);
@@ -162,10 +162,12 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
         } else {
             table = rt;
         }
-        ZERO = new GenSolvablePolynomial<C>(this);
         C coeff = coFac.getONE();
-        //evzero = ExpVector.create(nvar); // from super
-        ONE = new GenSolvablePolynomial<C>(this, coeff, evzero);
+        synchronized (this) {
+            ZERO = new GenSolvablePolynomial<C>(this);
+            //evzero = ExpVector.create(nvar); // from super
+            ONE = new GenSolvablePolynomial<C>(this, coeff, evzero);
+        }
     }
 
 
@@ -308,7 +310,14 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
      * @return 0 as GenSolvablePolynomial<C>.
      */
     @Override
-    public GenSolvablePolynomial<C> getZERO() {
+    public synchronized GenSolvablePolynomial<C> getZERO() {
+        if (ZERO == null || !ZERO.isZERO()) { // happened since May 5 2022
+            // Name        : java-11-openjdk-headless
+            // Version     : 11.0.15.0
+            // Release     : 150000.3.80.1
+            ZERO = new GenSolvablePolynomial<C>(this); // ???
+            logger.info("ZERO@get {}", ZERO);
+        }
         return ZERO;
     }
 
@@ -318,7 +327,11 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
      * @return 1 as GenSolvablePolynomial<C>.
      */
     @Override
-    public GenSolvablePolynomial<C> getONE() {
+    public synchronized GenSolvablePolynomial<C> getONE() {
+        if (ONE == null || !ONE.isONE()) {
+           ONE = new GenSolvablePolynomial<C>(this, coFac.getONE(), evzero);
+           logger.info("ONE@get {}", ONE);
+        }
         return ONE;
     }
 
@@ -489,8 +502,10 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
         for (int i = 0; i < l; i++) {
             e = ExpVector.random(nvar, d, q, rnd);
             a = coFac.random(k, rnd);
-            r = (GenSolvablePolynomial<C>) r.sum(a, e);
-            // somewhat inefficient but clean
+            if (!r.val.keySet().contains(e)) {
+                //r = (GenSolvablePolynomial<C>) r.sum(a, e); somewhat inefficient but clean
+                r.doPutToMap(e, a);
+            }
         }
         return r;
     }
