@@ -14,6 +14,7 @@ import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
+import edu.jas.gbufd.PolyModUtil;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.QuotPair;
 
@@ -139,13 +140,16 @@ public class SolvableQuotient<C extends GcdRingElem<C>>
         // must reduce to lowest terms
         // not perfect, TODO 
         //GenSolvablePolynomial<C>[] gcd = PolyModUtil.<C> syzGcdCofactors(r.ring, n, d);
-        GenSolvablePolynomial<C>[] gcd = FDUtil.<C> leftGcdCofactors(r.ring, n, d);
+        //GenSolvablePolynomial<C>[] gcd = FDUtil.<C> leftGcdCofactors(r.ring, n, d);
+        GenSolvablePolynomial<C>[] gcd = ring.fdengine.leftGcdCofactors(r.ring, n, d);
         if (!gcd[0].isONE()) {
             logger.info("constructor: gcd = {}", Arrays.toString(gcd)); // + ", {}", n + ", " +d);
             n = gcd[1];
             d = gcd[2];
         }
-        gcd = FDUtil.<C> rightGcdCofactors(r.ring, n, d);
+        //gcd = PolyModUtil.<C> syzGcdCofactors(r.ring, n, d);
+        //gcd = FDUtil.<C> rightGcdCofactors(r.ring, n, d);
+        gcd = ring.fdengine.rightGcdCofactors(r.ring, n, d);
         if (!gcd[0].isONE()) {
             logger.info("constructor: gcd = {}", Arrays.toString(gcd)); // + ", {}", n + ", " +d);
             n = gcd[1];
