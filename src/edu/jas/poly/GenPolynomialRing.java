@@ -68,7 +68,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
     /**
      * True for partially reversed variables.
      */
-    protected volatile boolean partial;
+    protected boolean partial;
 
 
     /**
@@ -86,19 +86,19 @@ public class GenPolynomialRing<C extends RingElem<C>>
     /**
      * The constant polynomial 0 for this ring.
      */
-    public volatile GenPolynomial<C> ZERO;
+    public GenPolynomial<C> ZERO; // volatile not meaningful by DL
 
 
     /**
      * The constant polynomial 1 for this ring.
      */
-    public volatile GenPolynomial<C> ONE;
+    public GenPolynomial<C> ONE; // volatile not meaningful by DL
 
 
     /**
      * The constant exponent vector 0 for this ring.
      */
-    public volatile ExpVector evzero;
+    public ExpVector evzero; // volatile not meaningful by DL
 
 
     /**
