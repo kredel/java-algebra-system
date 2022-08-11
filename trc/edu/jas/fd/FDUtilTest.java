@@ -182,26 +182,28 @@ public class FDUtilTest extends TestCase {
     /**
      * Test base pseudo division.
      */
-    @SuppressWarnings({ "cast" })
+    //@SuppressWarnings({ "cast" })
     public void testBasePseudoDivision() {
         String[] names = new String[] { "x" };
+        GenSolvablePolynomialRing<BigInteger> dfac;
         dfac = new GenSolvablePolynomialRing<BigInteger>(new BigInteger(1), to, names);
         GenSolvablePolynomialRing<BigRational> rdfac;
         rdfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), dfac);
         //System.out.println("dfac  = " + dfac.toScript());
 
         do {
-            a = dfac.random(kl, ll * 2, el + 1, q);
+            a = dfac.random(kl, ll * 1, el + 0, q);
         } while (a.isZERO());
-        //a = dfac.parse(" 3 x^5 + 44 ");
+        a = dfac.parse("3 x**5 + 44");
         //System.out.println("a = " + a);
 
         do {
             b = dfac.random(kl, ll * 2, el + 1, q);
         } while (b.isZERO());
         //a = a.sum(b);
-        //b = dfac.parse(" 2 x^2 + 40 ");
+        b = dfac.parse("2 x**2 + 40");
         //System.out.println("b = " + b);
+        //System.out.println("a = " + a);
 
         GenPolynomial<BigInteger>[] QR = PolyUtil.<BigInteger> basePseudoQuotientRemainder(a, b);
         c = (GenSolvablePolynomial<BigInteger>) QR[0];
@@ -386,7 +388,7 @@ public class FDUtilTest extends TestCase {
     /**
      * Test recursive right coefficient polynomial.
      */
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     public void testRightRecursivePolynomial() {
         //String[] names = new String[] { "t", "x", "y", "z" };
         String[] names = new String[] { "y", "z" };
@@ -440,7 +442,7 @@ public class FDUtilTest extends TestCase {
     /**
      * Test exact division of recursive polynomials.
      */
-    @SuppressWarnings({ "cast" })
+    //@SuppressWarnings({ "cast" })
     public void testRecursiveDivide() {
         rdfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), dfac);
         RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
@@ -555,16 +557,15 @@ public class FDUtilTest extends TestCase {
 
 
     /**
-     * Test polynomial conversions.
+     * Test integer polynomial conversions.
      */
-    //@SuppressWarnings({ "cast" })
-    public void testConversion() {
+    public void testIntConversion() {
         //System.out.println("dfac = " + dfac.toScript());
         //System.out.println("rdfac = " + rdfac.toScript());
         //System.out.println("rrfac = " + rrfac.toScript());
 
         rfac = dfac.recursive(2); // avoid polCoeff
-        System.out.println("rfac = " + rfac.toScript());
+        //System.out.println("rfac = " + rfac.toScript());
         assertFalse("isCommutative()", rfac.isCommutative());
         assertTrue("isAssociative()", rfac.isAssociative());
 
@@ -584,7 +585,7 @@ public class FDUtilTest extends TestCase {
         //System.out.println("qrel = " + qrel);
         assertEquals("#irel == #qrel: ", irel.size(), qrel.size());
         iqfac.table.addSolvRelations(qrel);
-        System.out.println("iqfac = " + iqfac.toScript());
+        //System.out.println("iqfac = " + iqfac.toScript());
         assertFalse("isCommutative()", iqfac.isCommutative());
         //assertTrue("isAssociative()", iqfac.isAssociative()); //extLeftGB is missing
 
@@ -594,21 +595,72 @@ public class FDUtilTest extends TestCase {
         assertEquals("#qrel == #iqrel: ", qrel.size(), iqrel.size());
         assertEquals("irel == iqrel: ", irel, iqrel);
 
+        // not possible because of missing extLeftGB for pseudo GB:
+        // iqfac.random(kl, ll, el, q);
+    }
+
+
+    /**
+     * Test rational polynomial conversions.
+     */
+    public void testRatConversion() {
+        ////System.out.println("dfac = " + dfac.toScript());
+        //System.out.println("rdfac = " + rdfac.toScript());
+        //System.out.println("rrfac = " + rrfac.toScript());
+
+        rrfac = rdfac.recursive(2); // avoid polCoeff
+        //System.out.println("rrfac = " + rrfac.toScript());
+        assertFalse("isCommutative()", rrfac.isCommutative());
+        assertTrue("isAssociative()", rrfac.isAssociative());
+
+        GenSolvablePolynomialRing<BigRational> irfac = (GenSolvablePolynomialRing<BigRational>) rrfac.coFac;
+        //System.out.println("irfac = " + irfac.toScript());
+
+        SolvableQuotientRing <BigRational> qfac = new SolvableQuotientRing<BigRational>(irfac);
+        //System.out.println("qfac = " + qfac.toScript());
+        GenSolvablePolynomialRing<SolvableQuotient<BigRational>> rqfac = new GenSolvablePolynomialRing<SolvableQuotient<BigRational>>(qfac, rrfac);
+        //System.out.println("rqfac = " + rqfac.toScript());
+
+        List<GenSolvablePolynomial<GenPolynomial<BigRational>>> rrel = rrfac.table.relationList();
+        //System.out.println("rrel = " + rrel);
+
+        List<GenSolvablePolynomial<SolvableQuotient<BigRational>>> qrel;
+        qrel = FDUtil.<BigRational> quotientFromIntegralCoefficients(rqfac, rrel);
+        //System.out.println("qrel = " + qrel);
+        assertEquals("#rrel == #qrel: ", rrel.size(), qrel.size());
+        rqfac.table.addSolvRelations(qrel);
+        //System.out.println("rqfac = " + rqfac.toScript());
+        assertFalse("isCommutative()", rqfac.isCommutative());
+        assertTrue("isAssociative()", rqfac.isAssociative());
+
+        List<GenSolvablePolynomial<GenPolynomial<BigRational>>> rqrel;
+        rqrel = FDUtil.<BigRational> integralFromQuotientCoefficients(rrfac, qrel);
+        //System.out.println("rqrel = " + rqrel);
+        assertEquals("#rrel == #rqrel: ", rrel.size(), rqrel.size());
+        assertEquals("rrel == rqrel: ", rrel, rqrel);
+
         kl = 1;
-        q = 0.25f;
-        if (kl == 1) {
-            return;
-        }
-        GenSolvablePolynomial<SolvableQuotient<BigInteger>> aq, bq, cq, dq;
+        q = 0.3f;
+        GenSolvablePolynomial<SolvableQuotient<BigRational>> aq, bq, cq, dq;
         do {
-            aq = iqfac.random(kl, ll, el, q);
+            aq = rqfac.random(kl, ll, el, q);
         } while (aq.isZERO());
-        System.out.println("aq = " + aq);
 
         do {
-            bq = iqfac.random(kl, ll, el, q);
+            bq = rqfac.random(kl, ll, el, q/2f);
         } while (bq.isZERO());
-        System.out.println("bq = " + bq);
+        //System.out.println("aq = " + aq);
+        //System.out.println("bq = " + bq);
+
+        // non commutative
+        cq = bq.multiply(aq);
+        dq = aq.multiply(bq);
+        //System.out.println("cq = " + cq);
+        //System.out.println("dq = " + dq);
+        assertTrue("cq != 0: ", !cq.isZERO());
+        assertTrue("dq != 0: ", !dq.isZERO());
+
+        assertTrue("aq*bq != bq*aq", !cq.equals(dq) || cq.leadingExpVector().equals(dq.leadingExpVector()));
     }
 
 }
