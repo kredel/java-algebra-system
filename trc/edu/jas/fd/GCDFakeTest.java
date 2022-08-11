@@ -606,9 +606,9 @@ public class GCDFakeTest extends TestCase {
 
 
     /**
-     * Test rational left gcd polynomial cofactor tests.
+     * Test rational coefficients gcd polynomial cofactor tests.
      */
-    public void testRatLeftCofactors() {
+    public void testRatCofactors() {
         System.out.println("dfac = " + dfac.toScript());
 
         do {
@@ -634,7 +634,7 @@ public class GCDFakeTest extends TestCase {
         System.out.println("d = " + d);
         System.out.println("e = " + e);
 
-        GenSolvablePolynomial<BigRational>[] gco = FDUtil.<BigRational> leftGcdCofactors(dfac, d, e);
+        GenSolvablePolynomial<BigRational>[] gco = fd.leftGcdCofactors(dfac, d, e);
         System.out.println("left gco[0] = " + gco[0]);
         System.out.println("gco[1] = " + gco[1]);
         System.out.println("gco[2] = " + gco[2]);
@@ -658,7 +658,7 @@ public class GCDFakeTest extends TestCase {
         System.out.println("d = " + d);
         System.out.println("e = " + e);
 
-        gco = FDUtil.<BigRational> rightGcdCofactors(dfac, d, e);
+        gco = fd.rightGcdCofactors(dfac, d, e);
         System.out.println("right gco[0] = " + gco[0]);
         System.out.println("gco[1] = " + gco[1]);
         System.out.println("gco[2] = " + gco[2]);

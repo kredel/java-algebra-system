@@ -1437,4 +1437,80 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         return oc;
     }
 
+
+    /**
+     * Left greatest common divisor and cofactors.
+     * @param r solvable polynomial ring.
+     * @param n first solvable polynomial.
+     * @param d second solvable polynomial.
+     * @return [ g=leftGcd(n,d), n/g, d/g ]
+     */
+    @SuppressWarnings("unchecked")
+    public GenSolvablePolynomial<C>[] leftGcdCofactors(
+                    GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+        logger.info("leftGCD_in: {}, {}", n, d);
+        GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
+        res[0] = leftGcd(n, d);
+        //res[0] = PolyModUtil.<C> syzLeftGcd(r, n, d);
+        res[1] = n;
+        res[2] = d;
+        if (res[0].isONE()) {
+            return res;
+        }
+        logger.info("leftGCD_out: {}", res[0]);
+        GenSolvablePolynomial<C>[] nqr;
+        nqr = FDUtil.<C> rightBasePseudoQuotientRemainder(n, res[0]);
+        if (!nqr[1].isZERO()) {
+            res[0] = r.getONE();
+            return res;
+        }
+        GenSolvablePolynomial<C>[] dqr;
+        dqr = FDUtil.<C> rightBasePseudoQuotientRemainder(d, res[0]);
+        if (!dqr[1].isZERO()) {
+            res[0] = r.getONE();
+            return res;
+        }
+        res[1] = nqr[0];
+        res[2] = dqr[0];
+        return res;
+    }
+
+
+    /**
+     * Right greatest common divisor and cofactors.
+     * @param r solvable polynomial ring.
+     * @param n first solvable polynomial.
+     * @param d second solvable polynomial.
+     * @return [ g=rightGcd(n,d), n/g, d/g ]
+     */
+    @SuppressWarnings("unchecked")
+    public GenSolvablePolynomial<C>[] rightGcdCofactors(
+                    GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+        logger.info("rightGCD_in: {}, {}", n, d);
+        GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
+        res[0] = rightGcd(n, d);
+        //res[0] = PolyModUtil.<C> syzRightGcd(r, n, d);
+        res[1] = n;
+        res[2] = d;
+        if (res[0].isONE()) {
+            return res;
+        }
+        logger.info("rightGCD_out: {}", res[0]);
+        GenSolvablePolynomial<C>[] nqr;
+        nqr = FDUtil.<C> leftBasePseudoQuotientRemainder(n, res[0]);
+        if (!nqr[1].isZERO()) {
+            res[0] = r.getONE();
+            return res;
+        }
+        GenSolvablePolynomial<C>[] dqr;
+        dqr = FDUtil.<C> leftBasePseudoQuotientRemainder(d, res[0]);
+        if (!dqr[1].isZERO()) {
+            res[0] = r.getONE();
+            return res;
+        }
+        res[1] = nqr[0];
+        res[2] = dqr[0];
+        return res;
+    }
+
 }
