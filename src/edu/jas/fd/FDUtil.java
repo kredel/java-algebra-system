@@ -1130,11 +1130,11 @@ public class FDUtil {
     @SuppressWarnings({ "cast", "unchecked" })
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C>[] leftGcdCofactors(
                     GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
-        //GreatestCommonDivisorAbstract<C> e1 = new GreatestCommonDivisorSimple<C>(r.coFac);
+        GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorSimple<C>(r.coFac);
         GreatestCommonDivisorAbstract<C> e1 = new GreatestCommonDivisorPrimitive<C>(r.coFac);
         //GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorFake<C>(r.coFac);
         GreatestCommonDivisorAbstract<C> e2 = new GreatestCommonDivisorSyzygy<C>(r.coFac);
-        GreatestCommonDivisorAbstract<C> engine = new SGCDParallelProxy<C>(r.coFac, e1, e2);
+        //GreatestCommonDivisorAbstract<C> engine = new SGCDParallelProxy<C>(r.coFac, e1, e2);
         logger.info("leftGCD_in: {}, {}", n, d);
         GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
         res[0] = engine.leftGcd(n, d);
@@ -1173,10 +1173,10 @@ public class FDUtil {
     @SuppressWarnings({ "cast", "unchecked" })
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<C>[] rightGcdCofactors(
                     GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
-        //GreatestCommonDivisorAbstract<C> e1 = new GreatestCommonDivisorSimple<C>(r.coFac);
-        //GreatestCommonDivisorAbstract<C> e1 = new GreatestCommonDivisorPrimitive<C>(r.coFac);
-        GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorFake<C>(r.coFac);
-        //GreatestCommonDivisorAbstract<C> e2 = new GreatestCommonDivisorSyzygy<C>(r.coFac);
+        GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorSimple<C>(r.coFac);
+        GreatestCommonDivisorAbstract<C> e1 = new GreatestCommonDivisorPrimitive<C>(r.coFac);
+        //GreatestCommonDivisorAbstract<C> engine = new GreatestCommonDivisorFake<C>(r.coFac);
+        GreatestCommonDivisorAbstract<C> e2 = new GreatestCommonDivisorSyzygy<C>(r.coFac);
         //GreatestCommonDivisorAbstract<C> engine = new SGCDParallelProxy<C>(r.coFac, e1, e2);
         logger.info("rightGCD_in: {}, {}", n, d);
         GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];

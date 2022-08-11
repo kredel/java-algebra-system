@@ -604,4 +604,76 @@ public class GCDFakeTest extends TestCase {
         assertTrue("gcd(a,b) | b: " + e, e.isZERO());
     }
 
+
+    /**
+     * Test rational left gcd polynomial cofactor tests.
+     */
+    public void testRatLeftCofactors() {
+        System.out.println("dfac = " + dfac.toScript());
+
+        do {
+            a = dfac.random(kl, ll*2, el, q);
+        } while (a.isZERO()||a.isConstant());
+
+        do {
+            b = dfac.random(kl, ll*2, el, q/2f);
+        } while (b.isZERO()||b.isConstant());
+
+        do {
+            c = dfac.random(kl, ll, el, q);
+        } while (c.isZERO()||c.isConstant());
+        c = c.monic();
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("c = " + c);
+
+        // non commutative left
+        System.out.println("right: ");
+        d = c.multiply(a);
+        e = c.multiply(b);
+        System.out.println("d = " + d);
+        System.out.println("e = " + e);
+
+        GenSolvablePolynomial<BigRational>[] gco = FDUtil.<BigRational> leftGcdCofactors(dfac, d, e);
+        System.out.println("left gco[0] = " + gco[0]);
+        System.out.println("gco[1] = " + gco[1]);
+        System.out.println("gco[2] = " + gco[2]);
+
+        if (!gco[0].isONE()||true) {
+            GenSolvablePolynomial<BigRational> ca, cb;
+            ca = gco[0].multiply(gco[1]);
+            cb = gco[0].multiply(gco[2]);
+            System.out.println("ca = " + ca);
+            System.out.println("d = " + d);
+            System.out.println("cb = " + cb);
+            System.out.println("e = " + e);
+            assertEquals("ca = c*a: ", ca, d);
+            assertEquals("cb = c*b: ", cb, e);
+        }
+
+        // non commutative right
+        System.out.println("left: ");
+        d = a.multiply(c);
+        e = b.multiply(c);
+        System.out.println("d = " + d);
+        System.out.println("e = " + e);
+
+        gco = FDUtil.<BigRational> rightGcdCofactors(dfac, d, e);
+        System.out.println("right gco[0] = " + gco[0]);
+        System.out.println("gco[1] = " + gco[1]);
+        System.out.println("gco[2] = " + gco[2]);
+
+        if (!gco[0].isONE()||true) {
+            GenSolvablePolynomial<BigRational> ac, bc;
+            ac = gco[1].multiply(gco[0]);
+            bc = gco[2].multiply(gco[0]);
+            System.out.println("ac = " + ac);
+            System.out.println("d = " + d);
+            System.out.println("bc = " + bc);
+            System.out.println("e = " + e);
+            assertEquals("ac = a*c: ", ac, d);
+            assertEquals("bc = b*c: ", bc, e);
+        }
+    }
+
 }
