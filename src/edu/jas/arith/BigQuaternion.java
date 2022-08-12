@@ -276,7 +276,11 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
      */
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer(re.toString());
+        StringBuffer sb = new StringBuffer();
+        int r = re.compareTo(BigRational.ZERO);
+        if (r != 0) {
+            sb.append(re.toString());
+        }
         int i = im.compareTo(BigRational.ZERO);
         int j = jm.compareTo(BigRational.ZERO);
         int k = km.compareTo(BigRational.ZERO);
@@ -286,11 +290,20 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
             logger.debug("compareTo {} ? 0 = {}", km, k);
         }
         if (i == 0 && j == 0 && k == 0) {
+            if (r == 0) {
+                sb.append(re.toString());
+            }
             return sb.toString();
         }
-        sb.append("i" + im);
-        sb.append("j" + jm);
-        sb.append("k" + km);
+        if (i != 0) {
+            sb.append("i" + im);
+        }
+        if (j != 0) {
+            sb.append("j" + jm);
+        }
+        if (k != 0) {
+            sb.append("k" + km);
+        }
         String s = sb.toString();
         //s = s.replaceAll("-","~"); 
         return s;
