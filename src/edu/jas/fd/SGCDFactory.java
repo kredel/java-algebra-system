@@ -154,7 +154,7 @@ public class SGCDFactory {
     public static GreatestCommonDivisorAbstract<BigInteger> getImplementation(BigInteger fac) {
         GreatestCommonDivisorAbstract<BigInteger> ufd;
         logger.info("fac = {}", fac.getClass().getName());
-        if (true) {
+        if (!fac.isField()) { // = false
             ufd = new GreatestCommonDivisorPrimitive<BigInteger>(fac);
         } else {
             ufd = new GreatestCommonDivisorSimple<BigInteger>(fac);
@@ -191,6 +191,10 @@ public class SGCDFactory {
         }
         logger.info("fac = {}", fac.getClass().getName());
         GreatestCommonDivisorAbstract<BigRational> ufd;
+        if (fac.isField()) { // = true
+            ufd = new GreatestCommonDivisorSimple<BigRational>(fac);
+            return ufd;
+        }
         ufd = new GreatestCommonDivisorPrimitive<BigRational>(fac);
         return ufd;
     }

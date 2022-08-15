@@ -13,6 +13,8 @@ import java.util.Random;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
 
+import edu.jas.fd.SGCDFactory;
+import edu.jas.fd.GreatestCommonDivisorAbstract;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gbufd.SGBFactory;
 import edu.jas.gbufd.SolvableSyzygyAbstract;
@@ -67,6 +69,12 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
 
 
     /**
+     * FD engine of the factory.
+     */
+    public final GreatestCommonDivisorAbstract<C> fdengine;
+
+
+    /**
      * Groebner base engine.
      */
     protected final SolvableGroebnerBaseAbstract<C> bb;
@@ -102,6 +110,7 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
             //throw new IllegalArgumentException("ideal must be prime or maximal");
         }
         engine = new SolvableSyzygySeq<C>(ring.coFac);
+        fdengine = SGCDFactory.<C> getImplementation(ring.coFac);
         bb = SGBFactory.getImplementation(ring.coFac); //new SolvableGroebnerBaseSeq<C>();
         logger.debug("solvable local residue ring constructed");
     }

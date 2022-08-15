@@ -25,10 +25,8 @@ import edu.jas.poly.PolynomialList;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.QuotPairFactory;
 import edu.jas.structure.RingFactory;
-
-
-// import edu.jas.ufd.GreatestCommonDivisor;
-// import edu.jas.ufd.GCDFactory;
+import edu.jas.fd.GreatestCommonDivisorAbstract;
+import edu.jas.fd.SGCDFactory;
 
 /**
  * SolvableLocal ring factory for SolvableLocal with GcdRingElem interface.
@@ -68,6 +66,12 @@ public class SolvableLocalRing<C extends GcdRingElem<C>> implements RingFactory<
 
 
     /**
+     * FD engine of the factory.
+     */
+    public final GreatestCommonDivisorAbstract<C> fdengine;
+
+
+    /**
      * Groebner base engine.
      */
     protected final SolvableGroebnerBaseAbstract<C> bb;
@@ -100,6 +104,7 @@ public class SolvableLocalRing<C extends GcdRingElem<C>> implements RingFactory<
             //throw new IllegalArgumentException("ideal must be maximal");
         }
         engine = new SolvableSyzygySeq<C>(ring.coFac);
+        fdengine = SGCDFactory.<C> getImplementation(ring.coFac);
         bb = SGBFactory.getImplementation(ring.coFac); // new SolvableGroebnerBaseSeq<C>();
         logger.debug("solvable local ring constructed");
     }

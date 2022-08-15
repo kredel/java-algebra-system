@@ -157,13 +157,13 @@ public class SolvableLocalResidue<C extends GcdRingElem<C>> implements GcdRingEl
         // must reduce to lowest terms
         // not perfect, TODO improve
         //GenSolvablePolynomial<C>[] gcd = PolyModUtil.<C> syzGcdCofactors(r.ring, n, d);
-        GenSolvablePolynomial<C>[] gcd = FDUtil.<C> leftGcdCofactors(r.ring, n, d);
+        GenSolvablePolynomial<C>[] gcd = ring.fdengine.leftGcdCofactors(r.ring, n, d);
         if (!gcd[0].isONE()) {
             logger.info("constructor: gcd = {}", Arrays.toString(gcd)); // + ", {}", n + ", " +d);
             n = gcd[1];
             d = gcd[2];
         }
-        gcd = FDUtil.<C> rightGcdCofactors(r.ring, n, d);
+        gcd = ring.fdengine.rightGcdCofactors(r.ring, n, d);
         if (!gcd[0].isONE()) {
             logger.info("constructor: gcd = {}", Arrays.toString(gcd)); // + ", {}", n + ", " +d);
             n = gcd[1];
