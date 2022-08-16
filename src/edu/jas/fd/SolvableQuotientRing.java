@@ -67,7 +67,8 @@ public class SolvableQuotientRing<C extends GcdRingElem<C>> implements RingFacto
     public SolvableQuotientRing(GenSolvablePolynomialRing<C> r) {
         ring = r;
         engine = new SolvableSyzygySeq<C>(ring.coFac);
-        fdengine = SGCDFactory.<C> getImplementation(ring.coFac);
+        //fdengine = SGCDFactory.<C> getImplementation(ring.coFac);
+        fdengine = SGCDFactory.<C> getFakeImplementation(ring.coFac);
         logger.debug("quotient ring constructed");
         //System.out.println("  engine = " + engine);
         //System.out.println("fdengine = " + fdengine);

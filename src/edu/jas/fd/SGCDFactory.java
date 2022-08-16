@@ -225,6 +225,7 @@ public class SGCDFactory {
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> GreatestCommonDivisorAbstract<C> getImplementation(
                     RingFactory<C> fac) {
+        System.out.println("SGCDFactory: " + fac.getClass().getName());
         GreatestCommonDivisorAbstract/*raw type<C>*/ ufd;
         logger.info("fac = {}", fac.getClass().getName());
         Object ofac = fac;
@@ -250,6 +251,28 @@ public class SGCDFactory {
             } else {
                 ufd = new GreatestCommonDivisorPrimitive<C>(fac);
             }
+        }
+        System.out.println("SGCDFactory: " + ufd.getClass().getName());
+        logger.debug("implementation = {}", ufd);
+        return ufd;
+    }
+
+
+    /**
+     * Determine fake implementation of gcd algorithms, other cases.
+     * @param fac RingFactory&lt;C&gt;.
+     * @return fake gcd algorithm implementation.
+     */
+    @SuppressWarnings("unchecked")
+    public static <C extends GcdRingElem<C>> GreatestCommonDivisorAbstract<C> getFakeImplementation(
+                    RingFactory<C> fac) {
+        GreatestCommonDivisorAbstract/*raw type<C>*/ ufd;
+        logger.info("fac = {}", fac.getClass().getName());
+        //Object ofac = fac;
+        ufd = new GreatestCommonDivisorFake<C>(fac);
+        if (!(fac instanceof BigRational)) {
+            System.out.println("SGCDFactory: " + fac.getClass().getName());
+            System.out.println("SGCDFactory: " + ufd.getClass().getName());
         }
         logger.debug("implementation = {}", ufd);
         return ufd;

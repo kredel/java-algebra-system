@@ -110,7 +110,8 @@ public class SolvableLocalResidueRing<C extends GcdRingElem<C>> implements
             //throw new IllegalArgumentException("ideal must be prime or maximal");
         }
         engine = new SolvableSyzygySeq<C>(ring.coFac);
-        fdengine = SGCDFactory.<C> getImplementation(ring.coFac);
+        //fdengine = SGCDFactory.<C> getImplementation(ring.coFac);
+        fdengine = SGCDFactory.<C> getFakeImplementation(ring.coFac);
         bb = SGBFactory.getImplementation(ring.coFac); //new SolvableGroebnerBaseSeq<C>();
         logger.debug("solvable local residue ring constructed");
     }

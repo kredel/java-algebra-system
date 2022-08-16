@@ -104,7 +104,8 @@ public class SolvableLocalRing<C extends GcdRingElem<C>> implements RingFactory<
             //throw new IllegalArgumentException("ideal must be maximal");
         }
         engine = new SolvableSyzygySeq<C>(ring.coFac);
-        fdengine = SGCDFactory.<C> getImplementation(ring.coFac);
+        //fdengine = SGCDFactory.<C> getImplementation(ring.coFac);
+        fdengine = SGCDFactory.<C> getFakeImplementation(ring.coFac);
         bb = SGBFactory.getImplementation(ring.coFac); // new SolvableGroebnerBaseSeq<C>();
         logger.debug("solvable local ring constructed");
     }
