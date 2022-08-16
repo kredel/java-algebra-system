@@ -60,7 +60,9 @@ public class GCDLeftRightTest extends TestCase {
     }
 
 
-    //GreatestCommonDivisorAbstract<BigQuaternion> fd;
+    GreatestCommonDivisorAbstract<BigQuaternion> fds;
+
+
     GreatestCommonDivisorLR<BigQuaternion> fd;
 
 
@@ -109,9 +111,10 @@ public class GCDLeftRightTest extends TestCase {
         cfac = new BigQuaternionRing();
         syz = new SolvableSyzygySeq<BigQuaternion>(cfac);
         //System.out.println("syz = " + syz);
-        fd = new GreatestCommonDivisorLR<BigQuaternion>(cfac, syz);
         //fd = new GreatestCommonDivisorFake<BigQuaternion>(cfac);
-        dfac = new GenSolvablePolynomialRing<BigQuaternion>(cfac, rl, to, vars);
+        fd = new GreatestCommonDivisorLR<BigQuaternion>(cfac, syz);
+        fds = new GreatestCommonDivisorSimple<BigQuaternion>(cfac);
+        dfac = new GenSolvablePolynomialRing<BigQuaternion>(cfac, to, vars);
         RelationGenerator<BigQuaternion> wl = new WeylRelationsIterated<BigQuaternion>();
         dfac.addRelations(wl);
         rfac = (RecSolvablePolynomialRing<BigQuaternion>) dfac.recursive(1);
@@ -740,7 +743,7 @@ public class GCDLeftRightTest extends TestCase {
             //System.out.println("g * og = " + s);
             //System.out.println("b * ob == g * og: " + r.equals(s));
             assertEquals("b * ob == g * og: ", r, s);
-
         }
     }
+
 }

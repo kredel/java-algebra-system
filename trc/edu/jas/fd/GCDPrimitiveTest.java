@@ -19,6 +19,7 @@ import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.RecSolvablePolynomialRing;
 import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.TermOrderByName;
 import edu.jas.poly.WeylRelationsIterated;
 
 import junit.framework.Test;
@@ -64,7 +65,7 @@ public class GCDPrimitiveTest extends TestCase {
     GreatestCommonDivisorAbstract<BigRational> fd, fds;
 
 
-    TermOrder to = new TermOrder(TermOrder.INVLEX);
+    TermOrder to = TermOrderByName.INVLEX;
 
 
     GenSolvablePolynomialRing<BigRational> dfac;
@@ -103,7 +104,7 @@ public class GCDPrimitiveTest extends TestCase {
         BigRational cf = new BigRational(1);
         fd = new GreatestCommonDivisorPrimitive<BigRational>(cf);
         fds = new GreatestCommonDivisorSimple<BigRational>(cf);
-        dfac = new GenSolvablePolynomialRing<BigRational>(cf, rl, to, vars);
+        dfac = new GenSolvablePolynomialRing<BigRational>(cf, to, vars);
         RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
         dfac.addRelations(wl);
         rfac = (RecSolvablePolynomialRing<BigRational>) dfac.recursive(1);
@@ -125,7 +126,7 @@ public class GCDPrimitiveTest extends TestCase {
      */
     public void testBaseGcdPrimitive() {
         String[] uvars = new String[] { "x" };
-        dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), 1, to, uvars);
+        dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, uvars);
 
         for (int i = 0; i < 5; i++) {
             a = dfac.random(kl * (i + 2), ll + 2 * i, el + 2, q);
@@ -588,6 +589,71 @@ public class GCDPrimitiveTest extends TestCase {
         //e = FDUtil.<BigRational> divideRightPolynomial(b,d);
         //System.out.println("e = " + e);
         assertTrue("gcd(a,b) | b: " + e, e.isZERO());
+    }
+
+
+    /**
+     * Test rational coefficients gcd polynomial cofactor tests.
+     */
+    public void testRatCofactors() {
+        System.out.println("dfac = " + dfac.toScript());
+        do {
+            a = dfac.random(kl, ll, el, q);
+        } while (a.isZERO()||a.isConstant());
+        do {
+            b = dfac.random(kl, ll, el, q/2f);
+        } while (b.isZERO()||b.isConstant());
+        do {
+            c = dfac.random(kl, ll, el, q/2f);
+        } while (c.isZERO()||c.isConstant());
+        c = c.monic();
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("c = " + c);
+
+        // non commutative left
+        System.out.println("right: ");
+        d = c.multiply(a);
+        e = c.multiply(b);
+        System.out.println("d = " + d);
+        System.out.println("e = " + e);
+
+        GenSolvablePolynomial<BigRational>[] gco = fd.leftGcdCofactors(dfac, d, e);
+        System.out.println("left gco[0] = " + gco[0]);
+        System.out.println("gco[1] = " + gco[1]);
+        System.out.println("gco[2] = " + gco[2]);
+
+        GenSolvablePolynomial<BigRational> ca, cb;
+        ca = gco[0].multiply(gco[1]);
+        cb = gco[0].multiply(gco[2]);
+        //System.out.println("ca = " + ca);
+        //System.out.println("d = " + d);
+        //System.out.println("cb = " + cb);
+        //System.out.println("e = " + e);
+        assertEquals("ca = c*a: ", ca, d);
+        assertEquals("cb = c*b: ", cb, e);
+
+        // non commutative right
+        System.out.println("left: ");
+        d = a.multiply(c);
+        e = b.multiply(c);
+        System.out.println("d = " + d);
+        System.out.println("e = " + e);
+
+        gco = fd.rightGcdCofactors(dfac, d, e);
+        System.out.println("right gco[0] = " + gco[0]);
+        System.out.println("gco[1] = " + gco[1]);
+        System.out.println("gco[2] = " + gco[2]);
+
+        GenSolvablePolynomial<BigRational> ac, bc;
+        ac = gco[1].multiply(gco[0]);
+        bc = gco[2].multiply(gco[0]);
+        //System.out.println("ac = " + ac);
+        //System.out.println("d = " + d);
+        //System.out.println("bc = " + bc);
+        //System.out.println("e = " + e);
+        assertEquals("ac = a*c: ", ac, d);
+        assertEquals("bc = b*c: ", bc, e);
     }
 
 }
