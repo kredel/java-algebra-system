@@ -158,7 +158,7 @@ public class SGCDFactoryTest extends TestCase {
 
         ufd = SGCDFactory.getImplementation(b);
         //System.out.println("ufd = " + ufd);
-        assertTrue("ufd = Primitive " + ufd, ufd instanceof GreatestCommonDivisorPrimitive);
+        assertTrue("ufd = Simple " + ufd, ufd instanceof GreatestCommonDivisorSimple);
     }
 
 
