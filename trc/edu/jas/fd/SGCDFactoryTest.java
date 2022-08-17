@@ -128,6 +128,11 @@ public class SGCDFactoryTest extends TestCase {
         ufd = SGCDFactory.getImplementation(bi);
         //System.out.println("ufd = " + ufd);
         assertTrue("ufd = Primitive " + ufd, ufd instanceof GreatestCommonDivisorPrimitive);
+
+        ufd = SGCDFactory.getProxy(bi);
+        //System.out.println("ufd = " + ufd);
+        assertTrue("ufd = Parallel Proxy " + ufd, ufd instanceof SGCDParallelProxy);
+        assertTrue("ufd = Primitive " + ufd, ((SGCDParallelProxy)ufd).e1 instanceof GreatestCommonDivisorPrimitive);
     }
 
 
@@ -142,10 +147,20 @@ public class SGCDFactoryTest extends TestCase {
         //System.out.println("ufd = " + ufd);
         assertTrue("ufd = Simple " + ufd, ufd instanceof GreatestCommonDivisorSimple);
 
+        ufd = SGCDFactory.getProxy(mi);
+        //System.out.println("ufd = " + ufd);
+        assertTrue("ufd = Parallel Proxy " + ufd, ufd instanceof SGCDParallelProxy);
+        assertTrue("ufd = Primitive " + ufd, ((SGCDParallelProxy)ufd).e2 instanceof GreatestCommonDivisorSimple);
+
         mi = new ModIntegerRing(30);
         ufd = SGCDFactory.getImplementation(mi);
         //System.out.println("ufd = " + ufd);
         assertTrue("ufd = Primitive " + ufd, ufd instanceof GreatestCommonDivisorPrimitive);
+
+        ufd = SGCDFactory.getProxy(mi);
+        //System.out.println("ufd = " + ufd);
+        assertTrue("ufd = Parallel Proxy " + ufd, ufd instanceof SGCDParallelProxy);
+        assertTrue("ufd = Simple " + ufd, ((SGCDParallelProxy)ufd).e1 instanceof GreatestCommonDivisorPrimitive);
     }
 
 
@@ -159,6 +174,11 @@ public class SGCDFactoryTest extends TestCase {
         ufd = SGCDFactory.getImplementation(b);
         //System.out.println("ufd = " + ufd);
         assertTrue("ufd = Simple " + ufd, ufd instanceof GreatestCommonDivisorSimple);
+
+        ufd = SGCDFactory.getProxy(b);
+        //System.out.println("ufd = " + ufd);
+        assertTrue("ufd = Parallel Proxy " + ufd, ufd instanceof SGCDParallelProxy);
+        assertTrue("ufd = Simple " + ufd, ((SGCDParallelProxy)ufd).e2 instanceof GreatestCommonDivisorSimple);
     }
 
 
@@ -172,6 +192,11 @@ public class SGCDFactoryTest extends TestCase {
         ufd = SGCDFactory.<BigComplex> getImplementation(b);
         //System.out.println("ufd = " + ufd);
         assertTrue("ufd = Simple " + ufd, ufd instanceof GreatestCommonDivisorSimple);
+
+        ufd = SGCDFactory.<BigComplex> getProxy(b);
+        //System.out.println("ufd = " + ufd);
+        assertTrue("ufd = Parallel Proxy " + ufd, ufd instanceof SGCDParallelProxy);
+        assertTrue("ufd = Simple " + ufd, ((SGCDParallelProxy)ufd).e1 instanceof GreatestCommonDivisorSimple);
     }
 
 
@@ -197,6 +222,10 @@ public class SGCDFactoryTest extends TestCase {
         //System.out.println("ufd1 = " + ufd);
         assertTrue("ufd = Primitive " + ufd, ufd instanceof GreatestCommonDivisorPrimitive);
 
+        ufd = SGCDFactory.<AlgebraicNumber<BigRational>> getProxy(afac);
+        //System.out.println("ufd1 = " + ufd);
+        assertTrue("ufd = Parallel Proxy " + ufd, ufd instanceof SGCDParallelProxy);
+        assertTrue("ufd = Primitive " + ufd, ((SGCDParallelProxy)ufd).e2 instanceof GreatestCommonDivisorPrimitive);
 
         mo = fac.univariate(0).subtract(fac.getONE());
         afac = new AlgebraicNumberRing<BigRational>(mo, true);
@@ -204,6 +233,11 @@ public class SGCDFactoryTest extends TestCase {
         ufd = SGCDFactory.<AlgebraicNumber<BigRational>> getImplementation(afac);
         //System.out.println("ufd1 = " + ufd);
         assertTrue("ufd = Simple " + ufd, ufd instanceof GreatestCommonDivisorSimple);
+
+        ufd = SGCDFactory.<AlgebraicNumber<BigRational>> getProxy(afac);
+        //System.out.println("ufd1 = " + ufd);
+        assertTrue("ufd = Parallel Proxy " + ufd, ufd instanceof SGCDParallelProxy);
+        assertTrue("ufd = Simple " + ufd, ((SGCDParallelProxy)ufd).e1 instanceof GreatestCommonDivisorSimple);
     }
 
 
@@ -230,11 +264,21 @@ public class SGCDFactoryTest extends TestCase {
         //System.out.println("ufd2 = " + ufd);
         assertTrue("ufd = Primitive " + ufd, ufd instanceof GreatestCommonDivisorPrimitive);
 
+        ufd = SGCDFactory.<AlgebraicNumber<ModInteger>> getProxy(afac);
+        //System.out.println("ufd2 = " + ufd);
+        assertTrue("ufd = Parallel Proxy " + ufd, ufd instanceof SGCDParallelProxy);
+        assertTrue("ufd = Primitive " + ufd, ((SGCDParallelProxy)ufd).e2 instanceof GreatestCommonDivisorPrimitive);
+
         mo = fac.univariate(0).subtract(fac.getONE());
         afac = new AlgebraicNumberRing<ModInteger>(mo, true);
         ufd = SGCDFactory.<AlgebraicNumber<ModInteger>> getImplementation(afac);
         //System.out.println("ufd2 = " + ufd);
         assertTrue("ufd = Simple " + ufd, ufd instanceof GreatestCommonDivisorSimple);
+
+        ufd = SGCDFactory.<AlgebraicNumber<ModInteger>> getProxy(afac);
+        //System.out.println("ufd2 = " + ufd);
+        assertTrue("ufd = Parallel Proxy " + ufd, ufd instanceof SGCDParallelProxy);
+        assertTrue("ufd = Primitive " + ufd, ((SGCDParallelProxy)ufd).e2 instanceof GreatestCommonDivisorPrimitive);
     }
 
 }

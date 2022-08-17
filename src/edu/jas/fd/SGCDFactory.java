@@ -225,7 +225,7 @@ public class SGCDFactory {
     @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> GreatestCommonDivisorAbstract<C> getImplementation(
                     RingFactory<C> fac) {
-        System.out.println("SGCDFactory: " + fac.getClass().getName());
+        //System.out.println("SGCDFactory: " + fac.getClass().getName());
         GreatestCommonDivisorAbstract/*raw type<C>*/ ufd;
         logger.info("fac = {}", fac.getClass().getName());
         Object ofac = fac;
@@ -252,7 +252,7 @@ public class SGCDFactory {
                 ufd = new GreatestCommonDivisorPrimitive<C>(fac);
             }
         }
-        System.out.println("SGCDFactory: " + ufd.getClass().getName());
+        //System.out.println("SGCDFactory: " + ufd.getClass().getName());
         logger.debug("implementation = {}", ufd);
         return ufd;
     }

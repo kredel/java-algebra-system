@@ -553,6 +553,52 @@ public class FDUtilTest extends TestCase {
                 break;
             }
         } while (i++ < max);
+
+        GenSolvablePolynomial<BigRational> bc = (GenSolvablePolynomial<BigRational>) bs.leadingBaseCoefficient();
+        ds = (RecSolvablePolynomial<BigRational>) as.multiply(bc);
+        fs = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveDivide(ds, bc);
+        System.out.println("bc = " + bc);
+        System.out.println("ds = " + ds);
+        System.out.println("fs = " + fs);
+        i = 0;
+        do {
+            x1 = (RecSolvablePolynomial<BigRational>) as.multiply(bc.power(i));
+            System.out.println("lc(b)^"+i+"*a = " + x1);
+            if (fs.equals(x1)) {
+                assertEquals("a == a*b/b: ", fs, x1);
+                break;
+            }
+            if (fs.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {
+                System.out.println("fail: a == a*b/b: lc(f)==lc(x1)");
+                if (fs.abs().equals(as.abs())) {
+                    System.out.println("success via pseudo: a == a*b/b: ");
+                }
+                break;
+            }
+        } while (i++ < max);
+
+	bc = (GenSolvablePolynomial<BigRational>) bs.leadingBaseCoefficient();
+        ds = (RecSolvablePolynomial<BigRational>) as.multiply(bc);
+        fs = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveLeftDivide(ds, bc);
+        System.out.println("bc = " + bc);
+        System.out.println("ds = " + ds);
+        System.out.println("fs = " + fs);
+        i = 0;
+        do {
+            x1 = (RecSolvablePolynomial<BigRational>) as.multiply(bc.power(i));
+            System.out.println("lc(b)^"+i+"*a = " + x1);
+            if (fs.equals(x1)) {
+                assertEquals("a == a*b/b: ", fs, x1);
+                break;
+            }
+            if (fs.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {
+                System.out.println("fail: a == a*b/b: lc(f)==lc(x1)");
+                if (fs.abs().equals(as.abs())) {
+                    System.out.println("success via pseudo: a == a*b/b: ");
+                }
+                break;
+            }
+        } while (i++ < max);
     }
 
 
