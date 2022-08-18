@@ -1008,7 +1008,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
     /**
      * GenSolvablePolynomial test for co-prime list.
      * @param A list of GenSolvablePolynomials.
-     * @return true if gcd(b,c) = 1 for all b != c in B, else false.
+     * @return true if gcd(b,c) = 1 for all b != c in A, else false.
      */
     public boolean isLeftCoPrime(List<GenSolvablePolynomial<C>> A) {
         if (A == null || A.isEmpty()) {
@@ -1036,8 +1036,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
 
     /**
      * GenSolvablePolynomial test for left co-prime list of given list.
-     * @param A list of GenSolvablePolynomials.
      * @param P list of co-prime GenSolvablePolynomials.
+     * @param A list of GenSolvablePolynomials.
      * @return true if isCoPrime(P) and for all a in A exists p in P with p | a,
      *         else false.
      */

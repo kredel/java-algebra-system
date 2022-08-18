@@ -699,11 +699,11 @@ public class GCDPrimitiveTest extends TestCase {
         assertTrue("is co-prime ", fd.isLeftCoPrime(P));
         assertTrue("is co-prime of ", fd.isLeftCoPrime(P, F));
 
-        //P = ufd.coPrimeRec(F);
+        P = fd.leftCoPrimeRec(F);
         //System.out.println("F = " + F);
         //System.out.println("P = " + P);
-        //assertTrue("is co-prime ", fd.isCoPrime(P));
-        //assertTrue("is co-prime of ", fd.isCoPrime(P, F));
+        assertTrue("is co-prime ", fd.isLeftCoPrime(P));
+        assertTrue("is co-prime of ", fd.isLeftCoPrime(P, F));
     }
 
 }

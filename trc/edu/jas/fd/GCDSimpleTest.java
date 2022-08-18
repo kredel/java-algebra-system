@@ -7,7 +7,7 @@ package edu.jas.fd;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Arrays;
 
 import edu.jas.arith.BigRational;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
@@ -78,7 +78,7 @@ public class GCDSimpleTest extends TestCase {
     RecSolvablePolynomialRing<BigRational> rfac;
 
 
-    GenSolvablePolynomial<BigRational> a, b, a0, b0, c, d, e;
+    GenSolvablePolynomial<BigRational> a, b, a0, b0, c, d, e, f;
 
 
     GenSolvablePolynomial<GenPolynomial<BigRational>> ar, br, cr, dr, er, ar0, br0;
@@ -130,12 +130,14 @@ public class GCDSimpleTest extends TestCase {
     public void testBaseGcdSimple() {
         String[] uvars = new String[] { "x" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), 1, to, uvars);
+        System.out.println("dfac = " + dfac.toScript());
         for (int i = 0; i < 3; i++) {
+            System.out.println();
             a = dfac.random(kl * (i + 2), ll + 2 * i, el + 2, q);
             b = dfac.random(kl * (i + 1), ll + i, el + 2, q);
             c = dfac.random(kl * (i + 1), ll + 1, el + 1, q);
             c = c.multiply(dfac.univariate(0));
-            if (c.isZERO()) {
+            if (a.isZERO()||b.isZERO()||c.isZERO()) {
                 // skip for this turn
                 continue;
             }
@@ -144,10 +146,12 @@ public class GCDSimpleTest extends TestCase {
             //c = (GenSolvablePolynomial<BigRational>) fd.basePrimitivePart(c).abs();
             //System.out.println("a  = " + a);
             //System.out.println("b  = " + b);
-            //System.out.println("c  = " + c);
+            System.out.println("c  = " + c);
 
             a = a.multiply(c);
             b = b.multiply(c);
+            System.out.println("a  = " + a);
+            System.out.println("b  = " + b);
 
             d = fd.leftBaseGcd(a, b);
             e = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> baseSparsePseudoRemainder(d, c);
@@ -162,6 +166,45 @@ public class GCDSimpleTest extends TestCase {
             e = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> baseSparsePseudoRemainder(b, d);
             //System.out.println("e = " + e);
             assertTrue("gcd(a,b) | b " + e, e.isZERO());
+
+            // extended gcd
+            GenSolvablePolynomial<BigRational>[] egcd = fd.baseExtendedGcd(a, b);
+            System.out.println("egcd = " + Arrays.toString(egcd));
+
+            d = egcd[0];
+            e = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> baseSparsePseudoRemainder(d, c);
+            //System.out.println("d  = " + d);
+            //System.out.println("c  = " + c);
+            assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
+
+            e = (GenSolvablePolynomial<BigRational>) a.multiply(egcd[1]).sum( b.multiply(egcd[2]) );
+            //System.out.println("e  = " + e);
+            f = (GenSolvablePolynomial<BigRational>) egcd[1].multiply(a).sum( egcd[2].multiply(b) );
+            //System.out.println("f  = " + f);
+            assertEquals("e == f: ", e, f);
+            assertEquals("egcd[0] == f: ", egcd[0], f.monic());
+
+            // diophant solution
+            GenSolvablePolynomial<BigRational>[] dio = fd.baseGcdDiophant(a, b, egcd[0]);
+            System.out.println("dio = " + Arrays.toString(dio));
+
+            d = dio[0];
+            e = dio[1];
+            //System.out.println("d  = " + d);
+            //System.out.println("e  = " + e);
+
+            e = (GenSolvablePolynomial<BigRational>) d.multiply(a).sum( dio[1].multiply(b) );
+            //System.out.println("e  = " + e);
+            f = (GenSolvablePolynomial<BigRational>) a.multiply(d).sum( b.multiply(dio[1]) );
+            //System.out.println("f  = " + f);
+            assertEquals("e == f: ", e, f);
+            //assertEquals("a*d + b*e == f: ", d, f.monic());
+            assertEquals("egcd[0] == f: ", egcd[0], f.monic());
+
+            f = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> baseSparsePseudoRemainder(f, c);
+            //System.out.println("d  = " + d);
+            System.out.println("c  = " + c);
+            assertTrue("c | a*d + b*e " + f, f.isZERO());
         }
     }
 
