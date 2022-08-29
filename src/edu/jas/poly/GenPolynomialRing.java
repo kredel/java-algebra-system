@@ -498,11 +498,12 @@ public class GenPolynomialRing<C extends RingElem<C>>
      */
     public synchronized GenPolynomial<C> getZERO() {
         if (ZERO == null || !ZERO.isZERO()) { // happened since May 5 2022
-            // Name        : java-11-openjdk-headless
-            // Version     : 11.0.15.0
-            // Release     : 150000.3.80.1
-           ZERO = new GenPolynomial<C>(this);
-           logger.info("ZERO@get {}", ZERO);
+            // Name        : java-11-openjdk-headless, java-17-openjdk-headless
+            // Version     : 11.0.15.0, 17.0.4
+            // Release     : 150000.3.80.1, 150400.3.3.1
+            GenPolynomial<C> x = ZERO;
+            ZERO = new GenPolynomial<C>(this);
+            logger.info("warn: ZERO@get |{}| wrong fix to {}", x, ZERO);
         }
         return ZERO;
     }
@@ -515,7 +516,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
     public synchronized GenPolynomial<C> getONE() {
         if (ONE == null || !ONE.isONE()) {
            ONE = new GenPolynomial<C>(this, coFac.getONE(), evzero);
-           logger.info("ONE@get {}", ONE);
+           logger.info("warn: ONE@get {}", ONE);
         }
         return ONE;
     }

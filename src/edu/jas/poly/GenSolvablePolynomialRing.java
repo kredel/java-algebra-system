@@ -312,12 +312,12 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
     @Override
     public synchronized GenSolvablePolynomial<C> getZERO() {
         if (ZERO == null || !ZERO.isZERO()) { // happened since May 5 2022
-            // Name        : java-11-openjdk-headless
-            // Version     : 11.0.15.0
-            // Release     : 150000.3.80.1
+            // Name        : java-11-openjdk-headless, java-17-openjdk-headless
+            // Version     : 11.0.15.0, 17.0.4
+            // Release     : 150000.3.80.1, 150400.3.3.1
             GenSolvablePolynomial<C> x = ZERO;
             ZERO = new GenSolvablePolynomial<C>(this);
-            logger.info("ZERO@get wrong: {} fix: {}", x, ZERO);
+            logger.info("warn: ZERO@get |{}| wrong fix to {}", x, ZERO);
         }
         return ZERO;
     }
@@ -331,7 +331,7 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
     public synchronized GenSolvablePolynomial<C> getONE() {
         if (ONE == null || !ONE.isONE()) {
            ONE = new GenSolvablePolynomial<C>(this, coFac.getONE(), evzero);
-           logger.info("ONE@get {}", ONE);
+           logger.info("warn: ONE@get {}", ONE);
         }
         return ONE;
     }

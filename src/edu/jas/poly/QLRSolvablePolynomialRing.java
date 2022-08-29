@@ -58,13 +58,13 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
     /**
      * The constant polynomial 0 for this ring. Hides super ZERO.
      */
-    public final QLRSolvablePolynomial<C, D> ZERO;
+    public /*final*/ QLRSolvablePolynomial<C, D> ZERO;
 
 
     /**
      * The constant polynomial 1 for this ring. Hides super ONE.
      */
-    public final QLRSolvablePolynomial<C, D> ONE;
+    public /*final*/ QLRSolvablePolynomial<C, D> ONE;
 
 
     /**
@@ -334,6 +334,14 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      */
     @Override
     public QLRSolvablePolynomial<C, D> getZERO() {
+        if (ZERO == null || !ZERO.isZERO()) { // happened since May 5 2022
+            // Name        : java-11-openjdk-headless, java-17-openjdk-headless
+            // Version     : 11.0.15.0, 17.0.4
+            // Release     : 150000.3.80.1, 150400.3.3.1
+            QLRSolvablePolynomial<C, D> x = ZERO;
+            ZERO = new QLRSolvablePolynomial<C, D>(this);
+            logger.info("warn: ZERO@get |{}| wrong fix to {}", x, ZERO);
+        }
         return ZERO;
     }
 
@@ -344,6 +352,10 @@ public class QLRSolvablePolynomialRing<C extends GcdRingElem<C> & QuotPair<GenPo
      */
     @Override
     public QLRSolvablePolynomial<C, D> getONE() {
+        if (ONE == null || !ONE.isONE()) {
+           ONE = new QLRSolvablePolynomial<C, D>(this, coFac.getONE(), evzero);
+           logger.info("warn: ONE@get {}", ONE);
+        }
         return ONE;
     }
 

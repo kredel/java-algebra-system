@@ -48,13 +48,13 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
     /**
      * The constant polynomial 0 for this ring. Hides super ZERO.
      */
-    public final RecSolvablePolynomial<C> ZERO;
+    public /*final*/ RecSolvablePolynomial<C> ZERO;
 
 
     /**
      * The constant polynomial 1 for this ring. Hides super ONE.
      */
-    public final RecSolvablePolynomial<C> ONE;
+    public /*final*/ RecSolvablePolynomial<C> ONE;
 
 
     private static final Logger logger = LogManager.getLogger(RecSolvablePolynomialRing.class);
@@ -310,6 +310,14 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
      */
     @Override
     public RecSolvablePolynomial<C> getZERO() {
+        if (ZERO == null || !ZERO.isZERO()) { // happened since May 5 2022
+            // Name        : java-11-openjdk-headless, java-17-openjdk-headless
+            // Version     : 11.0.15.0, 17.0.4
+            // Release     : 150000.3.80.1, 150400.3.3.1
+            RecSolvablePolynomial<C> x = ZERO;
+            ZERO = new RecSolvablePolynomial<C>(this);
+            logger.info("warn: ZERO@get |{}| wrong fix to {}", x, ZERO);
+        }
         return ZERO;
     }
 
@@ -320,6 +328,10 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
      */
     @Override
     public RecSolvablePolynomial<C> getONE() {
+        if (ONE == null || !ONE.isONE()) {
+           ONE = new RecSolvablePolynomial<C>(this, coFac.getONE(), evzero);
+           logger.info("warn: ONE@get {}", ONE);
+        }
         return ONE;
     }
 
