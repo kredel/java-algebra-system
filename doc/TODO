@@ -108,6 +108,9 @@ partially resolved and completed issues:
 
 - use Maven/Gradle/Buildr configuration management, Ivy done
 
+- make QuotSolvablePolynomial(Ring), LocalSolvablePolynomial(Ring)
+  and ResidueSolvablePolynomial(Ring) unsused, except self tests.
+  Only use QLRSolvablePolynomial(Ring) instead done
 
 
 resolved and completed issues:
