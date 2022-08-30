@@ -244,7 +244,7 @@ public class GCDPrimitiveTest extends TestCase {
         //System.out.println("dr = " + dr);
         //System.out.println("sr = " + sr);
         //System.out.println("time: ts = " + ts + ", tp = " + tp);
-        assertTrue("time: ts = " + ts + ", tp = " + tp, ts + tp > 0);
+        assertTrue("time: ts = " + ts + ", tp = " + tp, ts + tp >= 0);
 
         er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveSparsePseudoRemainder(dr, cr);
         //System.out.println("er = " + er);
@@ -376,7 +376,7 @@ public class GCDPrimitiveTest extends TestCase {
         //System.out.println("dr = " + dr);
         //System.out.println("sr = " + sr);
         //System.out.println("time: ts = " + ts + ", tp = " + tp);
-        assertTrue("time: ts = " + ts + ", tp = " + tp, ts + tp > 0);
+        assertTrue("time: ts = " + ts + ", tp = " + tp, ts + tp >= 0);
 
         er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(dr,
                         cr);

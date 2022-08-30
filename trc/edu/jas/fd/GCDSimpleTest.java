@@ -130,9 +130,9 @@ public class GCDSimpleTest extends TestCase {
     public void testBaseGcdSimple() {
         String[] uvars = new String[] { "x" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), 1, to, uvars);
-        System.out.println("dfac = " + dfac.toScript());
+        //System.out.println("dfac = " + dfac.toScript());
         for (int i = 0; i < 3; i++) {
-            System.out.println();
+            //System.out.println();
             a = dfac.random(kl * (i + 2), ll + 2 * i, el + 2, q);
             b = dfac.random(kl * (i + 1), ll + i, el + 2, q);
             c = dfac.random(kl * (i + 1), ll + 1, el + 1, q);
@@ -146,12 +146,12 @@ public class GCDSimpleTest extends TestCase {
             //c = (GenSolvablePolynomial<BigRational>) fd.basePrimitivePart(c).abs();
             //System.out.println("a  = " + a);
             //System.out.println("b  = " + b);
-            System.out.println("c  = " + c);
+            //System.out.println("c  = " + c);
 
             a = a.multiply(c);
             b = b.multiply(c);
-            System.out.println("a  = " + a);
-            System.out.println("b  = " + b);
+            //System.out.println("a  = " + a);
+            //System.out.println("b  = " + b);
 
             d = fd.leftBaseGcd(a, b);
             e = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> baseSparsePseudoRemainder(d, c);
@@ -166,13 +166,45 @@ public class GCDSimpleTest extends TestCase {
             e = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> baseSparsePseudoRemainder(b, d);
             //System.out.println("e = " + e);
             assertTrue("gcd(a,b) | b " + e, e.isZERO());
+        }
+    }
+
+
+    /**
+     * Test base extended gcd simple.
+     */
+    public void testBaseExtendedGcdSimple() {
+        String[] uvars = new String[] { "x" };
+        dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), 1, to, uvars);
+        //System.out.println("dfac = " + dfac.toScript());
+        for (int i = 0; i < 3; i++) {
+            //System.out.println();
+            a = dfac.random(kl * (i + 2), ll + 2 * i, el + 2, q);
+            b = dfac.random(kl * (i + 1), ll + i, el + 2, q);
+            c = dfac.random(kl * (i + 1), ll + 1, el + 1, q);
+            c = c.multiply(dfac.univariate(0));
+            if (a.isZERO()||b.isZERO()||c.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            //a = fd.basePrimitivePart(a);
+            //b = fd.basePrimitivePart(b);
+            //c = (GenSolvablePolynomial<BigRational>) fd.basePrimitivePart(c).abs();
+            //System.out.println("a  = " + a);
+            //System.out.println("b  = " + b);
+            //System.out.println("c  = " + c);
+
+            a = a.multiply(c);
+            b = b.multiply(c);
+            //System.out.println("a  = " + a);
+            //System.out.println("b  = " + b);
 
             // extended gcd
             GenSolvablePolynomial<BigRational>[] egcd = fd.baseExtendedGcd(a, b);
-            System.out.println("egcd = " + Arrays.toString(egcd));
+            //System.out.println("egcd = " + Arrays.toString(egcd));
 
             d = egcd[0];
-            e = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> baseSparsePseudoRemainder(d, c);
+            e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> leftBaseSparsePseudoRemainder(d,c);
             //System.out.println("d  = " + d);
             //System.out.println("c  = " + c);
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
@@ -182,29 +214,24 @@ public class GCDSimpleTest extends TestCase {
             f = (GenSolvablePolynomial<BigRational>) egcd[1].multiply(a).sum( egcd[2].multiply(b) );
             //System.out.println("f  = " + f);
             assertEquals("e == f: ", e, f);
-            assertEquals("egcd[0] == f: ", egcd[0], f.monic());
+            assertEquals("gcd(a,b) = s a + t b: " + f, d, f.monic());
 
             // diophant solution
-            GenSolvablePolynomial<BigRational>[] dio = fd.baseGcdDiophant(a, b, egcd[0]);
-            System.out.println("dio = " + Arrays.toString(dio));
+            GenSolvablePolynomial<BigRational>[] dio = fd.baseGcdDiophant(a, b, d);
+            //System.out.println("dio = " + Arrays.toString(dio));
 
-            d = dio[0];
-            e = dio[1];
-            //System.out.println("d  = " + d);
+            e = (GenSolvablePolynomial<BigRational>) dio[0].multiply(a).sum( dio[1].multiply(b) );
             //System.out.println("e  = " + e);
-
-            e = (GenSolvablePolynomial<BigRational>) d.multiply(a).sum( dio[1].multiply(b) );
-            //System.out.println("e  = " + e);
-            f = (GenSolvablePolynomial<BigRational>) a.multiply(d).sum( b.multiply(dio[1]) );
+            f = (GenSolvablePolynomial<BigRational>) a.multiply(dio[0]).sum( b.multiply(dio[1]) );
             //System.out.println("f  = " + f);
             assertEquals("e == f: ", e, f);
             //assertEquals("a*d + b*e == f: ", d, f.monic());
-            assertEquals("egcd[0] == f: ", egcd[0], f.monic());
+            assertEquals("d*gcd(a,b) = s a + t b: : ", d, f.monic());
 
-            f = (GenSolvablePolynomial<BigRational>) PolyUtil.<BigRational> baseSparsePseudoRemainder(f, c);
+            e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> leftBaseSparsePseudoRemainder(f, c);
             //System.out.println("d  = " + d);
-            System.out.println("c  = " + c);
-            assertTrue("c | a*d + b*e " + f, f.isZERO());
+            //System.out.println("c  = " + c);
+            assertTrue("c | a*s + b*t " + e, e.isZERO());
         }
     }
 
@@ -653,7 +680,7 @@ public class GCDSimpleTest extends TestCase {
      * Test rational coefficients gcd polynomial cofactor tests.
      */
     public void testRatCofactors() {
-        System.out.println("dfac = " + dfac.toScript());
+        //System.out.println("dfac = " + dfac.toScript());
         do {
             a = dfac.random(kl, ll, el, q);
         } while (a.isZERO()||a.isConstant());
@@ -664,21 +691,21 @@ public class GCDSimpleTest extends TestCase {
             c = dfac.random(kl, ll, el, q/2f);
         } while (c.isZERO()||c.isConstant());
         c = c.monic();
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("c = " + c);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
 
         // non commutative left
         //System.out.println("right: ");
         d = c.multiply(a);
         e = c.multiply(b);
-        System.out.println("d = " + d);
-        System.out.println("e = " + e);
+        //System.out.println("d = " + d);
+        //System.out.println("e = " + e);
 
         GenSolvablePolynomial<BigRational>[] gco = fd.leftGcdCofactors(dfac, d, e);
-        System.out.println("left gco[0] = " + gco[0]);
-        System.out.println("gco[1] = " + gco[1]);
-        System.out.println("gco[2] = " + gco[2]);
+        //System.out.println("left gco[0] = " + gco[0]);
+        //System.out.println("gco[1] = " + gco[1]);
+        //System.out.println("gco[2] = " + gco[2]);
 
         GenSolvablePolynomial<BigRational> ca, cb;
         ca = gco[0].multiply(gco[1]);
@@ -694,13 +721,13 @@ public class GCDSimpleTest extends TestCase {
         //System.out.println("left: ");
         d = a.multiply(c);
         e = b.multiply(c);
-        System.out.println("d = " + d);
-        System.out.println("e = " + e);
+        //System.out.println("d = " + d);
+        //System.out.println("e = " + e);
 
         gco = fd.rightGcdCofactors(dfac, d, e);
-        System.out.println("right gco[0] = " + gco[0]);
-        System.out.println("gco[1] = " + gco[1]);
-        System.out.println("gco[2] = " + gco[2]);
+        //System.out.println("right gco[0] = " + gco[0]);
+        //System.out.println("gco[1] = " + gco[1]);
+        //System.out.println("gco[2] = " + gco[2]);
 
         GenSolvablePolynomial<BigRational> ac, bc;
         ac = gco[1].multiply(gco[0]);
