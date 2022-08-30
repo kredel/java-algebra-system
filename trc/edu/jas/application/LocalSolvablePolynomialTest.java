@@ -136,6 +136,11 @@ public class LocalSolvablePolynomialTest extends TestCase {
      * Test constructor, generators and properties.
      */
     public void testConstructor() {
+        a = ring.getZERO();
+        assertTrue("length( a ) = 0", a.length() == 0);
+        assertTrue("isZERO( a )", a.isZERO());
+        assertTrue("isONE( a )", !a.isONE());
+
         assertFalse("not commutative", ring.isCommutative());
         assertTrue("associative", ring.isAssociative());
 
@@ -148,12 +153,6 @@ public class LocalSolvablePolynomialTest extends TestCase {
         assertTrue("length( c ) = 1", c.length() == 1);
         assertTrue("isZERO( c )", !c.isZERO());
         assertTrue("isONE( c )", c.isONE());
-
-        d = ring.getZERO();
-        assertTrue("length( d ) = 0", d.length() == 0);
-        assertTrue("isZERO( d )", d.isZERO());
-        assertTrue("isONE( d )", !d.isONE());
-        //System.out.println("d = " + d);
 
         //System.out.println("");
         for (GenPolynomial<SolvableLocal<BigRational>> g : ring.generators()) {

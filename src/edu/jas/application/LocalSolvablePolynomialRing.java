@@ -330,6 +330,12 @@ public class LocalSolvablePolynomialRing<C extends GcdRingElem<C>> extends
      */
     @Override
     public LocalSolvablePolynomial<C> getZERO() {
+        if (ZERO == null || !ZERO.isZERO()) { // happened since May 5 2022
+            // Name        : java-11-openjdk-headless, java-17-openjdk-headless
+            // Version     : 11.0.15.0, 17.0.4
+            // Release     : 150000.3.80.1, 150400.3.3.1
+            throw new RuntimeException("zero not 0: " + ZERO);
+        }
         return ZERO;
     }
 
@@ -340,6 +346,9 @@ public class LocalSolvablePolynomialRing<C extends GcdRingElem<C>> extends
      */
     @Override
     public LocalSolvablePolynomial<C> getONE() {
+        if (ONE == null || !ONE.isONE()) {
+            throw new RuntimeException("one not 1: " + ONE);
+        }
         return ONE;
     }
 
