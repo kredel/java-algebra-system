@@ -26,17 +26,22 @@
 <dt>2022, September </dt> <!-- 2.7.150 -->
 <dd>
 
- Fix / improve code in constructors for Java memory model for problems
- appearing with Java OpenJDK version "11.0.15", 2022-04-19 and still
- in "17.0.4", 2022-07-22. Added some unit tests to improve test
- coverage, for example <code>RunGB</code>, <code>RunSGB</code>,
- <code>IntegerProgram</code>, <code>StandardBaseSeq</code>,
- <code>jas.kern</code> utilities or <code>GenMatrix</code> and
- more. Added selectable <code>Quotient</code> normalizations, but only
+ Tried to improve code in <code>Gen*PolynomialRing</code> constructors
+ and method <code>getZERO()</code> with respect to Java memory model for
+ problems appearing with Java OpenJDK version "11.0.15", 2022-04-19
+ and still in "17.0.4", 2022-07-22.
+
+ Added some unit tests to improve test coverage, for example
+ <code>RunGB</code>, <code>RunSGB</code>, <code>IntegerProgram</code>,
+ <code>StandardBaseSeq</code>, <code>jas.kern</code> utilities or
+ <code>GenMatrix</code> and more. Added selectable
+ <code>Quotient</code> normalizations, but only
  <code>QuoNorm.normDenLead</code> works in other parts of JAS. Other
  normalizations must be checked and code fixed (see <a
  href="https://github.com/kredel/java-algebra-system/issues/29">issue
- 29</a>). Fix bug in <code>UnivPowerSeries</code> method
+ 29</a>).
+
+ Fix bug in <code>UnivPowerSeries</code> method
  <code>reductum()</code>. Fix bug in <code>ExpVector</code>
  constructor with respect to <code>hashCode()</code>. Verified again
  that JAS can be compiled and run with Java 17(.0.3) and jruby 9.2.14
@@ -2960,7 +2965,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Tue Aug 30 10:51:39 CEST 2022
+Last modified: Fri Sep  9 12:14:30 CEST 2022
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
