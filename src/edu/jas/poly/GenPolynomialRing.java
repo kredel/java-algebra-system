@@ -86,19 +86,19 @@ public class GenPolynomialRing<C extends RingElem<C>>
     /**
      * The constant polynomial 0 for this ring.
      */
-    public GenPolynomial<C> ZERO; // volatile not meaningful by DL
+    public /*final*/ GenPolynomial<C> ZERO; // volatile not meaningful by DL
 
 
     /**
      * The constant polynomial 1 for this ring.
      */
-    public GenPolynomial<C> ONE; // volatile not meaningful by DL
+    public /*final*/ GenPolynomial<C> ONE; // volatile not meaningful by DL
 
 
     /**
      * The constant exponent vector 0 for this ring.
      */
-    public ExpVector evzero; // volatile not meaningful by DL
+    public final ExpVector evzero; // volatile not meaningful by DL
 
 
     /**
