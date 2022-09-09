@@ -1087,6 +1087,13 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         GenSolvablePolynomial<C> x = (GenSolvablePolynomial<C>) hegcd[0].subtract(hegcd[1].multiply(P));
         GenSolvablePolynomial<C>[] qr = FDUtil.<C> leftBasePseudoQuotientRemainder(x, S);
         // assert qr[1].isZERO() 
+        if (!qr[1].isZERO()) {
+            GenSolvablePolynomial<C> y = (GenSolvablePolynomial<C>) qr[0].multiply(S).sum(qr[1]);
+            System.out.println("qr: " + Arrays.toString(qr));
+            System.out.println("x: " + x);
+            System.out.println("y: " + y);
+            //throw new RuntimeException("qr[1] != 0: " + qr[1]);
+        }
         ret[2] = qr[0];
         return ret;
     }

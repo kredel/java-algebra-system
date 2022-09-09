@@ -214,7 +214,8 @@ public class GCDSimpleTest extends TestCase {
             f = (GenSolvablePolynomial<BigRational>) egcd[1].multiply(a).sum( egcd[2].multiply(b) );
             //System.out.println("f  = " + f);
             assertEquals("e == f: ", e, f);
-            assertEquals("gcd(a,b) = s a + t b: " + f, d, f.monic());
+            //assertEquals("gcd(a,b) = s a + t b: " + f, d, f.monic());
+            assertTrue("gcd(a,b) = s a + t b: " + f, f.remainder(d).isZERO());
 
             // diophant solution
             GenSolvablePolynomial<BigRational>[] dio = fd.baseGcdDiophant(a, b, d);
@@ -226,7 +227,8 @@ public class GCDSimpleTest extends TestCase {
             //System.out.println("f  = " + f);
             assertEquals("e == f: ", e, f);
             //assertEquals("a*d + b*e == f: ", d, f.monic());
-            assertEquals("d*gcd(a,b) = s a + t b: : ", d, f.monic());
+            //assertEquals("d*gcd(a,b) = s a + t b: : ", d, f.monic());
+            assertTrue("d*gcd(a,b) = s a + t b: ", f.remainder(d).isZERO());
 
             e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> leftBaseSparsePseudoRemainder(f, c);
             //System.out.println("d  = " + d);
