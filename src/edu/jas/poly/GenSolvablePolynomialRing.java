@@ -47,13 +47,13 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
     /**
      * The constant polynomial 0 for this ring. Hides super ZERO.
      */
-    public volatile GenSolvablePolynomial<C> ZERO;
+    public GenSolvablePolynomial<C> ZERO; //volatile not meaningful by DL
 
 
     /**
      * The constant polynomial 1 for this ring. Hides super ONE.
      */
-    public volatile GenSolvablePolynomial<C> ONE;
+    public GenSolvablePolynomial<C> ONE; //volatile not meaningful by DL
 
 
     private static final Logger logger = LogManager.getLogger(GenSolvablePolynomialRing.class);
