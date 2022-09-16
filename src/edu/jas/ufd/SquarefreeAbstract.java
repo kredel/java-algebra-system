@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -96,6 +98,20 @@ public abstract class SquarefreeAbstract<C extends GcdRingElem<C>> implements Sq
      * @return true if P is squarefree, else false.
      */
     public boolean isSquarefree(GenPolynomial<C> P) {
+        SortedMap<GenPolynomial<C>, Long> sm = squarefreeFactors(P);
+        Set<Long> ex = new HashSet<Long>( sm.values() );
+        //System.out.println("exponents: " + ex + ", sm = " + sm + ", P = " + P);
+        if (ex.size() != 1) {
+            return false;
+        }
+        if (ex.contains(Long.valueOf(1L))) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /*public*/ boolean isSquarefreeAlternative(GenPolynomial<C> P) {
         GenPolynomial<C> S = squarefreePart(P);
         GenPolynomial<C> Ps = P;
         if (P.ring.coFac.isField()) {

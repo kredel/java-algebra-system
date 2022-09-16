@@ -31,7 +31,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
     private static final Logger logger = LogManager.getLogger(SquarefreeFieldChar0.class);
 
 
-    //private static final boolean debug = logger.isDebugEnabled();
+    private static final boolean debug = logger.isDebugEnabled();
 
 
     /**
@@ -118,8 +118,15 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         //System.out.println("d = " + d);
         GenPolynomial<C> g = engine.baseGcd(pp, d);
         //g = g.monic();
+        //System.out.println("baseGcd: g = " + g);
+        if (g.isONE()) {
+            return true;
+        }
+        if (g.degree() >= 1) { // 1 here okay
+            return false;
+        }
         //return g.isONE();
-        return g.degree(0) == 0;
+        return true;
     }
 
 
@@ -268,6 +275,9 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         if (P == null || P.isZERO()) {
             return true;
         }
+        if (P.isConstant() || (P.degree(0) == 1 && P.length() == 1)) {
+            return isSquarefree(P.leadingBaseCoefficient());
+        }
         GenPolynomialRing<GenPolynomial<C>> pfac = P.ring;
         if (pfac.nvar > 1) {
             throw new IllegalArgumentException(
@@ -276,12 +286,24 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         GenPolynomial<GenPolynomial<C>> pp = P;
         GenPolynomial<GenPolynomial<C>> d = PolyUtil.<C> recursiveDerivative(pp);
         //System.out.println("d = " + d);
+        if (d.isZERO()) {
+            return false;
+        }
         GenPolynomial<GenPolynomial<C>> g = engine.recursiveUnivariateGcd(pp, d);
-        logger.info("gcd = {}", g);
+        //logger.info("gcd = {} :: {}, pp={}, d={}", g, g.ring.toScript(), pp, d);
         //System.out.println("g,rec = " + g);
-        //g = PolyUtil.<C> monic(g);
-        //return g.isONE();
-        return g.degree(0) == 0;
+        if (g.isONE()) {
+            return true;
+        }
+        if (g.degree() >= 1) { // 1 here okay
+            return false;
+        }
+        GenPolynomial<C> lcg = g.leadingBaseCoefficient();
+        logger.info("lcg = {}, degree {}, g = {}", lcg, lcg.degree(), g);
+        if (isSquarefree(lcg)) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -446,7 +468,15 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         }
         GenPolynomialRing<GenPolynomial<C>> rfac = pfac.recursive(1);
         GenPolynomial<GenPolynomial<C>> Pr = PolyUtil.<C> recursive(rfac, P);
-        return isRecursiveUnivariateSquarefree(Pr);
+        boolean s1 = isRecursiveUnivariateSquarefree(Pr);
+        if (debug) {
+            boolean s2 = super.isSquarefree(P);
+            if (s1 != s2) {
+                logger.info("s_rec != s2_sup: {}", P);
+                throw new RuntimeException("s_rec != s2_sup: " + s1 + ", " + s2);
+            }
+        }
+        return s1;
     }
 
 
