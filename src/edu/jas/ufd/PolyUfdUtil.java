@@ -982,6 +982,7 @@ public class PolyUfdUtil {
         GenPolynomial<C> ape = A;
         C one = pfac.coFac.getONE();
         C ll = pfac.coFac.getZERO();
+        //logger.info("ape = {}, squarefree: {}", ape, sengine.isSquarefree(ape));
         for (int i = pfac.nvar; i > 1; i--) {
             //System.out.println("rpfac = " + rpfac.toScript());
             GenPolynomialRing<GenPolynomial<C>> rfac = rpfac.recursive(1);
@@ -1001,7 +1002,7 @@ public class PolyUfdUtil {
                     ll = one.subtract(ll);
                 }
                 ape = PolyUtil.<C> evaluateMainRecursive(cpfac, ap, Vi);
-                //System.out.println("ape = " + ape);
+                //logger.info("loop: ap, Vi, ape = {}, {}, {}, squarefree: {}", ap, Vi, ape, sengine.isSquarefree(ape));
                 //long degp = ape.degree(0);
                 long degc = ape.degree(cpfac.nvar - 1);
                 //System.out.println("degc = " + degc + ", degd = " + degd);
@@ -1009,16 +1010,15 @@ public class PolyUfdUtil {
                     continue;
                 }
                 if (!sengine.isSquarefree(ape)) {
+                    if (s++ > 30l) {
+                        throw new RuntimeException(s + " evaluations not squarefree: " + Vi + ", " + ape + ", squarefree(A): " + sengine.isSquarefree(A));
+                    }
                     //System.out.println("not squarefree");
                     continue;
                 }
                 //System.out.println("isSquarefree");
                 //ap = ape;
                 unlucky = false;
-                if (s++ > 300l) {
-                    throw new RuntimeException(s + " evaluations not squarefree: " + Vi + ", " + ape);
-                    //break;
-                }
             }
             L.add(Vi);
             rpfac = cpfac;

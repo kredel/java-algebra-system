@@ -622,15 +622,19 @@ public class PolyUfdUtilTest extends TestCase {
         //System.out.println("dfac = " + dfac.toScript());
         crfac = new GenPolynomialRing<BigRational>(new BigRational(1), dfac);
         //System.out.println("crfac = " + crfac.toScript());
+        SquarefreeAbstract<BigInteger> isqf = SquarefreeFactory.getImplementation(dfac.coFac);
+        SquarefreeAbstract<BigRational> rsqf = SquarefreeFactory.getImplementation(crfac.coFac);
         for (int i = 0; i < 5; i++) {
             a = dfac.random(kl, ll * 2, el * 5, q);
-            //System.out.println("a = " + a);
+            //System.out.println("a = " + a + ", isSquarefree: " + isqf.isSquarefree(a));
+            a = isqf.squarefreePart(a);
             EvalPoints<BigInteger> L = PolyUfdUtil.<BigInteger> evaluationPoints(a);
             //System.out.println("L = " + L);
             assertFalse("L != (): ", L.evalPoints.isEmpty());
 
             GenPolynomial<BigRational> ar = crfac.random(kl, ll, el*2, q*1.5f);
-            //System.out.println("ar = " + ar);
+            //System.out.println("ar = " + ar + ", isSquarefree: " + rsqf.isSquarefree(ar));
+            ar = rsqf.squarefreePart(ar);
             EvalPoints<BigRational> Lr = PolyUfdUtil.<BigRational> evaluationPoints(ar);
             //System.out.println("Lr = " + Lr);
             assertFalse("Lr != (): ", Lr.evalPoints.isEmpty());
