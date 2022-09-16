@@ -162,7 +162,8 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
                         sfactors.put(cr, rk);
                     }
                 }
-            } else {
+            }
+            if (sfactors.isEmpty()) {
                 sfactors.put(A, 1L);
             }
             return sfactors;
