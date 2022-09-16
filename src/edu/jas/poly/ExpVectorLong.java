@@ -172,7 +172,7 @@ public final class ExpVectorLong extends ExpVector
     protected long setVal(int i, long e) {
         long x = val[i];
         val[i] = e;
-        hash = 0; // beware of race condition
+        hash = -1; // beware of race condition
         return x;
     }
 

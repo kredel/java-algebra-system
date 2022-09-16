@@ -193,7 +193,7 @@ public final class ExpVectorShort extends ExpVector
             throw new IllegalArgumentException("exponent to large: " + e);
         }
         val[i] = (short) e;
-        hash = 0; // beware of race condition
+        hash = -1; // beware of race condition
         return x;
     }
 
@@ -207,7 +207,7 @@ public final class ExpVectorShort extends ExpVector
     protected short setVal(int i, short e) {
         short x = val[i];
         val[i] = e;
-        hash = 0; // beware of race condition
+        hash = -1; // beware of race condition
         return x;
     }
 

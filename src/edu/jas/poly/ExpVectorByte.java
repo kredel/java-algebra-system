@@ -193,7 +193,7 @@ public final class ExpVectorByte extends ExpVector
             throw new IllegalArgumentException("exponent to large: " + e);
         }
         val[i] = (byte) e;
-        hash = 0; // beware of race condition
+        hash = -1; // beware of race condition
         return x;
     }
 
@@ -207,7 +207,7 @@ public final class ExpVectorByte extends ExpVector
     protected byte setVal(int i, byte e) {
         byte x = val[i];
         val[i] = e;
-        hash = 0; // beware of race condition
+        hash = -1; // beware of race condition
         return x;
     }
 
