@@ -33,7 +33,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
     private static final Logger logger = LogManager.getLogger(SquarefreeFieldCharP.class);
 
 
-    private static final boolean debug = logger.isDebugEnabled();
+    //private static final boolean debug = logger.isDebugEnabled();
 
 
     /*
