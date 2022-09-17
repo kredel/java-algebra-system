@@ -68,7 +68,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
     /**
      * GenPolynomial polynomial greatest squarefree divisor.
      * @param P GenPolynomial.
-     * @return squarefree(pp(P)).
+     * @return squarefree(P).
      */
     @Override
     public GenPolynomial<C> baseSquarefreePart(GenPolynomial<C> P) {
@@ -226,7 +226,7 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
      * GenPolynomial recursive univariate polynomial greatest squarefree
      * divisor.
      * @param P recursive univariate GenPolynomial.
-     * @return squarefree(pp(P)).
+     * @return squarefree(P).
      */
     @Override
     public GenPolynomial<GenPolynomial<C>> recursiveUnivariateSquarefreePart(
@@ -239,21 +239,23 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
             throw new IllegalArgumentException(
                             this.getClass().getName() + " only for univariate recursive polynomials");
         }
-        // squarefree content
+        // remove content
         GenPolynomial<GenPolynomial<C>> pp = P;
         GenPolynomial<C> Pc = engine.recursiveContent(P);
         //?? Pc = Pc.monic();
         if (!Pc.isONE()) {
             pp = PolyUtil.<C> coefficientPseudoDivide(pp, Pc);
-            //System.out.println("pp,sqp = " + pp);
-            //GenPolynomial<C> Pr = squarefreePart(Pc);
-            //Pr = Pr.monic();
-            //System.out.println("Pr,sqp = " + Pr);
+            //System.out.println("P/cont = " + pp + ", cont = " + Pc);
         }
+        // squarefree content
+        GenPolynomial<C> Ps = squarefreePart(Pc);
+        //System.out.println("Pc = " + Pc + ", Ps = " + Ps);
         if (pp.leadingExpVector().getVal(0) < 1) {
             //System.out.println("pp = " + pp);
-            //System.out.println("Pc = " + Pc);
-            return pp.multiply(Pc);
+            //System.out.println("Ps = " + Ps);
+            pp = pp.multiply(Ps);
+            pp = PolyUtil.<C> monic(pp);
+            return pp;
         }
         GenPolynomial<GenPolynomial<C>> d = PolyUtil.<C> recursiveDerivative(pp);
         //System.out.println("d = " + d);
@@ -261,8 +263,9 @@ public class SquarefreeFieldChar0<C extends GcdRingElem<C>> extends SquarefreeAb
         //System.out.println("g,rec = " + g);
         //??g = PolyUtil.<C> monic(g);
         GenPolynomial<GenPolynomial<C>> q = PolyUtil.<C> recursivePseudoDivide(pp, g);
-        //?? q = PolyUtil.<C> monic(q);
-        return q.multiply(Pc);
+        q = q.multiply(Ps);
+        q = PolyUtil.<C> monic(q);
+        return q;
     }
 
 
