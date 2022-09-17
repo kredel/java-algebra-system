@@ -761,20 +761,19 @@ public class PolyUtilTest extends TestCase {
         fac = new GenPolynomialRing<BigInteger>(cfac, rl, to);
         //System.out.println("fac  = " + fac);
 
+        List<GenPolynomial<BigInteger>> list = new ArrayList<GenPolynomial<BigInteger>>();
+        List<BigInteger> evlist;
+
         a = fac.getZERO();
         //System.out.println("a  = " + a);
-
         ae = PolyUtil.<BigInteger> evaluateAll(cfac, a, Ev);
         //System.out.println("ae   = " + ae);
-
         assertTrue("isZERO( ae )", ae.isZERO());
 
         a = fac.getONE();
         //System.out.println("a  = " + a);
-
         ae = PolyUtil.<BigInteger> evaluateAll(cfac, a, Ev);
         //System.out.println("ae   = " + ae);
-
         assertTrue("isONE( ae )", ae.isONE());
 
         //a = fac.getONE();
@@ -786,30 +785,43 @@ public class PolyUtilTest extends TestCase {
 
         c = b.sum(a);
         //System.out.println("c  = " + c);
-
         ae = PolyUtil.<BigInteger> evaluateAll(cfac, a, Ev);
         be = PolyUtil.<BigInteger> evaluateAll(cfac, b, Ev);
         ce = PolyUtil.<BigInteger> evaluateAll(cfac, c, Ev);
         //System.out.println("ae   = " + ae);
         //System.out.println("be   = " + be);
         //System.out.println("ce   = " + ce);
-
         de = be.sum(ae);
         //System.out.println("de   = " + de);
+        assertEquals("eval(a+b) == eval(a) + eval(b)", ce, de);
 
+        list.add(a);
+        list.add(b);
+        list.add(c);
+        //System.out.println("list = " + list);
+        evlist = PolyUtil.<BigInteger> evaluateAll(cfac, list, Ev);
+        //System.out.println("evlist = " + evlist);
+        de = evlist.get(1).sum(evlist.get(0));
         assertEquals("eval(a+b) == eval(a) + eval(b)", ce, de);
 
         c = b.multiply(a);
         //System.out.println("c  = " + c);
-
         ce = PolyUtil.<BigInteger> evaluateAll(cfac, c, Ev);
         //System.out.println("ae   = " + ae);
         //System.out.println("be   = " + be);
         //System.out.println("ce   = " + ce);
-
         de = be.multiply(ae);
         //System.out.println("de   = " + de);
+        assertEquals("eval(a*b) == eval(a) * eval(b)", ce, de);
 
+        list.clear();
+        list.add(a);
+        list.add(b);
+        list.add(c);
+        //System.out.println("list = " + list);
+        evlist = PolyUtil.<BigInteger> evaluateAll(cfac, list, Ev);
+        //System.out.println("evlist = " + evlist);
+        de = evlist.get(1).multiply(evlist.get(0));
         assertEquals("eval(a*b) == eval(a) * eval(b)", ce, de);
     }
 

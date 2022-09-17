@@ -229,6 +229,9 @@ public class RealRootTest extends TestCase {
         if (a.degree() % 2 == 0) {
             a = a.multiply( dfac.univariate(0).subtract(dfac.getONE()) );
         }
+        if (a.trailingExpVector().degree() > 0) {
+            a = a.subtract(dfac.getONE()); // exclude root 0
+        }
         //System.out.println("a = " + a);
         RealRootsAbstract<BigRational> rr = new RealRootsSturm<BigRational>();
 

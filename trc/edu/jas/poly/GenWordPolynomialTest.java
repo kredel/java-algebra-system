@@ -775,4 +775,29 @@ public class GenWordPolynomialTest extends TestCase {
         assertEquals("parse() == ab - ba: ", a, crel);
     }
 
+
+    /**
+     * Test iterators.
+     */
+    public void testIterators() {
+        // integers
+        BigInteger rf = new BigInteger();
+        //System.out.println("rf = " + rf);
+
+        // word polynomials over integral numbers
+        GenWordPolynomialRing<BigInteger> pf = new GenWordPolynomialRing<BigInteger>(rf, "abcdef");
+        //System.out.println("pf = " + pf);
+
+        // random polynomial
+        GenWordPolynomial<BigInteger> p = pf.random(kl, 2 * ll, el);
+        //System.out.println("p = " + p);
+
+        // test monomials
+        for (WordMonomial<BigInteger> m : p) {
+            //System.out.println("m = " + m);
+            assertFalse("m.c == 0 ", m.coefficient().isZERO());
+            assertFalse("m.e < (0) ", m.word().signum() < 0);
+        }
+    }
+
 }
