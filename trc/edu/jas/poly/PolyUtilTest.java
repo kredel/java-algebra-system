@@ -1691,7 +1691,7 @@ public class PolyUtilTest extends TestCase {
         b = PolyUtil.reciprocalTransformation(d);
         //System.out.println("b = " + b);
 
-        c = dfac.random(kl * 2, ll + 2, el * 2, q+q);
+        c = dfac.random(kl * 2, ll + 2, el * 2, q + q);
         //System.out.println("c = " + c);
         a = PolyUtil.reciprocalTransformation(c);
         //System.out.println("a = " + a);
@@ -1701,9 +1701,9 @@ public class PolyUtilTest extends TestCase {
 
         for (int i = 0; i < rl; i++) {
             //System.out.println("i = " + i + ", deg(c,i) = " + c.degree(i));
-            a = PolyUtil.reciprocalTransformation(c,i);
+            a = PolyUtil.reciprocalTransformation(c, i);
             //System.out.println("a = " + a);
-            b = PolyUtil.reciprocalTransformation(a,i);
+            b = PolyUtil.reciprocalTransformation(a, i);
             //System.out.println("b = " + b);
             assertEquals("recip(recip(c)) == c: ", c, b);
             //break;
@@ -1774,10 +1774,10 @@ public class PolyUtilTest extends TestCase {
 
         c = dfac.univariate(0).power(2);
         c = c.sum(c.power(5));
-        c = c.multiply( dfac.univariate(1).power(3) );
-        c = c.multiply( dfac.univariate(2).power(4) );
-        c = c.sum( dfac.univariate(3).power(7) );
-        c = c.sum( dfac.univariate(4).power(11) );
+        c = c.multiply(dfac.univariate(1).power(3));
+        c = c.multiply(dfac.univariate(2).power(4));
+        c = c.sum(dfac.univariate(3).power(7));
+        c = c.sum(dfac.univariate(4).power(11));
         //System.out.println("c = " + c);
         a = PolyUtil.translation(c, H);
         //System.out.println("a = " + a);
@@ -1785,7 +1785,7 @@ public class PolyUtilTest extends TestCase {
         //System.out.println("b = " + b);
         assertEquals("translat(translat(c)) == c: ", c, b);
 
-        c = dfac.random(kl * 2, ll + 2, el * 2, q+q);
+        c = dfac.random(kl * 2, ll + 2, el * 2, q + q);
         //System.out.println("c = " + c);
         a = PolyUtil.translation(c, H);
         //System.out.println("a = " + a);

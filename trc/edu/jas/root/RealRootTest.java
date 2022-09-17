@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Roots;
@@ -20,7 +16,10 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.structure.Power;
-import edu.jas.structure.RingFactory;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -155,9 +154,9 @@ public class RealRootTest extends TestCase {
         //System.out.println("dr = " + dr);
         //assertTrue("ar >= maxNorm(a): " + (ar.subtract(dr)), ar.compareTo(dr) >= 0);
         Interval<BigRational> v2 = new Interval<BigRational>(mr.negate(), mr);
-        long r2 = rr.realRootCount(v2,a);
+        long r2 = rr.realRootCount(v2, a);
         //System.out.println("v2 = " + v2 + ", r2 = " + r2);
-        assertTrue("r1 == r2: " + (r2-r1), r1 == r2);
+        assertTrue("r1 == r2: " + (r2 - r1), r1 == r2);
 
         // squareNorm root bound
         BigRational qr = a.squareNorm().getRational();
@@ -166,9 +165,9 @@ public class RealRootTest extends TestCase {
         //System.out.println("ir = " + ir);
         //assertTrue("ar >= squareNorm(a): " + (ar.subtract(ir)), ar.compareTo(ir) >= 0);
         Interval<BigRational> v3 = new Interval<BigRational>(qr.negate(), qr);
-        long r3 = rr.realRootCount(v3,a);
+        long r3 = rr.realRootCount(v3, a);
         //System.out.println("v3 = " + v3 + ", r3 = " + r3);
-        assertTrue("r1 == r3: " + (r3-r1), r1 == r3);
+        assertTrue("r1 == r3: " + (r3 - r1), r1 == r3);
 
         // sumNorm root bound
         BigRational pr = a.sumNorm().getRational();
@@ -176,9 +175,9 @@ public class RealRootTest extends TestCase {
         //System.out.println("sr = " + sr);
         //assertTrue("ar >= squareNorm(a): " + (ar.subtract(sr)), ar.compareTo(sr) >= 0);
         Interval<BigRational> v4 = new Interval<BigRational>(pr.negate(), pr);
-        long r4 = rr.realRootCount(v4,a);
+        long r4 = rr.realRootCount(v4, a);
         //System.out.println("v4 = " + v4 + ", r4 = " + r4);
-        assertTrue("r1 == r4: " + (r4-r1), r1 == r4);
+        assertTrue("r1 == r4: " + (r4 - r1), r1 == r4);
 
         // minimal root bound
         BigDecimal dri = dr.sum(BigDecimal.ONE).inverse();
@@ -194,7 +193,8 @@ public class RealRootTest extends TestCase {
         // minimal root separation
         long n = a.degree();
         if (n > 0) {
-            BigDecimal sep = sr.sum(BigDecimal.ONE).power(2*n).multiply(sr.fromInteger(n).power(n+1)).inverse();
+            BigDecimal sep = sr.sum(BigDecimal.ONE).power(2 * n).multiply(sr.fromInteger(n).power(n + 1))
+                            .inverse();
             //System.out.println("sep = " + sep + ", sign(sep) = " + sep.signum());
             assertTrue("separation(a) > 0: " + sep, sep.signum() > 0);
             BigDecimal sri = rr.realMinimalRootSeparation(a).getDecimal();
@@ -227,7 +227,7 @@ public class RealRootTest extends TestCase {
     public void testRealRootSignSequence() {
         a = dfac.random(kl, ll * 2, el * 2, q);
         if (a.degree() % 2 == 0) {
-            a = a.multiply( dfac.univariate(0).subtract(dfac.getONE()) );
+            a = a.multiply(dfac.univariate(0).subtract(dfac.getONE()));
         }
         if (a.trailingExpVector().degree() > 0) {
             a = a.subtract(dfac.getONE()); // exclude root 0
@@ -241,27 +241,27 @@ public class RealRootTest extends TestCase {
         assertTrue("#roots >= 0 ", R != null);
 
         int l = R.size();
-        Interval<BigRational> v = R.get(l-1);
+        Interval<BigRational> v = R.get(l - 1);
         Interval<BigRational> u = R.get(0);
         if (u.left.isZERO() && u.right.isZERO()) {
             Interval<BigRational> w = v;
             v = u;
             u = w;
         }
-        Interval<BigRational> vm = new Interval<BigRational>(u.left,v.right);
+        Interval<BigRational> vm = new Interval<BigRational>(u.left, v.right);
         //System.out.println("v  = " + v);
         //System.out.println("u  = " + u);
         //System.out.println("vm = " + vm);
-        long rc = rr.realRootCount(vm,a);
+        long rc = rr.realRootCount(vm, a);
         //System.out.println("rc = " + rc);
         assertTrue("root number: R = " + R + ", a = " + a + ", rc = " + rc, rc == l);
-        long rn = rr.realRootNumber(a,vm);
+        long rn = rr.realRootNumber(a, vm);
         assertTrue("root number == " + rn, rn == l);
 
         long d = a.degree();
         List<GenPolynomial<BigRational>> fs = rr.fourierSequence(a);
         //System.out.println("fs = " + fs);
-        assertTrue("len(fs) == " + (d+1-fs.size()), fs.size() == (d+1));
+        assertTrue("len(fs) == " + (d + 1 - fs.size()), fs.size() == (d + 1));
 
         //List<Integer> ss = rr.signSequence(a, v);
         //System.out.println("ss = " + ss);
@@ -269,14 +269,14 @@ public class RealRootTest extends TestCase {
         for (Interval<BigRational> t : R) {
             List<Integer> ss = rr.signSequence(a, t);
             //System.out.println("ss = " + ss);
-            assertTrue("len(ss) == " + (d-ss.size()), ss.size() == d);
+            assertTrue("len(ss) == " + (d - ss.size()), ss.size() == d);
         }
     }
 
 
     /**
-     * Test real root isolation Wilkinson polynomials.
-     * p = (x-0)*(x-1)*(x-2)*(x-3)*...*(x-n)
+     * Test real root isolation Wilkinson polynomials. p =
+     * (x-0)*(x-1)*(x-2)*(x-3)*...*(x-n)
      */
     public void testRealRootIsolationWilkinson() {
         final int N = 10;
@@ -307,7 +307,7 @@ public class RealRootTest extends TestCase {
         //System.out.println("R = " + R);
         int i = 0;
         for (Interval<BigRational> v : R) {
-            BigDecimal dd = v.toDecimal(); 
+            BigDecimal dd = v.toDecimal();
             BigDecimal di = Rn.get(i++).toDecimal();
             //System.out.println("v  = " + dd);
             //System.out.println("vi = " + di);
@@ -318,8 +318,8 @@ public class RealRootTest extends TestCase {
 
 
     /**
-     * Test real root isolation Wilkinson polynomials inverse.
-     * p = (x-1)*(x-1/2)*(x-1/3)*...*(x-1/n)
+     * Test real root isolation Wilkinson polynomials inverse. p =
+     * (x-1)*(x-1/2)*(x-1/3)*...*(x-1/n)
      */
     public void testRealRootIsolationWilkinsonInverse() {
         final int N = 9;
@@ -457,7 +457,7 @@ public class RealRootTest extends TestCase {
             int i = 0;
             for (Interval<BigRational> v : R) {
                 //System.out.println("v = " + v);
-                BigDecimal dd = rr.approximateRoot(v,a,eps);
+                BigDecimal dd = rr.approximateRoot(v, a, eps);
                 BigDecimal di = Rn.get(i++).toDecimal();
                 //System.out.println("di = " + di);
                 //System.out.println("dd = " + dd);
@@ -470,8 +470,8 @@ public class RealRootTest extends TestCase {
 
 
     /**
-     * Test real root isolation and decimal refinement of Wilkinson polynomials, inverse roots.
-     * p = (x-1)*(x-1/2)*(x-1/3)*...*(x-1/n)
+     * Test real root isolation and decimal refinement of Wilkinson polynomials,
+     * inverse roots. p = (x-1)*(x-1/2)*(x-1/3)*...*(x-1/n)
      */
     public void testRealRootIsolationDecimalWilkinsonInverse() {
         final int N = 10;
@@ -512,7 +512,7 @@ public class RealRootTest extends TestCase {
             int i = 0;
             for (Interval<BigRational> v : R) {
                 //System.out.println("v = " + v);
-                BigDecimal dd = rr.approximateRoot(v,a,eps);
+                BigDecimal dd = rr.approximateRoot(v, a, eps);
                 BigDecimal di = Rn.get(i++).toDecimal();
                 //System.out.println("di = " + di);
                 //System.out.println("dd = " + dd);
@@ -525,11 +525,11 @@ public class RealRootTest extends TestCase {
 
 
     /**
-     * Test real root isolation and decimal refinement of Wilkinson polynomials, all roots.
-     * p = (x-0)*(x-1)*(x-2)*(x-3)*...*(x-n)
+     * Test real root isolation and decimal refinement of Wilkinson polynomials,
+     * all roots. p = (x-0)*(x-1)*(x-2)*(x-3)*...*(x-n)
      */
     public void testRealRootIsolationDecimalWilkinsonAll() {
-        final int N = 10; 
+        final int N = 10;
         d = dfac.getONE();
         e = dfac.univariate(0);
 
@@ -553,7 +553,7 @@ public class RealRootTest extends TestCase {
         //System.out.println("eps2 = " + eps2);
 
         List<BigDecimal> R = null;
-        R = rr.approximateRoots(a,eps);
+        R = rr.approximateRoots(a, eps);
         //System.out.println("R = " + R);
         assertTrue("#roots = " + N + " ", R.size() == N);
 
@@ -564,14 +564,14 @@ public class RealRootTest extends TestCase {
             //System.out.println("di = " + di);
             assertTrue("|dd - di| < eps ", dd.subtract(di).abs().compareTo(eps2) <= 0);
         }
-        boolean t = rr.isApproximateRoot(R,a,eps);
+        boolean t = rr.isApproximateRoot(R, a, eps);
         assertTrue("some |a(dd)| < eps ", t);
     }
 
 
     /**
-     * Test real root isolation and decimal refinement of Wilkinson polynomials, inverse roots, all roots.
-     * p = (x-1)*(x-1/2)*(x-1/3)*...*(x-1/n)
+     * Test real root isolation and decimal refinement of Wilkinson polynomials,
+     * inverse roots, all roots. p = (x-1)*(x-1/2)*(x-1/3)*...*(x-1/n)
      */
     public void testRealRootIsolationDecimalWilkinsonInverseAll() {
         final int N = 10;
@@ -604,7 +604,7 @@ public class RealRootTest extends TestCase {
         //System.out.println("eps2 = " + eps2);
 
         List<BigDecimal> R = null;
-        R = rr.approximateRoots(a,eps);
+        R = rr.approximateRoots(a, eps);
         //System.out.println("R = " + R);
         assertTrue("#roots = " + (N - 1) + " ", R.size() == (N - 1));
 
@@ -615,7 +615,7 @@ public class RealRootTest extends TestCase {
             //System.out.println("di = " + di);
             assertTrue("|dd - di| < eps ", dd.subtract(di).abs().compareTo(eps2) <= 0);
         }
-        boolean t = rr.isApproximateRoot(R,a,eps);
+        boolean t = rr.isApproximateRoot(R, a, eps);
         assertTrue("some |a(dd)| < eps ", t);
     }
 
