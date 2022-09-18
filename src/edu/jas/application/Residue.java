@@ -68,7 +68,7 @@ public class Residue<C extends GcdRingElem<C>> implements GcdRingElem<Residue<C>
     public Residue(ResidueRing<C> r, GenPolynomial<C> a, int u) {
         ring = r;
         val = ring.ideal.normalform(a); //.monic() no go
-        if ( u == 0 || u == 1 ) {
+        if (u == 0 || u == 1) {
             isunit = u;
             return;
         }
@@ -80,10 +80,10 @@ public class Residue<C extends GcdRingElem<C>> implements GcdRingElem<Residue<C>
             isunit = 1;
             return;
         }
-        if ( val.isUnit() ) {
-           isunit = 1;
-           //} else { // not possible
-           //isunit = 0;
+        if (val.isUnit()) {
+            isunit = 1;
+            //} else { // not possible
+            //isunit = 0;
         }
         isunit = -1;
     }

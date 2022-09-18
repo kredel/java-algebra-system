@@ -5,15 +5,15 @@
 package edu.jas.application;
 
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
-import edu.jas.structure.RingElem;
 import edu.jas.structure.QuotPair;
+import edu.jas.structure.RingElem;
 
 
 /**
@@ -22,8 +22,7 @@ import edu.jas.structure.QuotPair;
  * @author Heinz Kredel
  */
 // To be fixed?: Not jet working because of monic GBs.
-public class Local<C extends GcdRingElem<C>> 
-       implements RingElem<Local<C>>, QuotPair<GenPolynomial<C>> {
+public class Local<C extends GcdRingElem<C>> implements RingElem<Local<C>>, QuotPair<GenPolynomial<C>> {
 
 
     private static final Logger logger = LogManager.getLogger(Local.class);

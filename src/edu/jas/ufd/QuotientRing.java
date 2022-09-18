@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.StringUtil;
 import edu.jas.poly.GenPolynomial;
@@ -28,8 +28,8 @@ import edu.jas.structure.RingFactory;
  * of this class are immutable.
  * @author Heinz Kredel
  */
-public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quotient<C>>,
-                QuotPairFactory<GenPolynomial<C>, Quotient<C>> {
+public class QuotientRing<C extends GcdRingElem<C>>
+                implements RingFactory<Quotient<C>>, QuotPairFactory<GenPolynomial<C>, Quotient<C>> {
 
 
     private static final Logger logger = LogManager.getLogger(QuotientRing.class);
@@ -42,10 +42,10 @@ public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quoti
      * Quotient polynomial normalization, simplification.
      */
     public static enum QuoNorm {
-        normNumLead,  // normalize ldcf(numerator) == 1
+        normNumLead, // normalize ldcf(numerator) == 1
         normNumTrail, // normalize trcf(numerator) == 1
-        normDenLead,  // normalize ldcf(denominator) == 1
-        normDenTrail  // normalize trcf(denominator) == 1
+        normDenLead, // normalize ldcf(denominator) == 1
+        normDenTrail // normalize trcf(denominator) == 1
     };
 
 
@@ -54,6 +54,7 @@ public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quoti
      */
     public final static QuoNorm quoNorm = QuoNorm.normDenLead; // must be the default
     // see https://github.com/kredel/java-algebra-system/issues/29
+
 
     /**
      * Polynomial ring of the factory.
@@ -367,8 +368,8 @@ public class QuotientRing<C extends GcdRingElem<C>> implements RingFactory<Quoti
 
 
     /**
-     * Parse Quotient from String. Syntax: "{ polynomial | polynomial }" or
-     * "{ polynomial }" or " polynomial | polynomial " or " polynomial "
+     * Parse Quotient from String. Syntax: "{ polynomial | polynomial }" or "{
+     * polynomial }" or " polynomial | polynomial " or " polynomial "
      * @param s String.
      * @return Quotient from s.
      */

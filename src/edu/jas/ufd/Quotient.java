@@ -110,7 +110,7 @@ public class Quotient<C extends GcdRingElem<C>>
             }
         }
         C coeff;
-        switch(ring.quoNorm) {
+        switch (QuotientRing.quoNorm) { //ring.quoNorm
         case normNumLead:
             coeff = n.leadingBaseCoefficient();
             break;

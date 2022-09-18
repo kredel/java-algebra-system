@@ -10,17 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.kern.StringUtil;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.structure.GcdRingElem;
+import edu.jas.structure.QuotPairFactory;
 import edu.jas.structure.RingFactory;
 import edu.jas.ufd.GCDFactory;
 import edu.jas.ufd.GreatestCommonDivisor;
-import edu.jas.structure.QuotPairFactory;
 
 
 /**
@@ -28,8 +28,8 @@ import edu.jas.structure.QuotPairFactory;
  * this class are effective immutable.
  * @author Heinz Kredel
  */
-public class LocalRing<C extends GcdRingElem<C>> 
-       implements RingFactory<Local<C>>, QuotPairFactory<GenPolynomial<C>,Local<C>>  {
+public class LocalRing<C extends GcdRingElem<C>>
+                implements RingFactory<Local<C>>, QuotPairFactory<GenPolynomial<C>, Local<C>> {
 
 
     private static final Logger logger = LogManager.getLogger(LocalRing.class);
