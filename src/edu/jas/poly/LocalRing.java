@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.QuotPairFactory;
 import edu.jas.structure.RingElem;
@@ -244,8 +244,8 @@ public class LocalRing<C extends RingElem<C>> implements RingFactory<Local<C>>, 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    @SuppressWarnings("unchecked")
     // not jet working
+    @SuppressWarnings("unchecked")
     public boolean equals(Object b) {
         if (b == null) {
             return false;

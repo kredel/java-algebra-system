@@ -8,14 +8,14 @@ package edu.jas.application;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -130,12 +130,13 @@ public class LocalTest extends TestCase {
      * Test factory.
      */
     public void testRing() {
-        assertFalse("#ring infinite", fac.isFinite() );
-        assertTrue("associative ring", fac.isAssociative() );
-        assertTrue("commutative ring", fac.isCommutative() );
+        assertFalse("#ring infinite", fac.isFinite());
+        assertTrue("associative ring", fac.isAssociative());
+        assertTrue("commutative ring", fac.isCommutative());
         assertTrue("characteristic zero", fac.characteristic().signum() == 0);
-        assertTrue("no field", fac.isField() );
+        assertTrue("no field", fac.isField());
     }
+
 
     /**
      * Test constructor and toString.
