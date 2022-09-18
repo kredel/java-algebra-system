@@ -51,6 +51,12 @@ public class LocalRing<C extends RingElem<C>> implements RingFactory<Local<C>>, 
 
 
     /**
+     * A default random sequence generator.
+     */
+    protected final static Random random = new Random();
+
+
+    /**
      * The constructor creates a LocalRing object from a RingFactory and a
      * RingElem.
      * @param i localization ideal generator.
@@ -137,9 +143,11 @@ public class LocalRing<C extends RingElem<C>> implements RingFactory<Local<C>>, 
     public List<Local<C>> generators() {
         List<? extends C> rgens = ring.generators();
         List<Local<C>> gens = new ArrayList<Local<C>>(rgens.size() - 1);
+        C one = ring.getONE();
         for (C c : rgens) {
+            gens.add(new Local<C>(this, c));
             if (!c.isONE()) {
-                gens.add(new Local<C>(this, c));
+                gens.add(new Local<C>(this, one, c));
             }
         }
         return gens;
@@ -272,15 +280,7 @@ public class LocalRing<C extends RingElem<C>> implements RingFactory<Local<C>>, 
      * @return a random residue element.
      */
     public Local<C> random(int n) {
-        C r = ring.random(n);
-        C s = ring.random(n);
-        s = s.remainder(ideal);
-        while (s.isZERO()) {
-            logger.debug("zero was in ideal");
-            s = ring.random(n);
-            s = s.remainder(ideal);
-        }
-        return new Local<C>(this, r, s, false);
+        return random(n, random);
     }
 
 
@@ -309,8 +309,24 @@ public class LocalRing<C extends RingElem<C>> implements RingFactory<Local<C>>, 
      * @return Local from s.
      */
     public Local<C> parse(String s) {
-        C x = ring.parse(s);
-        return new Local<C>(this, x);
+        int i = s.indexOf("{");
+        if (i >= 0) {
+            s = s.substring(i + 1);
+        }
+        i = s.lastIndexOf("}");
+        if (i >= 0) {
+            s = s.substring(0, i);
+        }
+        i = s.indexOf("|");
+        if (i < 0) {
+            C n = ring.parse(s);
+            return new Local<C>(this, n);
+        }
+        String s1 = s.substring(0, i);
+        String s2 = s.substring(i + 1);
+        C n = ring.parse(s1);
+        C d = ring.parse(s2);
+        return new Local<C>(this, n, d);
     }
 
 

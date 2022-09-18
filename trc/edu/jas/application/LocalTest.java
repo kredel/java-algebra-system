@@ -67,19 +67,7 @@ public class LocalTest extends TestCase {
     List<GenPolynomial<BigRational>> F;
 
 
-    Local<BigRational> a;
-
-
-    Local<BigRational> b;
-
-
-    Local<BigRational> c;
-
-
-    Local<BigRational> d;
-
-
-    Local<BigRational> e;
+    Local<BigRational> a, b, c, d, e;
 
 
     int rl = 3;
@@ -139,6 +127,17 @@ public class LocalTest extends TestCase {
 
 
     /**
+     * Test factory.
+     */
+    public void testRing() {
+        assertFalse("#ring infinite", fac.isFinite() );
+        assertTrue("associative ring", fac.isAssociative() );
+        assertTrue("commutative ring", fac.isCommutative() );
+        assertTrue("characteristic zero", fac.characteristic().signum() == 0);
+        assertTrue("no field", fac.isField() );
+    }
+
+    /**
      * Test constructor and toString.
      * 
      */
@@ -156,6 +155,14 @@ public class LocalTest extends TestCase {
         assertTrue("length( d ) = 0", d.num.length() == 0);
         assertTrue("isZERO( d )", d.isZERO());
         assertTrue("isONE( d )", !d.isONE());
+
+        List<Local<BigRational>> gens = fac.generators();
+        //System.out.println("gens = " + gens);
+        assertTrue("#gens == 7: ", gens.size() == 7);
+        for (Local<BigRational> v : gens) {
+            a = fac.parse(v.toString());
+            assertEquals("a == v", a, v);
+        }
     }
 
 
