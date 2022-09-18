@@ -8,6 +8,7 @@ package edu.jas.poly;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
 
+import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.RingElem;
@@ -178,6 +179,10 @@ public class Residue<C extends RingElem<C>> implements RingElem<Residue<C>> {
      */
     @Override
     public String toString() {
+        if (PrettyPrint.isTrue()) {
+            String s = "{ " + val.toString() + " }";
+            return s;
+        }
         return "Residue[ " + val.toString() + " mod " + ring.toString() + " ]";
     }
 
@@ -329,6 +334,7 @@ public class Residue<C extends RingElem<C>> implements RingElem<Residue<C>> {
             GcdRingElem v = (GcdRingElem) val;
             GcdRingElem m = (GcdRingElem) ring.modul;
             C[] egcd = (C[]) v.egcd(m);
+            //System.out.println("v = " + v + ", m = " + m + ", e[0] = " + egcd[0] + ", e[1] = " + egcd[1]);
             if (debug) {
                 logger.info("egcd = {}, f = {}", egcd[0], egcd[1]);
             }
@@ -344,7 +350,7 @@ public class Residue<C extends RingElem<C>> implements RingElem<Residue<C>> {
             C x = val.inverse();
             return new Residue<C>(ring, x);
         }
-        System.out.println("isunit = " + isunit + ", isUnit() = " + this.isUnit());
+        //System.out.println("isunit = " + isunit + ", isUnit() = " + this.isUnit());
         throw new NotInvertibleException("element not invertible (!gcd)" + this);
     }
 

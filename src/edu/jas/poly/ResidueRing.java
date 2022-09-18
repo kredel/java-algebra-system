@@ -57,7 +57,7 @@ public class ResidueRing<C extends RingElem<C>> implements RingFactory<Residue<C
      */
     public ResidueRing(RingFactory<C> r, C m) {
         ring = r;
-        if (m.isZERO()) {
+        if (m == null || m.isZERO()) {
             throw new IllegalArgumentException("modul may not be null");
         }
         if (m.isONE()) {
@@ -76,8 +76,12 @@ public class ResidueRing<C extends RingElem<C>> implements RingFactory<Residue<C
      * @see edu.jas.structure.ElemFactory#isFinite()
      */
     public boolean isFinite() {
-        throw new UnsupportedOperationException("not implemented");
-        //return ring.isFinite();
+        if (ring instanceof GenPolynomialRing pr) { // Java 17?
+            return pr.coFac.isFinite();
+            /* always true: modul.degree() < \infinity */
+        }
+        return true; // modul < Long.MAX_VALUE;
+        //throw new UnsupportedOperationException("not implemented");
     }
 
 
@@ -167,7 +171,13 @@ public class ResidueRing<C extends RingElem<C>> implements RingFactory<Residue<C
      * @return characteristic of this ring.
      */
     public java.math.BigInteger characteristic() {
-        return ring.characteristic();
+        if (ring instanceof GenPolynomialRing pr) { // Java 17?
+            return pr.characteristic();
+            /* always true: modul.degree() < \infinity */
+        }
+        // modul < Long.MAX_VALUE;
+        java.math.BigInteger m = new java.math.BigInteger(modul.toString());
+        return m;
     }
 
 
@@ -278,6 +288,14 @@ public class ResidueRing<C extends RingElem<C>> implements RingFactory<Residue<C
      * @return Residue from s.
      */
     public Residue<C> parse(String s) {
+        int i = s.indexOf("{");
+        if (i >= 0) {
+            s = s.substring(i + 1);
+        }
+        i = s.lastIndexOf("}");
+        if (i >= 0) {
+            s = s.substring(0, i);
+        }
         C x = ring.parse(s);
         return new Residue<C>(this, x);
     }
