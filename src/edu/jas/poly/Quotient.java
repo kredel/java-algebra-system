@@ -8,6 +8,7 @@ package edu.jas.poly;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
 
+import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.QuotPair;
 import edu.jas.structure.RingElem;
@@ -211,6 +212,13 @@ public class Quotient<C extends RingElem<C>> implements RingElem<Quotient<C>>, Q
      */
     @Override
     public String toString() {
+        if (PrettyPrint.isTrue()) {
+            String s = "{ " + num.toString();
+            if (den.isONE()) {
+                return s + " }";
+            }
+            return s + "| " + den.toString() + " }";
+        }
         return "Quotient[ " + num.toString() + " / " + den.toString() + " ]";
     }
 

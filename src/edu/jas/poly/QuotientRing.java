@@ -119,8 +119,12 @@ public class QuotientRing<C extends RingElem<C>> implements RingFactory<Quotient
     public List<Quotient<C>> generators() {
         List<? extends C> rgens = ring.generators();
         List<Quotient<C>> gens = new ArrayList<Quotient<C>>(rgens.size());
+        C one = ring.getONE();
         for (C c : rgens) {
             gens.add(new Quotient<C>(this, c));
+            if (!c.isONE()) {
+                gens.add(new Quotient<C>(this, one, c));
+            }
         }
         return gens;
     }
@@ -271,8 +275,24 @@ public class QuotientRing<C extends RingElem<C>> implements RingFactory<Quotient
      * @return Quotient from s.
      */
     public Quotient<C> parse(String s) {
-        C x = ring.parse(s);
-        return new Quotient<C>(this, x);
+        int i = s.indexOf("{");
+        if (i >= 0) {
+            s = s.substring(i + 1);
+        }
+        i = s.lastIndexOf("}");
+        if (i >= 0) {
+            s = s.substring(0, i);
+        }
+        i = s.indexOf("|");
+        if (i < 0) {
+            C n = ring.parse(s);
+            return new Quotient<C>(this, n);
+        }
+        String s1 = s.substring(0, i);
+        String s2 = s.substring(i + 1);
+        C n = ring.parse(s1);
+        C d = ring.parse(s2);
+        return new Quotient<C>(this, n, d);
     }
 
 
