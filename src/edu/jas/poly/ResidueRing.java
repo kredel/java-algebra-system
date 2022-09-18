@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
@@ -76,7 +76,9 @@ public class ResidueRing<C extends RingElem<C>> implements RingFactory<Residue<C
      * @see edu.jas.structure.ElemFactory#isFinite()
      */
     public boolean isFinite() {
-        if (ring instanceof GenPolynomialRing pr) { // Java 17?
+        //if (ring instanceof GenPolynomialRing pr) { // Java 17
+        if (ring instanceof GenPolynomialRing) {
+            GenPolynomialRing pr = (GenPolynomialRing) ring;
             return pr.coFac.isFinite();
             /* always true: modul.degree() < \infinity */
         }
@@ -171,7 +173,9 @@ public class ResidueRing<C extends RingElem<C>> implements RingFactory<Residue<C
      * @return characteristic of this ring.
      */
     public java.math.BigInteger characteristic() {
-        if (ring instanceof GenPolynomialRing pr) { // Java 17?
+        //if (ring instanceof GenPolynomialRing pr) { // Java 17
+        if (ring instanceof GenPolynomialRing) {
+            GenPolynomialRing pr = (GenPolynomialRing) ring;
             return pr.characteristic();
             /* always true: modul.degree() < \infinity */
         }
