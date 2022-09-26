@@ -57,7 +57,7 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param rfac recursive polynomial ring factory.
      * @param A polynomial to be converted.
-     * @return Recursive represenations of this in the ring rfac.
+     * @return Recursive representations of this in the ring rfac.
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursive(
                     GenPolynomialRing<GenPolynomial<C>> rfac, GenPolynomial<C> A) {
@@ -1090,8 +1090,8 @@ public class PolyUtil {
      * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
      */
     @SuppressWarnings("unchecked")
-    public static <C extends RingElem<C>> GenPolynomial<C>[] basePseudoQuotientRemainder(final GenPolynomial<C> P,
-                    final GenPolynomial<C> S) {
+    public static <C extends RingElem<C>> GenPolynomial<C>[] basePseudoQuotientRemainder(
+                    final GenPolynomial<C> P, final GenPolynomial<C> S) {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P.toString() + " division by zero " + S);
         }
@@ -1518,8 +1518,18 @@ public class PolyUtil {
         GenPolynomial<C> a = P.leadingBaseCoefficient();
         rhs = q.multiply(S).sum(r);
         GenPolynomial<C> b = rhs.leadingBaseCoefficient();
-        if (P.multiply(b).equals(rhs.multiply(a))) {
+        GenPolynomial<GenPolynomial<C>> Pb = P.multiply(b);
+        GenPolynomial<GenPolynomial<C>> rhsa = rhs.multiply(a);
+        if (Pb.equals(rhsa)) {
             return true;
+        }
+        //System.out.println("b     = " + b);
+        //System.out.println("a     = " + a);
+        //System.out.println("P*b   = " + Pb);
+        //System.out.println("rhs*a = " + rhsa);
+        if (Pb.degree() != rhsa.degree()
+            || !Pb.leadingBaseCoefficient().equals(rhsa.leadingBaseCoefficient())) {
+            return false;
         }
         return false;
     }
@@ -1793,7 +1803,7 @@ public class PolyUtil {
 
 
     /**
-     * Absoulte norm. Square root of the sum of the squared coefficients.
+     * Absolute norm. Square root of the sum of the squared coefficients.
      * @param p GenPolynomial
      * @return sqrt( sum<sub>i</sub> |c<sub>i</sub>|<sup>2</sup> ).
      */
@@ -1806,7 +1816,6 @@ public class PolyUtil {
         if (a instanceof StarRingElem) {
             //System.out.println("StarRingElem case");
             for (C c : p.val.values()) {
-                @SuppressWarnings("unchecked")
                 C n = (C) ((StarRingElem) c).norm();
                 a = a.sum(n);
             }
@@ -3770,7 +3779,7 @@ class CoeffToRecAlg<C extends GcdRingElem<C>> implements UnaryFunctor<C, Algebra
     final int depth;
 
 
-    @SuppressWarnings({ "unchecked", "cast" })
+    @SuppressWarnings("unchecked")
     public CoeffToRecAlg(int depth, AlgebraicNumberRing<C> fac) {
         if (fac == null) {
             throw new IllegalArgumentException("fac must not be null");
@@ -3790,7 +3799,7 @@ class CoeffToRecAlg<C extends GcdRingElem<C>> implements UnaryFunctor<C, Algebra
     }
 
 
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings("unchecked")
     public AlgebraicNumber<C> eval(C c) {
         if (c == null) {
             return lfac.get(0).getZERO();
