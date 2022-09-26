@@ -463,7 +463,7 @@ public class Quotient<C extends RingElem<C>> implements RingElem<Quotient<C>>, Q
      * @param b other element.
      * @return [ gcd(this,b), c1, c2 ] with c1*this + c2*b = gcd(this,b).
      */
-    @SuppressWarnings("cast")
+    @SuppressWarnings("unchecked")
     public Quotient<C>[] egcd(Quotient<C> b) {
         Quotient<C>[] ret = (Quotient<C>[]) new Quotient[3];
         ret[0] = null;

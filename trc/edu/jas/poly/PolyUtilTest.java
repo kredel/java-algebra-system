@@ -6,6 +6,7 @@ package edu.jas.poly;
 
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import edu.jas.arith.BigComplex;
@@ -200,6 +201,7 @@ public class PolyUtilTest extends TestCase {
     /**
      * Test random rational -- integer conversion.
      */
+    @SuppressWarnings("unchecked")
     public void testRationalConversion() {
         GenPolynomialRing<BigRational> rfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, to);
 
@@ -222,8 +224,24 @@ public class PolyUtilTest extends TestCase {
             //System.out.println("ar  = " + ar);
             //System.out.println("br  = " + br);
             //System.out.println("crd = " + a);
-
             assertEquals("c == integer(rational(c))", c, a);
+
+            //ar = PolyUtil.<BigRational> fromIntegerCoefficients(rfac, c);
+            //br = ar.monic();
+            Object[] fa = PolyUtil.integerFromRationalCoefficientsFactor(dfac, br);
+            //System.out.println("c  = " + c);
+            //System.out.println("ar = " + ar);
+            //System.out.println("br = " + br);
+            //System.out.println("fa = " + Arrays.toString(fa));
+            java.math.BigInteger gcd = (java.math.BigInteger) fa[0];
+            java.math.BigInteger lcm = (java.math.BigInteger) fa[1];
+            a = (GenPolynomial<BigInteger>) fa[2];
+            //System.out.println("gcd = " + gcd);
+            //System.out.println("lcm = " + lcm);
+            //System.out.println("a = " + a);
+            assertEquals("c == integer(rational(c))", c, a);
+            assertEquals("gcd == 1", gcd, java.math.BigInteger.ONE);
+            assertEquals("lcm == lc(a)", lcm, a.leadingBaseCoefficient().val);
         }
     }
 
@@ -532,7 +550,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test recursive pseudo division.
+     * Test recursive pseudo quotient and remainder.
      * @see edu.jas.ufd.PolyUfdUtilTest#testRecursivePseudoDivisionSparse
      */
     public void testRecursivePseudoDivision() {
