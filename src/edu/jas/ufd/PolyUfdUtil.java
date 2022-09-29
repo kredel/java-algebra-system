@@ -1011,7 +1011,8 @@ public class PolyUfdUtil {
                 }
                 if (!sengine.isSquarefree(ape)) {
                     if (s++ > 30l) {
-                        throw new RuntimeException(s + " evaluations not squarefree: " + Vi + ", " + ape + ", squarefree(A): " + sengine.isSquarefree(A));
+                        throw new RuntimeException(s + " evaluations not squarefree: " + Vi + ", " + ape
+                                        + ", squarefree(A): " + sengine.isSquarefree(A));
                     }
                     //System.out.println("not squarefree");
                     continue;

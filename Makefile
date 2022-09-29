@@ -84,7 +84,7 @@ MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
 #JAVA_MEM=-Xms1500M -Xmx2900M
-JAVA_MEM=-Xms500M -Xmx900M
+JAVA_MEM=-Xms800M -Xmx1500M
 
 #SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/junit.jar-4.13.1.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms500M -J-Xmx900M"
 SOPTS="-J-cp ../lib/log4j-core-2.17.1.jar:../lib/log4j-api-2.17.1.jar:../lib/junit.jar-4.13.1.jar:../lib/hamcrest-core-1.3.jar:. -J-Xms500M -J-Xmx900M"
@@ -445,7 +445,7 @@ findbugs-low:
 # jan 2018 SVNSRT=5787
 # jan 2019 SVNSRT=5966
 # jan 2020 SVNSRT=5990
-SVNREV=150
+SVNREV=160
 GITREV=$(SVNREV)
 GITSINCE=2021-01-01
 #GITSINCE=2019-01-01
