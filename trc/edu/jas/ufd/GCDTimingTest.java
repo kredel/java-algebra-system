@@ -7,6 +7,7 @@ package edu.jas.ufd;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
+import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -30,6 +31,7 @@ public class GCDTimingTest extends TestCase {
      */
     public static void main(String[] args) {
         junit.textui.TestRunner.run(suite());
+        ComputerThreads.terminate();
     }
 
 
@@ -65,6 +67,9 @@ public class GCDTimingTest extends TestCase {
     GreatestCommonDivisorAbstract<BigInteger> ufd_moevsi;
 
 
+    GreatestCommonDivisorAbstract<BigInteger> ufd_par;
+
+
     TermOrder to = new TermOrder(TermOrder.INVLEX);
 
 
@@ -98,7 +103,7 @@ public class GCDTimingTest extends TestCase {
     int el = 3;
 
 
-    float q = 0.3f;
+    float q = 0.4f; //0.3f;
 
 
     @Override
@@ -114,6 +119,7 @@ public class GCDTimingTest extends TestCase {
         dfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl, to);
         cfac = new GenPolynomialRing<BigInteger>(new BigInteger(1), rl - 1, to);
         rfac = new GenPolynomialRing<GenPolynomial<BigInteger>>(cfac, 1, to);
+        ufd_par = GCDFactory.getProxy(BigInteger.ONE);
     }
 
 
@@ -323,6 +329,7 @@ public class GCDTimingTest extends TestCase {
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO() );
             System.out.println("simple prs        time = " + t);
             */
+
             /*
             t = System.currentTimeMillis();
             d = ufd_pp.gcd(a,b);
@@ -361,7 +368,17 @@ public class GCDTimingTest extends TestCase {
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
             System.out.println("modular eval      time = " + t);
-        }
+
+
+            t = System.currentTimeMillis();
+            d = ufd_par.gcd(a, b);
+            t = System.currentTimeMillis() - t;
+            e = PolyUtil.<BigInteger> baseSparsePseudoRemainder(d, c);
+            //System.out.println("d  = " + d);
+
+            assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
+            System.out.println("parallel          time = " + t);
+	}
     }
 
 }
