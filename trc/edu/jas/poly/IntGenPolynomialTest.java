@@ -246,6 +246,10 @@ public class IntGenPolynomialTest extends TestCase {
         d = a.scaleSubtractMultiple(tc,fv,lc,ev,b);
         e = a.multiply(tc,fv).subtract( b.multiply(lc,ev) );
         assertEquals("(tc fv) a - (lc ev) b == ((tc fv) a - ((lc ev) b))",d,e);
+
+        d = a.scaleSubtractMultiple(tc,lc,b);
+        e = a.multiply(tc).subtract( b.multiply(lc) );
+        assertEquals("tc a - lc b == (tc a) - (lc b)",d,e);
     }
 
 

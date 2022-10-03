@@ -14,9 +14,6 @@ import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 
 
-// import edu.jas.structure.RingElem;
-
-
 /**
  * ModInteger coefficients GenSolvablePolynomial tests with JUnit.
  * @author Heinz Kredel
@@ -51,28 +48,7 @@ public class ModGenSolvablePolynomialTest extends TestCase {
     }
 
 
-    GenSolvablePolynomial<ModInteger> a;
-
-
-    GenSolvablePolynomial<ModInteger> b;
-
-
-    GenSolvablePolynomial<ModInteger> c;
-
-
-    GenSolvablePolynomial<ModInteger> d;
-
-
-    GenSolvablePolynomial<ModInteger> e;
-
-
-    GenSolvablePolynomial<ModInteger> f;
-
-
-    GenSolvablePolynomial<ModInteger> x1;
-
-
-    GenSolvablePolynomial<ModInteger> x2;
+    GenSolvablePolynomial<ModInteger> a, b, c, d, e, f, x1, x2;
 
 
     int ml = 19; // modul 
@@ -321,6 +297,48 @@ public class ModGenSolvablePolynomialTest extends TestCase {
 
         assertEquals("a(bc) = (ab)c", d, e);
         assertTrue("a(bc) = (ab)c", d.equals(e));
+    }
+
+
+    /**
+     * Test BLAS level 1.
+     */
+    public void testBLAS1() {
+        int rloc = 4;
+        ring = new GenSolvablePolynomialRing<ModInteger>(cfac, rloc);
+        RelationGenerator<ModInteger> wl = new WeylRelations<ModInteger>();
+        wl.generate(ring);
+        table = ring.table;
+        //System.out.println("table = " + table);
+        //System.out.println("ring = " + ring);
+
+        a = ring.random(kl,ll,el,q);
+        b = ring.random(kl,ll,el,q);
+        ExpVector ev = ExpVector.random(rloc,el,q);
+        ModInteger lc = cfac.random(kl);
+
+        d = a.subtractMultiple(lc,b);
+        e = (GenSolvablePolynomial<ModInteger>) a.subtract( b.multiply(lc) );
+        assertEquals("a - (lc) b == a - ((lc) b)",d,e);
+
+        d = a.subtractMultiple(lc,ev,b);
+        e = (GenSolvablePolynomial<ModInteger>) a.subtract( b.multiplyLeft(lc,ev) );
+        assertEquals("a - (lc ev) b == a - ((lc ev) b): " + lc + ", " + ev, d, e);
+
+        ExpVector fv = ExpVector.random(rloc,el,q);
+        ModInteger tc = cfac.random(kl);
+
+        d = a.scaleSubtractMultiple(tc,lc,ev,b);
+        e = (GenSolvablePolynomial<ModInteger>) a.multiplyLeft(tc).subtract( b.multiplyLeft(lc,ev) );
+        assertEquals("(tc) a - (lc ev) b == ((tc) a - ((lc ev) b))",d,e);
+
+        d = a.scaleSubtractMultiple(tc,fv,lc,ev,b);
+        e = (GenSolvablePolynomial<ModInteger>) a.multiplyLeft(tc,fv).subtract( b.multiplyLeft(lc,ev) );
+        assertEquals("(tc fv) a - (lc ev) b == ((tc fv) a - ((lc ev) b)): " + tc + ", " + fv + ", " + lc + ", " + ev, d, e);
+
+        d = a.scaleSubtractMultiple(tc,lc,b);
+        e = (GenSolvablePolynomial<ModInteger>) a.multiplyLeft(tc).subtract( b.multiplyLeft(lc) );
+        assertEquals("tc a - lc b == (tc a) - (lc b)",d,e);
     }
 
 

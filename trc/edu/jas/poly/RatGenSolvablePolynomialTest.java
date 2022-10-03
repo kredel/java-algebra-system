@@ -52,7 +52,7 @@ public class RatGenSolvablePolynomialTest extends TestCase {
     GenSolvablePolynomial<BigRational> a, b, c, d, e, f, x1, x2;
 
 
-    int rl = 5;
+    int rl = 6;
 
 
     int kl = 10;
@@ -100,7 +100,7 @@ public class RatGenSolvablePolynomialTest extends TestCase {
     public void testGenerate() {
         String s = fac.toScript();
         //System.out.println("fac.toScript: " + s + ", " + s.length());
-        assertTrue("#s == 48: " + s, s.length() == 48);
+        assertTrue("#s == 51: " + s, s.length() == 51);
 
         List<GenPolynomial<BigRational>> gens = fac.generators();
         assertFalse("#gens != () ", gens.isEmpty());
@@ -387,6 +387,48 @@ public class RatGenSolvablePolynomialTest extends TestCase {
 
 
     /**
+     * Test BLAS level 1.
+     */
+    public void testBLAS1() {
+        int rloc = 4;
+        ring = new GenSolvablePolynomialRing<BigRational>(cfac, rloc);
+        RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
+        wl.generate(ring);
+        table = ring.table;
+        //System.out.println("table = " + table);
+        //System.out.println("ring = " + ring);
+
+        a = ring.random(kl,ll,el,q);
+        b = ring.random(kl,ll,el,q);
+        ExpVector ev = ExpVector.random(rloc,el,q);
+        BigRational lc = BigRational.ONE.random(kl);
+
+        d = a.subtractMultiple(lc,b);
+        e = (GenSolvablePolynomial<BigRational>) a.subtract( b.multiplyLeft(lc) );
+        assertEquals("a - (lc) b == a - ((lc) b)",d,e);
+
+        d = a.subtractMultiple(lc,ev,b);
+        e = (GenSolvablePolynomial<BigRational>) a.subtract( b.multiplyLeft(lc,ev) );
+        assertEquals("a - (lc ev) b == a - ((lc ev) b)",d,e);
+
+        ExpVector fv = ExpVector.random(rloc,el,q);
+        BigRational tc = BigRational.ONE.random(kl);
+
+        d = a.scaleSubtractMultiple(tc,lc,ev,b);
+        e = (GenSolvablePolynomial<BigRational>) a.multiplyLeft(tc).subtract( b.multiplyLeft(lc,ev) );
+        assertEquals("(tc) a - (lc ev) b == ((tc) a - ((lc ev) b))",d,e);
+
+        d = a.scaleSubtractMultiple(tc,fv,lc,ev,b);
+        e = (GenSolvablePolynomial<BigRational>) a.multiplyLeft(tc,fv).subtract( b.multiplyLeft(lc,ev) );
+        assertEquals("(tc fv) a - (lc ev) b == ((tc fv) a - ((lc ev) b))",d,e);
+
+        d = a.scaleSubtractMultiple(tc,lc,b);
+        e = (GenSolvablePolynomial<BigRational>) a.multiplyLeft(tc).subtract( b.multiplyLeft(lc) );
+        assertEquals("tc a - lc b == (tc a) - (lc b)",d,e);
+    }
+
+
+    /**
      * Test distributive law.
      */
     public void testDistributive() {
@@ -408,4 +450,5 @@ public class RatGenSolvablePolynomialTest extends TestCase {
 
         assertEquals("a(b+c) = ab+ac", d, e);
     }
+
 }
