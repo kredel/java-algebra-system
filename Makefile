@@ -84,12 +84,13 @@ MYCLASSPATH = $(LOG4JPATH):.:$(JUNITPATH):$(JOMPPATH):$(PYPATH)
 #:$(TNJPATH)
 
 #JAVA_MEM=-Xms1500M -Xmx2900M
-JAVA_MEM=-Xms800M -Xmx1500M
+#JAVA_MEM=-Xms800M -Xmx1500M
+JAVA_MEM=
 
 #SOPTS="-J-cp ../lib/log4j-core-2.5.jar:../lib/log4j-api-2.5.jar:../lib/junit.jar-4.13.1.jar:../lib/hamcrest-core-1.3.jar:. -J-verbose:gc -J-Xms500M -J-Xmx900M"
-SOPTS="-J-cp ../lib/log4j-core-2.17.1.jar:../lib/log4j-api-2.17.1.jar:../lib/junit.jar-4.13.1.jar:../lib/hamcrest-core-1.3.jar:. -J-Xms500M -J-Xmx900M"
+SOPTS="-J-cp ../lib/log4j-core-2.17.1.jar:../lib/log4j-api-2.17.1.jar:../lib/junit.jar-4.13.1.jar:../lib/hamcrest-core-1.3.jar:. "
 #SOPTS="-J-verbose:gc -J-Xms1500M -J-Xmx2900M"
-#SOPTS="-J-verbose:gc"
+#SOPTS="-J-verbose:gc -J-Xms500M -J-Xmx900M"
 
 
 JAVAC=$(JDK)/javac -classpath $(MYCLASSPATH) -d . -Xlint:unchecked
@@ -402,14 +403,11 @@ tests:
 	echo "--------------------"
 	-grep FAIL t.out
 	-grep Exception e.out | grep -v GCDProxy | grep -v GBProxy
+	-egrep '(Exception|Usage|Error|ERROR)' tr.out
 	-egrep '(Error|ERROR|File|Exception)' tjy.out
 	-egrep -i '(error|__file__|exception|failed)' tjr.out
-	-grep -i error jython/jsr.out
-	-grep -i error mpj/mpj.out
+	-egrep -i '(Error|File|Exception)' jython/jsr.out mpj/mpj.out jlinalg_adapter/ja.out
 	#-grep -i error mpi/mpi.out
-	-grep -i error jlinalg_adapter/ja.out
-	-grep -i error commons-math_adapter/ja.out
-	-egrep '(Exception|Usage|Error|ERROR)' tr.out
 
 metrics:
 	ant jdepend
