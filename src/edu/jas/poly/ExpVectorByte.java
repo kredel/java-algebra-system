@@ -144,6 +144,17 @@ public final class ExpVectorByte extends ExpVector
 
 
     /**
+     * Value of other.
+     * @param e other ExpVector.
+     * @return value in sub class of ExpVector.
+     */
+    //@Override
+    public static ExpVector valueOf(ExpVector e) {
+        return new ExpVectorByte(e.getVal());
+    }
+
+
+    /**
      * Clone this.
      * @see java.lang.Object#clone()
      */

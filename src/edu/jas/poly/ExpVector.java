@@ -196,6 +196,17 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector> {
 
 
     /**
+     * Value of other.
+     * @param e other ExpVector.
+     * @return value in sub class of ExpVector.
+     */
+    public static ExpVector valueOf(ExpVector e) {
+        //return ExpVector.create(e.getVal());
+        throw new UnsupportedOperationException("no general conversion");
+    }
+
+
+    /**
      * Clone this.
      * @see java.lang.Object#clone()
      */
