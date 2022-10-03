@@ -633,4 +633,44 @@ public class RecSolvablePolynomialTest extends TestCase {
         assertEquals("dd == cd", dd, cd);
     }
 
+
+    /**
+     * Test right recursive representation.
+     */
+    public void testRightRecursive() {
+        String[] svars = new String[] { "w", "x", "y", "z" };
+        GenSolvablePolynomialRing<BigRational> sring = new GenSolvablePolynomialRing<BigRational>(cfac, tord,
+                        svars);
+        RelationGenerator<BigRational> wlc = new WeylRelations<BigRational>();
+        //wlc.generate(sring);
+        sring.addRelations(wlc);
+        assertFalse("isCommutative()", sring.isCommutative());
+        assertTrue("isAssociative()", sring.isAssociative());
+        //System.out.println("sring = " + sring.toScript());
+
+        GenSolvablePolynomialRing<GenPolynomial<BigRational>> rsring = sring.recursive(2); // 1,2,3
+        //System.out.println("rsring = " + rsring.toScript());
+
+        a = (RecSolvablePolynomial<BigRational>) rsring.random(kl, ll, el, q);
+        //System.out.println("a = " + a);
+        d = (RecSolvablePolynomial<BigRational>) a.rightRecursivePolynomial();
+        //System.out.println("d = " + d);
+        e = (RecSolvablePolynomial<BigRational>) d.evalAsRightRecursivePolynomial();
+        //System.out.println("e = " + e);
+
+        assertEquals("eval(right(a)) == a", a, e);
+        assertTrue("d == isRight(right(a))", a.isRightRecursivePolynomial(d));
+
+        GenSolvablePolynomial<GenPolynomial<BigRational>> ar, dr, er;
+        ar = rsring.random(kl, ll, el, q);
+        //System.out.println("ar = " + ar);
+        dr = ar.rightRecursivePolynomial();
+        //System.out.println("dr = " + dr);
+        er = dr.evalAsRightRecursivePolynomial();
+        //System.out.println("er = " + er);
+
+        assertEquals("eval(right(ar)) == ar", ar, er);
+        assertTrue("dr == isRight(right(ar))", ar.isRightRecursivePolynomial(dr));
+    }
+
 }
