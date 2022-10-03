@@ -95,6 +95,14 @@ public class GenWordPolynomialTest extends TestCase {
         assertTrue("associative", pf.isAssociative());
         assertFalse("not field", pf.isField());
 
+        String s = pf.toScript();
+        //System.out.println("pf.toScript: " + s + ", " + s.length());
+        assertEquals("#s == 32: " + s, s.length(), 32);
+
+        s = pf.toString();
+        //System.out.println("pf.toString: " + s + ", " + s.length());
+        assertEquals("#s == 32: " + s, s.length(), 32);
+
         GenWordPolynomial<BigInteger> p = pf.getONE();
         //System.out.println("p = " + p);
         assertTrue("p == 1", p.isONE());
@@ -484,6 +492,18 @@ public class GenWordPolynomialTest extends TestCase {
         f = e.remainder(b);
         //System.out.println("f = " + f);
         assertTrue("d * a == 1 mod b ", f.isONE());
+
+        GenWordPolynomial<BigRational>[] egcd;
+        egcd = a.egcd(b);
+        d = egcd[0];
+        e = egcd[1];
+        f = egcd[2];
+        //System.out.println("d = " + d);
+        //System.out.println("e = " + e);
+        //System.out.println("f = " + f);
+        c = e.multiply(a).sum( f.multiply(b) );
+        //System.out.println("d = " + d);
+        assertEquals("gcd(a,b) == e*a + f*b", c, d); // since univariate
     }
 
 
@@ -730,8 +750,11 @@ public class GenWordPolynomialTest extends TestCase {
         GenWordPolynomial<BigInteger> ga, gb, crel;
         ga = gens.get(1);
         gb = gens.get(2);
-        //System.out.println("ga = " + ga);
+        //System.out.println("ga = " + ga + ", " + ga.toScript());
         //System.out.println("gb = " + gb);
+        assertEquals("#s == 3: ", ga.toString().length(), 3);
+        assertEquals("#s == 1: ", ga.toScript().length(), 1);
+
         crel = ga.multiply(gb).subtract(gb.multiply(ga));
         //System.out.println("crel = " + crel);
 

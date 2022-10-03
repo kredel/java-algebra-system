@@ -576,36 +576,37 @@ public class ExpVectorTest extends TestCase {
      * Test ExpVectorInteger constructor and toString.
      */
     public void testIntegerConstructor() {
-        a = ExpVectorInteger.create(0);
-        b = ExpVectorInteger.create(0);
-        assertEquals("() = ()", a, b);
-        assertEquals("length( () ) = 0", a.length(), 0);
-        assertTrue("isZERO( () )", a.isZERO());
-
-        a = ExpVectorInteger.create(10);
-        b = ExpVectorInteger.create(10);
+        a = new ExpVectorInteger(10);
+        b = new ExpVectorInteger(10);
         assertEquals("10e = 10e", a, b);
         assertEquals("length( 10e ) = 10", a.length(), 10);
         assertTrue("isZERO( ( 10e ) )", a.isZERO());
 
         String s = "(0,0,0,0,0,0,0,0,0,0)";
-        a = ExpVectorInteger.create(s);
+        a = new ExpVectorInteger(s);
         String t = a.toString().substring(0, s.length());
-
         assertEquals("stringConstr = toString", s, t);
         assertTrue("isZERO( ( 10e ) )", a.isZERO());
 
-        a = ExpVectorInteger.random(10, 20, 0.5f);
-        //System.out.println("a = " + a); // + ", " + a.toScript());
+        a = ExpVectorInteger.valueOf(ExpVector.random(10, 20, 0.5f));
+        //System.out.println("a = " + a);
         t = a.toString();
-        b = ExpVectorInteger.create(t);
+        b = new ExpVectorInteger(t);
+        //System.out.println("b = " + b);
         assertEquals("parse(toString(a)) == a", a, b);
 
-        b = ExpVectorInteger.valueOf(a);
+        b = ExpVectorInteger.valueOf(ExpVector.random(10, 20, 0.5f));
         //System.out.println("b = " + b);
-        c = ExpVector.create(b.getVal());
+        c = new ExpVectorInteger(b.getVal());
         //System.out.println("c = " + c);
-        assertEquals("int(a) == a", c, a);
+        assertEquals("int(b) == c", b, c);
+
+        c = a.lcm(b);
+        //System.out.println("c = " + c);
+        assertTrue("deg(lcm(a,b)) >= deg(a)", c.totalDeg() >= a.totalDeg());
+        assertTrue("deg(lcm(a,b)) >= deg(b)", c.totalDeg() >= b.totalDeg());
+        assertTrue("a | lcm(a,b)", c.multipleOf(a));
+        assertTrue("b | lcm(a,b)", c.multipleOf(b));
     }
 
 
@@ -613,36 +614,36 @@ public class ExpVectorTest extends TestCase {
      * Test ExpVectorShort constructor and toString.
      */
     public void testShortConstructor() {
-        a = ExpVectorShort.create(0);
-        b = ExpVectorShort.create(0);
-        assertEquals("() = ()", a, b);
-        assertEquals("length( () ) = 0", a.length(), 0);
-        assertTrue("isZERO( () )", a.isZERO());
-
-        a = ExpVectorShort.create(10);
-        b = ExpVectorShort.create(10);
+        a = new ExpVectorShort(10);
+        b = new ExpVectorShort(10);
         assertEquals("10e = 10e", a, b);
         assertEquals("length( 10e ) = 10", a.length(), 10);
         assertTrue("isZERO( ( 10e ) )", a.isZERO());
 
         String s = "(0,0,0,0,0,0,0,0,0,0)";
-        a = ExpVectorShort.create(s);
+        a = new ExpVectorShort(s);
         String t = a.toString().substring(0, s.length());
-
         assertEquals("stringConstr = toString", s, t);
         assertTrue("isZERO( ( 10e ) )", a.isZERO());
 
-        a = ExpVectorShort.random(10, 20, 0.5f);
+        a = ExpVectorShort.valueOf(ExpVector.random(10, 20, 0.5f));
         //System.out.println("a = " + a); // + ", " + a.toScript());
         t = a.toString();
-        b = ExpVectorShort.create(t);
+        b = new ExpVectorShort(t);
         assertEquals("parse(toString(a)) == a", a, b);
 
-        b = ExpVectorShort.valueOf(a);
+        b = ExpVectorShort.valueOf(ExpVector.random(10, 20, 0.5f));
         //System.out.println("b = " + b);
-        c = ExpVector.create(b.getVal());
+        c = new ExpVectorShort(b.getVal());
         //System.out.println("c = " + c);
-        assertEquals("int(a) == a", c, a);
+        assertEquals("short(a) == a", b, c);
+
+        c = a.lcm(b);
+        //System.out.println("c = " + c);
+        assertTrue("deg(lcm(a,b)) >= deg(a)", c.totalDeg() >= a.totalDeg());
+        assertTrue("deg(lcm(a,b)) >= deg(b)", c.totalDeg() >= b.totalDeg());
+        assertTrue("a | lcm(a,b)", c.multipleOf(a));
+        assertTrue("b | lcm(a,b)", c.multipleOf(b));
     }
 
 
@@ -650,36 +651,36 @@ public class ExpVectorTest extends TestCase {
      * Test ExpVectorByte constructor and toString.
      */
     public void testByteConstructor() {
-        a = ExpVectorByte.create(0);
-        b = ExpVectorByte.create(0);
-        assertEquals("() = ()", a, b);
-        assertEquals("length( () ) = 0", a.length(), 0);
-        assertTrue("isZERO( () )", a.isZERO());
-
-        a = ExpVectorByte.create(10);
-        b = ExpVectorByte.create(10);
+        a = new ExpVectorByte(10);
+        b = new ExpVectorByte(10);
         assertEquals("10e = 10e", a, b);
         assertEquals("length( 10e ) = 10", a.length(), 10);
         assertTrue("isZERO( ( 10e ) )", a.isZERO());
 
         String s = "(0,0,0,0,0,0,0,0,0,0)";
-        a = ExpVectorByte.create(s);
+        a = new ExpVectorByte(s);
         String t = a.toString().substring(0, s.length());
-
         assertEquals("stringConstr = toString", s, t);
         assertTrue("isZERO( ( 10e ) )", a.isZERO());
 
-        a = ExpVectorByte.random(10, 20, 0.5f);
+        a = ExpVectorByte.valueOf(ExpVector.random(10, 20, 0.5f));
         //System.out.println("a = " + a); // + ", " + a.toScript());
         t = a.toString();
-        b = ExpVectorByte.create(t);
+        b = new ExpVectorByte(t);
         assertEquals("parse(toString(a)) == a", a, b);
 
-        b = ExpVectorByte.valueOf(a);
+        b = ExpVectorByte.valueOf(ExpVector.random(10, 20, 0.5f));
         //System.out.println("b = " + b);
-        c = ExpVector.create(b.getVal());
+        c = new ExpVectorByte(b.getVal());
         //System.out.println("c = " + c);
-        assertEquals("int(a) == a", c, a);
+        assertEquals("byte(a) == c", b, c);
+
+        c = a.lcm(b);
+        //System.out.println("c = " + c);
+        assertTrue("deg(lcm(a,b)) >= deg(a)", c.totalDeg() >= a.totalDeg());
+        assertTrue("deg(lcm(a,b)) >= deg(b)", c.totalDeg() >= b.totalDeg());
+        assertTrue("a | lcm(a,b)", c.multipleOf(a));
+        assertTrue("b | lcm(a,b)", c.multipleOf(b));
     }
 
 }
