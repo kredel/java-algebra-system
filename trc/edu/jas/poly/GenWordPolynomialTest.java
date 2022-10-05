@@ -306,6 +306,8 @@ public class GenWordPolynomialTest extends TestCase {
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
+        assertTrue("deg(a+b) >= deg(a)", c.degree() >= a.degree());
+        assertTrue("deg(a+b) >= deg(b)", c.degree() >= b.degree());
 
         c = fac.random(kl, ll, el);
         //System.out.println("\nc = " + c);
@@ -378,6 +380,8 @@ public class GenWordPolynomialTest extends TestCase {
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
+        assertTrue("maxNorm(a*b) >= maxNorm(a)", c.maxNorm().compareTo(a.maxNorm()) >= 0);
+        assertTrue("maxNorm(a*b) >= maxNorm(b)", c.maxNorm().compareTo(b.maxNorm()) >= 0);
 
         c = fac.random(kl, ll, el);
         //System.out.println("c = " + c);
@@ -395,7 +399,7 @@ public class GenWordPolynomialTest extends TestCase {
         b = new GenWordPolynomial<BigInteger>(fac, x, u);
         c = a.multiply(b);
         d = a.multiply(x, u);
-        assertEquals("a+p(x,u) = a+(x,u)", c, d);
+        assertEquals("a*p(x,u) = a*(x,u)", c, d);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
 
@@ -403,11 +407,18 @@ public class GenWordPolynomialTest extends TestCase {
         b = new GenWordPolynomial<BigInteger>(fac, x, u);
         c = a.multiply(b);
         d = a.multiply(x, u);
-        assertEquals("a+p(x,u) = a+(x,u)", c, d);
+        assertEquals("a*p(x,u) = a*(x,u)", c, d);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
+
+        BigInteger y = rf.random(kl);
+        c = a.multiply(x,y);
+        //System.out.println("c = " + c);
+        d = a.multiply(y,x);
+        //System.out.println("d = " + d);
+        assertEquals("x a y = y a x", c, d);
     }
 
 

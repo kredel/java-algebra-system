@@ -85,6 +85,10 @@ public class PolynomialListTest extends TestCase {
                                             new ArrayList<GenPolynomial<BigRational>>());
         assertTrue("m = 0", m.list != null);
         assertTrue("m.size() == 0", m.list.size() == 0 );
+
+        String s = m.toScript();
+        //System.out.println("m.toScript: " + s + ", " + s.length());
+        assertEquals("#s == 60: " + s, s.length(), 60);
     }
 
 

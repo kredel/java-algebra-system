@@ -179,6 +179,10 @@ public class ResidueSolvablePolynomialQLRTest extends TestCase {
             assertFalse("not isZERO( g )", g.isZERO());
         }
         //System.out.println("");
+
+        String s = ring.toScript();
+        //System.out.println("ring.toScript: " + s + ", " + s.length());
+        assertEquals("#s == 291: " + s, s.length(), 291);
     }
 
 
