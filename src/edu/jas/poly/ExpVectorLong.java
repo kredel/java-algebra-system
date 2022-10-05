@@ -278,7 +278,7 @@ public final class ExpVectorLong extends ExpVector
      */
     @Override
     public ExpVectorLong reverse(int j) {
-        if (j <= 0 || j > val.length) {
+        if (j < 0 || j > val.length) {
             return this;
         }
         long[] w = new long[val.length];
@@ -303,7 +303,7 @@ public final class ExpVectorLong extends ExpVector
      * @return reversed exponent vector.
      */
     public ExpVectorLong reverseUpper(int j) {
-        if (j <= 0 || j > val.length) {
+        if (j < 0 || j > val.length) {
             return this;
         }
         long[] w = new long[val.length];

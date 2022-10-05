@@ -316,7 +316,7 @@ public final class ExpVectorShort extends ExpVector
      */
     @Override
     public ExpVectorShort reverse(int j) {
-        if (j <= 0 || j > val.length) {
+        if (j < 0 || j > val.length) {
             return this;
         }
         short[] w = new short[val.length];

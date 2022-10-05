@@ -88,6 +88,10 @@ public class ExpVectorTest extends TestCase {
 
         assertEquals("stringConstr = toString", s, t);
         assertTrue("isZERO( ( 10e ) )", a.isZERO());
+
+        s = a.toScript();
+        //System.out.println("a.toScript: " + s + ", " + s.length());
+        assertEquals("#s == 0: " + s, s.length(), 0);
     }
 
 
@@ -126,6 +130,12 @@ public class ExpVectorTest extends TestCase {
         c = ExpVector.EVDIF(b, a);
 
         assertTrue("a-b = 0", c.isZERO());
+
+        c = a.reverse();
+        //System.out.println("c = " + c);
+        d = c.reverse(0);
+        //System.out.println("d = " + d);
+        assertEquals("rev(rev(a),0) == a", a, d);
     }
 
 
@@ -573,9 +583,9 @@ public class ExpVectorTest extends TestCase {
 
 
     /**
-     * Test ExpVectorInteger constructor and toString.
+     * Test ExpVectorInteger.
      */
-    public void testIntegerConstructor() {
+    public void testInteger() {
         a = new ExpVectorInteger(10);
         b = new ExpVectorInteger(10);
         assertEquals("10e = 10e", a, b);
@@ -607,13 +617,28 @@ public class ExpVectorTest extends TestCase {
         assertTrue("deg(lcm(a,b)) >= deg(b)", c.totalDeg() >= b.totalDeg());
         assertTrue("a | lcm(a,b)", c.multipleOf(a));
         assertTrue("b | lcm(a,b)", c.multipleOf(b));
+
+        d = a.gcd(b);
+        //System.out.println("d = " + d);
+        ExpVector e, f;
+        e = c.sum(d);
+        f = a.sum(b);
+        //System.out.println("e = " + e);
+        //System.out.println("f = " + f);
+        assertEquals("lcm(a,b)*gcd(a,b) == a*b", e, f);
+
+        c = a.reverse();
+        //System.out.println("c = " + c);
+        d = c.reverse(0);
+        //System.out.println("d = " + d);
+        assertEquals("rev(rev(a),0) == a", a, d);
     }
 
 
     /**
-     * Test ExpVectorShort constructor and toString.
+     * Test ExpVectorShort.
      */
-    public void testShortConstructor() {
+    public void testShort() {
         a = new ExpVectorShort(10);
         b = new ExpVectorShort(10);
         assertEquals("10e = 10e", a, b);
@@ -644,13 +669,28 @@ public class ExpVectorTest extends TestCase {
         assertTrue("deg(lcm(a,b)) >= deg(b)", c.totalDeg() >= b.totalDeg());
         assertTrue("a | lcm(a,b)", c.multipleOf(a));
         assertTrue("b | lcm(a,b)", c.multipleOf(b));
+
+        d = a.gcd(b);
+        //System.out.println("d = " + d);
+        ExpVector e, f;
+        e = c.sum(d);
+        f = a.sum(b);
+        //System.out.println("e = " + e);
+        //System.out.println("f = " + f);
+        assertEquals("lcm(a,b)*gcd(a,b) == a*b", e, f);
+
+        c = a.reverse();
+        //System.out.println("c = " + c);
+        d = c.reverse(0);
+        //System.out.println("d = " + d);
+        assertEquals("rev(rev(a),0) == a", a, d);
     }
 
 
     /**
-     * Test ExpVectorByte constructor and toString.
+     * Test ExpVectorByte.
      */
-    public void testByteConstructor() {
+    public void testByte() {
         a = new ExpVectorByte(10);
         b = new ExpVectorByte(10);
         assertEquals("10e = 10e", a, b);
@@ -681,6 +721,21 @@ public class ExpVectorTest extends TestCase {
         assertTrue("deg(lcm(a,b)) >= deg(b)", c.totalDeg() >= b.totalDeg());
         assertTrue("a | lcm(a,b)", c.multipleOf(a));
         assertTrue("b | lcm(a,b)", c.multipleOf(b));
+
+        d = a.gcd(b);
+        //System.out.println("d = " + d);
+        ExpVector e, f;
+        e = c.sum(d);
+        f = a.sum(b);
+        //System.out.println("e = " + e);
+        //System.out.println("f = " + f);
+        assertEquals("lcm(a,b)*gcd(a,b) == a*b", e, f);
+
+        c = a.reverse();
+        //System.out.println("c = " + c);
+        d = c.reverse(0);
+        //System.out.println("d = " + d);
+        assertEquals("rev(rev(a),0) == a", a, d);
     }
 
 }

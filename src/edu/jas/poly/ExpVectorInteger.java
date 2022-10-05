@@ -316,7 +316,7 @@ public final class ExpVectorInteger extends ExpVector
      */
     @Override
     public ExpVectorInteger reverse(int j) {
-        if (j <= 0 || j > val.length) {
+        if (j < 0 || j > val.length) {
             return this;
         }
         int[] w = new int[val.length];

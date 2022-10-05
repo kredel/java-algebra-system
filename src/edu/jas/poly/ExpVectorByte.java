@@ -316,7 +316,7 @@ public final class ExpVectorByte extends ExpVector
      */
     @Override
     public ExpVectorByte reverse(int j) {
-        if (j <= 0 || j > val.length) {
+        if (j < 0 || j > val.length) {
             return this;
         }
         byte[] w = new byte[val.length];
