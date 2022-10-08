@@ -4,6 +4,7 @@
 
 package edu.jas.poly;
 
+import java.util.Arrays;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -69,7 +70,6 @@ public class TermOrderByNameTest extends TestCase {
      * Test constructor and toString.
      */
     public void testConstructor() {
-
         s = TermOrderByName.DEFAULT;
         t = TermOrderByName.DEFAULT;
         assertEquals("t = s", t, s);
@@ -528,6 +528,30 @@ public class TermOrderByNameTest extends TestCase {
         } catch (ArrayIndexOutOfBoundsException e) {
             //return;
         }
+    }
+
+
+    /**
+     * Test weight for order.
+     */
+    public void testWeigthForOrder() {
+        int r = 10;
+        long[][] w;
+
+        w = TermOrderByName.weightForOrder(TermOrderByName.INVLEX, r);
+        //System.out.println("w = " + Arrays.toString(w[0]));
+        assertEquals("w[0][0] = 1", w[0][0], 1L);
+        assertEquals("w[0][r-1] = 1", w[0][r-1], 0L);
+
+        w = TermOrderByName.weightForOrder(TermOrderByName.IGRLEX, r);
+        //System.out.println("w = " + Arrays.toString(w[0]));
+        assertEquals("w[0][0] = 1", w[0][0], 1L);
+        assertEquals("w[0][r-1] = 1", w[0][r-1], 1L);
+
+        w = TermOrderByName.weightForOrder(TermOrderByName.REVILEX, r);
+        //System.out.println("w = " + Arrays.toString(w[0]));
+        assertEquals("w[0][r-1] = 1", w[0][r-1], 1L);
+        assertEquals("w[0][0] = 0", w[0][0], 0L);
     }
 
 }

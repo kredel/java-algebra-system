@@ -141,6 +141,10 @@ public class TermOrderOptimizationTest extends TestCase {
         //System.out.println("Fi = " + Fi);
         assertEquals("r == ri: ", fac, faci);
         assertEquals("F == Fi: ", F, Fi);
+
+        String s = Fo.toString();
+        //System.out.println("Fo.toString: " + s + ", " + s.length());
+        assertTrue("#s >= 1000: " + s, s.length() >= 1000);
     }
 
 
