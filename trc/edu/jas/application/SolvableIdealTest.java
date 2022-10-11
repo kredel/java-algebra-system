@@ -121,9 +121,9 @@ public class SolvableIdealTest extends TestCase {
 
 
     /**
-     * Test Ideal sum.
+     * Test left ideal sum.
      */
-    public void testIdealSum() {
+    public void testLeftIdealSum() {
         SolvableIdeal<BigRational> I, J, K;
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
 
@@ -133,8 +133,21 @@ public class SolvableIdealTest extends TestCase {
         d = fac.random(kl, ll, el, q);
         e = d; //fac.random(kl, ll, el, q );
 
-        if (a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO()) {
-            return;
+        L = PolynomialList.castToSolvableList(fac.generators());
+        //System.out.println("generators: " + L);
+        int k = L.size() - rl;
+        if (a.isZERO()) {
+            a = L.get(k++);
+        }
+        if (b.isZERO()) {
+            b = L.get(k++);
+        }
+        if (c.isZERO()) {
+            c = L.get(k++);
+        }
+        if (d.isZERO()) {
+            d = L.get(k++);
+            e = d;
         }
 
         assertTrue("not isZERO( a )", !a.isZERO());
@@ -145,10 +158,13 @@ public class SolvableIdealTest extends TestCase {
         //assertTrue("not isONE( I )", !I.isONE());
         assertTrue("isGB( I )", I.isGB());
 
+        assertTrue("isZERO( 0 )", I.getZERO().isZERO());
+        assertTrue("isONE( 1 )", I.getONE().isONE());
+
         I = new SolvableIdeal<BigRational>(fac, L, false);
         assertTrue("not isZERO( I )", !I.isZERO());
         //assertTrue("not isONE( I )", !I.isONE());
-        assertTrue("isGB( I )", I.isGB());
+        assertTrue("isGB( I ): " + I.toScript(), I.isGB());
 
         L = bb.leftGB(L);
         assertTrue("isGB( { a } )", bb.isLeftGB(L));
@@ -162,6 +178,10 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("not isZERO( I )", !I.isZERO());
         //assertTrue("not isONE( I )", !I.isONE() );
         assertTrue("isGB( I )", I.isGB());
+
+        String s = I.toScript() + "\n" + I.toString();
+        //System.out.println("#s = " + s.length() + ": " + s);
+        assertTrue("#s >= 260: ", s.length() >= 260);
 
         assertTrue("not isZERO( b )", !b.isZERO());
         L.add(b);
@@ -228,6 +248,253 @@ public class SolvableIdealTest extends TestCase {
 
 
     /**
+     * Test right ideal sum.
+     */
+    public void testRightIdealSum() {
+        SolvableIdeal<BigRational> Ir, Jr, Kr;
+        L = new ArrayList<GenSolvablePolynomial<BigRational>>();
+
+        a = fac.random(kl, ll, el, q);
+        b = fac.random(kl, ll, el, q);
+        c = fac.random(kl, ll, el, q);
+        d = fac.random(kl, ll, el, q);
+        e = d; //fac.random(kl, ll, el, q );
+
+        L = PolynomialList.castToSolvableList(fac.generators());
+        //System.out.println("generators: " + L);
+        int k = L.size() - rl;
+        if (a.isZERO()) {
+            a = L.get(k++);
+        }
+        if (b.isZERO()) {
+            b = L.get(k++);
+        }
+        if (c.isZERO()) {
+            c = L.get(k++);
+        }
+        if (d.isZERO()) {
+            d = L.get(k++);
+            e = d;
+        }
+
+        assertTrue("not isZERO( a )", !a.isZERO());
+        L.add(a);
+
+        Ir = new SolvableIdeal<BigRational>(fac, L, true, SolvableIdeal.Side.right);
+        assertTrue("not isZERO( Ir )", !Ir.isZERO());
+        //assertTrue("not isONE( Ir )", !Ir.isONE());
+        assertTrue("isGB( Ir )", Ir.isGB());
+
+        Ir = new SolvableIdeal<BigRational>(fac, L, false, SolvableIdeal.Side.right);
+        assertTrue("not isZERO( Ir )", !Ir.isZERO());
+        //assertTrue("not isONE( Ir )", !Ir.isONE());
+        assertTrue("isGB( Ir ): " + Ir.toScript(), Ir.isGB());
+        assertTrue("isGB( Ir )", Ir.isRightGB());
+
+        L = bb.rightGB(L);
+        assertTrue("isGB( { a } )", bb.isRightGB(L));
+
+        Ir = new SolvableIdeal<BigRational>(fac, L, true, SolvableIdeal.Side.right);
+        assertTrue("not isZERO( Ir )", !Ir.isZERO());
+        //assertTrue("not isONE( Ir )", !Ir.isONE() );
+        assertTrue("isGB( Ir )", Ir.isGB());
+        assertTrue("isGB( Ir )", Ir.isRightGB());
+
+        Ir = new SolvableIdeal<BigRational>(fac, L, false, SolvableIdeal.Side.right);
+        assertTrue("not isZERO( Ir )", !Ir.isZERO());
+        //assertTrue("not isONE( Ir )", !Ir.isONE() );
+        assertTrue("isGB( Ir )", Ir.isGB());
+
+        String s = Ir.toScript() + "\n" + Ir.toString();
+        //System.out.println("#s = " + s.length() + ": " + s);
+        assertTrue("#s >= 260: ", s.length() >= 260);
+
+        assertTrue("not isZERO( b )", !b.isZERO());
+        L.add(b);
+        //System.out.println("L = " + L.size() );
+
+        Ir = new SolvableIdeal<BigRational>(fac, L, false, SolvableIdeal.Side.right);
+        assertTrue("not isZERO( Ir )", !Ir.isZERO());
+        //assertTrue("not isONE( Ir )", !Ir.isONE() );
+        //assertTrue("not isGB( Ir )", !Ir.isGB() );
+
+        L = bb.rightGB(L);
+        assertTrue("isGB( { a, b } )", bb.isRightGB(L));
+
+        Ir = new SolvableIdeal<BigRational>(fac, L, true, SolvableIdeal.Side.right);
+        assertTrue("not isZERO( Ir )", !Ir.isZERO());
+        // assertTrue("not isONE( Ir )", !Ir.isONE() );
+        assertTrue("isGB( Ir )", Ir.isRightGB());
+        assertTrue("isGB( Ir )", Ir.isGB());
+        Jr = Ir.rightGB();
+        assertTrue("isGB( Jr )", Jr.isRightGB());
+
+        Jr = Ir;
+        Kr = Jr.sum(Ir);
+        assertTrue("not isZERO( Kr )", !Kr.isZERO());
+        assertTrue("isGB( Kr )", Kr.isGB());
+        assertTrue("equals( Kr, Ir )", Kr.equals(Ir));
+
+        L = new ArrayList<GenSolvablePolynomial<BigRational>>();
+        assertTrue("not isZERO( c )", !c.isZERO());
+        L.add(c);
+        assertTrue("isGB( { c } )", bb.isRightGB(L));
+
+        Jr = new SolvableIdeal<BigRational>(fac, L, true, SolvableIdeal.Side.right);
+        Kr = Jr.sum(Ir);
+        assertTrue("not isZERO( Kr )", !Kr.isZERO());
+        assertTrue("isGB( Kr )", Kr.isGB());
+        assertTrue("Kr contains(Ir)", Kr.contains(Ir));
+        assertTrue("Kr contains(Jr)", Kr.contains(Jr));
+
+        L = new ArrayList<GenSolvablePolynomial<BigRational>>();
+        assertTrue("not isZERO( d )", !d.isZERO());
+        L.add(d);
+
+        assertTrue("isGB( { d } )", bb.isRightGB(L));
+        Jr = new SolvableIdeal<BigRational>(fac, L, true);
+        Ir = Kr;
+        Kr = Jr.sum(Ir);
+        assertTrue("not isZERO( Kr )", !Kr.isZERO());
+        assertTrue("isGB( Kr )", Kr.isGB());
+        assertTrue("Kr contains(Ir)", Kr.contains(Ir));
+        assertTrue("Kr contains(Jr)", Kr.contains(Jr));
+
+        L = new ArrayList<GenSolvablePolynomial<BigRational>>();
+        assertTrue("not isZERO( e )", !e.isZERO());
+        L.add(e);
+
+        assertTrue("isGB( { e } )", bb.isRightGB(L));
+        Jr = new SolvableIdeal<BigRational>(fac, L, true, SolvableIdeal.Side.right);
+        Ir = Kr;
+        Kr = Jr.sum(Ir);
+        assertTrue("not isZERO( Kr )", !Kr.isZERO());
+        assertTrue("isGB( Kr )", Kr.isGB());
+        assertTrue("equals( Kr, Ir )", Kr.equals(Ir));
+        assertTrue("Kr contains(Jr)", Kr.contains(Ir));
+        assertTrue("Ir contains(Kr)", Ir.contains(Kr));
+    }
+
+
+    /**
+     * Test twosided ideal sum.
+     */
+    public void testTwosideIdealSum() {
+        SolvableIdeal<BigRational> It, Jt, Kt;
+        L = new ArrayList<GenSolvablePolynomial<BigRational>>();
+
+        a = fac.random(kl, ll, el, q);
+        b = fac.random(kl, ll, el, q);
+        c = fac.random(kl, ll, el, q);
+        d = fac.random(kl, ll, el, q);
+        e = d; //fac.random(kl, ll, el, q );
+
+        L = PolynomialList.castToSolvableList(fac.generators());
+        //System.out.println("generators: " + L);
+        int k = L.size() - rl;
+        if (a.isZERO()) {
+            a = L.get(k++);
+        }
+        if (b.isZERO()) {
+            b = L.get(k++);
+        }
+        if (c.isZERO()) {
+            c = L.get(k++);
+        }
+        if (d.isZERO()) {
+            d = L.get(k++);
+            e = d;
+        }
+
+        assertTrue("not isZERO( a )", !a.isZERO());
+        L.add(a);
+
+        It = new SolvableIdeal<BigRational>(fac, L, true, SolvableIdeal.Side.twosided);
+        assertTrue("not isZERO( It )", !It.isZERO());
+        //assertTrue("not isONE( It )", !It.isONE());
+        assertTrue("isGB( It )", It.isGB());
+
+        L = bb.twosidedGB(L);
+        assertTrue("isGB( { a } )", bb.isTwosidedGB(L));
+        It = new SolvableIdeal<BigRational>(fac, L, false, SolvableIdeal.Side.twosided);
+        assertTrue("not isZERO( It )", !It.isZERO());
+        //assertTrue("not isONE( It )", !It.isONE());
+        assertTrue("isGB( It ): " + It.toScript(), It.isGB());
+
+        It = new SolvableIdeal<BigRational>(fac, L, true, SolvableIdeal.Side.twosided);
+        assertTrue("not isZERO( It )", !It.isZERO());
+        //assertTrue("not isONE( It )", !It.isONE() );
+        assertTrue("isGB( It )", It.isGB());
+
+        String s = It.toScript() + "\n" + It.toString();
+        //System.out.println("#s = " + s.length() + ": " + s);
+        assertTrue("#s >= 260: ", s.length() >= 260);
+
+        assertTrue("not isZERO( b )", !b.isZERO());
+        L.add(b);
+        //System.out.println("L = " + L.size() );
+
+        It = new SolvableIdeal<BigRational>(fac, L, false, SolvableIdeal.Side.twosided);
+        assertTrue("not isZERO( It )", !It.isZERO());
+        //assertTrue("not isONE( It )", !It.isONE() );
+        //assertTrue("not isGB( It )", !It.isGB() );
+
+        L = bb.twosidedGB(L);
+        assertTrue("isGB( { a, b } )", bb.isTwosidedGB(L));
+        It = new SolvableIdeal<BigRational>(fac, L, true, SolvableIdeal.Side.twosided);
+        assertTrue("not isZERO( It )", !It.isZERO());
+        // assertTrue("not isONE( It )", !It.isONE() );
+        assertTrue("isGB( It )", It.isGB());
+
+        Jt = It;
+        Kt = Jt.sum(It);
+        assertTrue("not isZERO( Kt )", !Kt.isZERO());
+        assertTrue("isGB( Kt )", Kt.isGB());
+        assertTrue("equals( Kt, It )", Kt.equals(It));
+
+        L = new ArrayList<GenSolvablePolynomial<BigRational>>();
+        assertTrue("not isZERO( c )", !c.isZERO());
+        L.add(c);
+        L = bb.twosidedGB(L);
+        assertTrue("isGB( { c } )", bb.isTwosidedGB(L));
+
+        Jt = new SolvableIdeal<BigRational>(fac, L, true, SolvableIdeal.Side.twosided);
+        Kt = Jt.sum(It);
+        assertTrue("not isZERO( Kt )", !Kt.isZERO());
+        assertTrue("isGB( Kt )", Kt.isGB());
+        assertTrue("Kt equals(It)", Kt.equals(It));
+        assertTrue("Kt equals(Jt)", Kt.equals(Jt));
+
+        L = new ArrayList<GenSolvablePolynomial<BigRational>>();
+        assertTrue("not isZERO( d )", !d.isZERO());
+        L.add(d);
+        L = bb.twosidedGB(L);
+        assertTrue("isGB( { d } )", bb.isTwosidedGB(L));
+        Jt = new SolvableIdeal<BigRational>(fac, L, true);
+        It = Kt;
+        Kt = Jt.sum(It);
+        assertTrue("not isZERO( Kt )", !Kt.isZERO());
+        assertTrue("isGB( Kt )", Kt.isGB());
+        assertTrue("Kt equals(It)", Kt.equals(It));
+        assertTrue("Kt equals(Jt)", Kt.equals(Jt));
+
+        L = new ArrayList<GenSolvablePolynomial<BigRational>>();
+        assertTrue("not isZERO( e )", !e.isZERO());
+        L.add(e);
+
+        assertTrue("isGB( { e } )", bb.isRightGB(L));
+        Jt = new SolvableIdeal<BigRational>(fac, L, true, SolvableIdeal.Side.twosided);
+        It = Kt;
+        Kt = Jt.sum(It);
+        assertTrue("not isZERO( Kt )", !Kt.isZERO());
+        assertTrue("isGB( Kt )", Kt.isGB());
+        assertTrue("equals( Kt, It )", Kt.equals(It));
+        //assertTrue("Kt contains(Jt)", Kt.contains(It));
+        //assertTrue("It contains(Kt)", It.contains(Kt));
+    }
+
+
+    /**
      * Test SolvableIdeal product.
      */
     public void testSolvableIdealProduct() {
@@ -249,7 +516,7 @@ public class SolvableIdealTest extends TestCase {
         I = new SolvableIdeal<BigRational>(fac, L, false);
         assertTrue("not isZERO( I )", !I.isZERO());
         assertTrue("not isONE( I )", !I.isONE() || a.isConstant());
-        assertTrue("isGB( I )", I.isGB());
+        assertTrue("isGB( I ): " + I.toScript(), I.isGB());
 
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
         assertTrue("not isZERO( b )", !a.isZERO());
@@ -258,7 +525,7 @@ public class SolvableIdealTest extends TestCase {
         J = new SolvableIdeal<BigRational>(fac, L, false);
         assertTrue("not isZERO( J )", !J.isZERO());
         assertTrue("not isONE( J )", !J.isONE() || a.isConstant() || b.isConstant());
-        assertTrue("isGB( J )", J.isGB());
+        assertTrue("isGB( J ): " + J.toScript(), J.isGB());
 
         K = I.product(J);
         //System.out.println("I = " + I);
@@ -339,8 +606,20 @@ public class SolvableIdealTest extends TestCase {
         d = c; //fac.random(kl, ll, el, q);
         e = d; //fac.random(kl, ll, el, q );
 
-        if (a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO()) {
-            return;
+        L = PolynomialList.castToSolvableList(fac.generators());
+        //System.out.println("generators: " + L);
+        int k = L.size() - rl;
+        if (a.isZERO()) {
+            a = L.get(k++);
+        }
+        if (b.isZERO()) {
+            b = L.get(k++);
+        }
+        if (c.isZERO()) {
+            c = L.get(k++);
+        }
+        if (d.isZERO()) {
+            d = L.get(k++);
         }
 
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -442,8 +721,21 @@ public class SolvableIdealTest extends TestCase {
         d = c; //fac.random(kl, ll, el, q);
         e = d; //fac.random(kl, ll, el, q );
 
-        if (a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO()) {
-            return;
+        L = PolynomialList.castToSolvableList(fac.generators());
+        //System.out.println("generators: " + L);
+        int k = L.size() - rl;
+        if (a.isZERO()) {
+            a = L.get(k++);
+        }
+        if (b.isZERO()) {
+            b = L.get(k++);
+        }
+        if (c.isZERO()) {
+            c = L.get(k++);
+        }
+        if (d.isZERO()) {
+            d = L.get(k++);
+            e = d;
         }
 
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -456,6 +748,9 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
 
         J = I.infiniteQuotient(a);
+        int x = I.infiniteQuotientExponent(a,J);
+        //System.out.println("I, a, J, x: " + I.toScript() + ", " + a + ", " + J.toScript() + ", " + x);
+        assertTrue("x >= 0: " + x, x >= 0);
 
         assertTrue("not isZERO( c )", !c.isZERO());
         L.add(c);
@@ -466,7 +761,7 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
 
         J = I.infiniteQuotient(a);
-        assertTrue("equals(J,I)", J.equals(I)); // GBs only
+        assertTrue("contains(J,I): " + J + ", " + I, J.contains(I)); // GBs only
 
         assertTrue("not isZERO( d )", !d.isZERO());
         L.add(d);
@@ -478,7 +773,7 @@ public class SolvableIdealTest extends TestCase {
 
         J = I.infiniteQuotient(a);
         assertTrue("isGB( J )", J.isGB());
-        assertTrue("equals(J,I)", J.equals(I)); // GBs only
+        assertTrue("contains(J,I)", J.contains(I)); // GBs only
 
         G = new ArrayList<GenSolvablePolynomial<BigRational>>();
         assertTrue("not isZERO( a )", !a.isZERO());
@@ -490,7 +785,7 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("isGB( K )", K.isGB());
 
         J = I.infiniteQuotient(K);
-        assertTrue("equals(J,I)", J.equals(I)); // GBs only
+        assertTrue("contains(J,I)", J.contains(I)); // GBs only
 
         assertTrue("not isZERO( e )", !e.isZERO());
         G.add(e);
@@ -501,14 +796,14 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("isGB( K )", K.isGB());
 
         J = I.infiniteQuotient(K);
-        assertTrue("equals(J,I)", J.equals(I)); // GBs only
+        assertTrue("contains(J,I)", J.contains(I)); // GBs only
     }
 
 
     /**
      * Test (commutative) SolvableIdeal infinite quotient with Rabinowich trick.
      */
-    public void testSolvableIdealInfiniteQuotientRabi() {
+    public void testSolvableIdealInfiniteQuotientRab() {
         fac = new GenSolvablePolynomialRing<BigRational>(fac.coFac, rl, fac.tord, fac.getVars());
         SolvableIdeal<BigRational> I, J, K, JJ;
         a = fac.random(kl - 1, ll - 1, el - 1, q / 2);
@@ -517,8 +812,20 @@ public class SolvableIdealTest extends TestCase {
         d = fac.random(kl - 1, ll - 1, el, q / 2);
         e = a; //fac.random(kl, ll-1, el, q );
 
-        if (a.isZERO() || b.isZERO() || c.isZERO() || d.isZERO()) {
-            return;
+        L = PolynomialList.castToSolvableList(fac.generators());
+        //System.out.println("generators: " + L);
+        int k = L.size() - rl;
+        if (a.isZERO()) {
+            a = L.get(k++);
+        }
+        if (b.isZERO()) {
+            b = L.get(k++);
+        }
+        if (c.isZERO()) {
+            c = L.get(k++);
+        }
+        if (d.isZERO()) {
+            d = L.get(k++);
         }
 
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -543,9 +850,9 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
 
         J = I.infiniteQuotientRab(a);
-        assertTrue("equals(J,I)", J.equals(I)); // GBs only
+        assertTrue("contains(J,I): " + J + ", " + I, J.contains(I)); // GBs only
         JJ = I.infiniteQuotient(a);
-        assertTrue("equals(J,JJ)", J.equals(JJ)); // GBs only
+        assertTrue("contains(J,JJ): " + J + ", " + JJ, J.contains(JJ)); // GBs only
 
         assertTrue("not isZERO( d )", !d.isZERO());
         L.add(d);
@@ -557,9 +864,9 @@ public class SolvableIdealTest extends TestCase {
 
         J = I.infiniteQuotientRab(a);
         assertTrue("isGB( J )", J.isGB());
-        assertTrue("equals(J,I)", J.equals(I)); // GBs only
+        assertTrue("contains(J,I)", J.contains(I)); // GBs only
         JJ = I.infiniteQuotient(a);
-        assertTrue("equals(J,JJ)", J.equals(JJ)); // GBs only
+        assertTrue("contains(J,JJ)", J.contains(JJ)); // GBs only
 
         G = new ArrayList<GenSolvablePolynomial<BigRational>>();
         assertTrue("not isZERO( a )", !a.isZERO());
@@ -571,9 +878,9 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("isGB( K )", K.isGB());
 
         J = I.infiniteQuotientRab(K);
-        assertTrue("equals(J,I)", J.equals(I)); // GBs only
+        assertTrue("contains(J,I)", J.contains(I)); // GBs only
         JJ = I.infiniteQuotient(a);
-        assertTrue("equals(J,JJ)", J.equals(JJ)); // GBs only
+        assertTrue("contains(J,JJ)", J.contains(JJ)); // GBs only
 
         assertTrue("not isZERO( e )", !e.isZERO());
         G.add(e);
@@ -584,9 +891,9 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("isGB( K )", K.isGB());
 
         J = I.infiniteQuotientRab(K);
-        assertTrue("equals(J,I)", J.equals(I)); // GBs only
+        assertTrue("contains(J,I)", J.contains(I)); // GBs only
         JJ = I.infiniteQuotient(a);
-        assertTrue("equals(J,JJ)", J.equals(JJ)); // GBs only
+        assertTrue("contains(J,JJ)", J.contains(JJ)); // GBs only
     }
 
 
@@ -602,8 +909,17 @@ public class SolvableIdealTest extends TestCase {
         //d = fac.random(kl - 1, ll - 1, el, q / 2);
         //e = a; //fac.random(kl, ll-1, el, q );
 
-        if (a.isZERO() || b.isZERO() || c.isZERO()) {
-            return;
+        L = PolynomialList.castToSolvableList(fac.generators());
+        //System.out.println("generators: " + L);
+        int k = L.size() - rl;
+        if (a.isZERO()) {
+            a = L.get(k++);
+        }
+        if (b.isZERO()) {
+            b = L.get(k++);
+        }
+        if (c.isZERO()) {
+            c = L.get(k++);
         }
 
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -619,8 +935,8 @@ public class SolvableIdealTest extends TestCase {
         //System.out.println("I = " + I);
 
         if (!I.isONE() && !a.equals(b)) {
-            assertFalse("a in radical(b)", I.isRadicalMember(a));
-            assertTrue("b in radical(b)", I.isRadicalMember(b));
+            assertFalse("a in radical(b): " + a + ", " + b, I.isRadicalMember(a));
+            assertTrue("b in radical(b): " + a + ", " + b, I.isRadicalMember(b));
         }
 
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -854,7 +1170,7 @@ public class SolvableIdealTest extends TestCase {
                     J = K.eliminate(efac);
                 }
                 //System.out.println("J = " + J.toScript());
-                assertTrue("isGB( J )", J.isGB());
+                assertTrue("isGB( J ): " + J.toScript(), J.isGB());
                 assertTrue("size( J ) <=  |ev|", J.getList().size() <= ev.size());
             }
         }

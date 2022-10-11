@@ -84,19 +84,7 @@ public class IdealTest extends TestCase {
     GroebnerBase<BigRational> bb;
 
 
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     int rl = 3; //4; //3; 
@@ -139,7 +127,6 @@ public class IdealTest extends TestCase {
      * Test Ideal sum.
      */
     public void testIdealSum() {
-
         Ideal<BigRational> I;
         Ideal<BigRational> J;
         Ideal<BigRational> K;
@@ -183,6 +170,9 @@ public class IdealTest extends TestCase {
         //assertTrue("not isONE( I )", !I.isONE() );
         assertTrue("isGB( I )", I.isGB());
 
+        String s = I.toScript() + "\n" + I.toString();
+        //System.out.println("#s = " + s.length() + ": " + s);
+        assertTrue("#s >= 90: ", s.length() >= 90);
 
         assertTrue("not isZERO( b )", !b.isZERO());
         L.add(b);
@@ -256,7 +246,6 @@ public class IdealTest extends TestCase {
      * Test Ideal product.
      */
     public void testIdealProduct() {
-
         Ideal<BigRational> I;
         Ideal<BigRational> J;
         Ideal<BigRational> K;
@@ -379,7 +368,6 @@ public class IdealTest extends TestCase {
      * Test Ideal quotient.
      */
     public void testIdealQuotient() {
-
         Ideal<BigRational> I;
         Ideal<BigRational> J;
         Ideal<BigRational> K;
@@ -486,7 +474,6 @@ public class IdealTest extends TestCase {
      * Test Ideal infinite quotient.
      */
     public void testIdealInfiniteQuotient() {
-
         Ideal<BigRational> I;
         Ideal<BigRational> J;
         Ideal<BigRational> K;
@@ -566,7 +553,6 @@ public class IdealTest extends TestCase {
      * Test Ideal infinite quotient with Rabinowich trick.
      */
     public void testIdealInfiniteQuotientRabi() {
-
         Ideal<BigRational> I;
         Ideal<BigRational> J;
         Ideal<BigRational> K;
@@ -657,7 +643,6 @@ public class IdealTest extends TestCase {
      * Test Ideal radical membership.
      */
     public void testIdealRadicalMember() {
-
         Ideal<BigRational> I;
         //Ideal<BigRational> J;
         //Ideal<BigRational> K;
@@ -727,7 +712,6 @@ public class IdealTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testIdealCommonZeros() {
-
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
 
@@ -767,7 +751,6 @@ public class IdealTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testIdealDimension() {
-
         Ideal<BigRational> I;
         L = new ArrayList<GenPolynomial<BigRational>>();
         Dimension dim;
@@ -834,7 +817,6 @@ public class IdealTest extends TestCase {
      * Test Ideal term order optimization.
      */
     public void testIdealTopt() {
-
         Ideal<BigRational> I;
         Ideal<BigRational> J;
         Ideal<BigRational> K;
@@ -924,7 +906,6 @@ public class IdealTest extends TestCase {
      * Test elimination Ideals.
      */
     public void testElimIdeal() {
-
         String[] vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);

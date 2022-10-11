@@ -281,8 +281,8 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                 }
                 q = p.multiply(x);
                 q = sred.leftNormalform(F, q);
-                //System.out.println("is: q generated = " + q + ", p = " + p + ", x = " + x);
                 if (!q.isZERO()) {
+                    //System.out.println("is: q generated = " + q + ", p = " + p + ", x = " + x);
                     return false;
                     //F.add(q);
                 }
@@ -304,6 +304,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                 h = sred.leftNormalform(F, s);
                 if (!h.isZERO()) {
                     logger.info("is not TwosidedGB: {}", h);
+                    //System.out.println("is: h = " + h + ", s = " + s);
                     return false;
                 }
             }

@@ -363,7 +363,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
      */
     @Override
     public String toString() {
-        return list.toString() + " # " + sided;
+        return list.toString() + " # " + sided + "-GB: " + isGB;
     }
 
 
@@ -374,7 +374,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
      */
     public String toScript() {
         // any script case
-        return list.toScript() + " # " + sided;
+        return list.toScript() + " # " + sided + "-GB: " + isGB;
     }
 
 
@@ -453,22 +453,23 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
 
     /**
      * Test if this is a left Groebner base.
-     * @return true, if this is a left Groebner base, else false
+     * @return true, if this is a left/right/twosided Groebner base, else false
      */
     public boolean isGB() {
-        if (testGB && sided == Side.left) {
+        if (testGB) {
             return isGB;
         }
-        logger.warn("isLeftGB computing");
-        boolean igb = bb.isLeftGB(getList());
-        if (sided != Side.left) {
-            logger.warn("wrong usage for is left sided GB: {}", sided);
-            //sided = Side.left;
-        } else {
-            isGB = igb;
-            testGB = true;
+        testGB = true;
+        boolean igb = false;
+        if (sided == Side.left) {
+            igb = bb.isLeftGB(getList());
+        } else if (sided == Side.right) {
+            igb = bb.isRightGB(getList());
+        } else if (sided == Side.twosided) {
+            igb = bb.isTwosidedGB(getList());
         }
-        return igb;
+        isGB = igb;
+        return isGB;
     }
 
 
@@ -483,18 +484,23 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (isGB && sided == Side.twosided) {
             return;
         }
-        if (sided == Side.right) {
-            logger.warn("wrong usage for left sided GB: {}", sided);
-            throw new IllegalArgumentException("wrong usage for left sided GB: " + sided);
+        if (isGB && sided == Side.right) {
+            return;
         }
+        // if (sided == Side.right) {
+        //     logger.warn("wrong usage for left sided GB: {}", sided);
+        //     throw new IllegalArgumentException("wrong usage for left sided GB: " + sided);
+        // }
         List<GenSolvablePolynomial<C>> G = getList();
         if (sided == Side.left) {
             logger.info("leftGB computing = {}", G);
             G = bb.leftGB(G);
-        }
-        if (sided == Side.twosided) {
+        } else if (sided == Side.twosided) {
             logger.info("twosidedGB computing = {}", G);
             G = bb.twosidedGB(G);
+        } else if (sided == Side.right) {
+            logger.info("rightGB computing = {}", G);
+            G = bb.rightGB(G);
         }
         //if (isTopt) {
         //    List<Integer> perm = ((OptimizedPolynomialList<C>) list).perm;
@@ -504,7 +510,6 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         list = new PolynomialList<C>(getRing(), G);
         isGB = true;
         testGB = true;
-        //sided = Side.left;
         return;
     }
 
@@ -533,7 +538,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         logger.warn("isTwosidedGB computing");
         isGB = bb.isTwosidedGB(getList());
         testGB = true;
-        sided = Side.twosided;
+        //sided = Side.twosided;
         return isGB;
     }
 
@@ -570,7 +575,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         logger.warn("isRightGB computing");
         isGB = bb.isRightGB(getList());
         testGB = true;
-        sided = Side.right;
+        //sided = Side.right;
         return isGB;
     }
 
@@ -606,6 +611,9 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (B == null || B.isZERO()) {
             return true;
         }
+        // if (sided != Side.left) {
+        //     throw new UnsupportedOperationException("only for left ideals");
+        // }
         return contains(B.getList());
     }
 
@@ -629,7 +637,21 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (!isGB) {
             doGB();
         }
-        GenSolvablePolynomial<C> z = red.leftNormalform(getList(), b);
+        GenSolvablePolynomial<C> z = null;
+        if (sided == Side.left) {
+            z = red.leftNormalform(getList(), b);
+        } else if (sided == Side.right) {
+            //throw new UnsupportedOperationException("only for left ideals");
+            z = red.rightNormalform(getList(), b);
+        } else if (sided == Side.twosided) {
+            //throw new UnsupportedOperationException("only for left and right ideals");
+            //z = red.normalform(getList(), b);
+            z = red.leftNormalform(getList(), b);
+            if (! z.isZERO()) {
+                return false;
+            }
+            z = red.rightNormalform(getList(), b);
+        }
         if (z == null || z.isZERO()) {
             return true;
         }
@@ -653,17 +675,23 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (!isGB) {
             doGB();
         }
+        //if (sided != Side.left) {
+            //throw new UnsupportedOperationException("only for left ideals");
+        //}
         List<GenSolvablePolynomial<C>> si = getList();
         for (GenSolvablePolynomial<C> b : B) {
             if (b == null) {
                 continue;
             }
-            GenSolvablePolynomial<C> z = red.leftNormalform(si, b);
-            if (!z.isZERO()) {
-                logger.info("contains nf(b) != 0: {} of {}", z, b);
-                //        + ", si = {}, ring = {}", si, z.ring.toScript());
+            if (! contains(b)) {
                 return false;
             }
+            // GenSolvablePolynomial<C> z = red.leftNormalform(si, b);
+            // if (!z.isZERO()) {
+            //     logger.info("contains nf(b) != 0: {} of {}", z, b);
+            //     //        + ", si = {}, ring = {}", si, z.ring.toScript());
+            //     return false;
+            // }
         }
         return true;
     }
@@ -682,16 +710,16 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (this.isZERO()) {
             return B;
         }
-        int s = getList().size() + B.getList().size();
-        List<GenSolvablePolynomial<C>> c;
-        c = new ArrayList<GenSolvablePolynomial<C>>(s);
-        c.addAll(getList());
-        c.addAll(B.getList());
-        SolvableIdeal<C> I = new SolvableIdeal<C>(getRing(), c, false, sided);
-        if (isGB && B.isGB) {
-            I.doGB(); // left, twosided, right handled in doGB
-        }
-        return I;
+        // int s = getList().size() + B.getList().size();
+        // List<GenSolvablePolynomial<C>> c;
+        // c = new ArrayList<GenSolvablePolynomial<C>>(s);
+        // c.addAll(getList());
+        // c.addAll(B.getList());
+        // SolvableIdeal<C> I = new SolvableIdeal<C>(getRing(), c, false, sided);
+        // if (isGB && B.isGB) {
+        //     I.doGB(); left, twosided, right handled in doGB
+        // }
+        return sum(B.getList());
     }
 
 
@@ -705,16 +733,15 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (b == null || b.isZERO()) {
             return this;
         }
-        int s = getList().size() + 1;
-        List<GenSolvablePolynomial<C>> c;
-        c = new ArrayList<GenSolvablePolynomial<C>>(s);
-        c.addAll(getList());
+        //int s = getList().size() + 1;
+        List<GenSolvablePolynomial<C>> c = new ArrayList<GenSolvablePolynomial<C>>(1);
+        //c.addAll(getList());
         c.add(b);
-        SolvableIdeal<C> I = new SolvableIdeal<C>(getRing(), c, false, sided);
-        if (isGB) {
-            I.doGB();
-        }
-        return I;
+        // SolvableIdeal<C> I = new SolvableIdeal<C>(getRing(), c, false, sided);
+        // if (isGB) {
+        //     I.doGB();
+        // }
+        return sum(c);
     }
 
 
@@ -772,7 +799,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
 
 
     /**
-     * Left product. Generators for the product this by a polynomial.
+     * Product. Generators for the product of this by a polynomial.
      * @param b solvable polynomial
      * @return ideal(this*b)
      */
@@ -787,6 +814,32 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         c = new ArrayList<GenSolvablePolynomial<C>>(getList().size());
         for (GenSolvablePolynomial<C> p : getList()) {
             GenSolvablePolynomial<C> q = p.multiply(b);
+            c.add(q);
+        }
+        SolvableIdeal<C> I = new SolvableIdeal<C>(getRing(), c, false, sided);
+        if (isGB) {
+            I.doGB();
+        }
+        return I;
+    }
+
+
+    /**
+     * Left product. Generators for the product of a polynomial by this.
+     * @param b solvable polynomial
+     * @return ideal(b*this)
+     */
+    public SolvableIdeal<C> leftProduct(GenSolvablePolynomial<C> b) {
+        if (b == null || b.isZERO()) {
+            return getZERO();
+        }
+        if (this.isZERO()) {
+            return this;
+        }
+        List<GenSolvablePolynomial<C>> c;
+        c = new ArrayList<GenSolvablePolynomial<C>>(getList().size());
+        for (GenSolvablePolynomial<C> p : getList()) {
+            GenSolvablePolynomial<C> q = b.multiply(p);
             c.add(q);
         }
         SolvableIdeal<C> I = new SolvableIdeal<C>(getRing(), c, false, sided);
