@@ -1645,6 +1645,34 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
+     * Test for radical ideal.
+     * @param ru ideal with univariate polynomials
+     * @return true if ru is a radical ideal, else false
+     */
+    public boolean isRadical(IdealWithUniv<C> ru) {
+        if (this.isZERO()) {
+            return false;
+        }
+        if (this.isONE()) {
+            return false; // not 0-dim
+        }
+        if (list.ring.coFac.characteristic().signum() > 0 && !list.ring.coFac.isFinite()) {
+            logger.warn("radical only for char 0 or finite coefficient rings, but found {}",
+                            list.ring.coFac.toScript());
+        }
+        for (int i = ru.upolys.size() - 1; i >= 0; i--) { //list.ring.nvar
+            GenPolynomial<C> u = ru.upolys.get(i);
+            boolean t = engine.isSquarefree(u);
+            if (!t) {
+                System.out.println("not squarefree " + engine.squarefreePart(u) + ", " + u);
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * Zero dimensional ideal irreducible decompostition. See algorithm DIRGZD
      * of BGK 1986 and also PREDEC of the Gr&ouml;bner bases book 1993.
      * @return intersection H, of ideals G_i with ideal(this) subseteq cap_i(

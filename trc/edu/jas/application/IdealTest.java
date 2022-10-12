@@ -1191,6 +1191,70 @@ public class IdealTest extends TestCase {
         boolean t = I.isZeroDimDecomposition(zd);
         //System.out.println("t = " + t);
         assertTrue("is decomposition ", t);
+
+        List<IdealWithUniv<BigRational>> zde = I.zeroDimElimination(zd);
+        //System.out.println("I = " + I);
+        //System.out.println("zde = " + zde);
+
+        t = I.isZeroDimDecomposition(zde);
+        //System.out.println("t = " + t);
+        assertTrue("is decomposition elimination", t);
+    }
+
+
+    /**
+     * Test zero dimensional radical decomposition.
+     */
+    public void testZeroDimRadicalDecomp() {
+        String[] vars;
+
+        BigRational coeff = new BigRational(17, 1);
+        to = new TermOrder(TermOrder.INVLEX);
+        vars = new String[] { "x", "y", "z" };
+        fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
+
+        vars = fac.getVars();
+        //System.out.println("vars = " + Arrays.toString(vars));
+        //System.out.println("fac = " + fac);
+        assertTrue("vars.length == 3 ", vars.length == 3);
+
+        Ideal<BigRational> I;
+        L = new ArrayList<GenPolynomial<BigRational>>();
+
+        a = fac.parse("( x^3 - 27 )**3 ( x**2 - 11 )**2 ( x + 1 ) ");
+        b = fac.parse("( y^4 - x )");
+        c = fac.parse("( z^2 - x^2 )");
+
+        if (a.isZERO() || b.isZERO() || c.isZERO()) {
+            return;
+        }
+
+        L.add(a);
+        L.add(b);
+        L.add(c);
+        I = new Ideal<BigRational>(fac, L);
+        //I.doGB();
+        assertTrue("not isZERO( I )", !I.isZERO());
+        assertTrue("isGB( I )", I.isGB());
+        //System.out.println("I = " + I);
+
+        List<IdealWithUniv<BigRational>> zd = I.zeroDimRadicalDecomposition();
+        //System.out.println("I = " + I);
+        //System.out.println("zd = " + zd);
+
+        boolean t = I.isZeroDimDecomposition(zd);
+        //System.out.println("t = " + t);
+        assertTrue("is decomposition ", t);
+
+        for (IdealWithUniv<BigRational> ru: zd) {
+            t = I.isRadical(ru); // works also for ZeroDim
+            //System.out.println("t = " + t);
+            assertTrue("is radical decomposition: " + ru, t);
+
+            t = ru.ideal.isZeroDimRadical();
+            //System.out.println("t = " + t);
+            assertTrue("is 0-dim radical decomposition: " + ru, t);
+        }
     }
 
 
@@ -1793,8 +1857,13 @@ public class IdealTest extends TestCase {
         Ideal<BigRational> Ii = I.intersect(dec);
         //System.out.println("Ii   = " + Ii);
         //System.out.println("I    = " + I);
-
         assertTrue("Ii.contains(I) ", Ii.contains(I));
+
+        for (IdealWithUniv<BigRational> ru : rdec) {
+            //System.out.println("ru = " + ru);
+            boolean t = I.isRadical(ru);
+            assertTrue("isRadical: " + ru, t);
+        }
 
         //Ii = I.radical();
         //System.out.println("Ii   = " + Ii);
