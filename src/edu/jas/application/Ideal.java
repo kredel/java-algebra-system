@@ -546,16 +546,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
         if (this.isZERO()) {
             return B;
         }
-        int s = getList().size() + B.getList().size();
-        List<GenPolynomial<C>> c;
-        c = new ArrayList<GenPolynomial<C>>(s);
-        c.addAll(getList());
-        c.addAll(B.getList());
-        Ideal<C> I = new Ideal<C>(getRing(), c, false);
-        if (isGB && B.isGB) {
-            I.doGB();
-        }
-        return I;
+        return sum(B.getList());
     }
 
 

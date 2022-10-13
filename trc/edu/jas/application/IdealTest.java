@@ -127,9 +127,7 @@ public class IdealTest extends TestCase {
      * Test Ideal sum.
      */
     public void testIdealSum() {
-        Ideal<BigRational> I;
-        Ideal<BigRational> J;
-        Ideal<BigRational> K;
+        Ideal<BigRational> I, J, K;
 
         L = new ArrayList<GenPolynomial<BigRational>>();
 
@@ -173,6 +171,12 @@ public class IdealTest extends TestCase {
         String s = I.toScript() + "\n" + I.toString();
         //System.out.println("#s = " + s.length() + ": " + s);
         assertTrue("#s >= 90: ", s.length() >= 90);
+
+        K = I.getZERO();
+        assertTrue("K == 0: " + K, K.isZERO());
+        K = I.getONE();
+        assertTrue("K == 1: " + K, K.isONE());
+
 
         assertTrue("not isZERO( b )", !b.isZERO());
         L.add(b);
@@ -246,10 +250,7 @@ public class IdealTest extends TestCase {
      * Test Ideal product.
      */
     public void testIdealProduct() {
-        Ideal<BigRational> I;
-        Ideal<BigRational> J;
-        Ideal<BigRational> K;
-        Ideal<BigRational> H;
+        Ideal<BigRational> I, J, K, H;
 
         a = fac.random(kl, ll, el, q);
         b = fac.random(kl, ll, el, q);
@@ -368,10 +369,7 @@ public class IdealTest extends TestCase {
      * Test Ideal quotient.
      */
     public void testIdealQuotient() {
-        Ideal<BigRational> I;
-        Ideal<BigRational> J;
-        Ideal<BigRational> K;
-        Ideal<BigRational> H;
+        Ideal<BigRational> I, J, K, H;
 
         a = fac.random(kl, ll, el, q);
         b = fac.random(kl, ll, el, q);
@@ -474,9 +472,7 @@ public class IdealTest extends TestCase {
      * Test Ideal infinite quotient.
      */
     public void testIdealInfiniteQuotient() {
-        Ideal<BigRational> I;
-        Ideal<BigRational> J;
-        Ideal<BigRational> K;
+        Ideal<BigRational> I, J, K;
 
         a = fac.random(kl, ll, el, q);
         b = fac.random(kl, ll, el, q);
@@ -644,9 +640,6 @@ public class IdealTest extends TestCase {
      */
     public void testIdealRadicalMember() {
         Ideal<BigRational> I;
-        //Ideal<BigRational> J;
-        //Ideal<BigRational> K;
-        //Ideal<BigRational> JJ;
 
         a = fac.random(kl - 1, ll, el - 1, q);
         b = fac.random(kl - 1, ll, el, q);
@@ -817,9 +810,7 @@ public class IdealTest extends TestCase {
      * Test Ideal term order optimization.
      */
     public void testIdealTopt() {
-        Ideal<BigRational> I;
-        Ideal<BigRational> J;
-        Ideal<BigRational> K;
+        Ideal<BigRational> I, J, K;
 
         L = new ArrayList<GenPolynomial<BigRational>>();
 
@@ -910,8 +901,7 @@ public class IdealTest extends TestCase {
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
 
-        Ideal<BigRational> I;
-        Ideal<BigRational> J;
+        Ideal<BigRational> I, J;
 
         L = new ArrayList<GenPolynomial<BigRational>>();
 
