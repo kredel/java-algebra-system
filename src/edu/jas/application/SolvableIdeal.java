@@ -611,16 +611,14 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (B == null || B.isZERO()) {
             return true;
         }
-        // if (sided != Side.left) {
-        //     throw new UnsupportedOperationException("only for left ideals");
-        // }
         return contains(B.getList());
     }
 
 
     /**
-     * Solvable ideal containment. Test if b is contained in this ideal. Note:
-     * this is eventually modified to become a Groebner Base.
+     * Solvable ideal containment. Test if b is contained in this
+     * left/right/twosided ideal. Note: this is eventually modified to
+     * become a Groebner Base.
      * @param b solvable polynomial
      * @return true, if b is contained in this, else false
      */
@@ -637,21 +635,21 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (!isGB) {
             doGB();
         }
-        GenSolvablePolynomial<C> z = null;
-        if (sided == Side.left) {
-            z = red.leftNormalform(getList(), b);
-        } else if (sided == Side.right) {
-            //throw new UnsupportedOperationException("only for left ideals");
-            z = red.rightNormalform(getList(), b);
-        } else if (sided == Side.twosided) {
-            //throw new UnsupportedOperationException("only for left and right ideals");
-            //z = red.normalform(getList(), b);
-            z = red.leftNormalform(getList(), b);
-            if (! z.isZERO()) {
-                return false;
-            }
-            z = red.rightNormalform(getList(), b);
-        }
+        GenSolvablePolynomial<C> z = normalform(b);
+        // if (sided == Side.left) {
+        //     z = red.leftNormalform(getList(), b);
+        // } else if (sided == Side.right) {
+        //     //throw new UnsupportedOperationException("only for left ideals");
+        //     z = red.rightNormalform(getList(), b);
+        // } else if (sided == Side.twosided) {
+        //     //throw new UnsupportedOperationException("only for left and right ideals");
+        //     //z = red.normalform(getList(), b);
+        //     z = red.leftNormalform(getList(), b);
+        //     if (! z.isZERO()) {
+        //         return false;
+        //     }
+        //     z = red.rightNormalform(getList(), b);
+        // }
         if (z == null || z.isZERO()) {
             return true;
         }
@@ -660,8 +658,9 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
 
 
     /**
-     * Solvable ideal containment. Test if each b in B is contained in this
-     * ideal. Note: this is eventually modified to become a Groebner Base.
+     * Solvable ideal containment. Test if each b in B is contained in
+     * this left/right/twosided ideal. Note: this is eventually
+     * modified to become a Groebner Base.
      * @param B list of solvable polynomials
      * @return true, if each b in B is contained in this, else false
      */
@@ -675,9 +674,6 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (!isGB) {
             doGB();
         }
-        //if (sided != Side.left) {
-            //throw new UnsupportedOperationException("only for left ideals");
-        //}
         List<GenSolvablePolynomial<C>> si = getList();
         for (GenSolvablePolynomial<C> b : B) {
             if (b == null) {
@@ -686,12 +682,6 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
             if (! contains(b)) {
                 return false;
             }
-            // GenSolvablePolynomial<C> z = red.leftNormalform(si, b);
-            // if (!z.isZERO()) {
-            //     logger.info("contains nf(b) != 0: {} of {}", z, b);
-            //     //        + ", si = {}, ring = {}", si, z.ring.toScript());
-            //     return false;
-            // }
         }
         return true;
     }
@@ -733,15 +723,9 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (b == null || b.isZERO()) {
             return this;
         }
-        //int s = getList().size() + 1;
-        List<GenSolvablePolynomial<C>> c = new ArrayList<GenSolvablePolynomial<C>>(1);
-        //c.addAll(getList());
-        c.add(b);
-        // SolvableIdeal<C> I = new SolvableIdeal<C>(getRing(), c, false, sided);
-        // if (isGB) {
-        //     I.doGB();
-        // }
-        return sum(c);
+        List<GenSolvablePolynomial<C>> B = new ArrayList<GenSolvablePolynomial<C>>(1);
+        B.add(b);
+        return sum(B);
     }
 
 
@@ -1241,7 +1225,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
     /**
      * Normalform for element.
      * @param h solvable polynomial
-     * @return left normalform of h with respect to this
+     * @return left/right/twosided normalform of h with respect to this
      */
     public GenSolvablePolynomial<C> normalform(GenSolvablePolynomial<C> h) {
         if (h == null) {
@@ -1254,7 +1238,14 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
             return h;
         }
         GenSolvablePolynomial<C> r;
-        r = red.leftNormalform(getList(), h);
+        if (sided == Side.left) {
+            r = red.leftNormalform(getList(), h);
+        } else if (sided == Side.right) {
+            r = red.rightNormalform(getList(), h);
+        } else { //if (sided == Side.twosided) {
+            //r = red.twosidedNormalform(getList(), h);
+            r = red.normalform(getList(), h);
+        }
         return r;
     }
 
