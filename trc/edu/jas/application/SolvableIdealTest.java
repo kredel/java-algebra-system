@@ -246,6 +246,10 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("equals( K, I )", K.equals(I));
         assertTrue("K contains(J)", K.contains(I));
         assertTrue("I contains(K)", I.contains(K));
+        L = K.normalform(I.getList());
+        I = new SolvableIdeal<BigRational>(fac, L, false);
+        //System.out.println("I = " + I);
+        assertTrue("I mod K == 0: " + I, I.isZERO());
 
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
         L.add(a);
@@ -259,6 +263,15 @@ public class SolvableIdealTest extends TestCase {
         //System.out.println("J = " + J);
         //System.out.println("K = " + K);
         assertEquals("equals( (I**3)**2, I**6 )", K, J);
+
+        if (I.isUnit(c)) {
+            d = I.inverse(c);
+            e = I.normalform(d.multiply(c));
+            //System.out.println("c = " + c);
+            //System.out.println("d = " + d);
+            //System.out.println("d*c mod I = " + e);
+            assertTrue("inv(c) * c mod I == 1: " + e, e.isONE());
+        }
     }
 
 
@@ -801,7 +814,7 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
 
         J = I.infiniteQuotient(a);
-        assertTrue("contains(J,I): " + J + ", " + I, J.contains(I)); // GBs only
+        assertTrue("contains(J,I): " + J.toScript() + ", " + I.toScript(), J.contains(I)); // GBs only
 
         assertTrue("not isZERO( d )", !d.isZERO());
         L.add(d);

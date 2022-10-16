@@ -424,6 +424,14 @@ public class WordIdealTest extends TestCase {
         //System.out.println("I cap J = K = " + K);
         assertTrue("intersect ", I.contains(K));
         assertTrue("intersect ", J.contains(K));
+
+        // now intersect with list of word ideals
+        List<WordIdeal<BigRational>> Bl = new ArrayList<WordIdeal<BigRational>>();
+        Bl.add(J);
+        K = I.intersect(Bl);
+        //System.out.println("I cap J = K = " + K);
+        assertTrue("intersect ", I.contains(K));
+        assertTrue("intersect ", J.contains(K));
     }
   
 }

@@ -1451,6 +1451,10 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (this.isZERO()) {
             return false;
         }
+        doGB();
+        if (this.isONE()) {
+            return false;
+        }
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(1 + list.list.size());
         F.add(h);
         F.addAll(getList());
