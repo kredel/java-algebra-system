@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
 
+import edu.jas.kern.TimeStatus;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -37,6 +38,9 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
      */
     public WordGroebnerBaseSeq() {
         super();
+        TimeStatus.setActive();
+        TimeStatus.setLimit(10);
+        TimeStatus.setCallBack(new TimeStatus.TSCall(false));
     }
 
 
@@ -46,6 +50,9 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
      */
     public WordGroebnerBaseSeq(WordReduction<C> red) {
         super(red);
+        TimeStatus.setActive();
+        TimeStatus.setLimit(10);
+        TimeStatus.setCallBack(new TimeStatus.TSCall(false));
     }
 
 
@@ -56,6 +63,9 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
      */
     public WordGroebnerBaseSeq(WordReduction<C> red, WordPairList<C> pl) {
         super(red, pl);
+        TimeStatus.setActive();
+        TimeStatus.setLimit(10);
+        TimeStatus.setCallBack(new TimeStatus.TSCall(false));
     }
 
 
@@ -85,6 +95,7 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
         GenWordPolynomial<C> pj;
         List<GenWordPolynomial<C>> S;
         GenWordPolynomial<C> H;
+        int infin = 0;
         while (pairlist.hasNext()) {
             pair = pairlist.removeNext();
             //logger.debug("pair = {}", pair);
@@ -145,6 +156,20 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
                     //l++;
                     G.add(H);
                     pairlist.put(H);
+                }
+                if (H.degree() > 9) {
+                    System.out.println("deg(H): " + H.degree());
+                    logger.warn("word GB too high degree {}", H.degree());
+                    TimeStatus.checkTime("word GB degree > 9");
+                }
+
+                if (s.leadingWord().dependencyOnVariables().equals(H.leadingWord().dependencyOnVariables())) {
+                    logger.info("LT depend: {} --> {}", s.leadingWord().dependencyOnVariables(), H.leadingWord().dependencyOnVariables());
+                    logger.info("LT depend: {} --> {}", s, H);
+                    infin++;
+                    if (infin > 500) {
+                        throw new RuntimeException("no convergence in word GB: " + infin);
+                    }
                 }
             }
         }

@@ -128,4 +128,21 @@ public class TimeStatus {
         throw new TimeExceededException(msg + " over time = " + tt);
     }
 
+
+    public static class TSCall implements Callable<Boolean> {
+
+
+        boolean flag = true;
+
+
+        public TSCall(boolean b) {
+            flag = b;
+        }
+
+
+        public Boolean call() {
+            return flag;
+        }
+
+    }
 }
