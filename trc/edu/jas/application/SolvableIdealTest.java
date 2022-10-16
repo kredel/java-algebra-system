@@ -332,6 +332,7 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("not isZERO( Ir )", !Ir.isZERO());
         //assertTrue("not isONE( Ir )", !Ir.isONE() );
         assertTrue("isGB( Ir )", Ir.isGB());
+        assertTrue("isGB( Ir )", Ir.isRightGB());
 
         String s = Ir.toScript() + "\n" + Ir.toString();
         //System.out.println("#s = " + s.length() + ": " + s);
@@ -361,6 +362,7 @@ public class SolvableIdealTest extends TestCase {
         Kr = Jr.sum(Ir);
         assertTrue("not isZERO( Kr )", !Kr.isZERO());
         assertTrue("isGB( Kr )", Kr.isGB());
+        assertTrue("isGB( Kr )", Kr.isRightGB());
         assertTrue("equals( Kr, Ir )", Kr.equals(Ir));
 
         L = new ArrayList<GenSolvablePolynomial<BigRational>>();
@@ -372,6 +374,7 @@ public class SolvableIdealTest extends TestCase {
         Kr = Jr.sum(Ir);
         assertTrue("not isZERO( Kr )", !Kr.isZERO());
         assertTrue("isGB( Kr )", Kr.isGB());
+        assertTrue("isGB( Kr )", Kr.isRightGB());
         assertTrue("Kr contains(Ir)", Kr.contains(Ir));
         assertTrue("Kr contains(Jr)", Kr.contains(Jr));
 
@@ -380,11 +383,12 @@ public class SolvableIdealTest extends TestCase {
         L.add(d);
 
         assertTrue("isGB( { d } )", bb.isRightGB(L));
-        Jr = new SolvableIdeal<BigRational>(fac, L, true);
+        Jr = new SolvableIdeal<BigRational>(fac, L, true, SolvableIdeal.Side.right);
         Ir = Kr;
         Kr = Jr.sum(Ir);
         assertTrue("not isZERO( Kr )", !Kr.isZERO());
         assertTrue("isGB( Kr )", Kr.isGB());
+        assertTrue("isGB( Kr )", Kr.isRightGB());
         assertTrue("Kr contains(Ir)", Kr.contains(Ir));
         assertTrue("Kr contains(Jr)", Kr.contains(Jr));
 
@@ -398,6 +402,7 @@ public class SolvableIdealTest extends TestCase {
         Kr = Jr.sum(Ir);
         assertTrue("not isZERO( Kr )", !Kr.isZERO());
         assertTrue("isGB( Kr )", Kr.isGB());
+        assertTrue("isGB( Kr )", Kr.isRightGB());
         assertTrue("equals( Kr, Ir )", Kr.equals(Ir));
         assertTrue("Kr contains(Jr)", Kr.contains(Ir));
         assertTrue("Ir contains(Kr)", Ir.contains(Kr));
@@ -448,6 +453,7 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("not isZERO( It )", !It.isZERO());
         //assertTrue("not isONE( It )", !It.isONE());
         assertTrue("isGB( It ): " + It.toScript(), It.isGB());
+        assertTrue("is2sGB( It ): " + It.toScript(), It.isTwosidedGB());
 
         It = new SolvableIdeal<BigRational>(fac, L, true, SolvableIdeal.Side.twosided);
         assertTrue("not isZERO( It )", !It.isZERO());
@@ -473,6 +479,7 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("not isZERO( It )", !It.isZERO());
         // assertTrue("not isONE( It )", !It.isONE() );
         assertTrue("isGB( It )", It.isGB());
+        assertTrue("is2sGB( It ): " + It.toScript(), It.isTwosidedGB());
 
         Jt = It;
         Kt = Jt.sum(It);
@@ -498,7 +505,8 @@ public class SolvableIdealTest extends TestCase {
         L.add(d);
         L = bb.twosidedGB(L);
         assertTrue("isGB( { d } )", bb.isTwosidedGB(L));
-        Jt = new SolvableIdeal<BigRational>(fac, L, true);
+        Jt = new SolvableIdeal<BigRational>(fac, L, true, SolvableIdeal.Side.twosided);
+        assertTrue("is2sGB( Jt ): " + Jt.toScript(), Jt.isTwosidedGB());
         It = Kt;
         Kt = Jt.sum(It);
         assertTrue("not isZERO( Kt )", !Kt.isZERO());

@@ -225,6 +225,19 @@ public class WordIdealTest extends TestCase {
         assertTrue("K contains(J)", K.contains(I));
         assertTrue("I contains(K)", I.contains(K));
         assertEquals("compareTo( K, I )", K.compareTo(I), 0);
+
+        L.clear();
+        e = fac.parse("x x");
+        L.add(e);
+        I = new WordIdeal<BigRational>(fac, L, true);
+        I.doGB();
+        J = I.power(3);
+        J = J.power(2);
+        K = I.power(6);
+        //System.out.println("I = " + I);
+        //System.out.println("J = " + J);
+        //System.out.println("K = " + K);
+        assertEquals("equals( (I**3)**2, I**6 )", K, J);
     }
 
 
