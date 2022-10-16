@@ -530,15 +530,12 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         if (!isGB) {
             doGB();
         }
-        List<GenWordPolynomial<C>> si = getList();
         for (GenWordPolynomial<C> b : B) {
             if (b == null) {
                 continue;
             }
-            GenWordPolynomial<C> z = red.normalform(si, b);
-            if (!z.isZERO()) {
-                System.out.println("contains nf(b) != 0: " + b + ", z = " + z);
-                //System.out.println("contains nf(b) != 0: si = " + si);
+            if (!contains(b)) {
+                System.out.println("contains nf(b) != 0: " + b);
                 return false;
             }
         }
@@ -559,16 +556,17 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         if (this.isZERO()) {
             return B;
         }
-        int s = getList().size() + B.getList().size();
-        List<GenWordPolynomial<C>> c;
-        c = new ArrayList<GenWordPolynomial<C>>(s);
-        c.addAll(getList());
-        c.addAll(B.getList());
-        WordIdeal<C> I = new WordIdeal<C>(getRing(), c, false);
-        if (isGB && B.isGB) {
-            I.doGB();
-        }
-        return I;
+        return sum(B.getList());
+        // int s = getList().size() + B.getList().size();
+        // List<GenWordPolynomial<C>> c;
+        // c = new ArrayList<GenWordPolynomial<C>>(s);
+        // c.addAll(getList());
+        // c.addAll(B.getList());
+        // WordIdeal<C> I = new WordIdeal<C>(getRing(), c, false);
+        // if (isGB && B.isGB) {
+        //     I.doGB();
+        // }
+        // return I;
     }
 
 
