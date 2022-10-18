@@ -1221,7 +1221,8 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
             r = red.rightNormalform(getList(), h);
         } else { //if (sided == Side.twosided) {
             //r = red.twosidedNormalform(getList(), h);
-            r = red.normalform(getList(), h);
+            //r = red.normalform(getList(), h);
+            r = red.leftNormalform(getList(), h);
         }
         return r;
     }
@@ -1237,7 +1238,7 @@ public class SolvableIdeal<C extends GcdRingElem<C>> implements Comparable<Solva
         if (L == null) {
             return L;
         }
-        if (L.size() == 0) {
+        if (L.isEmpty()) {
             return L;
         }
         if (this.isZERO()) {
