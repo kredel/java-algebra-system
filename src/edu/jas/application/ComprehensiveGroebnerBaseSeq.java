@@ -254,6 +254,10 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         for (ColoredSystem<C> cs : CS) {
             Ideal<C> id = cs.condition.zero;
             ResidueRing<C> r = new ResidueRing<C>(id);
+            // if (!r.isField()) {
+            //     System.out.println("condition zero ideal, no field = " + r.toScript());
+            //     // no return true;
+            // }
             //GroebnerBase<Residue<C>> bb = new GroebnerBasePseudoSeq<Residue<C>>(r);
             List<GenPolynomial<Residue<C>>> list;
             boolean t;
@@ -312,8 +316,12 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         }
         logger.info("random ideal = {}", il);
         Ideal<C> id = new Ideal<C>(ccf, il);
-        //System.out.println("random ideal = " + id.toScript());
+        id.doGB();
         ResidueRing<C> r = new ResidueRing<C>(id);
+        if (!r.isField()) {
+            System.out.println("random ideal, no field = " + r.toScript());
+            return true;
+        }
         //GroebnerBase<Residue<C>> bb = new GroebnerBasePseudoSeq<Residue<C>>(r);
         List<GenPolynomial<Residue<C>>> list;
         boolean t;
