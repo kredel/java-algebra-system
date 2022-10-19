@@ -142,9 +142,9 @@
            overview="doc/overview.html" 
            author="true" 
            linksource="true" 
-           additionalparam="-Xdoclint:none -html5 --no-module-directories"
+           additionalparam="-Xdoclint:none -html5"
            >
-<!--       
+<!--       -  -  no-module-directories
            private="true" 
            linksource="true" 
 -->
