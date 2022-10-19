@@ -62,58 +62,13 @@ public class ProductTest extends TestCase {
     ProductRing<BigInteger> ifac;
 
 
-    Product<BigRational> a;
+    Product<BigRational> a, b, c, d, e, f;
 
 
-    Product<BigRational> b;
+    Product<ModInteger> ap, bp, cp, dp, ep, fp;
 
 
-    Product<BigRational> c;
-
-
-    Product<BigRational> d;
-
-
-    Product<BigRational> e;
-
-
-    Product<BigRational> f;
-
-
-    Product<ModInteger> ap;
-
-
-    Product<ModInteger> bp;
-
-
-    Product<ModInteger> cp;
-
-
-    Product<ModInteger> dp;
-
-
-    Product<ModInteger> ep;
-
-
-    Product<ModInteger> fp;
-
-
-    Product<BigInteger> ai;
-
-
-    Product<BigInteger> bi;
-
-
-    Product<BigInteger> ci;
-
-
-    Product<BigInteger> di;
-
-
-    Product<BigInteger> ei;
-
-
-    Product<BigInteger> fi;
+    Product<BigInteger> ai, bi, ci, di, ei, fi;
 
 
     int pl = 5;
@@ -175,7 +130,6 @@ public class ProductTest extends TestCase {
 
     /**
      * Test constructor for rational.
-     * 
      */
     public void testRatConstruction() {
         c = fac.getONE();
@@ -187,12 +141,15 @@ public class ProductTest extends TestCase {
         //System.out.println("d = " + d);
         assertTrue("isZERO( d )", d.isZERO());
         assertTrue("isONE( d )", !d.isONE());
+
+        BigRational crfac = new BigRational(2,3);
+        fac.addFactory(crfac);
+        assertEquals("#fac == 5+1: ", fac.length(), pl+1);
     }
 
 
     /**
      * Test constructor for modular.
-     * 
      */
     public void testModConstruction() {
         cp = mfac.getONE();
@@ -209,7 +166,6 @@ public class ProductTest extends TestCase {
 
     /**
      * Test random rational.
-     * 
      */
     public void testRatRandom() {
         for (int i = 0; i < 7; i++) {
@@ -232,7 +188,6 @@ public class ProductTest extends TestCase {
 
     /**
      * Test random modular.
-     * 
      */
     public void testModRandom() {
         for (int i = 0; i < 7; i++) {
@@ -249,10 +204,8 @@ public class ProductTest extends TestCase {
 
     /**
      * Test rational addition.
-     * 
      */
     public void testRatAddition() {
-
         a = fac.random(kl, q);
         b = fac.random(kl, q);
 
@@ -299,10 +252,8 @@ public class ProductTest extends TestCase {
 
     /**
      * Test integer addition.
-     * 
      */
     public void testIntAddition() {
-
         ai = ifac.random(kl, q);
         bi = ifac.random(kl, q);
 
@@ -349,10 +300,8 @@ public class ProductTest extends TestCase {
 
     /**
      * Test modular addition.
-     * 
      */
     public void testModAddition() {
-
         ap = mfac.random(kl, q);
         bp = mfac.random(kl, q);
         //System.out.println("a = " + a);
@@ -387,10 +336,8 @@ public class ProductTest extends TestCase {
 
     /**
      * Test rational multiplication.
-     * 
      */
     public void testRatMultiplication() {
-
         a = fac.random(kl);
         if (a.isZERO()) {
             return;
@@ -465,10 +412,8 @@ public class ProductTest extends TestCase {
 
     /**
      * Test integer multiplication.
-     * 
      */
     public void testIntMultiplication() {
-
         ai = ifac.random(kl);
         while (ai.isZERO()) {
             ai = ifac.random(kl);
@@ -580,10 +525,8 @@ public class ProductTest extends TestCase {
 
     /**
      * Test modular multiplication.
-     * 
      */
     public void testModMultiplication() {
-
         ap = mfac.random(kl, q);
         if (ap.isZERO()) {
             return;
@@ -656,6 +599,5 @@ public class ProductTest extends TestCase {
             assertEquals("a*1/a = 1", ep, dp);
         }
     }
-
 
 }

@@ -108,8 +108,9 @@ public class ProductRing<C extends RingElem<C>> implements RingFactory<Product<C
         if (nCopies != 0) {
             if (ring.equals(rf)) {
                 nCopies++;
+                return;
             }
-            throw new IllegalArgumentException("wrong RingFactory: " + rf);
+            throw new IllegalArgumentException("wrong RingFactory: " + rf + " != " + ring);
         }
         ringList.add(rf);
     }
