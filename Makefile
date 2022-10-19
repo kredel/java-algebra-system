@@ -425,7 +425,7 @@ findbugs-low:
 #SVNREV=svnlook youngest $(SVNREPO)/jas
 #SVNDATE=svnlook date $(SVNREPO)/jas
 # new numbering in git:
-#SVNDATE=git log -r HEAD .|grep Date:|head -1|awk '{print $4}'
+#SVNDATE=git log -r HEAD --date=iso .|grep Date:|head -1|awk '{print $2}'
 # Jan 2008 SVNSRT=1584 
 # Jun 2008 SVNSRT=1882
 # Sep 2008 SVNSRT=2118r

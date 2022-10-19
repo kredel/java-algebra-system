@@ -23,30 +23,48 @@
 
 <dl>
 
-<dt>2022, September </dt> <!-- 2.7.150 -->
+<dt>2022, November </dt> <!-- 2.7.160 -->
 <dd>
 
- Tried to improve code in <code>Gen*PolynomialRing</code> constructors
- and method <code>getZERO()</code> with respect to Java memory model for
- problems appearing with Java OpenJDK version "11.0.15", 2022-04-19
- and still in "17.0.4", 2022-07-22.
+ Introduce some multi-sided operations in
+ <code>SolvableIdeal</code>. Stop for long running or infinite word
+ Groebner Base computations. Stop for long running Kronecker
+ factorization algorithm cases.
 
- Added some unit tests to improve test coverage, for example
- <code>RunGB</code>, <code>RunSGB</code>, <code>IntegerProgram</code>,
+ Fix bugs in <code>ExpVector</code> subclasses, in methods
+ <code>setVal()</code>, this resolves <a
+ href="https://github.com/kredel/java-algebra-system/issues/30">issue
+ 30</a>. Fix in <code>SquarefreeFieldCharP</code> for polynomial
+ 1. Fixes in <code>SquarefreeFieldChar0</code> and
+ <code>SquarefreeRingChar0</code> for recursion to polynomial content.
+ Fix in <code>PolyUfdUtilTest</code> of
+ <code>evaluationPoints()</code> to ensure squarefree input.
+
+ Added more unit test cases to improve code coverage of statement and
+ expression tests.  Further cleanups and bug fixes (see <a
+ href="doc/git_change.log">Git log</a>).
+
+</dd>
+
+<dt>2022, September </dt> <!-- 2.7.150 -->
+<dd>
+ Tried to improve code in <code>Gen*PolynomialRing</code> constructors
+ and method <code>getZERO()</code> with respect to Java memory model
+ for problems appearing with Java OpenJDK version "11.0.15",
+ 2022-04-19 and still in "17.0.4", 2022-07-22.  Added some unit tests
+ to improve test coverage, for example <code>RunGB</code>,
+ <code>RunSGB</code>, <code>IntegerProgram</code>,
  <code>StandardBaseSeq</code>, <code>jas.kern</code> utilities or
  <code>GenMatrix</code> and more. Added selectable
  <code>Quotient</code> normalizations, but only
  <code>QuoNorm.normDenLead</code> works in other parts of JAS. Other
  normalizations must be checked and code fixed (see <a
  href="https://github.com/kredel/java-algebra-system/issues/29">issue
- 29</a>).
-
- Fix bug in <code>UnivPowerSeries</code> method
+ 29</a>).  Fix bug in <code>UnivPowerSeries</code> method
  <code>reductum()</code>. Fix bug in <code>ExpVector</code>
  constructor with respect to <code>hashCode()</code>. Verified again
  that JAS can be compiled and run with Java 17(.0.3) and jruby 9.2.14
  and jython 2.7.2.
-
 </dd>
 
 
@@ -2965,7 +2983,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Fri Sep  9 12:14:30 CEST 2022
+Last modified: Wed Oct 19 22:59:54 CEST 2022
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
