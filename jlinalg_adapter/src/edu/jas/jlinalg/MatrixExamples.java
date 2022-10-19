@@ -98,7 +98,7 @@ public class MatrixExamples {
         System.out.println("matrix,gauss-jordan = " + mj);
 
         try {
-            System.out.println("matrix,eigenvalue = " + m.eig());
+            System.out.println("matrix,eigenvalue = "); // + m.eig()); fails for Double
         } catch (org.jlinalg.InvalidOperationException e) {
             System.out.println("" + e);
         }
@@ -167,7 +167,7 @@ public class MatrixExamples {
         System.out.println("matrix,gauss-jordan = " + mj);
 
         try {
-            System.out.println("matrix,eigenvalue = " + m.eig());
+            System.out.println("matrix,eigenvalue = "); // + m.eig()); fails for Double
         } catch (org.jlinalg.InvalidOperationException e) {
             System.out.println("" + e);
         }

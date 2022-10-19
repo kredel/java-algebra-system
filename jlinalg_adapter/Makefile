@@ -33,6 +33,7 @@ all: clean jlinalg_adapter.jar
 $(CLASSES): $(FILES) Makefile
 	-mkdir classes
 	javac -classpath $(CLASSPATH) -d classes src/edu/jas/*/*.java
+	-echo $(CLASSES)
 
 #compile: $(HOME)/java/lib/jlinalg_adapter.jar
 

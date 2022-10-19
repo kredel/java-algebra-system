@@ -376,8 +376,8 @@ public class Residue<C extends GcdRingElem<C>> implements GcdRingElem<Residue<C>
         int i = -1; // gcd might become a unit
         if (x.isONE()) {
             i = 1;
-        } else {
-            System.out.println("Residue gcd = " + x);
+            //} else {
+            //System.out.println("Residue gcd = " + x);
         }
         if (isunit == 1 && b.isunit == 1) {
             i = 1;

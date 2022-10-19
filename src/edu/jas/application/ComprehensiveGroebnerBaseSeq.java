@@ -319,7 +319,7 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         id.doGB();
         ResidueRing<C> r = new ResidueRing<C>(id);
         if (!r.isField()) {
-            System.out.println("random ideal, no field = " + r.toScript());
+            //System.out.println("random ideal, no field = " + r.toScript());
             return true;
         }
         //GroebnerBase<Residue<C>> bb = new GroebnerBasePseudoSeq<Residue<C>>(r);

@@ -240,7 +240,7 @@ public class CGBSeqTest extends TestCase {
         } catch (IOException e) {
             fail("" + e);
         }
-        System.out.println("F = " + F.toScript());
+        //System.out.println("F = " + F.toScript());
 
         // as comprehensive Gröbner system
         GroebnerSystem<BigRational> GS;
@@ -251,7 +251,7 @@ public class CGBSeqTest extends TestCase {
         assertTrue("isGBsys( GBsys(Raksanyi) )", bb.isGB(GS));
 
         G = GS.getCGB();
-        System.out.println("cgb( GS ) = " + G);
+        //System.out.println("cgb( GS ) = " + G);
         assertTrue("isCGB( CGB(Raksanyi) )", bb.isGB(G));
 
         // as regular ring
@@ -263,7 +263,7 @@ public class CGBSeqTest extends TestCase {
         //System.out.println("Gr = " + Gr);
         res = new RReductionSeq<Product<Residue<BigRational>>>();
         Grbc = res.booleanClosure(Gr);
-        System.out.println("Grbc = " + Grbc);
+        //System.out.println("Grbc = " + Grbc);
 
         RingFactory<Product<Residue<BigRational>>> cofac = Grbc.get(0).ring.coFac;
         //System.out.println("cofac = " + cofac.toScript());
@@ -272,7 +272,7 @@ public class CGBSeqTest extends TestCase {
         assertTrue("isGB(Grbc)", rbb.isGB(Grbc));
 
         GBr = rbb.GB(Grbc);
-        System.out.println("GBr = " + GBr);
+        //System.out.println("GBr = " + GBr);
         assertTrue("isRGB( RGB(Raksanyi) )", rbb.isGB(GBr));
     }
 
