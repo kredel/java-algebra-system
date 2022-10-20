@@ -7,7 +7,7 @@ package edu.jas.structure;
 
 /**
  * Value interface. Defines selector for value.
- * @param C base element type
+ * @typeparam C base element type
  * @author Heinz Kredel
  */
 public interface Value<C extends RingElem<C>> {

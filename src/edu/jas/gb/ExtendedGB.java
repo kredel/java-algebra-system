@@ -17,11 +17,6 @@ import edu.jas.structure.RingElem;
 /**
  * Container for a GB and transformation matrices. A container for F, G, calG
  * and calF. Immutable objects.
- * @param <C> coefficient type
- * @param F an ideal base.
- * @param G a Groebner base of F.
- * @param F2G a transformation matrix from F to G.
- * @param G2F a transformation matrix from G to F.
  */
 public class ExtendedGB<C extends RingElem<C>> {
 
@@ -41,8 +36,16 @@ public class ExtendedGB<C extends RingElem<C>> {
     public final GenPolynomialRing<C> ring;
 
 
+    /**
+     * Container for a GB and transformation matrices.
+     * @param <C> coefficient type
+     * @param F an ideal base.
+     * @param G a Groebner base of F.
+     * @param F2G a transformation matrix from F to G.
+     * @param G2F a transformation matrix from G to F.
+     */
     public ExtendedGB(List<GenPolynomial<C>> F, List<GenPolynomial<C>> G, List<List<GenPolynomial<C>>> F2G,
-                    List<List<GenPolynomial<C>>> G2F) {
+                      List<List<GenPolynomial<C>>> G2F) {
         this.F = F;
         this.G = G;
         this.F2G = F2G;
