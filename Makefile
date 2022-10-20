@@ -473,19 +473,19 @@ export:
 	cd ~/jas-versions/$(VERSION)/; sh ./jruby_tests.sh >jruby_tests.out 2>&1
 	cp ~/jas-versions/$(VERSION).$(GITREV)-bin.jar $(LIBPATH)/jas.jar
 	cp ~/jas-versions/$(VERSION).$(GITREV)-bin.jar ~/jas-versions/$(VERSION)/jas.jar
-	cd ~/jas-versions/$(VERSION)/jython; make all doc > ~/jas-versions/$(VERSION)/make_jython.out
-	cd ~/jas-versions/$(VERSION)/mpi; make all doc > ~/jas-versions/$(VERSION)/make_mpi.out
-	cd ~/jas-versions/$(VERSION)/mpj; make all doc > ~/jas-versions/$(VERSION)/make_mpj.out
+	cd ~/jas-versions/$(VERSION)/jython; make all doc > ~/jas-versions/$(VERSION)/make_jython.out 2>&1
+	cd ~/jas-versions/$(VERSION)/mpi; make all doc > ~/jas-versions/$(VERSION)/make_mpi.out 2>&1
+	cd ~/jas-versions/$(VERSION)/mpj; make all doc > ~/jas-versions/$(VERSION)/make_mpj.out 2>&1
 	cd ~/jas-versions/$(VERSION)/meditor; jas_dosed $(VERSION) $(GITREV) manifest.mf
-	cd ~/jas-versions/$(VERSION)/meditor; make > ~/jas-versions/$(VERSION)/make_meditor.out
+	cd ~/jas-versions/$(VERSION)/meditor; make > ~/jas-versions/$(VERSION)/make_meditor.out 2>&1
 	#cd ~/jas-versions/log4j_adapter; make > ~/jas-versions/$(VERSION)/make_mylog.out
 	#cp ~/java/lib/mylog.jar ~/jas-versions/$(VERSION)/
 	#cd ~/jas-versions/log4j_droid_adapter; make > ~/jas-versions/$(VERSION)/make_droidlog.out
 	#cp ~/java/lib/droidlog.jar ~/jas-versions/$(VERSION)/
 	#cd ~/jas-versions/log4j_null_adapter; make > ~/jas-versions/$(VERSION)/make_nolog.out
 	#cp ~/java/lib/nolog.jar ~/jas-versions/$(VERSION)/
-	cd ~/jas-versions/$(VERSION)/jlinalg_adapter; make all doc > ~/jas-versions/$(VERSION)/make_jlinalg.out
-	cd ~/jas-versions/$(VERSION)/commons-math_adapter; make all doc > ~/jas-versions/$(VERSION)/make_commons-math.out
+	cd ~/jas-versions/$(VERSION)/jlinalg_adapter; make all doc > ~/jas-versions/$(VERSION)/make_jlinalg.out 2>&1
+	cd ~/jas-versions/$(VERSION)/commons-math_adapter; make all doc > ~/jas-versions/$(VERSION)/make_commons-math.out 2>&1
 	cd ~/jas-versions/$(VERSION)/; jar -cfM ../$(VERSION).$(GITREV)-doc.zip doc/ images/ *.html doc/*.html *.css doc/*.css
 	mv ~/jas-versions/$(VERSION).$(GITREV)-*.jar ~/jas-versions/$(VERSION)/
 	mv ~/jas-versions/$(VERSION).$(GITREV)-*.zip ~/jas-versions/$(VERSION)/
