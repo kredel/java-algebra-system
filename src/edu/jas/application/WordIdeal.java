@@ -562,7 +562,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         // c = new ArrayList<GenWordPolynomial<C>>(s);
         // c.addAll(getList());
         // c.addAll(B.getList());
-        // WordIdeal<C> I = new WordIdeal<C>(getRing(), c, false);
+        // WordIdeal<C> I = new WordIdeal<C>(getRing(), c, false, bb);
         // if (isGB && B.isGB) {
         //     I.doGB();
         // }
@@ -585,7 +585,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         c = new ArrayList<GenWordPolynomial<C>>(s);
         c.addAll(getList());
         c.add(b);
-        WordIdeal<C> I = new WordIdeal<C>(getRing(), c, false);
+        WordIdeal<C> I = new WordIdeal<C>(getRing(), c, false, bb);
         if (isGB) {
             I.doGB();
         }
@@ -608,7 +608,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         List<GenWordPolynomial<C>> c = new ArrayList<GenWordPolynomial<C>>(s);
         c.addAll(getList());
         c.addAll(L);
-        WordIdeal<C> I = new WordIdeal<C>(getRing(), c, false);
+        WordIdeal<C> I = new WordIdeal<C>(getRing(), c, false, bb);
         if (isGB) {
             I.doGB();
         }
@@ -638,7 +638,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
                 c.add(q);
             }
         }
-        WordIdeal<C> I = new WordIdeal<C>(getRing(), c, false);
+        WordIdeal<C> I = new WordIdeal<C>(getRing(), c, false, bb);
         if (isGB && B.isGB) {
             I.doGB();
         }
@@ -664,7 +664,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
             GenWordPolynomial<C> q = p.multiply(b);
             c.add(q);
         }
-        WordIdeal<C> I = new WordIdeal<C>(getRing(), c, false);
+        WordIdeal<C> I = new WordIdeal<C>(getRing(), c, false, bb);
         if (isGB) {
             I.doGB();
         }
@@ -709,8 +709,8 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         if (this.isZERO()) {
             return this;
         }
-        List<GenWordPolynomial<C>> c = PolyGBUtil.<C> intersect(getRing(), getList(), B.getList());
-        WordIdeal<C> I = new WordIdeal<C>(getRing(), c, true);
+        List<GenWordPolynomial<C>> c = PolyGBUtil.<C> intersect(getRing(), getList(), B.getList(), bb);
+        WordIdeal<C> I = new WordIdeal<C>(getRing(), c, true, bb);
         return I;
     }
 
@@ -728,7 +728,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
             throw new IllegalArgumentException("R may not be null");
         }
         List<GenWordPolynomial<C>> H = PolyUtil.<C> intersect(R, getList());
-        return new WordIdeal<C>(R, H, isGB);
+        return new WordIdeal<C>(R, H, isGB, bb);
     }
 
 
@@ -767,7 +767,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
         List<GenWordPolynomial<C>> H;
         H = new ArrayList<GenWordPolynomial<C>>(1);
         H.add(h);
-        WordIdeal<C> Hi = new WordIdeal<C>(getRing(), H, true);
+        WordIdeal<C> Hi = new WordIdeal<C>(getRing(), H, true, bb);
         WordIdeal<C> I = this.intersect(Hi);
         List<GenWordPolynomial<C>> Q;
         Q = new ArrayList<GenWordPolynomial<C>>(I.getList().size());
@@ -775,7 +775,7 @@ public class WordIdeal<C extends GcdRingElem<C>> implements Comparable<WordIdeal
             q = (GenWordPolynomial<C>) q.divide(h); // remainder == 0
             Q.add(q);
         }
-        return new WordIdeal<C>(getRing(), Q, true);
+        return new WordIdeal<C>(getRing(), Q, true, bb);
     }
      */
 

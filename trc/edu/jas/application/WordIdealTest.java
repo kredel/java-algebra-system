@@ -37,7 +37,6 @@ public class WordIdealTest extends TestCase {
      * main
      */
     public static void main(String[] args) {
-        
         junit.textui.TestRunner.run(suite());
     }
 
@@ -76,7 +75,7 @@ public class WordIdealTest extends TestCase {
     List<GenWordPolynomial<BigRational>> G;
 
 
-    WordGroebnerBase<BigRational> bb;
+    WordGroebnerBaseSeq<BigRational> bb;
 
 
     GenWordPolynomial<BigRational> a, b, c, d, e;
@@ -100,6 +99,7 @@ public class WordIdealTest extends TestCase {
         fac = new GenWordPolynomialRing<BigRational>(coeff, vars);
         bb = new WordGroebnerBaseSeq<BigRational>();
         //bb = GBFactory.getImplementation(coeff);
+        //bb.timestatus.setNotActive(); // allow infintite computation
         a = b = c = d = e = null;
     }
 
@@ -133,19 +133,19 @@ public class WordIdealTest extends TestCase {
         L.add(a);
         //System.out.println("L = " + L.size() );
 
-        I = new WordIdeal<BigRational>(fac, L, true);
+        I = new WordIdeal<BigRational>(fac, L, true, bb);
         assertTrue("isGB( I )", I.isGB());
 
-        I = new WordIdeal<BigRational>(fac, L, false);
+        I = new WordIdeal<BigRational>(fac, L, false, bb);
         assertTrue("isGB( I )", I.isGB());
 
         L = bb.GB(L);
         assertTrue("isGB( { a } )", bb.isGB(L));
 
-        I = new WordIdeal<BigRational>(fac, L, true);
+        I = new WordIdeal<BigRational>(fac, L, true, bb);
         assertTrue("isGB( I )", I.isGB());
 
-        I = new WordIdeal<BigRational>(fac, L, false);
+        I = new WordIdeal<BigRational>(fac, L, false, bb);
         assertTrue("isGB( I )", I.isGB());
 
         String s = I.toScript() + "\n" + I.toString();
@@ -161,7 +161,7 @@ public class WordIdealTest extends TestCase {
         L.add(b);
         //System.out.println("L = " + L.size() );
 
-        I = new WordIdeal<BigRational>(fac, L, false);
+        I = new WordIdeal<BigRational>(fac, L, false, bb);
         assertTrue("not isZERO( I )", !I.isZERO());
         //assertTrue("not isONE( I )", !I.isONE() );
         //assertTrue("not isGB( I )", !I.isGB() );
@@ -169,7 +169,7 @@ public class WordIdealTest extends TestCase {
         L = bb.GB(L);
         assertTrue("isGB( { a, b } )", bb.isGB(L));
 
-        I = new WordIdeal<BigRational>(fac, L, true);
+        I = new WordIdeal<BigRational>(fac, L, true, bb);
         assertTrue("not isZERO( I )", !I.isZERO());
         // assertTrue("not isONE( I )", !I.isONE() );
         assertTrue("isGB( I )", I.isGB());
@@ -196,7 +196,7 @@ public class WordIdealTest extends TestCase {
         L.add(c);
         assertTrue("isGB( { c } )", bb.isGB(L));
 
-        J = new WordIdeal<BigRational>(fac, L, true);
+        J = new WordIdeal<BigRational>(fac, L, true, bb);
         K = J.sum(I);
         assertTrue("isGB( K )", K.isGB());
         assertTrue("K contains(I)", K.contains(I));
@@ -206,7 +206,7 @@ public class WordIdealTest extends TestCase {
         L.add(d);
 
         assertTrue("isGB( { d } )", bb.isGB(L));
-        J = new WordIdeal<BigRational>(fac, L, true);
+        J = new WordIdeal<BigRational>(fac, L, true, bb);
         I = K;
         K = J.sum(I);
         assertTrue("isGB( K )", K.isGB());
@@ -217,7 +217,7 @@ public class WordIdealTest extends TestCase {
         L.add(e);
 
         assertTrue("isGB( { e } )", bb.isGB(L));
-        J = new WordIdeal<BigRational>(fac, L, true);
+        J = new WordIdeal<BigRational>(fac, L, true, bb);
         I = K;
         K = J.sum(I);
         assertTrue("isGB( K )", K.isGB());
@@ -229,7 +229,7 @@ public class WordIdealTest extends TestCase {
         L.clear();
         e = fac.parse("x x");
         L.add(e);
-        I = new WordIdeal<BigRational>(fac, L, true);
+        I = new WordIdeal<BigRational>(fac, L, true, bb);
         I.doGB();
         J = I.power(3);
         J = J.power(2);
@@ -260,14 +260,14 @@ public class WordIdealTest extends TestCase {
         L = new ArrayList<GenWordPolynomial<BigRational>>();
         L.add(a);
 
-        I = new WordIdeal<BigRational>(fac, L, false);
+        I = new WordIdeal<BigRational>(fac, L, false, bb);
         assertTrue("not isONE( I )", !I.isONE() || a.isConstant());
         assertTrue("isGB( I )", I.isGB());
 
         L = new ArrayList<GenWordPolynomial<BigRational>>();
         L.add(b);
 
-        J = new WordIdeal<BigRational>(fac, L, false);
+        J = new WordIdeal<BigRational>(fac, L, false, bb);
         assertTrue("not isONE( J )", !J.isONE() || a.isConstant() || b.isConstant());
         assertTrue("isGB( J )", J.isGB());
 
@@ -299,7 +299,7 @@ public class WordIdealTest extends TestCase {
         //L.add(c);
         L = bb.GB(L); // may be infinite with c
 
-        I = new WordIdeal<BigRational>(fac, L, true);
+        I = new WordIdeal<BigRational>(fac, L, true, bb);
         //System.out.println("I = " + I);
         assertTrue("isGB( I )", I.isGB());
 
@@ -311,7 +311,7 @@ public class WordIdealTest extends TestCase {
         assertTrue("J contains(K)", J.contains(K));
 
         M = I.normalform(K.getList());
-        H = new WordIdeal<BigRational>(fac, M, false);
+        H = new WordIdeal<BigRational>(fac, M, false, bb);
         //System.out.println("I = " + I);
         //System.out.println("K = " + K);
         //System.out.println("H = " + H);
@@ -327,30 +327,30 @@ public class WordIdealTest extends TestCase {
         WordIdeal<BigRational> I, J;
         L = new ArrayList<GenWordPolynomial<BigRational>>();
 
-        I = new WordIdeal<BigRational>(fac, L, true);
+        I = new WordIdeal<BigRational>(fac, L, true, bb);
         assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1);
 
         a = fac.getZERO();
         L.add(a);
-        I = new WordIdeal<BigRational>(fac, L, true);
+        I = new WordIdeal<BigRational>(fac, L, true, bb);
         assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1);
 
         b = fac.getONE();
         L.add(b);
-        I = new WordIdeal<BigRational>(fac, L, true);
+        I = new WordIdeal<BigRational>(fac, L, true, bb);
         assertEquals("commonZeroTest( I )", I.commonZeroTest(), -1);
 
         L = new ArrayList<GenWordPolynomial<BigRational>>();
         a = fac.random(kl, ll, el);
         if (!a.isZERO() && !a.isConstant()) {
             L.add(a);
-            I = new WordIdeal<BigRational>(fac, L, true);
+            I = new WordIdeal<BigRational>(fac, L, true, bb);
             assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1);
         }
 
         L = (List<GenWordPolynomial<BigRational>>) fac.univariateList();
         //System.out.println("L = " + L);
-        I = new WordIdeal<BigRational>(fac, L, true);
+        I = new WordIdeal<BigRational>(fac, L, true, bb);
         assertEquals("commonZeroTest( I )", I.commonZeroTest(), 0);
 
         J = I.product(I);
@@ -358,7 +358,7 @@ public class WordIdealTest extends TestCase {
         assertEquals("commonZeroTest( J )", J.commonZeroTest(), 0);
 
         L.remove(0);
-        I = new WordIdeal<BigRational>(fac, L, true);
+        I = new WordIdeal<BigRational>(fac, L, true, bb);
         assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1);
     }
 
@@ -386,7 +386,7 @@ public class WordIdealTest extends TestCase {
         c = fac2.valueOf(c);
         L.add(c);
         
-        I = new WordIdeal<BigRational>(fac2, L, false);
+        I = new WordIdeal<BigRational>(fac2, L, false, bb);
         //System.out.println("I = " + I);
         I.doGB();
         //System.out.println("I = " + I);
@@ -401,7 +401,7 @@ public class WordIdealTest extends TestCase {
             GenWordPolynomial<BigRational> pe = fac2.valueOf(p);
             ex.add(pe);
         }
-        K = new WordIdeal<BigRational>(fac2, ex);
+        K = new WordIdeal<BigRational>(fac2, ex, false, bb);
         //System.out.println("K = " + K);
 
         assertTrue("intersect ", I.contains(K));
@@ -421,7 +421,7 @@ public class WordIdealTest extends TestCase {
         c = fac.random(4).monic();
         L.add(c);
         
-        I = new WordIdeal<BigRational>(fac, L, false);
+        I = new WordIdeal<BigRational>(fac, L, false, bb);
         //System.out.println("I = " + I);
 
         // second ideal
@@ -429,7 +429,7 @@ public class WordIdealTest extends TestCase {
         a = fac.random(3).monic();
         L.add(a);
         
-        J = new WordIdeal<BigRational>(fac, L, false);
+        J = new WordIdeal<BigRational>(fac, L, false, bb);
         //System.out.println("J = " + J);
 
         // now intersect with word ideal
