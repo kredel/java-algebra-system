@@ -410,6 +410,22 @@ public class PolyGBUtil {
     public static <C extends GcdRingElem<C>> List<GenWordPolynomial<C>> intersect(
                     GenWordPolynomialRing<C> pfac, List<GenWordPolynomial<C>> A,
                     List<GenWordPolynomial<C>> B) {
+        logger.warn("new WordGroebnerBaseSeq generated");
+        return intersect(pfac, A, B, new WordGroebnerBaseSeq<C>());
+    }
+
+
+    /**
+     * Intersection. Generators for the intersection of word ideals.
+     * @param pfac word polynomial ring
+     * @param A list of word polynomials
+     * @param B list of word polynomials
+     * @param bb Groebner Base engine
+     * @return generators for (A \cap B) if it exists
+     */
+    public static <C extends GcdRingElem<C>> List<GenWordPolynomial<C>> intersect(
+                    GenWordPolynomialRing<C> pfac, List<GenWordPolynomial<C>> A,
+                    List<GenWordPolynomial<C>> B, WordGroebnerBaseAbstract<C> bb) {
         if (A == null || A.isEmpty()) { // (0)
             return B;
         }
@@ -442,7 +458,7 @@ public class PolyGBUtil {
             L.add(p);
         }
         //System.out.println("L = " + L);
-        WordGroebnerBaseAbstract<C> bb = new WordGroebnerBaseSeq<C>();
+        //WordGroebnerBaseAbstract<C> bb = new WordGroebnerBaseSeq<C>(); // todo timestatus
         logger.warn("intersect computing GB");
         List<GenWordPolynomial<C>> G = bb.GB(L);
         //System.out.println("G = " + G);

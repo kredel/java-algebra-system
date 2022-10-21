@@ -10,7 +10,7 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager; 
 
-import edu.jas.kern.TimeStatus;
+import edu.jas.kern.LocalTimeStatus;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
 import edu.jas.poly.PolyUtil;
@@ -18,8 +18,16 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Non-commutative word Groebner Base sequential algorithm. Implements Groebner
- * bases and GB test.
+ * Non-commutative word Groebner Base sequential algorithm. Implements
+ * Groebner bases and GB test. Run-time for GB computation is limited
+ * to 20 seconds. To change this limit use
+ * <pre>
+ *   wbb.timestatus.setLimit(newLimit);
+ * </pre>
+ * or decativate it for inifinite running time
+ * <pre>
+ *   wbb.timestatus.setNotActive();
+ * </pre>
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
@@ -33,14 +41,15 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
     private static final boolean debug = logger.isDebugEnabled();
 
 
+    public final LocalTimeStatus timestatus;
+
+
     /**
      * Constructor.
      */
     public WordGroebnerBaseSeq() {
         super();
-        TimeStatus.setActive();
-        TimeStatus.setLimit(10);
-        TimeStatus.setCallBack(new TimeStatus.TSCall(false));
+        timestatus = new LocalTimeStatus(true, 20*1000, false);
     }
 
 
@@ -50,9 +59,7 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
      */
     public WordGroebnerBaseSeq(WordReduction<C> red) {
         super(red);
-        TimeStatus.setActive();
-        TimeStatus.setLimit(10);
-        TimeStatus.setCallBack(new TimeStatus.TSCall(false));
+        timestatus = new LocalTimeStatus(true, 20*1000, false);
     }
 
 
@@ -63,9 +70,7 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
      */
     public WordGroebnerBaseSeq(WordReduction<C> red, WordPairList<C> pl) {
         super(red, pl);
-        TimeStatus.setActive();
-        TimeStatus.setLimit(10);
-        TimeStatus.setCallBack(new TimeStatus.TSCall(false));
+        timestatus = new LocalTimeStatus(true, 20*1000, false);
     }
 
 
@@ -89,6 +94,10 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
         OrderedWordPairlist<C> pairlist = (OrderedWordPairlist<C>) strategy.create(ring);
         pairlist.put(G);
         logger.info("start {}", pairlist);
+        timestatus.restart();
+        //if (timestatus.isActive()) {
+        //    throw new RuntimeException("timestatus: " + timestatus);
+        //}
 
         WordPair<C> pair;
         GenWordPolynomial<C> pi;
@@ -158,9 +167,9 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
                     pairlist.put(H);
                 }
                 if (H.degree() > 9) {
-                    System.out.println("deg(H): " + H.degree());
-                    logger.warn("word GB too high degree {}", H.degree());
-                    TimeStatus.checkTime("word GB degree > 9");
+                    //System.out.println("deg(H): " + H.degree());
+                    //logger.warn("word GB too high degree {}", H.degree());
+                    timestatus.checkTime("word GB degree > 9: " + H.degree());
                 }
 
                 if (s.leadingWord().dependencyOnVariables().equals(H.leadingWord().dependencyOnVariables())) {
@@ -168,7 +177,9 @@ public class WordGroebnerBaseSeq<C extends RingElem<C>> extends WordGroebnerBase
                     logger.info("LT depend: {} --> {}", s, H);
                     infin++;
                     if (infin > 500) {
-                        throw new RuntimeException("no convergence in word GB: " + infin);
+                        //System.out.println("deg(H): " + H.degree());
+                        //throw new RuntimeException("no convergence in word GB: " + infin);
+                        timestatus.checkTime("no convergence in word GB: > 500: " + infin);
                     }
                 }
             }
