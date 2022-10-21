@@ -9,7 +9,8 @@ import java.util.concurrent.Callable;
 
 
 /**
- * Run-time status, defines global status and handling for run time limits.
+ * Run-time status, defines global status and handling for run time
+ * limits.
  * @author Heinz Kredel
  */
 
@@ -122,10 +123,10 @@ public class TimeStatus {
             } catch (Exception e) {
             }
         }
-        if (msg == null) {
-            msg = "";
+        if (msg != null) {
+            msg = msg + ", ";
         }
-        throw new TimeExceededException(msg + " over time = " + tt);
+        throw new TimeExceededException(msg + "elapsed time >= " + limitTime + " ms");
     }
 
 
