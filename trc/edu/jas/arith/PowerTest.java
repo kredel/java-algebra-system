@@ -2,14 +2,14 @@
  * $Id$
  */
 
-package edu.jas.structure;
+package edu.jas.arith;
 
 
 import java.util.List;
 import java.util.LinkedList;
 
-import edu.jas.arith.BigInteger;
-import edu.jas.arith.BigRational;
+import edu.jas.structure.MonoidElem;
+import edu.jas.structure.Power;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
