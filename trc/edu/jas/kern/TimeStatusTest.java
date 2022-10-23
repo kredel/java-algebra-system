@@ -93,7 +93,7 @@ public class TimeStatusTest extends TestCase {
         TimeStatus.setActive();
         TimeStatus.restart();
         TimeStatus.setLimit(0L);
-        TimeStatus.setCallBack(new TSCallMock(true));
+        TimeStatus.setCallBack(new TimeStatus.TSCall(true));
         assertTrue("is active ", TimeStatus.isActive());
 
         try {
@@ -106,7 +106,7 @@ public class TimeStatusTest extends TestCase {
             fail("test3 interrupt");
         }
 
-        TimeStatus.setCallBack(new TSCallMock(false));
+        TimeStatus.setCallBack(new TimeStatus.TSCall(false));
         try {
             Thread.sleep(10);
             TimeStatus.checkTime("test4");
@@ -116,24 +116,6 @@ public class TimeStatusTest extends TestCase {
         } catch (InterruptedException e) {
             fail("test4 interrupt");
         }
-    }
-
-}
-
-
-class TSCallMock implements Callable<Boolean> {
-
-
-    boolean flag = true;
-
-
-    public TSCallMock(boolean b) {
-        flag = b;
-    }
-
-
-    public Boolean call() {
-        return flag;
     }
 
 }

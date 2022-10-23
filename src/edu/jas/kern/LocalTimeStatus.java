@@ -46,7 +46,7 @@ public class LocalTimeStatus {
      * Public constructor.
      */
     public LocalTimeStatus() {
-        this(false, Long.MAX_VALUE, true);
+        this(false, Long.MAX_VALUE, false);
     }
 
 
@@ -59,7 +59,7 @@ public class LocalTimeStatus {
     public LocalTimeStatus(boolean a, long d, boolean r) {
         allowTime = a;
         limitTime = d;
-        callBack = new TSCall(r);
+        callBack = new LocalTimeStatus.TSCall(r);
         startTime = System.currentTimeMillis();
     }
 
