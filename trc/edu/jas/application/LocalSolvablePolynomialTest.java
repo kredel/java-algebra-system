@@ -136,6 +136,10 @@ public class LocalSolvablePolynomialTest extends TestCase {
      * Test constructor, generators and properties.
      */
     public void testConstructor() {
+        String s = ring.toString() + ", " + ring.toScript();
+        //System.out.println("s = " + s + ", " + s.length());
+        assertTrue("length( string(ring) ) >= 563", s.length() >= 563);
+
         a = ring.getZERO();
         assertTrue("length( a ) = 0", a.length() == 0);
         assertTrue("isZERO( a )", a.isZERO());
@@ -175,6 +179,10 @@ public class LocalSolvablePolynomialTest extends TestCase {
             assertTrue("length( a" + i + " ) <> 0", a.length() >= 0);
             assertTrue(" not isZERO( a" + i + " )", !a.isZERO());
             assertTrue(" not isONE( a" + i + " )", !a.isONE());
+
+            String s = a.toString() + ", " + a.toScript();
+            //System.out.println("s = " + s + ", " + s.length());
+            assertTrue("length( string(a) ) >= 9", s.length() >= 9);
         }
     }
 

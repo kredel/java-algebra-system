@@ -249,6 +249,9 @@ public class CGBSeqTest extends TestCase {
         GS = bb.GBsys(F.list);
         //System.out.println("GBsys(F) = GS = " + GS);
         assertTrue("isGBsys( GBsys(Raksanyi) )", bb.isGB(GS));
+        String s = GS.toString() + ", " + GS.toScript();
+        //System.out.println("s = " + s + ", " + s.length());
+        assertTrue("length( string(GS) ) >= 10500", s.length() >= 10500);
 
         G = GS.getCGB();
         //System.out.println("cgb( GS ) = " + G);

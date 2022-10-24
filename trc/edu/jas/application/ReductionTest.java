@@ -64,37 +64,17 @@ public class ReductionTest extends TestCase {
     }
 
 
-    //private final static int bitlen = 100;
-
     GenPolynomialRing<BigRational> fac;
 
 
-    GenPolynomial<BigRational> a;
-
-
-    GenPolynomial<BigRational> b;
-
-
-    GenPolynomial<BigRational> c;
-
-
-    GenPolynomial<BigRational> d;
-
-
-    GenPolynomial<BigRational> e;
+    GenPolynomial<BigRational> a, b, c, d, e;
 
 
     List<GenPolynomial<BigRational>> L;
 
 
-    PolynomialList<BigRational> F;
+    PolynomialList<BigRational> F, G;
 
-
-    PolynomialList<BigRational> G;
-
-
-    //ReductionSeq<BigRational> red;
-    //Reduction<BigRational> redpar;
 
     int rl = 2;
 
@@ -115,8 +95,6 @@ public class ReductionTest extends TestCase {
     protected void setUp() {
         a = b = c = d = e = null;
         fac = new GenPolynomialRing<BigRational>(new BigRational(0), rl);
-        //red = new ReductionSeq<BigRational>();
-        //redpar = new ReductionPar<BigRational>();
     }
 
 
@@ -124,8 +102,6 @@ public class ReductionTest extends TestCase {
     protected void tearDown() {
         a = b = c = d = e = null;
         fac = null;
-        //red = null;
-        //redpar = null;
     }
 
 
@@ -140,10 +116,8 @@ public class ReductionTest extends TestCase {
     /**
      * Test rational coefficient polynomial parametric reduction,
      * caseDistinction and determination.
-     * 
      */
     public void testRatPolReduction() {
-
         RingFactory<BigRational> bi = new BigRational(0);
         GenPolynomialRing<BigRational> pr = new GenPolynomialRing<BigRational>(bi, 2,
                         new String[] { "a", "b" });
@@ -222,6 +196,10 @@ public class ReductionTest extends TestCase {
         Condition<BigRational> cond = new Condition<BigRational>(id);
         ColoredSystem<BigRational> s = new ColoredSystem<BigRational>(cond, cp);
         //System.out.println("s = " + s);
+
+        String z = s.toString() + ", " + s.toScript();
+        //System.out.println("z = " + z + ", " + z.length());
+        assertTrue("length( string(s) ) >= 0", z.length() >= 0);
 
         assertTrue("isDetermined ", s.isDetermined());
         assertTrue("checkInvariant ", s.checkInvariant());
