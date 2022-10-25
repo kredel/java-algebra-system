@@ -9,8 +9,7 @@ import java.util.concurrent.Callable;
 
 
 /**
- * Run-time status, defines local status and handling for local run time
- * limits.
+ * Run-time status, defines local status and handling for local run time limits.
  * @see edu.jas.kern.TimeStatus
  * @author Heinz Kredel
  */
@@ -68,12 +67,13 @@ public class LocalTimeStatus {
      * To String.
      * @return String representation of this.
      */
+    @Override
     public String toString() {
         StringBuffer sb = new StringBuffer("LocalTimeStatus(");
         sb.append("" + allowTime);
         sb.append(", " + limitTime);
         try {
-            sb.append(", " + (callBack == null ? "null" : callBack.call()) );
+            sb.append(", " + (callBack == null ? "null" : callBack.call()));
         } catch (Exception e) {
         }
         sb.append(", " + startTime);
@@ -160,7 +160,7 @@ public class LocalTimeStatus {
         if (msg != null) {
             msg = msg + ", ";
         }
-        throw new TimeExceededException(msg + "elapsed time >= " + (limitTime+tt) + " ms");
+        throw new TimeExceededException(msg + "elapsed time >= " + (limitTime + tt) + " ms");
     }
 
 

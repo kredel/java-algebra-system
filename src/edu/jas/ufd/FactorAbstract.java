@@ -299,7 +299,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                     TimeStatus.checkTime(ti + " % 2000 == 0");
                 }
                 if (JASConfig.MAX_ITERATIONS_KRONECKER_FACTORIZATION > 0
-                    && JASConfig.MAX_ITERATIONS_KRONECKER_FACTORIZATION < kr.degree(0)) {
+                    && JASConfig.MAX_ITERATIONS_KRONECKER_FACTORIZATION < ti) {
                   throw new ArithmeticException(
                       "Kronecker substitution iteration limit (see JASConfig) exceeeded: " + ti);
                 }
