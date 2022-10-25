@@ -12,19 +12,17 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
-
+import edu.jas.kern.JASConfig;
 import edu.jas.kern.TimeStatus;
-import edu.jas.kern.StringUtil;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.OptimizedPolynomialList;
 import edu.jas.poly.PolyUtil;
-import edu.jas.poly.TermOrderOptimization;
 import edu.jas.poly.TermOrderByName;
+import edu.jas.poly.TermOrderOptimization;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.util.KsubSet;
@@ -96,6 +94,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @param P GenPolynomial.
      * @return true if P is irreducible, else false.
      */
+    @Override
     public boolean isIrreducible(GenPolynomial<C> P) {
         if (!isSquarefree(P)) {
             return false;
@@ -122,6 +121,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @param P GenPolynomial.
      * @return true if P is reducible, else false.
      */
+    @Override
     public boolean isReducible(GenPolynomial<C> P) {
         return !isIrreducible(P);
     }
@@ -132,6 +132,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @param P GenPolynomial.
      * @return true if P is squarefree, else false.
      */
+    @Override
     public boolean isSquarefree(GenPolynomial<C> P) {
         return sengine.isSquarefree(P);
     }
@@ -243,6 +244,12 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
             logger.warn("Kronecker substitution has too high degree {}", kr.degree(0));
             TimeStatus.checkTime("degree > 100");
         }
+        if (JASConfig.MAX_DEGREE_KRONECKER_FACTORIZATION > 0
+            && JASConfig.MAX_DEGREE_KRONECKER_FACTORIZATION < kr.degree(0)) {
+          throw new ArithmeticException(
+              "Kronecker substitution maximum degree (see JASConfig) exceeded: "
+                  + kr.degree(0));
+        }
 
         // factor Kronecker polynomial
         List<GenPolynomial<C>> ulist = new ArrayList<GenPolynomial<C>>();
@@ -290,6 +297,11 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
                 if (ti % 2000 == 0) {
                     logger.warn("ti({})", ti);
                     TimeStatus.checkTime(ti + " % 2000 == 0");
+                }
+                if (JASConfig.MAX_ITERATIONS_KRONECKER_FACTORIZATION > 0
+                    && JASConfig.MAX_ITERATIONS_KRONECKER_FACTORIZATION < kr.degree(0)) {
+                  throw new ArithmeticException(
+                      "Kronecker substitution iteration limit (see JASConfig) exceeeded: " + ti);
                 }
                 if (!evl.multipleOf(trial.leadingExpVector())) {
                     continue;
@@ -469,6 +481,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @return [p_1, ..., p_k] with P = prod_{i=1,...,k} p_i**{e_i} for some
      *         e_i.
      */
+    @Override
     public List<GenPolynomial<C>> factorsRadical(GenPolynomial<C> P) {
         return new ArrayList<GenPolynomial<C>>(factors(P).keySet());
     }
@@ -496,6 +509,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k}
      *         p_i**e_i.
      */
+    @Override
     public SortedMap<GenPolynomial<C>, Long> factors(GenPolynomial<C> P) {
         if (P == null) {
             throw new IllegalArgumentException(this.getClass().getName() + " P != null");
@@ -592,6 +606,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @param P GenPolynomial.
      * @return squarefree(P).
      */
+    @Override
     public GenPolynomial<C> squarefreePart(GenPolynomial<C> P) {
         return sengine.squarefreePart(P);
     }
@@ -626,6 +641,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @return [p_1 -&gt; e_1, ..., p_k -&gt; e_k] with P = prod_{i=1,...,k}
      *         p_i**e_i.
      */
+    @Override
     public SortedMap<GenPolynomial<C>, Long> squarefreeFactors(GenPolynomial<C> P) {
         return sengine.squarefreeFactors(P);
     }
@@ -637,6 +653,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @param F = [p_1,...,p_k].
      * @return true if P = prod_{i=1,...,r} p_i, else false.
      */
+    @Override
     public boolean isFactorization(GenPolynomial<C> P, List<GenPolynomial<C>> F) {
         return sengine.isFactorization(P, F);
         // test irreducible
@@ -649,6 +666,7 @@ public abstract class FactorAbstract<C extends GcdRingElem<C>> implements Factor
      * @param F = [p_1 -&gt; e_1, ..., p_k -&gt; e_k].
      * @return true if P = prod_{i=1,...,k} p_i**e_i , else false.
      */
+    @Override
     public boolean isFactorization(GenPolynomial<C> P, SortedMap<GenPolynomial<C>, Long> F) {
         return sengine.isFactorization(P, F);
         // test irreducible
