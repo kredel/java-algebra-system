@@ -11,22 +11,20 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
 import edu.jas.arith.BigRational;
 import edu.jas.arith.Product;
-import edu.jas.arith.ProductRing;
+import edu.jas.gbufd.RGroebnerBasePseudoSeq;
+import edu.jas.gbufd.RReductionSeq;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingFactory;
-import edu.jas.gbufd.RReduction;
-import edu.jas.gbufd.RReductionSeq;
-import edu.jas.gbufd.RGroebnerBasePseudoSeq;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -35,7 +33,6 @@ import edu.jas.gbufd.RGroebnerBasePseudoSeq;
  */
 
 public class CGBSeqTest extends TestCase {
-
 
 
     /**
@@ -89,7 +86,7 @@ public class CGBSeqTest extends TestCase {
     int ll = 3;
 
 
-    int el = 3+1;
+    int el = 3 + 1;
 
 
     float q = 0.3f; //0.4f
@@ -189,14 +186,11 @@ public class CGBSeqTest extends TestCase {
     public void testTrinks7GBase() {
         PolynomialList<GenPolynomial<BigRational>> F = null;
         List<GenPolynomial<GenPolynomial<BigRational>>> G = null;
-        String exam = "IntFunc(b) (S,T,Z,P,W) L "
-               + "( "
-               + "( 45 P + 35 S - { 165 b + 36 } ), "
-               + "( 35 P + 40 Z + 25 T - 27 S ), "
-               + "( 15 W + 25 S P + 30 Z - 18 T - { 165 b**2 } ), "
-               + "( - 9 W + 15 T P + 20 S Z ), " + "( P W + 2 T Z - { 11 b**3 } ), "
-               + "( 99 W - { 11 b } S + { 3 b**2 } ), " + "( { b**2 + 33/50 b + 2673/10000 } ) "
-               + ") ";
+        String exam = "IntFunc(b) (S,T,Z,P,W) L " + "( " + "( 45 P + 35 S - { 165 b + 36 } ), "
+                        + "( 35 P + 40 Z + 25 T - 27 S ), "
+                        + "( 15 W + 25 S P + 30 Z - 18 T - { 165 b**2 } ), " + "( - 9 W + 15 T P + 20 S Z ), "
+                        + "( P W + 2 T Z - { 11 b**3 } ), " + "( 99 W - { 11 b } S + { 3 b**2 } ), "
+                        + "( { b**2 + 33/50 b + 2673/10000 } ) " + ") ";
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {
@@ -224,13 +218,10 @@ public class CGBSeqTest extends TestCase {
     @SuppressWarnings("unchecked")
     public void testRaksanyiCGBase() {
         PolynomialList<GenPolynomial<BigRational>> F = null;
-        String exam = "IntFunc(a1,a2,a3,a4) (x1,x2,x3,x4) L "
-               + "( "
-               + "( x4 - ( a4 - a2 ) ), "
-               + "( x1 + x2 + x3 + x4 - ( a1 + a3 + a4 ) ), "
-               + "( x1 * x3 + x1 * x4 + x2 * x3 + x3 * x4 - ( a1 * a4 + a1 * a3 + a3 * a4 ) ), "
-               + "( x1 * x3 * x4 - ( a1 * a3 * a4 ) ) "
-               + ") ";
+        String exam = "IntFunc(a1,a2,a3,a4) (x1,x2,x3,x4) L " + "( " + "( x4 - ( a4 - a2 ) ), "
+                        + "( x1 + x2 + x3 + x4 - ( a1 + a3 + a4 ) ), "
+                        + "( x1 * x3 + x1 * x4 + x2 * x3 + x3 * x4 - ( a1 * a4 + a1 * a3 + a3 * a4 ) ), "
+                        + "( x1 * x3 * x4 - ( a1 * a3 * a4 ) ) " + ") ";
         Reader source = new StringReader(exam);
         GenPolynomialTokenizer parser = new GenPolynomialTokenizer(source);
         try {

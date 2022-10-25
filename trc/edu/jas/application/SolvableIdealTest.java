@@ -809,7 +809,7 @@ public class SolvableIdealTest extends TestCase {
         assertTrue("isGB( I )", I.isGB());
 
         J = I.infiniteQuotient(a);
-        int x = I.infiniteQuotientExponent(a,J);
+        int x = I.infiniteQuotientExponent(a, J);
         //System.out.println("I, a, J, x: " + I.toScript() + ", " + a + ", " + J.toScript() + ", " + x);
         assertTrue("x >= 0: " + x, x >= 0);
 

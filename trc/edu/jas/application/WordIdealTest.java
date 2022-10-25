@@ -8,14 +8,7 @@ package edu.jas.application;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
-
 import edu.jas.arith.BigRational;
-import edu.jas.gb.WordGroebnerBase;
 import edu.jas.gb.WordGroebnerBaseSeq;
 // import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenWordPolynomial;
@@ -23,14 +16,16 @@ import edu.jas.poly.GenWordPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.poly.TermOrder;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 
 /**
  * WordIdeal tests with JUnit.
  * @author Heinz Kredel
  */
 public class WordIdealTest extends TestCase {
-
-
 
 
     /**
@@ -294,7 +289,7 @@ public class WordIdealTest extends TestCase {
         assertTrue("I contains(K)", I.contains(K));
 
 
-	L = new ArrayList<GenWordPolynomial<BigRational>>();
+        L = new ArrayList<GenWordPolynomial<BigRational>>();
         L.add(a);
         //L.add(c);
         L = bb.GB(L); // may be infinite with c
@@ -362,7 +357,7 @@ public class WordIdealTest extends TestCase {
         assertEquals("commonZeroTest( I )", I.commonZeroTest(), 1);
     }
 
-    
+
     /**
      * Test WordIdeal contraction.
      */
@@ -381,11 +376,11 @@ public class WordIdealTest extends TestCase {
         b = fac2.random(3).monic();
         b = fac2.valueOf(b);
         L.add(b);
-        
+
         c = fac.random(4).monic();
         c = fac2.valueOf(c);
         L.add(c);
-        
+
         I = new WordIdeal<BigRational>(fac2, L, false, bb);
         //System.out.println("I = " + I);
         I.doGB();
@@ -420,7 +415,7 @@ public class WordIdealTest extends TestCase {
         L.add(b);
         c = fac.random(4).monic();
         L.add(c);
-        
+
         I = new WordIdeal<BigRational>(fac, L, false, bb);
         //System.out.println("I = " + I);
 
@@ -428,7 +423,7 @@ public class WordIdealTest extends TestCase {
         L.clear();
         a = fac.random(3).monic();
         L.add(a);
-        
+
         J = new WordIdeal<BigRational>(fac, L, false, bb);
         //System.out.println("J = " + J);
 
@@ -446,5 +441,5 @@ public class WordIdealTest extends TestCase {
         assertTrue("intersect ", I.contains(K));
         assertTrue("intersect ", J.contains(K));
     }
-  
+
 }

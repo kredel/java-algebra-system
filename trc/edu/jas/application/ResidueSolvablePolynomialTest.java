@@ -9,12 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
-
 import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -26,6 +20,10 @@ import edu.jas.poly.RecSolvablePolynomial;
 import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -40,7 +38,7 @@ public class ResidueSolvablePolynomialTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        
+
         junit.textui.TestRunner.run(suite());
     }
 
@@ -369,10 +367,10 @@ public class ResidueSolvablePolynomialTest extends TestCase {
                 //System.out.println("gens:" + a + " * " + b + " = " + c);
                 ExpVector ev = a.leadingExpVector().sum(b.leadingExpVector());
                 assertTrue("LT(a)*LT(b) == LT(c)", c.leadingExpVector().equals(ev));
-                ev = a.leadingBaseCoefficient().val.leadingExpVector().sum(
-                                b.leadingBaseCoefficient().val.leadingExpVector());
-                assertTrue("LT(lc(a))*LT(lc(b)) == LT(lc(c))", c.leadingBaseCoefficient().val
-                                .leadingExpVector().equals(ev));
+                ev = a.leadingBaseCoefficient().val.leadingExpVector()
+                                .sum(b.leadingBaseCoefficient().val.leadingExpVector());
+                assertTrue("LT(lc(a))*LT(lc(b)) == LT(lc(c))",
+                                c.leadingBaseCoefficient().val.leadingExpVector().equals(ev));
             }
         }
         //System.out.println("ring = " + ring.toScript());

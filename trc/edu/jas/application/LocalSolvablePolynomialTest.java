@@ -5,14 +5,8 @@
 package edu.jas.application;
 
 
-import java.util.List;
 import java.util.ArrayList;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
+import java.util.List;
 
 import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
@@ -20,10 +14,13 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.RecSolvablePolynomial;
-import edu.jas.poly.RelationTable;
+import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
-import edu.jas.poly.RelationGenerator;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -38,7 +35,7 @@ public class LocalSolvablePolynomialTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        
+
         junit.textui.TestRunner.run(suite());
     }
 
@@ -191,7 +188,7 @@ public class LocalSolvablePolynomialTest extends TestCase {
      * Test addition.
      */
     public void testAddition() {
-        a = ring.random(kl+1, ll, el, q);
+        a = ring.random(kl + 1, ll, el, q);
         c = (LocalSolvablePolynomial<BigRational>) a.subtract(a);
         assertTrue("a-a = 0", c.isZERO());
 
@@ -349,8 +346,8 @@ public class LocalSolvablePolynomialTest extends TestCase {
      * Test solvable coefficient ring.
      */
     public void testSolvableCoeffs() {
-        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
-                        tord, cvars);
+        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac, tord,
+                        cvars);
         //RelationGenerator<BigRational> wc = new WeylRelations<BigRational>();
         //no: csring.addRelations(wc); //wc.generate(csring);
         //assertTrue("# relations == 1", csring.table.size() == 1);
