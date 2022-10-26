@@ -577,7 +577,7 @@ public class FDUtilTest extends TestCase {
             }
         } while (i++ < max);
 
-	bc = (GenSolvablePolynomial<BigRational>) bs.leadingBaseCoefficient();
+        bc = (GenSolvablePolynomial<BigRational>) bs.leadingBaseCoefficient();
         ds = (RecSolvablePolynomial<BigRational>) as.multiply(bc);
         fs = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveLeftDivide(ds, bc);
         System.out.println("bc = " + bc);

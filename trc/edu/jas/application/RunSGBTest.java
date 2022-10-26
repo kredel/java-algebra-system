@@ -5,8 +5,8 @@
 package edu.jas.application;
 
 
-import java.io.PrintStream;
 import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import edu.jas.kern.ComputerThreads;
 
@@ -69,7 +69,7 @@ public class RunSGBTest extends TestCase {
         PrintStream ss = new PrintStream(bs);
         try {
             System.setOut(ss);
-            cli.main(new String[]{ "seq", "left", "examples/wa_32.jas", "check"} );
+            cli.main(new String[] { "seq", "left", "examples/wa_32.jas", "check" });
         } finally {
             System.setOut(ps);
         }
@@ -91,7 +91,7 @@ public class RunSGBTest extends TestCase {
         PrintStream ss = new PrintStream(bs);
         try {
             System.setOut(ss);
-            cli.main(new String[]{ "seq", "two", "examples/wa_32.jas", "check"} );
+            cli.main(new String[] { "seq", "two", "examples/wa_32.jas", "check" });
         } finally {
             System.setOut(ps);
         }
@@ -114,7 +114,7 @@ public class RunSGBTest extends TestCase {
         PrintStream ss = new PrintStream(bs);
         try {
             System.setOut(ss);
-            cli.main(new String[]{ "par", "left", "examples/wa_1.jas", "3", "check"} );
+            cli.main(new String[] { "par", "left", "examples/wa_1.jas", "3", "check" });
         } finally {
             System.setOut(ps);
         }

@@ -7,12 +7,6 @@ package edu.jas.application;
 
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
-
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModLongRing;
 import edu.jas.kern.ComputerThreads;
@@ -31,6 +25,10 @@ import edu.jas.ufd.QuotientRing;
 import edu.jas.vector.GenMatrix;
 import edu.jas.vector.GenMatrixRing;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 
 /**
  * ExtensionFieldBuilder tests with JUnit.
@@ -44,7 +42,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        
+
         junit.textui.TestRunner.run(suite());
     }
 
@@ -462,8 +460,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testConstructionMat() {
-        RingFactory fac = ExtensionFieldBuilder.baseField(BigRational.ONE).transcendentExtension("a")
-                        .build();
+        RingFactory fac = ExtensionFieldBuilder.baseField(BigRational.ONE).transcendentExtension("a").build();
         //System.out.println("fac = " + fac.toScript());
 
         List<RingElem> gens = fac.generators();
@@ -471,8 +468,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
         //System.out.println("gens    = " + gens);
         assertTrue("#gens == 2 " + s, s == 2);
 
-        GenMatrixRing mfac = (GenMatrixRing) ExtensionFieldBuilder.baseField(fac)
-                        .matrixExtension(3).build();
+        GenMatrixRing mfac = (GenMatrixRing) ExtensionFieldBuilder.baseField(fac).matrixExtension(3).build();
         //System.out.println("mfac = " + mfac.toScript());
 
         List<RingElem> mgens = mfac.generators();
@@ -487,7 +483,7 @@ public class ExtensionFieldBuilderTest extends TestCase {
         //System.out.println("elem**t = " + elemt);
         elem = elem.multiply(elemt);
         //System.out.println("elem    = " + elem);
-        GenMatrix elemp = (GenMatrix)elem.power(3);
+        GenMatrix elemp = (GenMatrix) elem.power(3);
         //System.out.println("elem**3 = " + elemp);
         GenMatrix elemi = elem.inverse();
         //System.out.println("elem^-1 = " + elemi);

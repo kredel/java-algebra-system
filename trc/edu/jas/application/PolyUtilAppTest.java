@@ -5,21 +5,15 @@
 package edu.jas.application;
 
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
-
 import edu.jas.arith.BigRational;
-import edu.jas.arith.Product;
-import edu.jas.arith.ProductRing;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.PolyUtil;
-import edu.jas.poly.TermOrder;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -34,7 +28,7 @@ public class PolyUtilAppTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        
+
         junit.textui.TestRunner.run(suite());
     }
 
@@ -206,7 +200,7 @@ public class PolyUtilAppTest extends TestCase {
         // convert to primitive element ring
         AlgebraicNumber<BigRational> as = PolyUtilApp.<BigRational> convertToPrimitiveElem(cfac, pe.A, a);
         AlgebraicNumber<BigRational> bs = PolyUtilApp.<BigRational> convertToPrimitiveElem(cfac, pe.A, pe.B,
-                b);
+                        b);
 
         // test alpha+(t)beta == gamma
         AlgebraicNumber<BigRational> cs = as.sum(bs);
@@ -216,18 +210,18 @@ public class PolyUtilAppTest extends TestCase {
         // test for polynomials, too simple
         String[] vx = new String[] { "x" };
         GenPolynomialRing<AlgebraicNumber<BigRational>> rafac = new GenPolynomialRing<AlgebraicNumber<BigRational>>(
-                afac, 1, vx);
+                        afac, 1, vx);
         GenPolynomialRing<AlgebraicNumber<AlgebraicNumber<BigRational>>> rbfac = new GenPolynomialRing<AlgebraicNumber<AlgebraicNumber<BigRational>>>(
-                bfac, 1, vx);
+                        bfac, 1, vx);
         GenPolynomial<AlgebraicNumber<BigRational>> ap = rafac.getONE().multiply(a);
         GenPolynomial<AlgebraicNumber<AlgebraicNumber<BigRational>>> bp = rbfac.getONE().multiply(b);
         //System.out.println("ap = " + ap);
         //System.out.println("bp = " + bp);
 
-        GenPolynomial<AlgebraicNumber<BigRational>> asp = PolyUtilApp.<BigRational> convertToPrimitiveElem(
-                cfac, pe.A, ap);
-        GenPolynomial<AlgebraicNumber<BigRational>> bsp = PolyUtilApp.<BigRational> convertToPrimitiveElem(
-                cfac, pe.A, pe.B, bp);
+        GenPolynomial<AlgebraicNumber<BigRational>> asp = PolyUtilApp
+                        .<BigRational> convertToPrimitiveElem(cfac, pe.A, ap);
+        GenPolynomial<AlgebraicNumber<BigRational>> bsp = PolyUtilApp
+                        .<BigRational> convertToPrimitiveElem(cfac, pe.A, pe.B, bp);
         //System.out.println("asp = " + asp);
         //System.out.println("bsp = " + bsp);
 

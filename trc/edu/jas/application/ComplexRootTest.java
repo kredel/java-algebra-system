@@ -5,14 +5,8 @@
 package edu.jas.application;
 
 
-import java.util.List;
 import java.util.ArrayList;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
+import java.util.List;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
@@ -27,6 +21,10 @@ import edu.jas.structure.Power;
 import edu.jas.ufd.Squarefree;
 import edu.jas.ufd.SquarefreeFactory;
 
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+
 
 /**
  * RootUtil tests with JUnit.
@@ -40,7 +38,7 @@ public class ComplexRootTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        
+
         junit.textui.TestRunner.run(suite());
         ComputerThreads.terminate();
     }
@@ -111,7 +109,8 @@ public class ComplexRootTest extends TestCase {
         rfac = new GenPolynomialRing<BigRational>(new BigRational(1), to, vars);
         eps = Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION);
         ceps = new Complex<BigRational>(cfac, eps);
-        deps = new BigDecimal(Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION-2));
+        deps = new BigDecimal(
+                        Power.positivePower(new BigRational(1L, 10L), BigDecimal.DEFAULT_PRECISION - 2));
     }
 
 
@@ -239,7 +238,7 @@ public class ComplexRootTest extends TestCase {
                         .<Complex<RealAlgebraicNumber<BigRational>>> getImplementation(root.ring);
         cpol = sen.squarefreePart(cpol);
         //if (cpol.degree(0) < dd) {
-            //System.out.println("cpol = " + cpol);
+        //System.out.println("cpol = " + cpol);
         //}
         //System.out.println("cpol = " + cpol);
 
@@ -285,9 +284,8 @@ public class ComplexRootTest extends TestCase {
         //                             + root.getIm().decimalMagnitude() + " i");
         for (edu.jas.root.ComplexAlgebraicNumber<RealAlgebraicNumber<BigRational>> cr2 : coroots) {
             //System.out.println("r2.ring = " + cr2.ring); //magnitude());
-            assertTrue("f(r) == 0: " + cr2,
-                            edu.jas.root.RootFactory.<RealAlgebraicNumber<BigRational>> isRootComplex(cpol,
-                                            cr2));
+            assertTrue("f(r) == 0: " + cr2, edu.jas.root.RootFactory
+                            .<RealAlgebraicNumber<BigRational>> isRootComplex(cpol, cr2));
         }
 
         // decimal for comparison
@@ -329,25 +327,25 @@ public class ComplexRootTest extends TestCase {
         M.add(br);
         //System.out.println("M = " + M);
 
-	Ideal<BigRational> I = new Ideal<BigRational>(rfac, M);
+        Ideal<BigRational> I = new Ideal<BigRational>(rfac, M);
         //System.out.println("I = " + I);
 
-        List<List<Complex<BigDecimal>>> roots
-            = PolyUtilApp.<BigRational> complexRootTuples(I, eps);
+        List<List<Complex<BigDecimal>>> roots = PolyUtilApp.<BigRational> complexRootTuples(I, eps);
         //System.out.println("roots = " + roots);
-        assertEquals("#roots == deg(a)*deg(b) ", roots.size(), ar.degree(1)*br.degree(0));
+        assertEquals("#roots == deg(a)*deg(b) ", roots.size(), ar.degree(1) * br.degree(0));
 
         a = PolyUtil.<BigRational> toComplex(dfac, ar);
         b = PolyUtil.<BigRational> toComplex(dfac, br);
         GenPolynomialRing<Complex<BigDecimal>> pfac;
-        pfac = new GenPolynomialRing<Complex<BigDecimal>>(new ComplexRing<BigDecimal>(new BigDecimal(1)), rfac);
+        pfac = new GenPolynomialRing<Complex<BigDecimal>>(new ComplexRing<BigDecimal>(new BigDecimal(1)),
+                        rfac);
         GenPolynomial<Complex<BigDecimal>> ac, bc;
         ac = PolyUtil.<BigRational> complexDecimalFromRational(pfac, a);
         bc = PolyUtil.<BigRational> complexDecimalFromRational(pfac, b);
         List<GenPolynomial<Complex<BigDecimal>>> Mc;
         Mc = new ArrayList<GenPolynomial<Complex<BigDecimal>>>();
-        Mc.add( ac );
-        Mc.add( bc );
+        Mc.add(ac);
+        Mc.add(bc);
         //System.out.println("Mc = " + Mc);
         assertTrue("isComplexRoots: " + roots, PolyUtilApp.<BigRational> isComplexRoots(Mc, roots, deps));
     }
@@ -371,11 +369,10 @@ public class ComplexRootTest extends TestCase {
         M.add(br);
         //System.out.println("M = " + M);
 
-	Ideal<BigRational> I = new Ideal<BigRational>(rfac, M);
+        Ideal<BigRational> I = new Ideal<BigRational>(rfac, M);
         //System.out.println("I = " + I);
 
-        List<List<BigDecimal>> roots
-            = PolyUtilApp.<BigRational> realRootTuples(I, eps);
+        List<List<BigDecimal>> roots = PolyUtilApp.<BigRational> realRootTuples(I, eps);
         //System.out.println("roots = " + roots);
         assertEquals("#roots == deg(a)*deg(b) ", roots.size(), 2);
 
@@ -383,8 +380,8 @@ public class ComplexRootTest extends TestCase {
         pfac = new GenPolynomialRing<BigDecimal>(new BigDecimal(1), rfac);
         List<GenPolynomial<BigDecimal>> Md;
         Md = new ArrayList<GenPolynomial<BigDecimal>>();
-        Md.add( PolyUtil.<BigRational> decimalFromRational(pfac, ar) );
-        Md.add( PolyUtil.<BigRational> decimalFromRational(pfac, br) );
+        Md.add(PolyUtil.<BigRational> decimalFromRational(pfac, ar));
+        Md.add(PolyUtil.<BigRational> decimalFromRational(pfac, br));
         //System.out.println("Md = " + Md);
         assertTrue("isRealRoots: " + roots, PolyUtilApp.<BigRational> isRealRoots(Md, roots, deps));
     }

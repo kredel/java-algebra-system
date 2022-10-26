@@ -74,7 +74,7 @@ public class PowerTest extends TestCase {
              b = BigInteger.ZERO.random(50);
              L.add(b);
              a = a.sum(b);
-	}
+        }
         c = Power.<BigInteger> sum(BigInteger.ONE, L);
         assertEquals("a = c", c, a);
     }
@@ -92,7 +92,7 @@ public class PowerTest extends TestCase {
              b = BigInteger.ZERO.random(50);
              L.add(b);
              a = a.multiply(b);
-	}
+        }
         c = Power.<BigInteger> multiply(BigInteger.ONE, L);
         assertEquals("a = c", c, a);
     }

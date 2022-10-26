@@ -9,12 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
-
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.ExpVector;
@@ -23,8 +17,9 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.PolynomialList;
 import edu.jas.structure.RingFactory;
 
-
-// import edu.jas.application.Ideal;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -39,7 +34,7 @@ public class ReductionTest extends TestCase {
      * main
      */
     public static void main(String[] args) {
-        
+
         junit.textui.TestRunner.run(suite());
         ComputerThreads.terminate();
     }

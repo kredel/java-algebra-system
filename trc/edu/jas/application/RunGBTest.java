@@ -5,8 +5,8 @@
 package edu.jas.application;
 
 
-import java.io.PrintStream;
 import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 import edu.jas.kern.ComputerThreads;
 
@@ -69,7 +69,7 @@ public class RunGBTest extends TestCase {
         PrintStream ss = new PrintStream(bs);
         try {
             System.setOut(ss);
-            cli.main(new String[]{ "seq", "examples/trinks7.jas", "check"} );
+            cli.main(new String[] { "seq", "examples/trinks7.jas", "check" });
         } finally {
             System.setOut(ps);
         }
@@ -91,7 +91,7 @@ public class RunGBTest extends TestCase {
         PrintStream ss = new PrintStream(bs);
         try {
             System.setOut(ss);
-            cli.main(new String[]{ "par", "examples/trinks7.jas", "3", "check"} );
+            cli.main(new String[] { "par", "examples/trinks7.jas", "3", "check" });
         } finally {
             System.setOut(ps);
         }
@@ -113,7 +113,8 @@ public class RunGBTest extends TestCase {
         PrintStream ss = new PrintStream(bs);
         try {
             System.setOut(ss);
-            cli.main(new String[]{ "build=syzygyPairlist.iterated.graded.parallel(3)", "examples/trinks7.jas", "check"} );
+            cli.main(new String[] { "build=syzygyPairlist.iterated.graded.parallel(3)",
+                    "examples/trinks7.jas", "check" });
         } finally {
             System.setOut(ps);
         }

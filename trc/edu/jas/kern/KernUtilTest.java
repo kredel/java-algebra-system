@@ -59,7 +59,7 @@ public class KernUtilTest extends TestCase {
      * Test StringUtil.
      */
     public void testStringUtil() {
-	StringReader sr = new StringReader(" ein text - noch ein / text { wort } [1, 2, 3] [[1, 4], [2], [3, 5]]");
+        StringReader sr = new StringReader(" ein text - noch ein / text { wort } [1, 2, 3] [[1, 4], [2], [3, 5]]");
         String s = StringUtil.nextString(sr);
         //System.out.println(":" + s + ":");
         assertEquals("s==ein", s, "ein");
@@ -80,15 +80,15 @@ public class KernUtilTest extends TestCase {
         }
 
         s = StringUtil.nextPairedString(sr,'{','}');
-	//System.out.println(":" + s + ":");
+        //System.out.println(":" + s + ":");
         assertEquals("s==wort", s, "wort");
 
         s = StringUtil.nextPairedString(sr,'[',']');
-	//System.out.println(":" + s + ":");
+        //System.out.println(":" + s + ":");
         assertEquals("s==1, 2, 3", s, "1, 2, 3");
 
         s = StringUtil.nextPairedString(sr,'[',']');
-	//System.out.println(":" + s + ":");
+        //System.out.println(":" + s + ":");
         assertEquals("s==[1, 4], [2], [3, 5]", s, "[1, 4], [2], [3, 5]");
     }
 

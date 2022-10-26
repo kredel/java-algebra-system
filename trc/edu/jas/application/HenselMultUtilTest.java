@@ -8,12 +8,6 @@ package edu.jas.application;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
@@ -28,6 +22,10 @@ import edu.jas.ufd.GCDFactory;
 import edu.jas.ufd.GreatestCommonDivisor;
 import edu.jas.ufd.HenselMultUtil;
 import edu.jas.ufd.NoLiftingException;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -44,7 +42,7 @@ public class HenselMultUtilTest extends TestCase {
      * main.
      */
     public static void main(String[] args) {
-        
+
         junit.textui.TestRunner.run(suite());
         ComputerThreads.terminate();
     }
@@ -144,8 +142,8 @@ public class HenselMultUtilTest extends TestCase {
         ModIntegerRing pm = new ModIntegerRing(p, false);
         //ModLongRing pl = new ModLongRing(p, false);
         //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 2, tord, new String[]{ "x", "y" });
-        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 3, tord, new String[] {
-                "x", "y", "z" });
+        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 3, tord,
+                        new String[] { "x", "y", "z" });
         //GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pfac);
 
         BigInteger mi = m;
@@ -305,8 +303,8 @@ public class HenselMultUtilTest extends TestCase {
         ModIntegerRing pm = new ModIntegerRing(p, false);
         //ModLongRing pl = new ModLongRing(p, false);
         //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 2, tord, new String[]{ "x", "y" });
-        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 3, tord, new String[] {
-                "x", "y", "z" });
+        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 3, tord,
+                        new String[] { "x", "y", "z" });
         //GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(pm, 4, tord, new String[]{ "w", "x", "y", "z" });
         //GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(new BigInteger(),pfac);
 

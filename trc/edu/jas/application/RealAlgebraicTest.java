@@ -8,12 +8,6 @@ package edu.jas.application;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
-
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
@@ -25,6 +19,10 @@ import edu.jas.poly.TermOrder;
 import edu.jas.root.RealRootTuple;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.Power;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -106,8 +104,8 @@ public class RealAlgebraicTest extends TestCase {
         List<IdealWithUniv<BigRational>> idul = id.zeroDimRootDecomposition();
         IdealWithUniv<BigRational> idu = idul.get(0);
         //if (idul.size() > 1) {
-            //System.out.println("idul = " + idul);
-            //idu = idul.get(1);
+        //System.out.println("idul = " + idul);
+        //idu = idul.get(1);
         //}
         //System.out.println("idu = " + idu);
         GenPolynomial<BigRational> x = idu.ideal.list.list.remove(1);
@@ -117,8 +115,8 @@ public class RealAlgebraicTest extends TestCase {
         idu.ideal.list.list.add(x);
         //System.out.println("idu = " + idu);
 
-        IdealWithRealAlgebraicRoots<BigRational> idr = PolyUtilApp
-                        .<BigRational> realAlgebraicRoots(idu.ideal).get(0);
+        IdealWithRealAlgebraicRoots<BigRational> idr = PolyUtilApp.<BigRational> realAlgebraicRoots(idu.ideal)
+                        .get(0);
         //System.out.println("idr = " + idr);
         //idr.doDecimalApproximation();
         //for ( List<BigDecimal> d : idr.decimalApproximation() ) {

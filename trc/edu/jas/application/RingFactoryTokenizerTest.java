@@ -11,32 +11,26 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigQuaternion;
 import edu.jas.arith.BigQuaternionRing;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.ModInt;
+import edu.jas.arith.ModIntRing;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
-import edu.jas.arith.ModInt;
-import edu.jas.arith.ModIntRing;
-import edu.jas.poly.AlgebraicNumber;
-import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.TermOrder;
-import edu.jas.poly.PolynomialList;
-import edu.jas.poly.ModuleList;
-import edu.jas.poly.InvalidExpressionException;
+import edu.jas.structure.RingFactory;
 import edu.jas.ufd.Quotient;
 import edu.jas.ufd.QuotientRing;
-import edu.jas.structure.RingFactory;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -301,7 +295,7 @@ public class RingFactoryTokenizerTest extends TestCase {
         String[] vars = new String[] { "x", "y", "z" };
         int nvar = vars.length;
         pfac = new GenPolynomialRing<BigInteger>(fac, nvar, tord, vars);
-	
+
         QuotientRing<BigInteger> qfac = new QuotientRing<BigInteger>(pfac);
         //System.out.println("qfac = " + qfac.toScript());
         //System.out.println("f.coFac = " + f.ring.coFac.toScript());

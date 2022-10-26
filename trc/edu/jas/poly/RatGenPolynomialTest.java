@@ -98,7 +98,7 @@ public class RatGenPolynomialTest extends TestCase {
         for (GenPolynomial<BigRational> p : gens) {
             //System.out.println("p = " + p.toScript() + ", # = " + p.hashCode() + ", red = " + p.reductum());
             assertTrue("red(p) == 0 ", p.reductum().isZERO());
-	    iset.add(p.hashCode());
+            iset.add(p.hashCode());
         }
         assertEquals("#gens == #iset: ", gens.size(), iset.size());
     }

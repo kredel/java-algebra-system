@@ -13,10 +13,10 @@ public class JASConfig {
 
 
     /**
-     * {@link FactorAbstract#factorsSquarefreeKronecker(edu.jas.poly.GenPolynomial)}
-     * will throw an {@link ArithmeticException}, if this parameter is greater
-     * than <code>0</code> and the Kronecker substitution is greater than this
-     * value.
+     * {@linkFactorAbstract#factorsSquarefreeKronecker(edu.jas.poly.GenPolynomial)}
+     * will throw an {@link ArithmeticException}, if this parameter is
+     * greater than <code>0</code> and the Kronecker substitution
+     * degree is greater than this value.
      */
     public static int MAX_DEGREE_KRONECKER_FACTORIZATION = -1;
 

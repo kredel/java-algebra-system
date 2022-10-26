@@ -378,7 +378,7 @@ public class GCDTimingTest extends TestCase {
 
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
             System.out.println("parallel          time = " + t);
-	}
+        }
     }
 
 }

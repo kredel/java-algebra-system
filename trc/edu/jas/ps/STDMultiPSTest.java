@@ -25,7 +25,6 @@ import junit.framework.TestSuite;
  * Standard base of multivariate power series tests with JUnit.
  * @author Heinz Kredel
  */
-
 public class STDMultiPSTest extends TestCase {
 
 
@@ -264,7 +263,7 @@ public class STDMultiPSTest extends TestCase {
         L.add(b);
         L.add(c);
         //System.out.println("L = " + L);
-	
+
         StandardBaseSeq<BigRational> tm = new StandardBaseSeq<BigRational>();
         //assertFalse("isSTD(L): ", tm.isSTD(L));
         S = tm.STD(L);

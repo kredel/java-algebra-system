@@ -377,11 +377,11 @@ public class SolvableQuotientTest extends TestCase {
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
 
-	SolvableQuotient<BigRational>[] egcd = a.egcd(b);
+        SolvableQuotient<BigRational>[] egcd = a.egcd(b);
         //System.out.println("egcd = " + Arrays.toString(egcd));
-	SolvableQuotient<BigRational> e0 = egcd[0];
-	SolvableQuotient<BigRational> e1 = egcd[1];
-	SolvableQuotient<BigRational> e2 = egcd[2];
+        SolvableQuotient<BigRational> e0 = egcd[0];
+        SolvableQuotient<BigRational> e1 = egcd[1];
+        SolvableQuotient<BigRational> e2 = egcd[2];
 
         c = a.multiply(e1).sum( b.multiply(e2) );
         //System.out.println("c = " + c);
