@@ -58,7 +58,7 @@ public class BigDecimalComplexTest extends TestCase {
         a = b = c = d = e = null;
         fac = new BigDecimalComplex();
         eps = new BigDecimalComplex("0.1");
-        eps = eps.power(precision-1);
+        eps = eps.power(precision - 1);
     }
 
 

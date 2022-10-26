@@ -5,8 +5,8 @@
 package edu.jas.arith;
 
 
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 import edu.jas.structure.MonoidElem;
 import edu.jas.structure.Power;
@@ -71,9 +71,9 @@ public class PowerTest extends TestCase {
         int n = 471;
         a = BigInteger.ZERO;
         for (int i = 1; i < n; i++) {
-             b = BigInteger.ZERO.random(50);
-             L.add(b);
-             a = a.sum(b);
+            b = BigInteger.ZERO.random(50);
+            L.add(b);
+            a = a.sum(b);
         }
         c = Power.<BigInteger> sum(BigInteger.ONE, L);
         assertEquals("a = c", c, a);
@@ -89,9 +89,9 @@ public class PowerTest extends TestCase {
         int n = 471;
         a = BigInteger.ONE;
         for (int i = 1; i < n; i++) {
-             b = BigInteger.ZERO.random(50);
-             L.add(b);
-             a = a.multiply(b);
+            b = BigInteger.ZERO.random(50);
+            L.add(b);
+            a = a.multiply(b);
         }
         c = Power.<BigInteger> multiply(BigInteger.ONE, L);
         assertEquals("a = c", c, a);
@@ -109,7 +109,7 @@ public class PowerTest extends TestCase {
         BigInteger a, b;
         a = new BigInteger("2");
         b = new BigInteger("1024");
-        x = Power.<BigInteger>logarithm(a, b);
+        x = Power.<BigInteger> logarithm(a, b);
         //System.out.println("x = " + x);
         assertEquals("x = 10", x, 10L);
     }

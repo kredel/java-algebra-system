@@ -8,12 +8,11 @@ package edu.jas.arith;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.jas.structure.RingFactory;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-
-import edu.jas.structure.RingFactory;
 
 
 /**
@@ -142,9 +141,9 @@ public class ProductTest extends TestCase {
         assertTrue("isZERO( d )", d.isZERO());
         assertTrue("isONE( d )", !d.isONE());
 
-        BigRational crfac = new BigRational(2,3);
+        BigRational crfac = new BigRational(2, 3);
         fac.addFactory(crfac);
-        assertEquals("#fac == 5+1: ", fac.length(), pl+1);
+        assertEquals("#fac == 5+1: ", fac.length(), pl + 1);
     }
 
 

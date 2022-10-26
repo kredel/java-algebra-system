@@ -125,6 +125,7 @@ public class ArithTest extends TestCase {
 
     //--------------------------------------------------------
 
+
     /**
      * Test random and compares Integer.
      */

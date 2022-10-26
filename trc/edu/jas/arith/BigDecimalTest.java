@@ -64,7 +64,7 @@ public class BigDecimalTest extends TestCase {
     protected void setUp() {
         a = b = c = d = e = null;
         fac = new BigDecimal(0L, mc);
-        eps = new BigDecimal(new BigRational(1,10));
+        eps = new BigDecimal(new BigRational(1, 10));
         eps = eps.power(precision);
     }
 
