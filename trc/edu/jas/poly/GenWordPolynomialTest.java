@@ -414,9 +414,9 @@ public class GenWordPolynomialTest extends TestCase {
         //System.out.println("d = " + d);
 
         BigInteger y = rf.random(kl);
-        c = a.multiply(x,y);
+        c = a.multiply(x, y);
         //System.out.println("c = " + c);
-        d = a.multiply(y,x);
+        d = a.multiply(y, x);
         //System.out.println("d = " + d);
         assertEquals("x a y = y a x", c, d);
     }
@@ -512,7 +512,7 @@ public class GenWordPolynomialTest extends TestCase {
         //System.out.println("d = " + d);
         //System.out.println("e = " + e);
         //System.out.println("f = " + f);
-        c = e.multiply(a).sum( f.multiply(b) );
+        c = e.multiply(a).sum(f.multiply(b));
         //System.out.println("d = " + d);
         assertEquals("gcd(a,b) == e*a + f*b", c, d); // since univariate
     }

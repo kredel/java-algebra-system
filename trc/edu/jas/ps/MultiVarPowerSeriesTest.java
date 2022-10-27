@@ -5,11 +5,10 @@
 package edu.jas.ps;
 
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
 
 import edu.jas.arith.BigRational;
 import edu.jas.poly.ExpVector;
@@ -236,7 +235,7 @@ public class MultiVarPowerSeriesTest extends TestCase {
     public void testRandom() {
         for (int i = 0; i < 5; i++) {
             a = fac.random(i + 2);
-            if (a.isZERO()||a.isONE()) {
+            if (a.isZERO() || a.isONE()) {
                 continue;
             }
             //System.out.println("a = " + a);

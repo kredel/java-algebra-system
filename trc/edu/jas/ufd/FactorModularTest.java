@@ -187,7 +187,8 @@ public class FactorModularTest extends TestCase {
         TermOrder to = new TermOrder(TermOrder.INVLEX);
         ModIntegerRing cfac = new ModIntegerRing(2L);
         //System.out.println("cfac = " + cfac);
-        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, new String[]{"x"}, to);
+        GenPolynomialRing<ModInteger> pfac = new GenPolynomialRing<ModInteger>(cfac, new String[] { "x" },
+                        to);
         FactorModular<ModInteger> fac = new FactorModular<ModInteger>(cfac);
         for (int i = 1; i < 4; i++) {
             int facs = 0;
@@ -634,8 +635,8 @@ public class FactorModularTest extends TestCase {
         FactorModularBerlekamp<ModInt> bf = new FactorModularBerlekamp<ModInt>(pfac.coFac);
         SortedMap<GenPolynomial<ModInt>, Long> factors, f2;
 
-        GenPolynomial<ModInt> B = pfac.random(kl,ll*ll+20,el*el+10,q+q).monic();
-        GenPolynomial<ModInt> C = pfac.random(kl,ll*ll+20,el*el+10,q+q).monic();
+        GenPolynomial<ModInt> B = pfac.random(kl, ll * ll + 20, el * el + 10, q + q).monic();
+        GenPolynomial<ModInt> C = pfac.random(kl, ll * ll + 20, el * el + 10, q + q).monic();
         A = B.multiply(C);
         //System.out.println("A = " + A.toScript());
         //System.out.println("B = " + B.toScript());

@@ -4,12 +4,10 @@
 
 package edu.jas.poly;
 
-import java.util.Arrays;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 
 
 /**
@@ -110,10 +108,10 @@ public class TermOrderByNameTest extends TestCase {
         assertEquals("x = y", x, y);
         //System.out.println("s = " + s);
 
-        s = TermOrderByName.blockOrder(TermOrderByName.DegreeLexicographic, TermOrderByName.Lexicographic,
-                        ev, sp);
-        t = TermOrderByName.blockOrder(TermOrderByName.DegreeLexicographic, TermOrderByName.Lexicographic,
-                        ev, sp);
+        s = TermOrderByName.blockOrder(TermOrderByName.DegreeLexicographic, TermOrderByName.Lexicographic, ev,
+                        sp);
+        t = TermOrderByName.blockOrder(TermOrderByName.DegreeLexicographic, TermOrderByName.Lexicographic, ev,
+                        sp);
         assertEquals("t = s", t, s);
         //System.out.println("s = " + s);
     }
@@ -541,16 +539,16 @@ public class TermOrderByNameTest extends TestCase {
         w = TermOrderByName.weightForOrder(TermOrderByName.INVLEX, r);
         //System.out.println("w = " + Arrays.toString(w[0]));
         assertEquals("w[0][0] = 1", w[0][0], 1L);
-        assertEquals("w[0][r-1] = 1", w[0][r-1], 0L);
+        assertEquals("w[0][r-1] = 1", w[0][r - 1], 0L);
 
         w = TermOrderByName.weightForOrder(TermOrderByName.IGRLEX, r);
         //System.out.println("w = " + Arrays.toString(w[0]));
         assertEquals("w[0][0] = 1", w[0][0], 1L);
-        assertEquals("w[0][r-1] = 1", w[0][r-1], 1L);
+        assertEquals("w[0][r-1] = 1", w[0][r - 1], 1L);
 
         w = TermOrderByName.weightForOrder(TermOrderByName.REVILEX, r);
         //System.out.println("w = " + Arrays.toString(w[0]));
-        assertEquals("w[0][r-1] = 1", w[0][r-1], 1L);
+        assertEquals("w[0][r-1] = 1", w[0][r - 1], 1L);
         assertEquals("w[0][0] = 0", w[0][0], 0L);
     }
 

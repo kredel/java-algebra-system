@@ -290,98 +290,98 @@ public class SolvableGroebnerBasePseudoRecSeqTest extends TestCase {
 
     /*
      * Test sequential extended GBase.
-    public void testSequentialExtendedGBase() {
-        L = new ArrayList<GenSolvablePolynomial<GenPolynomial<BigInteger>>>();
+     public void testSequentialExtendedGBase() {
+     L = new ArrayList<GenSolvablePolynomial<GenPolynomial<BigInteger>>>();
 
-        SolvableExtendedGB<GenPolynomial<BigInteger>> exgb;
+     SolvableExtendedGB<GenPolynomial<BigInteger>> exgb;
 
-        L.add(a);
-        //System.out.println("L = " + L );
+     L.add(a);
+     //System.out.println("L = " + L );
 
-        exgb = sbb.extLeftGB( L );
-        //System.out.println("exgb = " + exgb );
-        assertTrue("isLeftGB( { a } )", sbb.isLeftGB(exgb.G) );
-        assertTrue("isLeftRmat( { a } )", sbb.isLeftReductionMatrix(exgb) );
+     exgb = sbb.extLeftGB( L );
+     //System.out.println("exgb = " + exgb );
+     assertTrue("isLeftGB( { a } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isLeftRmat( { a } )", sbb.isLeftReductionMatrix(exgb) );
 
-        L.add(b);
-        //System.out.println("L = " + L );
-        exgb = sbb.extLeftGB( L );
-        //System.out.println("exgb = " + exgb );
-        assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(exgb.G) );
-        assertTrue("isLeftRmat( { a, b } )", sbb.isLeftReductionMatrix(exgb) );
+     L.add(b);
+     //System.out.println("L = " + L );
+     exgb = sbb.extLeftGB( L );
+     //System.out.println("exgb = " + exgb );
+     assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isLeftRmat( { a, b } )", sbb.isLeftReductionMatrix(exgb) );
 
-        L.add(c);
-        exgb = sbb.extLeftGB( L );
-        //System.out.println("exgb = " + exgb );
-        assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(exgb.G) );
-        assertTrue("isLeftRmat( { a, b, c } )", sbb.isLeftReductionMatrix(exgb) );
+     L.add(c);
+     exgb = sbb.extLeftGB( L );
+     //System.out.println("exgb = " + exgb );
+     assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isLeftRmat( { a, b, c } )", sbb.isLeftReductionMatrix(exgb) );
 
-        L.add(d);
-        exgb = sbb.extLeftGB( L );
-        //System.out.println("exgb = " + exgb );
-        assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(exgb.G) );
-        assertTrue("isLeftRmat( { a, b, c, d } )", sbb.isLeftReductionMatrix(exgb) );
+     L.add(d);
+     exgb = sbb.extLeftGB( L );
+     //System.out.println("exgb = " + exgb );
+     assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isLeftRmat( { a, b, c, d } )", sbb.isLeftReductionMatrix(exgb) );
 
-        L.add(e);
-        exgb = sbb.extLeftGB( L );
-        //System.out.println("exgb = " + exgb );
-        assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(exgb.G) );
-        assertTrue("isLeftRmat( { a, b, c, d, e } )", sbb.isLeftReductionMatrix(exgb) );
-    }
-     */
+     L.add(e);
+     exgb = sbb.extLeftGB( L );
+     //System.out.println("exgb = " + exgb );
+     assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isLeftRmat( { a, b, c, d, e } )", sbb.isLeftReductionMatrix(exgb) );
+     }
+    */
 
 
     /*
      * Test Weyl sequential extended GBase.
-    public void testWeylSequentialExtendedGBase() {
-        //int rloc = 4;
-        //ring = new GenSolvablePolynomialRing<BigInteger>(cfac,rloc);
+     public void testWeylSequentialExtendedGBase() {
+     //int rloc = 4;
+     //ring = new GenSolvablePolynomialRing<BigInteger>(cfac,rloc);
 
-        RelationGenerator<GenPolynomial<BigInteger>> wl = new WeylRelations<GenPolynomial<BigInteger>>();
-        wl.generate(ring);
-        //table = ring.table;
+     RelationGenerator<GenPolynomial<BigInteger>> wl = new WeylRelations<GenPolynomial<BigInteger>>();
+     wl.generate(ring);
+     //table = ring.table;
 
-        a = ring.random(kl, ll, el, q );
-        b = ring.random(kl, ll, el, q );
-        c = ring.random(kl, ll, el, q );
-        d = ring.random(kl, ll, el, q );
-        e = d; //ring.random(kl, ll, el, q );
+     a = ring.random(kl, ll, el, q );
+     b = ring.random(kl, ll, el, q );
+     c = ring.random(kl, ll, el, q );
+     d = ring.random(kl, ll, el, q );
+     e = d; //ring.random(kl, ll, el, q );
 
-        SolvableExtendedGB<BigInteger> exgb;
+     SolvableExtendedGB<BigInteger> exgb;
 
-        L = new ArrayList<GenSolvablePolynomial<GenPolynomial<BigInteger>>>();
+     L = new ArrayList<GenSolvablePolynomial<GenPolynomial<BigInteger>>>();
 
-        L.add(a);
-        exgb = sbb.extLeftGB( L );
-        // System.out.println("exgb = " + exgb );
-        assertTrue("isLeftGB( { a } )", sbb.isLeftGB(exgb.G) );
-        assertTrue("isRmat( { a } )", sbb.isLeftReductionMatrix(exgb) );
+     L.add(a);
+     exgb = sbb.extLeftGB( L );
+     // System.out.println("exgb = " + exgb );
+     assertTrue("isLeftGB( { a } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isRmat( { a } )", sbb.isLeftReductionMatrix(exgb) );
 
-        L.add(b);
-        //System.out.println("L = " + L.size() );
-        exgb = sbb.extLeftGB( L );
-        //System.out.println("exgb = " + exgb );
-        assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(exgb.G) );
-        assertTrue("isRmat( { a, b } )", sbb.isLeftReductionMatrix(exgb) );
+     L.add(b);
+     //System.out.println("L = " + L.size() );
+     exgb = sbb.extLeftGB( L );
+     //System.out.println("exgb = " + exgb );
+     assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isRmat( { a, b } )", sbb.isLeftReductionMatrix(exgb) );
 
-        L.add(c);
-        exgb = sbb.extLeftGB( L );
-        //System.out.println("exgb = " + exgb );
-        assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(exgb.G) );
-        assertTrue("isRmat( { a, b, c } )", sbb.isLeftReductionMatrix(exgb) );
+     L.add(c);
+     exgb = sbb.extLeftGB( L );
+     //System.out.println("exgb = " + exgb );
+     assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isRmat( { a, b, c } )", sbb.isLeftReductionMatrix(exgb) );
 
-        L.add(d);
-        exgb = sbb.extLeftGB( L );
-        //System.out.println("exgb = " + exgb );
-        assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(exgb.G) );
-        assertTrue("isRmat( { a, b, c, d } )", sbb.isLeftReductionMatrix(exgb) );
+     L.add(d);
+     exgb = sbb.extLeftGB( L );
+     //System.out.println("exgb = " + exgb );
+     assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isRmat( { a, b, c, d } )", sbb.isLeftReductionMatrix(exgb) );
 
-        L.add(e);
-        exgb = sbb.extLeftGB( L );
-        //System.out.println("exgb = " + exgb );
-        assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(exgb.G) );
-        assertTrue("isRmat( { a, b, c, d, e } )", sbb.isLeftReductionMatrix(exgb) );
-    }
-     */
+     L.add(e);
+     exgb = sbb.extLeftGB( L );
+     //System.out.println("exgb = " + exgb );
+     assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(exgb.G) );
+     assertTrue("isRmat( { a, b, c, d, e } )", sbb.isLeftReductionMatrix(exgb) );
+     }
+    */
 
 }

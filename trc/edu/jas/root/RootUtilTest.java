@@ -187,14 +187,14 @@ public class RootUtilTest extends TestCase {
         //System.out.println("v3 = " + v3);
         //System.out.println("v4 = " + v4);
         //System.out.println("v5 = " + v5);
-        assertTrue("v1 in v3" , v3.contains(v1));
-        assertTrue("v2 in v3" , v3.contains(v2));
+        assertTrue("v1 in v3", v3.contains(v1));
+        assertTrue("v2 in v3", v3.contains(v2));
 
-        assertTrue("v1 in v4" , v4.contains(v1));
-        assertTrue("v2 in v4" , v4.contains(v2));
+        assertTrue("v1 in v4", v4.contains(v1));
+        assertTrue("v2 in v4", v4.contains(v2));
 
-        assertTrue("v3 in v5" , v5.contains(v3));
-        assertTrue("v4 in v5" , v5.contains(v4));
+        assertTrue("v3 in v5", v5.contains(v3));
+        assertTrue("v4 in v5", v5.contains(v4));
     }
 
 
@@ -238,7 +238,7 @@ public class RootUtilTest extends TestCase {
         GenPolynomial<Complex<BigRational>> ca = PolyUtil.<BigRational> toComplex(cfac, a);
         //System.out.println("ca = " + ca);
         List<ComplexAlgebraicNumber<BigRational>> lcn = RootFactory
-            .<BigRational> complexAlgebraicNumbersComplex(ca);
+                        .<BigRational> complexAlgebraicNumbersComplex(ca);
         //System.out.println("lcn = " + lcn);
         assertTrue("#roots == deg(a): " + a, lcn.size() == a.degree(0));
 
@@ -289,7 +289,7 @@ public class RootUtilTest extends TestCase {
         assertTrue("complex in lcn: " + ts, ts.indexOf("real") >= 0 || ts.indexOf("complex") >= 0);
         ts = lcn.toDecimalScript();
         //System.out.println("lcn = " + ts);
-        assertTrue("complex in lcn: " + ts, ts.indexOf("real") >= 0 || ts.indexOf("complex") >= 0 );
+        assertTrue("complex in lcn: " + ts, ts.indexOf("real") >= 0 || ts.indexOf("complex") >= 0);
 
         long r = lcn.real.size() + lcn.complex.size();
         ////Roots<BigRational> linalg = new Roots<BigRational>();
@@ -302,17 +302,18 @@ public class RootUtilTest extends TestCase {
 
 
     /**
-     * Test decimal algebraic roots, i.e. real and complex decimal algebraic roots.
+     * Test decimal algebraic roots, i.e. real and complex decimal algebraic
+     * roots.
      */
     public void testDecimalRoots() {
-        a = dfac.random(kl, ll-1, el, q);
+        a = dfac.random(kl, ll - 1, el, q);
         //a = a.multiply( dfac.univariate(0) );
         //System.out.println("a = " + a);
         int prec = BigDecimal.DEFAULT_PRECISION / 2;
         BigRational eps = (new BigRational(1, 10)).power(prec);
         //System.out.println("prec = " + prec + ", eps = " + eps);
 
-        DecimalRoots<BigRational> lcn = RootFactory.<BigRational> decimalRoots(a,eps);
+        DecimalRoots<BigRational> lcn = RootFactory.<BigRational> decimalRoots(a, eps);
         String ts = lcn.toScript();
         //System.out.println("lcn = " + ts);
         assertTrue("complex in lcn: " + ts, ts.indexOf("real") >= 0 || ts.indexOf("complex") >= 0);

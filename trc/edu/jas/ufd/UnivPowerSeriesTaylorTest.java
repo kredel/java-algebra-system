@@ -175,11 +175,11 @@ public class UnivPowerSeriesTaylorTest extends TestCase {
         //System.out.println("p   = " + p);
         TaylorFunction<BigRational> F = new QuotientTaylorFunction<BigRational>(p);
 
-        int dm = (int)p.num.degree()+1, dn = (int)p.den.degree()+1;
+        int dm = (int) p.num.degree() + 1, dn = (int) p.den.degree() + 1;
         //System.out.println("[" + dm + "," + dn + "]");
         Quotient<BigRational> pa = null;
         for (int m = 0; m < dm; m++) {
-            for (int n = 0; n < dn; n++) { 
+            for (int n = 0; n < dn; n++) {
                 pa = PolyUfdUtil.<BigRational> approximantOfPade(fac, F, br, m, n);
                 //System.out.println("pa[" + m + "," + n + "]  = " + pa + "\n");
                 assertTrue("deg(num) <= m", pa.num.degree() <= m);

@@ -4,17 +4,17 @@
 
 package edu.jas.ps;
 
-import java.util.ArrayList;
+
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.HashSet;
 
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
-import edu.jas.vector.GenVector;
-import edu.jas.vector.GenVectorModul;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.vector.GenVector;
+import edu.jas.vector.GenVectorModul;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

@@ -8,11 +8,6 @@ package edu.jas.gbufd;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-
 import edu.jas.arith.BigInteger;
 import edu.jas.poly.GenWordPolynomial;
 import edu.jas.poly.GenWordPolynomialRing;
@@ -20,6 +15,10 @@ import edu.jas.poly.Overlap;
 import edu.jas.poly.OverlapList;
 import edu.jas.poly.Word;
 import edu.jas.poly.WordFactory;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**

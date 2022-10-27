@@ -6,8 +6,8 @@
 package edu.jas.ufd;
 
 
-import java.util.SortedMap;
 import java.util.List;
+import java.util.SortedMap;
 
 import edu.jas.arith.BigRational;
 import edu.jas.kern.ComputerThreads;
@@ -16,7 +16,6 @@ import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
 import edu.jas.vector.GenMatrix;
 import edu.jas.vector.GenMatrixRing;
-import edu.jas.vector.GenVector;
 import edu.jas.vector.LinAlg;
 
 import junit.framework.Test;
@@ -351,16 +350,18 @@ public class QuotientRatTest extends TestCase {
 
 
     /**
-     * Test symbolic row echelon form and LU decomposition. Using an example from 
-     * <a href="https://github.com/kredel/java-algebra-system/issues/21">Issue #21</a>.
+     * Test symbolic row echelon form and LU decomposition. Using an example
+     * from
+     * <a href="https://github.com/kredel/java-algebra-system/issues/21">Issue
+     * #21</a>.
      */
     public void testLinAlg() {
         BigRational cfac = new BigRational(11);
-        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, new String[]{ "a" });
+        GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(cfac, new String[] { "a" });
         //System.out.println("pfac = " + pfac.toScript());
         QuotientRing<BigRational> qfac = new QuotientRing<BigRational>(pfac);
         //System.out.println("qfac = " + qfac.toScript());
-        Quotient<BigRational> a = new Quotient<BigRational>(qfac,pfac.univariate(0));
+        Quotient<BigRational> a = new Quotient<BigRational>(qfac, pfac.univariate(0));
         //System.out.println("a: " + a.toScript());
         int n = 3;
         GenMatrixRing<Quotient<BigRational>> mfac = new GenMatrixRing<Quotient<BigRational>>(qfac, n, n);
@@ -402,7 +403,7 @@ public class QuotientRatTest extends TestCase {
         //System.out.println("U  :   " + A.getUpper().toScript());
 
         // test LU inverse
-        GenMatrix<Quotient<BigRational>> I = lu.inverseLU(A,P);
+        GenMatrix<Quotient<BigRational>> I = lu.inverseLU(A, P);
         //System.out.println("I  :   " + I.toScript());
 
         GenMatrix<Quotient<BigRational>> C = new GenMatrix<Quotient<BigRational>>(mfac, mm);

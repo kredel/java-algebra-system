@@ -390,7 +390,8 @@ public class ComplexRootTest extends TestCase {
         //System.out.println("a = " + a);
         long deg = a.degree(0); // now fixed
 
-        Squarefree<Complex<BigRational>> engine = SquarefreeFactory.<Complex<BigRational>> getImplementation(cfac);
+        Squarefree<Complex<BigRational>> engine = SquarefreeFactory
+                        .<Complex<BigRational>> getImplementation(cfac);
         b = engine.squarefreePart(a);
         //long deg = b.degree(0); // multiplicity is fixed
 

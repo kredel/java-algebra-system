@@ -9,12 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import edu.jas.arith.BigRational;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-
-import edu.jas.arith.BigRational;
 
 
 /**
@@ -249,13 +248,13 @@ public class RecSolvablePolynomialTest extends TestCase {
         BigRational x = a.leadingBaseCoefficient().leadingBaseCoefficient().inverse();
         GenPolynomial<BigRational> xp = new GenPolynomial<BigRational>(cring, x);
         d = (RecSolvablePolynomial<BigRational>) a.multiply(xp);
-        assertTrue("monic(a) = a*(1/ldcf(ldcf(a)))", d.leadingBaseCoefficient().leadingBaseCoefficient()
-                        .isONE());
+        assertTrue("monic(a) = a*(1/ldcf(ldcf(a)))",
+                        d.leadingBaseCoefficient().leadingBaseCoefficient().isONE());
 
         d = (RecSolvablePolynomial<BigRational>) a.monic();
         assertTrue("a.monic(): " + d.leadingBaseCoefficient() + ", " + a.leadingBaseCoefficient(),
-                        d.leadingBaseCoefficient().isONE()
-                   || d.leadingBaseCoefficient().equals(a.leadingBaseCoefficient().abs()));
+                        d.leadingBaseCoefficient().isONE() || d.leadingBaseCoefficient()
+                                        .equals(a.leadingBaseCoefficient().abs()));
     }
 
 
@@ -313,8 +312,8 @@ public class RecSolvablePolynomialTest extends TestCase {
      * Test solvable coefficient ring.
      */
     public void testSolvableCoeffs() {
-        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
-                        tord, cvars);
+        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac, tord,
+                        cvars);
         RelationGenerator<BigRational> wlc = new WeylRelations<BigRational>();
         //wlc.generate(csring);
         csring.addRelations(wlc);
@@ -397,8 +396,8 @@ public class RecSolvablePolynomialTest extends TestCase {
      * Test extension and contraction for Weyl relations.
      */
     public void testExtendContractWeyl() {
-        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
-                        tord, cvars);
+        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac, tord,
+                        cvars);
         RelationGenerator<BigRational> wlc = new WeylRelations<BigRational>();
         //wlc.generate(csring);
         csring.addRelations(wlc);
@@ -438,8 +437,8 @@ public class RecSolvablePolynomialTest extends TestCase {
      */
     @SuppressWarnings("unchecked")
     public void testDistRecWeyl() {
-        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
-                        tord, cvars);
+        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac, tord,
+                        cvars);
         RelationGenerator<BigRational> wlc = new WeylRelations<BigRational>();
         csring.addRelations(wlc);
         assertFalse("isCommutative()", csring.isCommutative());
@@ -500,8 +499,8 @@ public class RecSolvablePolynomialTest extends TestCase {
      * Test reversion for Weyl relations.
      */
     public void testReverseWeyl() {
-        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac,
-                        tord, cvars);
+        GenSolvablePolynomialRing<BigRational> csring = new GenSolvablePolynomialRing<BigRational>(cfac, tord,
+                        cvars);
         RelationGenerator<BigRational> wlc = new WeylRelations<BigRational>();
         //wlc.generate(csring);
         csring.addRelations(wlc);

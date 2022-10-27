@@ -634,7 +634,7 @@ public class PolyUfdUtilTest extends TestCase {
             //System.out.println("L = " + L);
             assertFalse("L != (): ", L.evalPoints.isEmpty());
 
-            GenPolynomial<BigRational> ar = crfac.random(kl, ll, el*2, q*1.5f);
+            GenPolynomial<BigRational> ar = crfac.random(kl, ll, el * 2, q * 1.5f);
             //System.out.println("ar = " + ar + ", isSquarefree: " + rsqf.isSquarefree(ar));
             ar = rsqf.squarefreePart(ar);
             EvalPoints<BigRational> Lr = PolyUfdUtil.<BigRational> evaluationPoints(ar);

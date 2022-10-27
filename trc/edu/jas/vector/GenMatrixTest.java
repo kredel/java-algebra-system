@@ -7,13 +7,10 @@ package edu.jas.vector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedMap;
 
 import edu.jas.arith.BigRational;
-import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModLong;
 import edu.jas.arith.ModLongRing;
-import edu.jas.kern.ComputerThreads;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -21,7 +18,7 @@ import junit.framework.TestSuite;
 
 
 /**
- * GenMatrix tests with JUnit
+ * GenMatrix tests with JUnit.
  * @author Heinz Kredel
  */
 

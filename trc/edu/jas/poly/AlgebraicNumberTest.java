@@ -272,11 +272,12 @@ public class AlgebraicNumberTest extends TestCase {
      */
     public void testExample() {
         BigRational cofac = new BigRational(1);
-        GenPolynomialRing<BigRational> mfac = new GenPolynomialRing<BigRational>(cofac, new String[]{"w35"});
+        GenPolynomialRing<BigRational> mfac = new GenPolynomialRing<BigRational>(cofac,
+                        new String[] { "w35" });
 
         // w35**2 - 35: w35 == sqrt(35)
         GenPolynomial<BigRational> mo = mfac.univariate(0);
-        mo = mo.power(2).subtract( mfac.fromInteger(35) );
+        mo = mo.power(2).subtract(mfac.fromInteger(35));
         //System.out.println("mo = " + mo);
         AlgebraicNumberRing<BigRational> fac = new AlgebraicNumberRing<BigRational>(mo);
         //System.out.println("fac = " + fac);

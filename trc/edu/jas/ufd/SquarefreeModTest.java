@@ -337,6 +337,7 @@ public class SquarefreeModTest extends TestCase {
 
     /* ------------char-th root ------------------------- */
 
+
     /**
      * Test base squarefree with char-th root.
      */

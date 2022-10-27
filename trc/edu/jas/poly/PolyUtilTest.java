@@ -6,7 +6,6 @@ package edu.jas.poly;
 
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import edu.jas.arith.BigComplex;
@@ -1394,7 +1393,6 @@ public class PolyUtilTest extends TestCase {
      * Test algebraic conversions.
      */
     public void testAlgebraicConversions() {
-
         BigRational cfac = new BigRational(1);
         String[] alpha = new String[] { "alpha" };
         //String[] vars = new String[] { "z" };
