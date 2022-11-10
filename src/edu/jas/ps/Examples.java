@@ -252,15 +252,15 @@ public class Examples {
         System.out.println("integers 2     = " + ints2);
         UnivPowerSeries<BigInteger> inv1 = ONE.inverse();
         System.out.println("integers inv1  = " + inv1);
-        UnivPowerSeries<BigInteger> int1 = integers.reductum();
-        System.out.println("integers int1  = " + int1);
-        UnivPowerSeries<BigInteger> intinv = int1.inverse();
-        System.out.println("integers intinv = " + intinv);
-        UnivPowerSeries<BigInteger> one1 = int1.multiply(intinv);
+        UnivPowerSeries<BigInteger> intr = integers.reductum();
+        System.out.println("integers intr  = " + intr);
+        UnivPowerSeries<BigInteger> ints2inv = ONE.sum(ZERO).inverse();
+        System.out.println("integers ints2inv = " + ints2inv);
+        UnivPowerSeries<BigInteger> one1 = ints2.multiply(ints2inv);
         System.out.println("integers one1  = " + one1);
-        UnivPowerSeries<BigInteger> ii = intinv.inverse();
+        UnivPowerSeries<BigInteger> ii = ints2inv.inverse();
         System.out.println("integers ii    = " + ii);
-        UnivPowerSeries<BigInteger> rem = integers.subtract(integers.divide(int1).multiply(int1));
+        UnivPowerSeries<BigInteger> rem = integers.subtract(integers.divide(ints2).multiply(ints2));
         System.out.println("integers rem   = " + rem);
     }
 
