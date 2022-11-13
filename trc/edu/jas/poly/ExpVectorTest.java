@@ -738,9 +738,9 @@ public class ExpVectorTest extends TestCase {
 
 
     /**
-     * Test weight degree, integer.
+     * Test weight degree, long, integer, short and byte.
      */
-    public void testWeightdegInt() {
+    public void testWeightdegIntShortByte() {
         float q = (float) 0.2;
         a = new ExpVectorInteger(100);
         assertTrue("tdeg(a) = 0", a.totalDeg() == 0);
@@ -750,6 +750,32 @@ public class ExpVectorTest extends TestCase {
         b = ExpVectorInteger.valueOf(ExpVector.random(5, 10, q));
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
+        runWeightdeg(a,b);
+
+        a = ExpVectorShort.valueOf(ExpVector.random(5, 10, q));
+        b = ExpVectorShort.valueOf(ExpVector.random(5, 10, q));
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        runWeightdeg(a,b);
+
+        a = ExpVectorByte.valueOf(ExpVector.random(5, 10, q));
+        b = ExpVectorByte.valueOf(ExpVector.random(5, 10, q));
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        runWeightdeg(a,b);
+
+        a = ExpVectorLong.valueOf(ExpVector.random(5, 10, q));
+        b = ExpVectorLong.valueOf(ExpVector.random(5, 10, q));
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        runWeightdeg(a,b);
+    }
+
+
+    /**
+     * Run weight degree tests.
+     */
+    public void runWeightdeg(ExpVector a, ExpVector b) {
         long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l } };
 
         assertTrue("tdeg(a) >= 0", a.totalDeg() >= 0);
@@ -759,7 +785,7 @@ public class ExpVectorTest extends TestCase {
         assertEquals("tdeg(a) == wdeg(a)", a.totalDeg(), a.weightDeg(w));
         assertEquals("tdeg(b) == wdeg(b)", b.totalDeg(), b.weightDeg(w));
 
-        c = a.sum(b);
+        ExpVector c = a.sum(b);
         assertTrue("wdeg(a+b) >= wdeg(a)", c.weightDeg(w) >= a.weightDeg(w));
         assertTrue("wdeg(a+b) >= wdeg(b)", c.weightDeg(w) >= b.weightDeg(w));
 
@@ -809,12 +835,6 @@ public class ExpVectorTest extends TestCase {
         t = a.invWeightCompareTo(w,b,0,3) + b.invWeightCompareTo(w,a,0,3);
         assertTrue("(a <= b) + (b <= a) == 0", t == 0);
 
-        t = a.invTdegCompareTo(b) + b.invTdegCompareTo(a);
-        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
-
-        t = a.revLexInvTdegCompareTo(b) + b.revLexInvTdegCompareTo(a);
-        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
-
         t = a.revInvGradCompareTo(b) + b.revInvGradCompareTo(a);
         assertTrue("(a <= b) + (b <= a) == 0", t == 0);
         t = a.revInvGradCompareTo(b,0,3) + b.revInvGradCompareTo(a,0,3);
@@ -823,6 +843,15 @@ public class ExpVectorTest extends TestCase {
         t = a.invGradCompareTo(b) + b.invGradCompareTo(a);
         assertTrue("(a <= b) + (b <= a) == 0", t == 0);
         t = a.invGradCompareTo(b,0,3) + b.invGradCompareTo(a,0,3);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
+
+        if (a instanceof ExpVectorShort || a instanceof ExpVectorByte) {
+            return;
+        }
+        t = a.invTdegCompareTo(b) + b.invTdegCompareTo(a);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
+
+        t = a.revLexInvTdegCompareTo(b) + b.revLexInvTdegCompareTo(a);
         assertTrue("(a <= b) + (b <= a) == 0", t == 0);
     }
 
