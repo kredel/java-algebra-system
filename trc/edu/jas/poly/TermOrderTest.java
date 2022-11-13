@@ -5,12 +5,9 @@
 package edu.jas.poly;
 
 
-// import edu.jas.poly.TermOrder;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 
 
 /**
@@ -99,16 +96,21 @@ public class TermOrderTest extends TestCase {
         int sp = 5;
         s = new TermOrder(TermOrder.IGRLEX, TermOrder.IGRLEX, r, sp);
         t = new TermOrder(TermOrder.IGRLEX, TermOrder.IGRLEX, r, sp);
-        assertEquals("t = s", t, s);
+        assertEquals("t == s", t, s);
 
         String x = t.toString();
         String y = s.toString();
-        assertEquals("x = y", x, y);
+        assertEquals("x == y", x, y);
         //System.out.println("s = " + s);
 
         s = new TermOrder(TermOrder.IGRLEX, TermOrder.INVLEX, r, sp);
         t = new TermOrder(TermOrder.IGRLEX, TermOrder.INVLEX, r, sp);
-        assertEquals("t = s", t, s);
+        assertEquals("t == s", t, s);
+        //System.out.println("s = " + s);
+
+        s = new TermOrder(TermOrder.INVLEX, TermOrder.IGRLEX, r, sp, true);
+        t = new TermOrder(TermOrder.INVLEX, TermOrder.IGRLEX, r, sp, true);
+        assertEquals("t == s", t, s);
         //System.out.println("s = " + s);
     }
 

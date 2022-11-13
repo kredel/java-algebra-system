@@ -780,6 +780,10 @@ public class ExpVectorTest extends TestCase {
 
         assertTrue("tdeg(a) >= 0", a.totalDeg() >= 0);
         assertTrue("tdeg(b) >= 0", b.totalDeg() >= 0);
+        assertTrue("madeg(a) >= 0", a.maxDeg() >= 0);
+        assertTrue("madeg(b) >= 0", b.maxDeg() >= 0);
+        assertTrue("mideg(a) >= 0", a.minDeg() >= 0);
+        assertTrue("mideg(b) >= 0", b.minDeg() >= 0);
         assertTrue("wdeg(a) >= 0", a.weightDeg(w) >= 0);
         assertTrue("wdeg(b) >= 0", b.weightDeg(w) >= 0);
         assertEquals("tdeg(a) == wdeg(a)", a.totalDeg(), a.weightDeg(w));
@@ -835,9 +839,19 @@ public class ExpVectorTest extends TestCase {
         t = a.invWeightCompareTo(w,b,0,3) + b.invWeightCompareTo(w,a,0,3);
         assertTrue("(a <= b) + (b <= a) == 0", t == 0);
 
+        t = a.revInvLexCompareTo(b) + b.revInvLexCompareTo(a);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
+        t = a.revInvLexCompareTo(b,0,3) + b.revInvLexCompareTo(a,0,3);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
+
         t = a.revInvGradCompareTo(b) + b.revInvGradCompareTo(a);
         assertTrue("(a <= b) + (b <= a) == 0", t == 0);
         t = a.revInvGradCompareTo(b,0,3) + b.revInvGradCompareTo(a,0,3);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
+
+        t = a.invLexCompareTo(b) + b.invLexCompareTo(a);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
+        t = a.invLexCompareTo(b,0,3) + b.invLexCompareTo(a,0,3);
         assertTrue("(a <= b) + (b <= a) == 0", t == 0);
 
         t = a.invGradCompareTo(b) + b.invGradCompareTo(a);
