@@ -214,7 +214,7 @@ public class ExpVectorTest extends TestCase {
 
 
     /**
-     * Test weighted.
+     * Test weight degree.
      */
     public void testWeightdeg() {
         a = ExpVector.create(100);
@@ -283,7 +283,6 @@ public class ExpVectorTest extends TestCase {
         c = ExpVector.EVLCM(a, b);
         assertTrue("wdeg(lcm(a,b)) >= wdeg(a)", ExpVector.EVWDEG(w, c) >= ExpVector.EVWDEG(w, a));
         assertTrue("wdeg(lcm(a,b)) >= wdeg(b)", ExpVector.EVWDEG(w, c) >= ExpVector.EVWDEG(w, b));
-
     }
 
 
@@ -735,6 +734,96 @@ public class ExpVectorTest extends TestCase {
         d = c.reverse(0);
         //System.out.println("d = " + d);
         assertEquals("rev(rev(a),0) == a", a, d);
+    }
+
+
+    /**
+     * Test weight degree, integer.
+     */
+    public void testWeightdegInt() {
+        float q = (float) 0.2;
+        a = new ExpVectorInteger(100);
+        assertTrue("tdeg(a) = 0", a.totalDeg() == 0);
+        assertTrue("wdeg(a) = 0", a.weightDeg((long[][])null) == 0);
+
+        a = ExpVectorInteger.valueOf(ExpVector.random(5, 10, q));
+        b = ExpVectorInteger.valueOf(ExpVector.random(5, 10, q));
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        long[][] w = new long[][] { new long[] { 1l, 1l, 1l, 1l, 1l } };
+
+        assertTrue("tdeg(a) >= 0", a.totalDeg() >= 0);
+        assertTrue("tdeg(b) >= 0", b.totalDeg() >= 0);
+        assertTrue("wdeg(a) >= 0", a.weightDeg(w) >= 0);
+        assertTrue("wdeg(b) >= 0", b.weightDeg(w) >= 0);
+        assertEquals("tdeg(a) == wdeg(a)", a.totalDeg(), a.weightDeg(w));
+        assertEquals("tdeg(b) == wdeg(b)", b.totalDeg(), b.weightDeg(w));
+
+        c = a.sum(b);
+        assertTrue("wdeg(a+b) >= wdeg(a)", c.weightDeg(w) >= a.weightDeg(w));
+        assertTrue("wdeg(a+b) >= wdeg(b)", c.weightDeg(w) >= b.weightDeg(w));
+
+        c = a.lcm(b);
+        assertTrue("wdeg(lcm(a,b)) >= wdeg(a)", c.weightDeg(w) >= a.weightDeg(w));
+        assertTrue("wdeg(lcm(a,b)) >= wdeg(b)", c.weightDeg(w) >= b.weightDeg(w));
+
+
+        //w = new long[][] { new long[] { 10l, 1l, 3l, 9l, 100l } };
+        long[] v = new long[] { 10l, 1l, 3l, 9l, 100l };
+
+        assertTrue("tdeg(a) >= 0", a.totalDeg() >= 0);
+        assertTrue("tdeg(b) >= 0", b.totalDeg() >= 0);
+        assertTrue("wdeg(a) >= 0", a.weightDeg(v) >= 0);
+        assertTrue("wdeg(b) >= 0", b.weightDeg(v) >= 0);
+        assertTrue("tdeg(a) <= wdeg(a)", a.totalDeg() <= a.weightDeg(v));
+        assertTrue("tdeg(b) <= wdeg(b)", b.totalDeg() <= b.weightDeg(v));
+
+        c = a.sum(b);
+        assertTrue("wdeg(a+b) >= wdeg(a)", c.weightDeg(v) >= a.weightDeg(v));
+        assertTrue("wdeg(a+b) >= wdeg(b)", c.weightDeg(v) >= b.weightDeg(v));
+
+        c = a.lcm(b);
+        assertTrue("wdeg(lcm(a,b)) >= wdeg(a)", c.weightDeg(v) >= a.weightDeg(v));
+        assertTrue("wdeg(lcm(a,b)) >= wdeg(b)", c.weightDeg(v) >= b.weightDeg(v));
+
+
+        w = new long [][] { v, w[0] };
+
+        assertTrue("tdeg(a) >= 0", a.totalDeg() >= 0);
+        assertTrue("tdeg(b) >= 0", b.totalDeg() >= 0);
+        assertTrue("wdeg(a) >= 0", a.weightDeg(w) >= 0);
+        assertTrue("wdeg(b) >= 0", b.weightDeg(w) >= 0);
+        assertTrue("tdeg(a) <= wdeg(a)", a.totalDeg() <= a.weightDeg(w));
+        assertTrue("tdeg(b) <= wdeg(b)", b.totalDeg() <= b.weightDeg(w));
+
+        c = a.sum(b);
+        assertTrue("wdeg(a+b) >= wdeg(a)", c.weightDeg(w) >= a.weightDeg(w));
+        assertTrue("wdeg(a+b) >= wdeg(b)", c.weightDeg(w) >= b.weightDeg(w));
+
+        c = a.lcm(b);
+        assertTrue("wdeg(lcm(a,b)) >= wdeg(a)", c.weightDeg(w) >= a.weightDeg(w));
+        assertTrue("wdeg(lcm(a,b)) >= wdeg(b)", c.weightDeg(w) >= b.weightDeg(w));
+
+        int t = a.invWeightCompareTo(w,b) + b.invWeightCompareTo(w,a);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
+        t = a.invWeightCompareTo(w,b,0,3) + b.invWeightCompareTo(w,a,0,3);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
+
+        t = a.invTdegCompareTo(b) + b.invTdegCompareTo(a);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
+
+        t = a.revLexInvTdegCompareTo(b) + b.revLexInvTdegCompareTo(a);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
+
+        t = a.revInvGradCompareTo(b) + b.revInvGradCompareTo(a);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
+        t = a.revInvGradCompareTo(b,0,3) + b.revInvGradCompareTo(a,0,3);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
+
+        t = a.invGradCompareTo(b) + b.invGradCompareTo(a);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
+        t = a.invGradCompareTo(b,0,3) + b.invGradCompareTo(a,0,3);
+        assertTrue("(a <= b) + (b <= a) == 0", t == 0);
     }
 
 }

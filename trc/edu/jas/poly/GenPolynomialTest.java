@@ -518,10 +518,17 @@ public class GenPolynomialTest extends TestCase {
         //System.out.println("p = " + p);
 
         // test monomials
+        Monomial<BigInteger> one = new Monomial<BigInteger>(pf.getONE().leadingMonomial());
         for (Monomial<BigInteger> m : p) {
             //System.out.println("m = " + m);
             assertFalse("m.c == 0 ", m.coefficient().isZERO());
             assertFalse("m.e < (0) ", m.exponent().signum() < 0);
+            if (!m.exponent().isZERO()) {
+                assertFalse("m != 1: ", m.equals(one));
+            }
+            String s = m.toString() + ",  " + m.toScript();
+            //System.out.println("s = " + s);
+            assertTrue("#s >= 2*rl + 5: ", s.length() >= 2*rl + 5);
         }
 
         // test exponents
