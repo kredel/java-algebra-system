@@ -379,16 +379,35 @@ public class LocalSolvablePolynomialTest extends TestCase {
         //System.out.println("r2 = " + r2);
         //System.out.println("rp = " + rp);
         ring.polCoeff.coeffTable.update(r1.leadingExpVector(), r2.leadingExpVector(), rp);
-        //System.out.println("ring = " + ring);
-        //System.out.println("ring.polCoeff = " + ring.polCoeff);
+        //System.out.println("ring = " + ring.toScript());
+        //System.out.println("ring.polCoeff = " + ring.polCoeff.toScript());
         assertFalse("isCommutative()", ring.isCommutative());
         assertTrue("isAssociative()", ring.isAssociative());
 
         List<GenPolynomial<SolvableLocal<BigRational>>> gens = ring.generators();
+        //System.out.println("gens = " + gens);
         for (GenPolynomial<SolvableLocal<BigRational>> x : gens) {
             GenSolvablePolynomial<SolvableLocal<BigRational>> xx = (GenSolvablePolynomial<SolvableLocal<BigRational>>) x;
+            try {
+                GenSolvablePolynomial<GenPolynomial<BigRational>> ap = ring.toPolyCoefficients(xx);
+                //System.out.println("ap = " + ap);
+                c = ring.fromPolyCoefficients(ap);
+                //System.out.println("c = " + c);
+                assertEquals("from(to(xx)) == xx", xx, c);
+            } catch (IllegalArgumentException iae) {
+                // pass
+            }
             a = new LocalSolvablePolynomial<BigRational>(ring, xx);
             //System.out.println("a = " + a);
+            try {
+                GenSolvablePolynomial<GenPolynomial<BigRational>> ap = ring.toPolyCoefficients(a);
+                //System.out.println("ap = " + ap);
+                c = ring.fromPolyCoefficients(ap);
+                //System.out.println("c = " + c);
+                assertEquals("from(to(a)) == a", a, c);
+            } catch (IllegalArgumentException iae) {
+                // pass
+            }
             for (GenPolynomial<SolvableLocal<BigRational>> y : gens) {
                 GenSolvablePolynomial<SolvableLocal<BigRational>> yy = (GenSolvablePolynomial<SolvableLocal<BigRational>>) y;
                 b = new LocalSolvablePolynomial<BigRational>(ring, yy);

@@ -285,7 +285,7 @@ public class GCDProxyTest extends TestCase {
 
             e = PolyUtil.<ModInteger> baseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
-            assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
+            assertTrue("c | gcd(ac,bc) " + e + ", " + d + ", " + c, e.isZERO());
         }
         // obsolete ((GCDProxy<ModInteger>)ufd_par).terminate();
         ComputerThreads.terminate();

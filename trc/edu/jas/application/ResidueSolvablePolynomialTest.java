@@ -357,9 +357,28 @@ public class ResidueSolvablePolynomialTest extends TestCase {
         assertTrue("isAssociative()", ring.isAssociative());
 
         List<GenPolynomial<SolvableResidue<BigRational>>> gens = ring.generators();
+        //System.out.println("gens = " + gens);
         for (GenPolynomial<SolvableResidue<BigRational>> x : gens) {
             GenSolvablePolynomial<SolvableResidue<BigRational>> xx = (GenSolvablePolynomial<SolvableResidue<BigRational>>) x;
+            try {
+                GenSolvablePolynomial<GenPolynomial<BigRational>> ap = ring.toPolyCoefficients(xx);
+                //System.out.println("ap = " + ap);
+                c = ring.fromPolyCoefficients(ap);
+                //System.out.println("c = " + c);
+                assertEquals("from(to(xx)) == xx", xx, c);
+            } catch (IllegalArgumentException iae) {
+                // pass
+            }
             a = new ResidueSolvablePolynomial<BigRational>(ring, xx);
+            try {
+                GenSolvablePolynomial<GenPolynomial<BigRational>> ap = ring.toPolyCoefficients(a);
+                //System.out.println("ap = " + ap);
+                c = ring.fromPolyCoefficients(ap);
+                //System.out.println("c = " + c);
+                assertEquals("from(to(a)) == a", a, c);
+            } catch (IllegalArgumentException iae) {
+                // pass
+            }
             for (GenPolynomial<SolvableResidue<BigRational>> y : gens) {
                 GenSolvablePolynomial<SolvableResidue<BigRational>> yy = (GenSolvablePolynomial<SolvableResidue<BigRational>>) y;
                 b = new ResidueSolvablePolynomial<BigRational>(ring, yy);
