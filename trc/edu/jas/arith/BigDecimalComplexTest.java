@@ -73,10 +73,10 @@ public class BigDecimalComplexTest extends TestCase {
      * Test static initialization and constants.
      */
     public void testConstants() {
-        a = BigDecimalComplex.ZERO;
-        b = BigDecimalComplex.ONE;
+        a = fac.getZERO();
+        b = fac.getONE();
         c = b.subtract(b);
-        d = BigDecimalComplex.I;
+        d = fac.getIMAG();
         e = BigDecimalComplex.CDIF(d, d);
 
         assertEquals("1-1 == 0", c, a);
@@ -94,10 +94,10 @@ public class BigDecimalComplexTest extends TestCase {
      * Test bitLength.
      */
     public void testBitLength() {
-        a = BigDecimalComplex.ZERO;
-        b = BigDecimalComplex.ONE;
+        a = fac.getZERO();
+        b = fac.getONE();
         c = b.random(300);
-        d = BigDecimalComplex.I;
+        d = fac.getIMAG();
         //System.out.println("c = " + c);
         //System.out.println("len(c) = " + c.bitLength());
 
@@ -136,7 +136,7 @@ public class BigDecimalComplexTest extends TestCase {
         c = b.sum(a);
 
         assertTrue("1 == 1", a.isONE());
-        assertEquals("1+(-1) == 0", c, BigDecimalComplex.ZERO);
+        assertEquals("1+(-1) == 0", c, fac.getZERO());
     }
 
 
@@ -148,7 +148,7 @@ public class BigDecimalComplexTest extends TestCase {
         b = new BigDecimalComplex(a.getRe(), a.getIm());
         c = b.subtract(a);
 
-        assertEquals("a-b == 0", c, BigDecimalComplex.ZERO);
+        assertEquals("a-b == 0", c, fac.getZERO());
 
         d = new BigDecimalComplex(b.getRe(), b.getIm());
         assertEquals("sign(a-a) == 0", 0, b.compareTo(d));
@@ -171,12 +171,12 @@ public class BigDecimalComplexTest extends TestCase {
         d = b.sum(a);
         assertEquals("a+b == b+a: " + c.subtract(d), c, d);
 
-        d = a.sum(BigDecimalComplex.ZERO);
+        d = a.sum(fac.getZERO());
         assertEquals("a+0 == a", d, a);
-        d = a.subtract(BigDecimalComplex.ZERO);
+        d = a.subtract(fac.getZERO());
         assertEquals("a-0 == a", d, a);
         d = a.subtract(a);
-        assertEquals("a-a == 0", d, BigDecimalComplex.ZERO);
+        assertEquals("a-a == 0", d, fac.getZERO());
     }
 
 
@@ -192,9 +192,9 @@ public class BigDecimalComplexTest extends TestCase {
         d = c.subtract(a).abs().divide(a.abs());
         assertTrue("a*a/a == a: " + c.subtract(a), d.compareTo(eps) <= 0);
 
-        d = a.multiply(BigDecimalComplex.ONE);
+        d = a.multiply(fac.getONE());
         assertEquals("a*1 == a", d, a);
-        d = a.divide(BigDecimalComplex.ONE);
+        d = a.divide(fac.getONE());
         assertEquals("a/1 == a", d, a);
 
         b = fac.random(5);

@@ -322,6 +322,9 @@ public class BigRationalTest extends TestCase {
                 as = as.substring(0, as.length() - 1);
             }
         }
+        int l = Math.min(as.length(), ds.length());
+        as = as.substring(0, l - 1);
+        ds = ds.substring(0, l - 1);
         assertEquals("a = decimal(d): " + d, as, ds);
     }
 }

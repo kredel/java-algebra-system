@@ -34,7 +34,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
     public final java.math.BigDecimal val;
 
 
-    private final static Random random = new Random();
+    public final MathContext context; // should be in factory
 
 
     public static final MathContext DEFAULT_CONTEXT = MathContext.DECIMAL64; //32; //64; //128;
@@ -43,7 +43,7 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
     public static final int DEFAULT_PRECISION = DEFAULT_CONTEXT.getPrecision();
 
 
-    public final MathContext context;
+    private final static Random random = new Random();
 
 
     /**
@@ -55,13 +55,13 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
 
     /**
      * The constant 0.
-     */
+     */          // depends on math context, should be in factory
     public final static BigDecimal ZERO = new BigDecimal(java.math.BigDecimal.ZERO);
 
 
     /**
      * The constant 1.
-     */
+     */          // depends on math context, should be in factory
     public final static BigDecimal ONE = new BigDecimal(java.math.BigDecimal.ONE);
 
 
@@ -190,7 +190,8 @@ public final class BigDecimal implements GcdRingElem<BigDecimal>, RingFactory<Bi
 
     /*
      * Get the value.
-     * @return val java.math.BigDecimal. public java.math.BigDecimal getVal() {
+     * @return val java.math.BigDecimal.
+     * public java.math.BigDecimal getVal() {
      *         return val; }
      */
 

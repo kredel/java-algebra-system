@@ -48,6 +48,24 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
 
 
     /**
+     * The constant 0.
+     */    // depends on math context, should be in factory
+    public final static BigDecimalComplex ZERO = new BigDecimalComplex();
+
+
+    /**
+     * The constant 1.
+     */    // depends on math context, should be in factory
+    public final static BigDecimalComplex ONE = new BigDecimalComplex(1l);
+
+
+    /**
+     * The constant i.
+     */    // depends on math context, should be in factory
+    public final static BigDecimalComplex I = new BigDecimalComplex(0l,1l);
+
+
+    /**
      * The constructor creates a BigDecimalComplex object from two BigDecimal
      * objects real and imaginary part.
      * @param r real part.
@@ -60,12 +78,21 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
 
 
     /**
+     * The constructor creates a BigDecimalComplex object with real part 0 and
+     * imaginary part 0.
+     */
+    public BigDecimalComplex() {
+        this(0l);
+    }
+
+
+    /**
      * The constructor creates a BigDecimalComplex object from a BigDecimal
      * object as real part, the imaginary part is set to 0.
      * @param r real part.
      */
     public BigDecimalComplex(BigDecimal r) {
-        this(r, BigDecimal.ZERO);
+        this(r, r.getZERO());
     }
 
 
@@ -75,16 +102,18 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
      * @param r real part.
      */
     public BigDecimalComplex(long r) {
-        this(new BigDecimal(r), BigDecimal.ZERO);
+        this(new BigDecimal(r));
     }
 
 
     /**
-     * The constructor creates a BigDecimalComplex object with real part 0 and
-     * imaginary part 0.
+     * The constructor creates a BigDecimalComplex object from a long element as
+     * real part and the imaginary part.
+     * @param r real part.
+     * @param i imaginary part.
      */
-    public BigDecimalComplex() {
-        this(BigDecimal.ZERO);
+    public BigDecimalComplex(long r, long i) {
+        this(new BigDecimal(r), new BigDecimal(i));
     }
 
 
@@ -96,15 +125,15 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
      */
     public BigDecimalComplex(String s) throws NumberFormatException {
         if (s == null || s.length() == 0) {
-            re = BigDecimal.ZERO;
-            im = BigDecimal.ZERO;
+            re = new BigDecimal(0l);
+            im = re.getZERO();
             return;
         }
         s = s.trim();
         int i = s.indexOf("i");
         if (i < 0) {
             re = new BigDecimal(s);
-            im = BigDecimal.ZERO;
+            im = re.getZERO();
             return;
         }
         //logger.warn("String constructor not done");
@@ -266,24 +295,6 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
     public BigDecimalComplex fromInteger(long a) {
         return new BigDecimalComplex(new BigDecimal(a));
     }
-
-
-    /**
-     * The constant 0.
-     */
-    public static final BigDecimalComplex ZERO = new BigDecimalComplex();
-
-
-    /**
-     * The constant 1.
-     */
-    public static final BigDecimalComplex ONE = new BigDecimalComplex(BigDecimal.ONE);
-
-
-    /**
-     * The constant i.
-     */
-    public static final BigDecimalComplex I = new BigDecimalComplex(BigDecimal.ZERO, BigDecimal.ONE);
 
 
     /**
@@ -766,8 +777,8 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
      * @return R.
      */
     public BigDecimalComplex random(int n, Random rnd) {
-        BigDecimal r = BigDecimal.ONE.random(n, rnd);
-        BigDecimal i = BigDecimal.ONE.random(n, rnd);
+        BigDecimal r = ZERO.re.random(n, rnd);
+        BigDecimal i = ZERO.re.random(n, rnd);
         return new BigDecimalComplex(r, i);
     }
 
@@ -780,7 +791,7 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
      * @return R.
      */
     public static BigDecimalComplex CRAND(int n) {
-        return ONE.random(n, random);
+        return new BigDecimalComplex().random(n, random);
     }
 
 

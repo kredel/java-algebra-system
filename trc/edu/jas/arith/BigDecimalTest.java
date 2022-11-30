@@ -65,7 +65,7 @@ public class BigDecimalTest extends TestCase {
         a = b = c = d = e = null;
         fac = new BigDecimal(0L, mc);
         eps = new BigDecimal(new BigRational(1, 10));
-        eps = eps.power(precision);
+        eps = eps.power(precision-1);
     }
 
 
@@ -81,19 +81,19 @@ public class BigDecimalTest extends TestCase {
      * Test static initialization and constants.
      */
     public void testConstants() {
-        a = BigDecimal.ZERO;
-        b = BigDecimal.ONE;
+        a = fac.getZERO();
+        b = fac.getONE();
         c = b.subtract(b);
 
-        assertTrue("1-1 = 0", c.compareTo(a) == 0);
-        assertTrue("1-1 = 0", c.isZERO());
-        assertTrue("1 = 1", b.isONE());
+        assertTrue("1-1 == 0: " + c + a, c.compareTo(a) == 0);
+        assertTrue("1-1 == 0", c.isZERO());
+        assertTrue("1 == 1", b.isONE());
 
-        a = BigDecimal.ZERO;
-        b = BigDecimal.ONE;
-        c = a.subtract(a);
+        a = fac.getZERO();
+        b = fac.getONE();
+        c = b.subtract(a);
 
-        assertTrue("1-1 = 0", c.compareTo(a) == 0);
+        assertTrue("1-0 == 1: " + c + b, c.compareTo(b) == 0);
     }
 
 
@@ -101,17 +101,17 @@ public class BigDecimalTest extends TestCase {
      * Test bitLength.
      */
     public void testBitLength() {
-        a = BigDecimal.ZERO;
-        b = BigDecimal.ONE;
+        a = fac.getZERO();
+        b = fac.getONE();
         c = b.random(300, 100);
         //System.out.println("c = " + c);
         //System.out.println("unscale(c) = " + c.val.unscaledValue());
         //System.out.println("scale(c) = " + c.val.scale());
         //System.out.println("len(c) = " + c.bitLength());
 
-        assertEquals("len(0) = 1", 2, a.bitLength());
-        assertEquals("len(1) = 3", 3, b.bitLength());
-        assertEquals("len(-1) = 3", 3, b.negate().bitLength());
+        assertEquals("len(0) == 1", 2, a.bitLength());
+        assertEquals("len(1) == 3", 3, b.bitLength());
+        assertEquals("len(-1) == 3", 3, b.negate().bitLength());
         assertTrue("len(random) >= 2", 2 <= c.bitLength());
     }
 
@@ -130,15 +130,15 @@ public class BigDecimalTest extends TestCase {
         a = new BigDecimal(s);
         String t = a.toString();
 
-        assertEquals("stringConstr = toString", s, t);
+        assertEquals("stringConstr == toString", s, t);
 
         a = new BigDecimal(1);
         b = new BigDecimal(-1);
         c = b.sum(a);
 
-        assertTrue("1 = 1", a.isONE());
-        assertTrue("1+(-1) = 0", c.compareTo(BigDecimal.ZERO) == 0);
-        assertTrue("1+(-1) = 0", c.isZERO());
+        assertTrue("1 == 1", a.isONE());
+        assertTrue("1+(-1) == 0", c.compareTo(fac.getZERO()) == 0);
+        assertTrue("1+(-1) == 0", c.isZERO());
     }
 
 
@@ -152,13 +152,13 @@ public class BigDecimalTest extends TestCase {
         c = a.subtract(a);
 
         //System.out.println("c = " + c);
-        //assertTrue("a-b = 0", c.compareTo(BigDecimal.ZERO)==0 );
-        assertTrue("a-b = 0", c.isZERO());
+        //assertTrue("a-b == 0", c.compareTo(BigDecimal.ZERO)==0 );
+        assertTrue("a-b == 0", c.isZERO());
 
         d = new BigDecimal("" + b);
         //System.out.println("b = " + b);
         //System.out.println("d = " + d);
-        assertTrue("sign(a-a) = 0", b.compareTo(d) == 0);
+        assertTrue("sign(a-a) == 0", b.compareTo(d) == 0);
     }
 
 
@@ -174,19 +174,19 @@ public class BigDecimalTest extends TestCase {
         //System.out.println("c = " + c);
 
         //assertEquals("a+a-a = a", c, a);
-        assertEquals("a+a-a = a", 0, c.compareTo(a));
+        assertEquals("a+a-a == a", 0, c.compareTo(a));
 
-        d = a.sum(BigDecimal.ZERO);
-        assertEquals("a+0 = a", 0, d.compareTo(a));
-        d = a.subtract(BigDecimal.ZERO);
-        assertEquals("a-0 = a", 0, d.compareTo(a));
+        d = a.sum(fac.getZERO());
+        assertEquals("a+0 == a", 0, d.compareTo(a));
+        d = a.subtract(fac.getZERO());
+        assertEquals("a-0 == a", 0, d.compareTo(a));
         d = a.subtract(a);
-        assertTrue("a-a = 0", d.compareTo(BigDecimal.ZERO) == 0);
+        assertTrue("a-a == 0", d.compareTo(fac.getZERO()) == 0);
 
         b = fac.random(kl);
         c = a.sum(b);
         d = b.sum(a);
-        assertTrue("a+b = b+a", d.compareTo(c) == 0);
+        assertTrue("a+b == b+a", d.compareTo(c) == 0);
 
         // addition is not associative
     }
@@ -210,9 +210,9 @@ public class BigDecimalTest extends TestCase {
         //assertEquals("a*a/a = a",c,a);
         assertTrue("a*a/a = a", c.compareTo(a) == 0);
 
-        d = a.multiply(BigDecimal.ONE);
-        assertEquals("a*1 = a", d, a);
-        d = a.divide(BigDecimal.ONE);
+        d = a.multiply(fac.getONE());
+        assertEquals("a*1 == a", d, a);
+        d = a.divide(fac.getONE());
         assertEquals("a/1 = a", 0, d.compareTo(a));
 
         a = fac.random(kl);
@@ -220,14 +220,15 @@ public class BigDecimalTest extends TestCase {
         c = a.multiply(b);
         //System.out.println("c = " + c);
         d = c.subtract(fac.getONE()).abs();
-        assertTrue("a*1/a = 1: " + c, d.compareTo(eps) <= 0);
+        //System.out.println("d = " + d);
+        assertTrue("a*1/a == 1: " + c, d.compareTo(eps) <= 0);
 
         b = fac.random(kl);
         c = a.multiply(b);
         d = b.multiply(a);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-        assertTrue("ab = ba", d.compareTo(c) == 0);
+        assertTrue("ab == ba", d.compareTo(c) == 0);
 
         c = fac.random(kl);
         d = a.multiply(b.multiply(c));
@@ -235,7 +236,7 @@ public class BigDecimalTest extends TestCase {
         //System.out.println("d = " + d);
         //System.out.println("e = " + e);
         if (d.compareTo(e) == 0) {
-            assertTrue("a(bc) = (ab)c", d.compareTo(e) == 0);
+            assertTrue("a(bc) == (ab)c", d.compareTo(e) == 0);
         }
     }
 
@@ -251,7 +252,7 @@ public class BigDecimalTest extends TestCase {
         d = a.multiply(b.sum(c));
         e = a.multiply(b).sum(a.multiply(c));
         if (d.compareTo(e) == 0) {
-            assertTrue("a(b+c) = ab+ac", d.compareTo(e) == 0);
+            assertTrue("a(b+c) == ab+ac", d.compareTo(e) == 0);
         }
     }
 

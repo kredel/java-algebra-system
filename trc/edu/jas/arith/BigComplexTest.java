@@ -68,10 +68,10 @@ public class BigComplexTest extends TestCase {
      * Test static initialization and constants.
      */
     public void testConstants() {
-        a = BigComplex.ZERO;
-        b = BigComplex.ONE;
+        a = fac.getZERO();
+        b = fac.getONE();
         c = BigComplex.CDIF(b, b);
-        d = BigComplex.I;
+        d = fac.getIMAG();
         e = BigComplex.CDIF(d, d);
 
         assertEquals("1-1 = 0", c, a);
@@ -87,10 +87,10 @@ public class BigComplexTest extends TestCase {
      * Test bitLength.
      */
     public void testBitLength() {
-        a = BigComplex.ZERO;
-        b = BigComplex.ONE;
+        a = fac.getZERO();
+        b = fac.getONE();
         c = BigComplex.CDIF(b, b);
-        d = BigComplex.I;
+        d = fac.getIMAG();
         e = BigComplex.CDIF(d, d);
 
         assertEquals("len(0) = 6", 6, a.bitLength());
@@ -137,11 +137,11 @@ public class BigComplexTest extends TestCase {
      * Test random rationals.
      */
     public void testRandom() {
-        a = BigComplex.CRAND(500);
+        a = fac.random(500);
         b = new BigComplex(a.getRe(), a.getIm());
         c = BigComplex.CDIF(b, a);
 
-        assertEquals("a-b = 0", c, BigComplex.ZERO);
+        assertEquals("a-b = 0", c, fac.getZERO());
 
         d = new BigComplex(b.getRe(), b.getIm());
         assertEquals("sign(a-a) = 0", 0, b.compareTo(d));
@@ -152,7 +152,7 @@ public class BigComplexTest extends TestCase {
      * Test addition.
      */
     public void testAddition() {
-        a = BigComplex.CRAND(100);
+        a = fac.random(100);
         b = BigComplex.CSUM(a, a);
         c = BigComplex.CDIF(b, a);
 
@@ -164,12 +164,12 @@ public class BigComplexTest extends TestCase {
         d = b.sum(a);
         assertEquals("a+b == b+a: " + c.subtract(d), c, d);
 
-        d = BigComplex.CSUM(a, BigComplex.ZERO);
+        d = BigComplex.CSUM(a, fac.getZERO());
         assertEquals("a+0 = a", d, a);
-        d = BigComplex.CDIF(a, BigComplex.ZERO);
+        d = BigComplex.CDIF(a, fac.getZERO());
         assertEquals("a-0 = a", d, a);
         d = BigComplex.CDIF(a, a);
-        assertEquals("a-a = 0", d, BigComplex.ZERO);
+        assertEquals("a-a = 0", d, fac.getZERO());
     }
 
 
@@ -177,16 +177,16 @@ public class BigComplexTest extends TestCase {
      * Test multiplication.
      */
     public void testMultiplication() {
-        a = BigComplex.CRAND(100);
+        a = fac.random(100);
         b = BigComplex.CPROD(a, a);
         c = BigComplex.CQ(b, a);
 
         assertEquals("a*a/a = a", c, a);
         assertEquals("a*a/a = a", 0, c.compareTo(a));
 
-        d = BigComplex.CPROD(a, BigComplex.ONE);
+        d = BigComplex.CPROD(a, fac.getONE());
         assertEquals("a*1 = a", d, a);
-        d = BigComplex.CQ(a, BigComplex.ONE);
+        d = BigComplex.CQ(a, fac.getONE());
         assertEquals("a/1 = a", d, a);
 
         b = fac.random(5);
@@ -194,7 +194,7 @@ public class BigComplexTest extends TestCase {
         d = b.multiply(a);
         assertEquals("a*b == b*a: " + c.subtract(d), c, d);
 
-        a = BigComplex.CRAND(100);
+        a = fac.random(100);
         b = BigComplex.CINV(a);
         c = BigComplex.CPROD(a, b);
 
