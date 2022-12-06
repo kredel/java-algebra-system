@@ -100,6 +100,9 @@ public class GBAlgorithmBuilderTest extends TestCase {
 
         GBAlgorithmBuilder<BigRational> ab = GBAlgorithmBuilder.<BigRational> polynomialRing(pf);
         //System.out.println("ab = " + ab);
+        String s = ab.toString() + " :: " + ab.toScript();
+        //System.out.println("s = " + s + ", len(s) = " + s.length());
+        assertTrue("len(s) >= 150 " + s, s.length() >= 150);
 
         GroebnerBaseAbstract<BigRational> bb = ab.build();
         //System.out.println("bb = " + bb);

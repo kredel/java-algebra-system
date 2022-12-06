@@ -82,6 +82,29 @@ public class RunGBTest extends TestCase {
 
 
     /**
+     * Test sequential GB plus.
+     */
+    public void testSequentialGBplus() {
+        RunGB cli = new RunGB();
+        PrintStream ps = System.out;
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        PrintStream ss = new PrintStream(bs);
+        try {
+            System.setOut(ss);
+            cli.main(new String[] { "seq+", "examples/trinks7.jas", "check" });
+        } finally {
+            System.setOut(ps);
+        }
+        String sto = bs.toString();
+        //System.out.println(sto);
+        assertTrue("sequential", sto.contains("sequential"));
+        assertTrue("sequential", sto.contains("seq+"));
+        assertTrue("G.size() = 6", sto.contains("G.size() = 6"));
+        assertTrue("check isGB = true", sto.contains("check isGB = true"));
+    }
+
+
+    /**
      * Test parallel GB.
      */
     public void testParallelGB() {
@@ -98,6 +121,29 @@ public class RunGBTest extends TestCase {
         String sto = bs.toString();
         //System.out.println(sto);
         assertTrue("parallel", sto.contains("parallel"));
+        assertTrue("G.size() = 6", sto.contains("G.size() = 6"));
+        assertTrue("check isGB = true", sto.contains("check isGB = true"));
+    }
+
+
+    /**
+     * Test parallel GB plus.
+     */
+    public void testParallelGBplus() {
+        RunGB cli = new RunGB();
+        PrintStream ps = System.out;
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        PrintStream ss = new PrintStream(bs);
+        try {
+            System.setOut(ss);
+            cli.main(new String[] { "par+", "examples/trinks7.jas", "3", "check" });
+        } finally {
+            System.setOut(ps);
+        }
+        String sto = bs.toString();
+        //System.out.println(sto);
+        assertTrue("parallel", sto.contains("parallel"));
+        assertTrue("parallel", sto.contains("par+"));
         assertTrue("G.size() = 6", sto.contains("G.size() = 6"));
         assertTrue("check isGB = true", sto.contains("check isGB = true"));
     }

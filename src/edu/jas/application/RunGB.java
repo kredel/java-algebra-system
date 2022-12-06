@@ -370,9 +370,9 @@ public class RunGB {
         System.out.println("G.size() = " + G.size());
 
         if (plusextra) {
-            System.out.print("p+ ");
+            System.out.print("par+ ");
         } else {
-            System.out.print("p ");
+            System.out.print("par ");
         }
         System.out.println("= " + threads + ", time = " + t + " milliseconds");
         if (plusextra) {
