@@ -11,8 +11,6 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.gb.DGroebnerBaseSeq;
@@ -33,9 +31,12 @@ import edu.jas.gbufd.GroebnerBaseFGLM;
 import edu.jas.gbufd.GroebnerBaseWalk;
 import edu.jas.gbufd.GroebnerBasePseudoSeq;
 import edu.jas.gbufd.GroebnerBaseRational;
+import edu.jas.gbufd.GroebnerBaseQuotient;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.ufd.Quotient;
+import edu.jas.ufd.QuotientRing;
 
 
 /**
@@ -470,6 +471,40 @@ public class GBAlgorithmBuilderTest extends TestCase {
         //System.out.println("bb = " + bb);
         assertTrue("instance of " + bb, bb instanceof GroebnerBaseSigSeqIter);
         assertTrue("instance of " + bb, bb instanceof GroebnerBaseArriSigSeqIter);
+    }
+
+
+    /**
+     * Test construction for Quotient and parallel.
+     */
+    public void testConstructionQuotient() {
+        BigRational bf = new BigRational(1);
+        String[] vars = new String[] { "a", "b", "c" };
+        GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(bf, vars);
+        QuotientRing<BigRational> qr = new QuotientRing<BigRational>(pf);
+        String[] varq = new String[] { "x", "y", "z" };
+        GenPolynomialRing<Quotient<BigRational>> qf = new GenPolynomialRing<Quotient<BigRational>>(qr, varq);
+
+        GroebnerBaseAbstract<Quotient<BigRational>> bb;
+        GBProxy<Quotient<BigRational>> bbp;
+        bb = GBAlgorithmBuilder.<Quotient<BigRational>> polynomialRing(qf).fractionFree().build();
+        //System.out.println("bb = " + bb);
+        assertTrue("instance of " + bb, bb instanceof GroebnerBaseQuotient);
+
+        bb = GBAlgorithmBuilder.<Quotient<BigRational>> polynomialRing(qf).fractionFree().parallel(2).build();
+        //System.out.println("bb = " + bb);
+        assertTrue("instance of " + bb, bb instanceof GBProxy);
+        bbp = (GBProxy<Quotient<BigRational>>) bb;
+        assertTrue("instance of " + bbp.e1, bbp.e1 instanceof GroebnerBaseQuotient);
+        assertTrue("instance of " + bbp.e2, bbp.e2 instanceof GroebnerBaseQuotient);
+
+        bb = GBAlgorithmBuilder.<Quotient<BigRational>> polynomialRing(qf).fractionFree().graded().parallel()
+                        .build();
+        //System.out.println("bb = " + bb);
+        assertTrue("instance of " + bb, bb instanceof GBProxy);
+        bbp = (GBProxy<Quotient<BigRational>>) bb;
+        assertTrue("instance of " + bbp.e1, bbp.e1 instanceof GroebnerBaseFGLM);
+        assertTrue("instance of " + bbp.e2, bbp.e2 instanceof GroebnerBaseParallel);
     }
 
 }

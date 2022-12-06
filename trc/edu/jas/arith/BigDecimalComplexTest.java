@@ -58,7 +58,7 @@ public class BigDecimalComplexTest extends TestCase {
         a = b = c = d = e = null;
         fac = new BigDecimalComplex();
         eps = new BigDecimalComplex("0.1");
-        eps = eps.power(precision - 1);
+        eps = eps.power(precision - 2);
     }
 
 
@@ -237,10 +237,13 @@ public class BigDecimalComplexTest extends TestCase {
         b = a.norm();
         c = a.abs();
         d = c.multiply(c);
-        e = b.subtract(d);
+        e = b.subtract(d).abs();
         //System.out.println("e = " + e);
+        //System.out.println("eps = " + eps);
+        assertTrue("||a|| == |a|*|a|: " + e, e.compareTo(eps) <= 0);
 
         e = d.subtract(b).abs().divide(b.abs());
+        //System.out.println("e = " + e);
         assertTrue("||a|| == |a|*|a|: " + e, e.compareTo(eps) <= 0);
     }
 
