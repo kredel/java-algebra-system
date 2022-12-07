@@ -197,7 +197,36 @@ public class RunGBTest extends TestCase {
         assertTrue("disthyb", sto.contains("distributed hybrid"));
         assertTrue("G.size() = 6", sto.contains("G.size() = 6"));
         assertTrue("check isGB = true", sto.contains("check isGB = true"));
-        //pool.shutdownNow();
+        pool.shutdownNow();
+    }
+
+
+    /**
+     * Test distributed hybrid GB plus.
+     */
+    public void testDisthybGBplus() {
+        RunGB cli = new RunGB();
+        ExecutorService pool = ComputerThreads.getPool();
+        RunGB node1 = new RunGB();
+        RunGB node2 = new RunGB();
+        PrintStream ps = System.out;
+        ByteArrayOutputStream bs = new ByteArrayOutputStream();
+        PrintStream ss = new PrintStream(bs);
+        try {
+            System.setOut(ss);
+            pool.execute( () -> node1.main(new String[] { "cli", "8114" }) );
+            pool.execute( () -> node2.main(new String[] { "cli", "9114" }) );
+            cli.main(new String[] { "disthyb+", "examples/trinks7.jas", "3/2", "machines.localhost", "check" });
+        } finally {
+            System.setOut(ps);
+        }
+        String sto = bs.toString();
+        System.out.println(sto);
+        assertTrue("disthyb", sto.contains("distributed hybrid"));
+        assertTrue("disthyb", sto.contains("disthyb+"));
+        assertTrue("G.size() = 6", sto.contains("G.size() = 6"));
+        assertTrue("check isGB = true", sto.contains("check isGB = true"));
+        pool.shutdownNow();
     }
 
 }
