@@ -14,6 +14,8 @@ import org.apache.logging.log4j.Logger;
 
 import edu.jas.arith.BigDecimal;
 import edu.jas.arith.BigRational;
+import edu.jas.arith.ModInteger;
+import edu.jas.arith.ModIntegerRing;
 import edu.jas.gb.GroebnerBase;
 import edu.jas.gbufd.GBFactory;
 import edu.jas.kern.ComputerThreads;
@@ -1475,16 +1477,14 @@ public class IdealTest extends TestCase {
 
 
     /**
-     * Test 0-dim root decomposition.
+     * Test 0-dim root decomposition char 0.
      */
-    public void testRootDecomposition() {
+    public void testRootDecompositionChar0() {
         String[] vars;
-
         BigRational coeff = new BigRational(17, 1);
         to = new TermOrder(TermOrder.INVLEX);
         vars = new String[] { "x", "y", "z" };
         fac = new GenPolynomialRing<BigRational>(coeff, rl, to, vars);
-
         vars = fac.getVars();
         //System.out.println("vars = " + Arrays.toString(vars));
         //System.out.println("fac = " + fac);
@@ -1514,6 +1514,61 @@ public class IdealTest extends TestCase {
         //System.out.println("rzd = " + rzd);
 
         assertTrue("is contained in intersection ", I.isZeroDimDecomposition(rzd));
+    }
+
+
+    /**
+     * Test 0-dim root decomposition char p = 13.
+     */
+    public void testRootDecompositionCharP() {
+        String[] vars;
+        ModIntegerRing coeff = new ModIntegerRing(13, true); // 13 important for field extension
+        to = new TermOrder(TermOrder.INVLEX);
+        vars = new String[] { "x", "y", "z" };
+        GenPolynomialRing<ModInteger> fac;
+        fac = new GenPolynomialRing<ModInteger>(coeff, rl, to, vars);
+        vars = fac.getVars();
+        //System.out.println("vars = " + Arrays.toString(vars));
+        //System.out.println("fac = " + fac.toScript());
+        assertTrue("vars.length == 3 ", vars.length == 3);
+
+        Ideal<ModInteger> I;
+        List<GenPolynomial<ModInteger>> L;
+        L = new ArrayList<GenPolynomial<ModInteger>>();
+        GenPolynomial<ModInteger> a, b, c;
+
+        // need field extension for this test:
+        a = fac.parse("( x^2 - 7 )");
+        b = fac.parse("( y^3 + 3 )");
+        c = fac.parse("( z^5 + x * y )");
+
+        if (a.isZERO() || b.isZERO() || c.isZERO()) {
+            return;
+        }
+
+        L.add(a);
+        L.add(b);
+        L.add(c);
+        I = new Ideal<ModInteger>(fac, L);
+        //System.out.println("I = " + I);
+        I.doGB();
+        assertTrue("not isZERO( I )", !I.isZERO());
+        assertTrue("isGB( I )", I.isGB());
+        //System.out.println("I = " + I);
+
+        List<IdealWithUniv<ModInteger>> rzd = I.zeroDimRootDecomposition();
+        //System.out.println("rzd = " + rzd);
+        //System.out.println("#rzd = " + rzd.size());
+        assertTrue("is zero dim decomposition ", I.isZeroDimDecomposition(rzd));
+
+        /* not ok when field extensions are used:
+        List<Ideal<ModInteger>> izd = IdealWithUniv.asListOfIdeals(rzd);
+        System.out.println("izd = " + izd);
+        Ideal<ModInteger> J = I.intersect(izd);
+        System.out.println("I = " + I.toScript());
+        System.out.println("J = " + J.toScript());
+        assertEquals("I == J ", I, J);
+        */
     }
 
 

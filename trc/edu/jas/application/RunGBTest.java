@@ -221,7 +221,7 @@ public class RunGBTest extends TestCase {
             System.setOut(ps);
         }
         String sto = bs.toString();
-        System.out.println(sto);
+        //System.out.println(sto);
         assertTrue("disthyb", sto.contains("distributed hybrid"));
         assertTrue("disthyb", sto.contains("disthyb+"));
         assertTrue("G.size() = 6", sto.contains("G.size() = 6"));

@@ -7,6 +7,7 @@ package edu.jas.application;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.ArrayList;
 
 import edu.jas.poly.GenPolynomial;
 import edu.jas.structure.GcdRingElem;
@@ -106,6 +107,28 @@ public class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {
             return s;
         }
         return s + ", others=" + others.toString();
+    }
+
+
+    /**
+     * Get list of ideals from list of ideals with univariates.
+     * @param Bl list of ideals with univariate polynomials
+     * @return list of ideals
+     */
+    public static <C extends GcdRingElem<C>>
+           List<Ideal<C>> asListOfIdeals(List<IdealWithUniv<C>> Bl) {
+        List<Ideal<C>> L = new ArrayList<Ideal<C>>(Bl.size());
+        if (Bl.size() == 0) {
+            return L;
+        }
+        for (IdealWithUniv<C> B : Bl) {
+            if (B == null) {
+                continue;
+            }
+            Ideal<C> I = B.ideal;
+            L.add(I);
+        }
+        return L;
     }
 
 }
