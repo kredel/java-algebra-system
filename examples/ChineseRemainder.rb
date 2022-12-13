@@ -67,11 +67,11 @@ ff = [[a,b,c], [a.sum(oo),b,c], [a,b.sum(oo),c], [a,b,c.sum(oo)]];
 puts "ff = " + str(ff.map{ |f| f.map{ |a| a.to_s } });
 puts;
 
-a = 2/3;
-b = 3/7;
-c = 5;
-d = 1/27;
-rr = [a, b, c, d];
+a1 = 2/3;
+b1 = 3/7;
+c1 = 5;
+d1 = 1/27;
+rr = [a1, b1, c1, d1];
 puts "ff = " + str(rr.map{ |f| f.to_s });
 puts;
 
