@@ -120,7 +120,7 @@ public class SGCDParallelProxyTest extends TestCase {
 
 
     /**
-     * Test get BigRational implementation.
+     * Test get BigRational parallel implementation.
      */
     public void testBigRational() {
         long t;
@@ -129,7 +129,7 @@ public class SGCDParallelProxyTest extends TestCase {
         GreatestCommonDivisor<BigRational> fd_par;
         GreatestCommonDivisorAbstract<BigRational> fd;
 
-        fd_par = SGCDFactory./*<BigRational>*/getProxy(bi);
+        fd_par = SGCDFactory.<BigRational> getProxy(bi);
         //System.out.println("fd_par = " + fd_par);
         assertTrue("fd_par != null " + fd_par, fd_par != null);
 
@@ -171,12 +171,30 @@ public class SGCDParallelProxyTest extends TestCase {
             t = System.currentTimeMillis();
             d = (GenSolvablePolynomial<BigRational>) fd_par.leftGcd(a, b);
             t = System.currentTimeMillis() - t;
+            assertTrue("time >= 0: " + t, t >= 0);
             //System.out.println("i proxy time = " + t);
             //System.out.println("c = " + c);
             //System.out.println("d = " + d);
             //System.out.println("e = " + e);
 
             e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(d, c);
+            //System.out.println("e = " + e);
+            assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
+
+            // now with right variants:
+            c = (GenSolvablePolynomial<BigRational>) fd.rightPrimitivePart(c).abs();
+            a = c.multiply(a);
+            b = c.multiply(b);
+            //System.out.println("a = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
+
+            t = System.currentTimeMillis();
+            d = (GenSolvablePolynomial<BigRational>) fd_par.rightGcd(a, b);
+            t = System.currentTimeMillis() - t;
+            assertTrue("time >= 0: " + t, t >= 0);
+
+            e = FDUtil.<BigRational> rightBaseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
             assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
         }
@@ -186,7 +204,7 @@ public class SGCDParallelProxyTest extends TestCase {
 
 
     /**
-     * Test get ModInteger implementation.
+     * Test get ModInteger parallel implementation.
      */
     public void testModInteger() {
         long t;
@@ -198,7 +216,7 @@ public class SGCDParallelProxyTest extends TestCase {
         GreatestCommonDivisor<ModInteger> fd_par;
         GreatestCommonDivisorAbstract<ModInteger> fd;
 
-        fd_par = SGCDFactory.getProxy(mi);
+        fd_par = SGCDFactory.<ModInteger> getProxy(mi);
         //System.out.println("fd_par = " + fd_par);
         assertTrue("fd_par != null " + fd_par, fd_par != null);
 
@@ -244,6 +262,7 @@ public class SGCDParallelProxyTest extends TestCase {
             t = System.currentTimeMillis();
             d = (GenSolvablePolynomial<ModInteger>) fd_par.leftGcd(a, b);
             t = System.currentTimeMillis() - t;
+            assertTrue("time >= 0: " + t, t >= 0);
             //System.out.println("m proxy time = " + t);
             //System.out.println("c = " + c);
             //System.out.println("d = " + d);
@@ -252,6 +271,23 @@ public class SGCDParallelProxyTest extends TestCase {
             e = FDUtil.<ModInteger> leftBaseSparsePseudoRemainder(d, c);
             //System.out.println("e = " + e);
             assertTrue("c | gcd(ac,bc) " + e + ", " + d + ", " + c, e.isZERO());
+
+            // now with right variants:
+            c = (GenSolvablePolynomial<ModInteger>) fd.rightPrimitivePart(c).abs();
+            a = c.multiply(a);
+            b = c.multiply(b);
+            //System.out.println("a = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
+
+            t = System.currentTimeMillis();
+            d = (GenSolvablePolynomial<ModInteger>) fd_par.rightGcd(a, b);
+            t = System.currentTimeMillis() - t;
+            assertTrue("time >= 0: " + t, t >= 0);
+
+            e = FDUtil.<ModInteger> rightBaseSparsePseudoRemainder(d, c);
+            //System.out.println("e = " + e);
+            assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
         }
         // obsolete ((SGCDParallelProxy<ModInteger>)fd_par).terminate();
         ComputerThreads.terminate();
@@ -265,7 +301,7 @@ public class SGCDParallelProxyTest extends TestCase {
         BigInteger b = new BigInteger();
         GreatestCommonDivisor<BigInteger> fd;
 
-        fd = SGCDFactory./*<BigInteger>*/getImplementation(b);
+        fd = SGCDFactory.<BigInteger> getImplementation(b);
         //System.out.println("fd = " + fd);
         assertTrue("fd = Primitive " + fd, fd instanceof GreatestCommonDivisorPrimitive);
     }
