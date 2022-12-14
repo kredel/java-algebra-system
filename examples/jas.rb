@@ -3584,6 +3584,17 @@ Optimize the term order on the variables.
         return SimIdeal.new(r,"",o.list);
     end
 
+
+=begin rdoc
+Compute the dimension of the ideal.
+=end
+    def dimension()
+        ii = Ideal.new(@pset);
+        d = ii.dimension();
+        return d;
+    end
+
+
 =begin rdoc
 Compute real roots of 0-dim ideal.
 =end
@@ -4750,6 +4761,16 @@ Test if this is a right syzygy of the module in m.
         t = System.currentTimeMillis() - t;
         puts "executed isRightSyzygy in #{t} ms\n"; 
         return z;
+    end
+
+
+=begin rdoc
+Compute the dimension of the ideal.
+=end
+    def dimension()
+        ii = SolvableIdeal.new(@pset);
+        d = ii.dimension();
+        return d;
     end
 
 end

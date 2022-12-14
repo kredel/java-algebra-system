@@ -1002,6 +1002,13 @@ class Ideal:
         r = Ring("",o.ring);
         return Ideal(r,"",o.list);
 
+    def dimension(self):
+        '''Compute the dimension of the ideal.
+        '''
+        I = jas.application.Ideal(self.pset);
+        d = I.dimension();
+        return d;
+
     def realRoots(self):
         '''Compute real roots of 0-dim ideal.
         '''
@@ -1780,6 +1787,14 @@ class SolvableIdeal:
         t = System.currentTimeMillis() - t;
         print "executed isRightSyzygy in %s ms" % t; 
         return z;
+
+    def dimension(self):
+        '''Compute the dimension of the ideal.
+        '''
+        I = jas.application.SolvableIdeal(self.pset);
+        d = I.dimension();
+        return d;
+
 
 
 class Module:
