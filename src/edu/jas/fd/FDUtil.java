@@ -589,6 +589,7 @@ public class FDUtil {
         GenSolvablePolynomial<GenPolynomial<C>> h, q, r;
         RecSolvablePolynomial<C> hr, rr, qr;
         r = P;
+        //System.out.println("zero = " + S.ring.getZERO().copy());
         qr = (RecSolvablePolynomial<C>) S.ring.getZERO().copy();
         while (!r.isZERO()) {
             ExpVector g = r.leadingExpVector();

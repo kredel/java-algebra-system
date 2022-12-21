@@ -557,13 +557,13 @@ public class FDUtilTest extends TestCase {
         GenSolvablePolynomial<BigRational> bc = (GenSolvablePolynomial<BigRational>) bs.leadingBaseCoefficient();
         ds = (RecSolvablePolynomial<BigRational>) as.multiply(bc);
         fs = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveDivide(ds, bc);
-        System.out.println("bc = " + bc);
-        System.out.println("ds = " + ds);
-        System.out.println("fs = " + fs);
+        //System.out.println("bc = " + bc);
+        //System.out.println("ds = " + ds);
+        //System.out.println("fs = " + fs);
         i = 0;
         do {
             x1 = (RecSolvablePolynomial<BigRational>) as.multiply(bc.power(i));
-            System.out.println("lc(b)^"+i+"*a = " + x1);
+            //System.out.println("lc(b)^"+i+"*a = " + x1);
             if (fs.equals(x1)) {
                 assertEquals("a == a*b/b: ", fs, x1);
                 break;
@@ -580,13 +580,13 @@ public class FDUtilTest extends TestCase {
         bc = (GenSolvablePolynomial<BigRational>) bs.leadingBaseCoefficient();
         ds = (RecSolvablePolynomial<BigRational>) as.multiply(bc);
         fs = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveLeftDivide(ds, bc);
-        System.out.println("bc = " + bc);
-        System.out.println("ds = " + ds);
-        System.out.println("fs = " + fs);
+        //System.out.println("bc = " + bc);
+        //System.out.println("ds = " + ds);
+        //System.out.println("fs = " + fs);
         i = 0;
         do {
             x1 = (RecSolvablePolynomial<BigRational>) as.multiply(bc.power(i));
-            System.out.println("lc(b)^"+i+"*a = " + x1);
+            //System.out.println("lc(b)^"+i+"*a = " + x1);
             if (fs.equals(x1)) {
                 assertEquals("a == a*b/b: ", fs, x1);
                 break;

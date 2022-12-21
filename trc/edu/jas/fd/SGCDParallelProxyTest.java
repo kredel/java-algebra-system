@@ -17,6 +17,8 @@ import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
+import edu.jas.poly.RecSolvablePolynomial;
+import edu.jas.poly.RecSolvablePolynomialRing;
 import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrder;
 
@@ -69,7 +71,8 @@ public class SGCDParallelProxyTest extends TestCase {
     GenSolvablePolynomialRing<BigRational> cfac;
 
 
-    GenSolvablePolynomialRing<GenPolynomial<BigRational>> rfac;
+    RecSolvablePolynomialRing<BigRational> rfac;
+    //GenSolvablePolynomialRing<GenPolynomial<BigRational>> rfac;
 
 
     BigRational ai, bi, ci, di, ei;
@@ -103,7 +106,8 @@ public class SGCDParallelProxyTest extends TestCase {
         ar = br = cr = dr = er = null;
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), rl, to);
         cfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), rl - 1, to);
-        rfac = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(cfac, 1, to);
+        //rfac = new GenSolvablePolynomialRing<GenPolynomial<BigRational>>(cfac, 1, to);
+        rfac = (RecSolvablePolynomialRing<BigRational>) dfac.recursive(1);
     }
 
 
@@ -317,6 +321,217 @@ public class SGCDParallelProxyTest extends TestCase {
         fd = SGCDFactory.<BigComplex> getImplementation(b);
         //System.out.println("fd = " + fd);
         assertTrue("fd != Simple " + fd, fd instanceof GreatestCommonDivisorSimple);
+    }
+
+
+    /**
+     * Test get BigRational base parallel implementation.
+     */
+    public void testBigRationalBase() {
+        long t;
+        BigRational bi = new BigRational();
+
+        GreatestCommonDivisorAbstract<BigRational> fd_par;
+        GreatestCommonDivisorAbstract<BigRational> fd;
+
+        fd_par = SGCDFactory.<BigRational> getProxy(bi);
+        //System.out.println("fd_par = " + fd_par);
+        assertTrue("fd_par != null " + fd_par, fd_par != null);
+
+        fd = new GreatestCommonDivisorFake<BigRational>(bi);
+
+        //System.out.println("fd = " + fd);
+        assertTrue("fd != null " + fd, fd != null);
+
+        int rl = 1;
+        dfac = new GenSolvablePolynomialRing<BigRational>(bi, 1, to);
+
+        for (int i = 0; i < 1; i++) { // 10-50
+            a = dfac.random(kl + i * 10, ll + i, el, q);
+            b = dfac.random(kl + i * 10, ll + i, el, q);
+            c = dfac.random(kl + 2, ll, el, q);
+            //c = dfac.getONE();
+            //c = c.multiply( dfac.univariate(0) );
+            c = (GenSolvablePolynomial<BigRational>) fd.leftPrimitivePart(c).abs();
+            //System.out.println("a = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
+
+            if (a.isZERO() || b.isZERO() || c.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            assertTrue("length( c" + i + " ) <> 0", c.length() > 0);
+            //assertTrue(" not isZERO( c"+i+" )", !c.isZERO() );
+            //assertTrue(" not isONE( c"+i+" )", !c.isONE() );
+
+            a = a.multiply(c);
+            b = b.multiply(c);
+            //System.out.println("a = " + a);
+            //System.out.println("b = " + b);
+            /*
+            System.out.println("\ni degrees: a = " + a.degree()
+                                        + ", b = " + b.degree()
+                                        + ", c = " + c.degree());
+            */
+            t = System.currentTimeMillis();
+            d = (GenSolvablePolynomial<BigRational>) fd_par.leftBaseGcd(a, b);
+            t = System.currentTimeMillis() - t;
+            assertTrue("time >= 0: " + t, t >= 0);
+            //System.out.println("i proxy time = " + t);
+            //System.out.println("c = " + c);
+            //System.out.println("d = " + d);
+            //System.out.println("e = " + e);
+
+            e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(d, c);
+            //System.out.println("e = " + e);
+            assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
+
+            // now with right variants:
+            c = (GenSolvablePolynomial<BigRational>) fd.rightPrimitivePart(c).abs();
+            a = c.multiply(a);
+            b = c.multiply(b);
+            //System.out.println("a = " + a);
+            //System.out.println("b = " + b);
+            //System.out.println("c = " + c);
+
+            t = System.currentTimeMillis();
+            d = (GenSolvablePolynomial<BigRational>) fd_par.rightBaseGcd(a, b);
+            t = System.currentTimeMillis() - t;
+            assertTrue("time >= 0: " + t, t >= 0);
+
+            e = FDUtil.<BigRational> rightBaseSparsePseudoRemainder(d, c);
+            //System.out.println("e = " + e);
+            assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
+        }
+        // obsolete ((SGCDParallelProxy<BigRational>)fd_par).terminate();
+        ComputerThreads.terminate();
+    }
+
+
+    /**
+     * Test get BigRational left recursive parallel implementation.
+     */
+    public void testBigRationalLeftRecursive() {
+        long t;
+        BigRational bi = new BigRational();
+
+        GreatestCommonDivisorAbstract<BigRational> fd_par;
+        GreatestCommonDivisorAbstract<BigRational> fd;
+
+        fd_par = SGCDFactory.<BigRational> getProxy(bi);
+        //System.out.println("fd_par = " + fd_par);
+        assertTrue("fd_par != null " + fd_par, fd_par != null);
+
+        fd = new GreatestCommonDivisorFake<BigRational>(bi);
+
+        //System.out.println("fd = " + fd);
+        assertTrue("fd != null " + fd, fd != null);
+
+        for (int i = 0; i < 1; i++) { // 10-50
+            ar = rfac.random(kl + i * 5, ll + i/2, el, q);
+            br = rfac.random(kl + i * 5, ll + i/2, el, q);
+            cr = rfac.random(kl, ll, el, q);
+            //cr = rfac.getONE();
+            //cr = c.multiply( rfac.univariate(0) );
+            cr = (GenSolvablePolynomial<GenPolynomial<BigRational>>) fd.leftRecursivePrimitivePart(cr).abs();
+            //System.out.println("ar = " + ar);
+            //System.out.println("br = " + br);
+            //System.out.println("cr = " + cr);
+
+            if (ar.isZERO() || br.isZERO() || cr.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            assertTrue("length( cr" + i + " ) <> 0", cr.length() > 0);
+            //assertTrue(" not isZERO( c"+i+" )", !cr.isZERO() );
+            //assertTrue(" not isONE( c"+i+" )", !cr.isONE() );
+
+            ar = ar.multiply(cr);
+            br = br.multiply(cr);
+            //System.out.println("ar = " + ar);
+            //System.out.println("br = " + br);
+            /*
+            System.out.println("\ni degrees: ar = " + ar.degree()
+                                        + ", br = " + br.degree()
+                                        + ", cr = " + cr.degree());
+            */
+            t = System.currentTimeMillis();
+            dr = (GenSolvablePolynomial<GenPolynomial<BigRational>>) fd_par.leftRecursiveUnivariateGcd(ar, br);
+            t = System.currentTimeMillis() - t;
+            assertTrue("time >= 0: " + t, t >= 0);
+            //System.out.println("i proxy time = " + t);
+            //System.out.println("cr = " + cr);
+            //System.out.println("dr = " + dr);
+
+            //recursiveLeftSparsePseudoRemainder
+            er = FDUtil.<BigRational> recursivePseudoQuotientRemainder(dr, cr)[1];
+            //System.out.println("er = " + er);
+            assertTrue("c | gcd(ac,bc) " + er, er.isZERO());
+        }
+        // obsolete ((SGCDParallelProxy<BigRational>)fd_par).terminate();
+        ComputerThreads.terminate();
+    }
+
+
+    /**
+     * Test get BigRational right recursive parallel implementation.
+     */
+    public void testBigRationalRightRecursive() {
+        long t;
+        BigRational bi = new BigRational();
+
+        GreatestCommonDivisorAbstract<BigRational> fd_par;
+        GreatestCommonDivisorAbstract<BigRational> fd;
+
+        fd_par = SGCDFactory.<BigRational> getProxy(bi);
+        //System.out.println("fd_par = " + fd_par);
+        assertTrue("fd_par != null " + fd_par, fd_par != null);
+
+        fd = new GreatestCommonDivisorFake<BigRational>(bi);
+
+        //System.out.println("fd = " + fd);
+        assertTrue("fd != null " + fd, fd != null);
+
+        for (int i = 0; i < 1; i++) { // 10-50
+            ar = rfac.random(kl + i * 5, ll + i/2, el, q);
+            br = rfac.random(kl + i * 5, ll + i/2, el, q);
+            cr = rfac.random(kl, ll, el, q);
+            //cr = rfac.getONE();
+            //cr = c.multiply( rfac.univariate(0) );
+            //System.out.println("ar = " + ar);
+            //System.out.println("br = " + br);
+            //System.out.println("cr = " + cr);
+
+            if (ar.isZERO() || br.isZERO() || cr.isZERO()) {
+                // skip for this turn
+                continue;
+            }
+            assertTrue("length( cr" + i + " ) <> 0", cr.length() > 0);
+            //assertTrue(" not isZERO( c"+i+" )", !cr.isZERO() );
+            //assertTrue(" not isONE( c"+i+" )", !cr.isONE() );
+
+            // now with right variants:                                 right!
+            cr = (GenSolvablePolynomial<GenPolynomial<BigRational>>) fd.rightRecursivePrimitivePart(cr).abs();
+            ar = cr.multiply(ar);
+            br = cr.multiply(br);
+            //System.out.println("ar = " + ar);
+            //System.out.println("br = " + br);
+            //System.out.println("cr = " + cr);
+
+            t = System.currentTimeMillis();
+            dr = (GenSolvablePolynomial<GenPolynomial<BigRational>>) fd_par.rightRecursiveUnivariateGcd(ar, br);
+            t = System.currentTimeMillis() - t;
+            assertTrue("time >= 0: " + t, t >= 0);
+            //System.out.println("dr = " + dr);
+
+            //recursiveRightSparsePseudoRemainder
+            er = FDUtil.<BigRational> recursiveRightSparsePseudoRemainder(dr, cr);
+            //System.out.println("er = " + er);
+            assertTrue("c | gcd(ac,bc) " + er, er.isZERO());
+        }
+        // obsolete ((SGCDParallelProxy<BigRational>)fd_par).terminate();
+        ComputerThreads.terminate();
     }
 
 }

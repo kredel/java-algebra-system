@@ -609,7 +609,7 @@ public class GCDSyzygyTest extends TestCase {
      * Test rational coefficients gcd polynomial cofactor tests.
      */
     public void testRatCofactors() {
-        System.out.println("dfac = " + dfac.toScript());
+        //System.out.println("dfac = " + dfac.toScript());
         do {
             a = dfac.random(kl, ll, el, q);
         } while (a.isZERO()||a.isConstant());
@@ -620,21 +620,21 @@ public class GCDSyzygyTest extends TestCase {
             c = dfac.random(kl, ll, el, q/2f);
         } while (c.isZERO()||c.isConstant());
         c = c.monic();
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
-        System.out.println("c = " + c);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+        //System.out.println("c = " + c);
 
         // non commutative left
         //System.out.println("right: ");
         d = c.multiply(a);
         e = c.multiply(b);
-        System.out.println("d = " + d);
-        System.out.println("e = " + e);
+        //System.out.println("d = " + d);
+        //System.out.println("e = " + e);
 
         GenSolvablePolynomial<BigRational>[] gco = fd.leftGcdCofactors(dfac, d, e);
-        System.out.println("left gco[0] = " + gco[0]);
-        System.out.println("gco[1] = " + gco[1]);
-        System.out.println("gco[2] = " + gco[2]);
+        //System.out.println("left gco[0] = " + gco[0]);
+        //System.out.println("gco[1] = " + gco[1]);
+        //System.out.println("gco[2] = " + gco[2]);
 
         GenSolvablePolynomial<BigRational> ca, cb;
         ca = gco[0].multiply(gco[1]);
@@ -650,13 +650,13 @@ public class GCDSyzygyTest extends TestCase {
         //System.out.println("left: ");
         d = a.multiply(c);
         e = b.multiply(c);
-        System.out.println("d = " + d);
-        System.out.println("e = " + e);
+        //System.out.println("d = " + d);
+        //System.out.println("e = " + e);
 
         gco = fd.rightGcdCofactors(dfac, d, e);
-        System.out.println("right gco[0] = " + gco[0]);
-        System.out.println("gco[1] = " + gco[1]);
-        System.out.println("gco[2] = " + gco[2]);
+        //System.out.println("right gco[0] = " + gco[0]);
+        //System.out.println("gco[1] = " + gco[1]);
+        //System.out.println("gco[2] = " + gco[2]);
 
         GenSolvablePolynomial<BigRational> ac, bc;
         ac = gco[1].multiply(gco[0]);
