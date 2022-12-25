@@ -392,7 +392,7 @@ def CR(re=BigRational.new(),im=BigRational.new(),ring=nil)
             re = QQ( re[0] );
         else
             re = QQ(re);
-#        re = makeJasArith( re );
+#            re = makeJasArith( re );
         end
     end
     if im.is_a? Array 

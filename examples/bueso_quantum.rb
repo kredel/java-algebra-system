@@ -36,6 +36,7 @@ puts "rs: " + str(rs);
 puts "gens = " + rs.gens().join(", ") { |r| r.to_s };
 
 
+#p = (k * l)**2 - k * l - 1;
 p = k * l - 1;
 pl = [p];
 
