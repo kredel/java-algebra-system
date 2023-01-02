@@ -31,14 +31,14 @@ CLASSES=$(subst src,classes,$(subst java,class,$(FILES)))
 all: clean jlinalg_adapter.jar
 
 $(CLASSES): $(FILES) Makefile
-	-mkdir classes
+	-mkdir -p classes
 	javac -classpath $(CLASSPATH) -d classes src/edu/jas/*/*.java
 	-echo $(CLASSES)
 
 #compile: $(HOME)/java/lib/jlinalg_adapter.jar
 
 jlinalg_adapter.jar: $(CLASSES) 
-	-mkdir classes/META-INF
+	-mkdir -p classes/META-INF
 	cp -a manifest.mf classes/META-INF/MANIFEST.MF
 	jar cfM jlinalg_adapter.jar -C classes .
 	#jar uf  jlinalg_adapter.jar -C src .

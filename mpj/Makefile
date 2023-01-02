@@ -54,12 +54,12 @@ CLASSES=$(subst src,classes,$(subst java,class,$(FILES)))
 all: jas-mpj.jar
 
 $(CLASSES): $(FILES) Makefile
-	-mkdir classes
+	-mkdir -p classes
 	javac -classpath $(CLASSPATH) -d classes src/edu/jas/*/*.java
 #	fmpjc -classpath $(CLASSPATH) -d classes src/edu/jas/*/*.java
 
 jas-mpj.jar: $(CLASSES) 
-	-mkdir classes/META-INF
+	-mkdir -p classes/META-INF
 	cp -a manifest.mf classes/META-INF/MANIFEST.MF
 	jar cfM jas-mpj.jar -C classes .
 	cp -f jas-mpj.jar $(LIBPATH)

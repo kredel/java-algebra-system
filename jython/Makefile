@@ -34,13 +34,13 @@ DOC=javadoc -classpath $(DOCCLASSES):$(JYTHONPATH)
 all: clean jas-jython.jar
 
 $(CLASSES): $(FILES)
-	-mkdir classes
+	-mkdir -p classes
 	javac -g -classpath $(JYTHONPATH):$(CLASSPATH) -sourcepath src -d classes src/edu/jas/*/*.java
 	#javac -g -source 1.6 -target 1.6 -classpath $(JYTHONPATH):$(CLASSPATH) -bootclasspath $(BOOTCLASSPATH6) -sourcepath src -d classes src/edu/jas/*/*.java
 
 jas-jython.jar: $(CLASSES) $(JASPATH)/examples/jas.py services/javax.script.ScriptEngineFactory
-	-mkdir classes/META-INF
-	-mkdir classes/META-INF/services
+	-mkdir -p classes/META-INF
+	-mkdir -p classes/META-INF/services
 	-cp -a manifest.mf classes/META-INF/MANIFEST.MF
 	#cp -a services/javax.script.ScriptEngineFactory classes/META-INF/services/
 	-cp -a $(JASPATH)/examples/jas.py $(JASPATH)/examples/*.class $(JASPATH)/examples/basic_sigbased_gb.py classes

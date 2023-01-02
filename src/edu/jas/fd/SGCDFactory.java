@@ -271,8 +271,8 @@ public class SGCDFactory {
         //Object ofac = fac;
         ufd = new GreatestCommonDivisorFake<C>(fac);
         if (!(fac instanceof BigRational)) {
-            System.out.println("SGCDFactory: " + fac.getClass().getName());
-            System.out.println("SGCDFactory: " + ufd.getClass().getName());
+            //System.out.println("SGCDFactory: " + fac.getClass().getName());
+            //System.out.println("SGCDFactory: " + ufd.getClass().getName());
         }
         logger.debug("implementation = {}", ufd);
         return ufd;
