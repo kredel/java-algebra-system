@@ -5,9 +5,13 @@
 package edu.jas.poly;
 
 
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.structure.MonoidElem;
@@ -64,7 +68,12 @@ public class IndexList implements MonoidElem<IndexList> {
      */
     public IndexList(int s, int[] v) {
         sign = s;
-        val = v;
+        if (v == null) {
+            val = v;
+        } else {
+            val = Arrays.copyOf(v, v.length);
+        }
+        //if (v != null && v.length > 0) System.out.println("v[0]: " + v[0]);
     }
 
 
@@ -118,6 +127,16 @@ public class IndexList implements MonoidElem<IndexList> {
 
     /**
      * Value of other.
+     * @param e String of index names.
+     * @return value as IndexList.
+     */
+    public static IndexList valueOf(String var) {
+        return IndexList.sequence(0, var.length());
+    }
+
+
+    /**
+     * Value of other.
      * @param e other Collection of Integer indexes.
      * @return value as IndexList.
      */
@@ -151,10 +170,10 @@ public class IndexList implements MonoidElem<IndexList> {
         }
         int r = e.length;
         IndexList w = new IndexList(new int[] {}); // = 1
-        int[] v = new int[1];
         for (int i = 0; i < r; i++) {
+            int[] v = new int[1];
             v[0] = e[i];
-	    IndexList vs = new IndexList(v);
+            IndexList vs = new IndexList(v);
             w = w.exteriorProduct(vs);
             if (w.isZERO()) {
                 return w;
@@ -188,6 +207,28 @@ public class IndexList implements MonoidElem<IndexList> {
         }
         IndexList ck = IndexList.valueOf(val);
         return this.abs().equals(ck.abs());
+    }
+
+
+    /**
+     * Generators.
+     * @return list of generators for this index list.
+     */
+    public List<IndexList> generators() {
+        List<IndexList> gens = new ArrayList<IndexList>();
+        if (isZERO()) {
+            return gens;
+        }
+        //IndexList one = getONE();
+        //gens.add(one);
+        for (int i = 0; i < val.length; i++) {
+            int[] v = new int[1];
+            v[0] = val[i];
+            IndexList vs = new IndexList(v);
+            gens.add(vs);
+        }
+        //System.out.println("gens: " + gens + ", val = " + Arrays.toString(val));
+        return gens;
     }
 
 
@@ -342,11 +383,29 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
+     * Get IndexList zero.
+     * @return 0 IndexList.
+     */
+    public static IndexList getZERO() {
+        return new IndexList();
+    }
+
+
+    /**
      * Is IndexList one.
      * @return If this sign != 0 and length val is zero then true returned, else false.
      */
     public boolean isONE() {
         return (sign != 0 && val.length == 0);
+    }
+
+
+    /**
+     * Get IndexList one.
+     * @return 1 IndexList.
+     */
+    public static IndexList getONE() {
+        return new IndexList(new int[0]);
     }
 
 
@@ -681,6 +740,16 @@ public class IndexList implements MonoidElem<IndexList> {
      */
     @Override
     public int compareTo(IndexList V) {
+        return strongCompareTo(V);
+    }
+
+
+    /**
+     * IndexList weekCompareTo.
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public int weekCompareTo(IndexList V) {
         if (sign == 0 && V.sign == 0) {
             return 0;
         }
@@ -715,6 +784,111 @@ public class IndexList implements MonoidElem<IndexList> {
                 return 1;
         }
         return 0;
+    }
+
+
+    /**
+     * IndexList strongCompareTo.
+     * @param V
+     * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
+     */
+    public int strongCompareTo(IndexList V) {
+        if (sign == 0 && V.sign == 0) {
+            return 0;
+        }
+        if (sign == 0) {
+            return -1;
+        }
+        if (V.sign == 0) {
+            return +1;
+        }
+        // both not zero :: ignore sign
+        // if (sign < V.sign) {
+        //     return -1;
+        // }
+        // if (sign > V.sign) {
+        //     return 1;
+        // }
+        // both have same sign
+        int[] vval = V.val;
+        int m = Math.min(val.length, vval.length);
+        int tl = 0;
+        for (int i = 0; i < m; i++) {
+	    if (val[i] < vval[i]) {
+                tl = -1;
+                break;
+            }
+	    if (val[i] > vval[i]) {
+                tl = 1;
+                break;
+            }
+        }
+        if (val.length == vval.length) {
+                return tl;
+        }
+        if (val.length < vval.length) {
+                return -1;
+        }
+        if (val.length > vval.length) {
+                return 1;
+        }
+        return 0;
+    }
+
+
+    /**
+     * Comparator for IndexLists.
+     */
+    public static abstract class IndexListComparator implements Comparator<IndexList>, Serializable {
+
+
+        public abstract int compare(IndexList e1, IndexList e2);
+    }
+
+
+    /**
+     * Defined descending order comparator. Sorts the highest terms first.
+     */
+    private static final IndexListComparator horder = new IndexListComparator() {
+
+
+        @Override
+        public int compare(IndexList e1, IndexList e2) {
+            //return e1.gradCompareTo(e2);
+            return -e1.strongCompareTo(e2);
+        }
+    };
+
+
+    /**
+     * Defined ascending order comparator. Sorts the lowest terms first.
+     */
+    private static final IndexListComparator lorder = new IndexListComparator() {
+
+
+        @Override
+        public int compare(IndexList e1, IndexList e2) {
+            //return -e1.gradCompareTo(e2);
+            return e1.strongCompareTo(e2);
+        }
+    };
+
+
+    /**
+     * Get the descending order comparator. Sorts the highest terms first.
+     * @return horder.
+     */
+    public IndexListComparator getDescendComparator() {
+        return horder;
+    }
+
+
+    /**
+     * Get the ascending order comparator. Sorts the lowest terms first.
+     * @return lorder.
+     */
+    public IndexListComparator getAscendComparator() {
+        return lorder;
     }
 
 }
