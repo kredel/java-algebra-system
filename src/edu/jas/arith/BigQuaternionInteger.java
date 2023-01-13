@@ -444,4 +444,20 @@ public final class BigQuaternionInteger extends BigQuaternion
         return q;
     }
 
+
+    /**
+     * Quaternion number test if it is a prime number.
+     * @return isPrime(norm(this))
+     */
+    public boolean isPrime() {
+        BigQuaternion n = norm();
+        BigRational r = n.re;
+        java.math.BigInteger di = r.den;
+        if (!di.equals(java.math.BigInteger.ONE)) {
+            return false;
+        }
+        java.math.BigInteger ni = r.num;
+        boolean p = PrimeInteger.isPrime(ni);
+        return p;
+    }
 }

@@ -345,7 +345,7 @@ public final class Word implements MonoidElem<Word> {
     /**
      * Word remainder.
      * @param V other word.
-     * @return this (this/V). <b>Note:</b> not useful.
+     * @return this - (this/V). <b>Note:</b> not useful.
      */
     public Word remainder(Word V) {
         int i = this.val.indexOf(V.val);

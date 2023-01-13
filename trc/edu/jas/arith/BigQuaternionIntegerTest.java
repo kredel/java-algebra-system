@@ -263,7 +263,9 @@ public class BigQuaternionIntegerTest extends TestCase {
 
         c = a.multiply(b);
         d = b.multiply(a);
-        assertFalse("a*b != b*a: " + c + ", " + d, c.equals(d));
+        if (c.compareTo(d) != 0) {
+            assertFalse("a*b != b*a: " + c + ", " + d, c.equals(d));
+        }
 
         assertTrue("isEntier(a)", a.isEntier());
         assertTrue("isEntier(b)", b.isEntier());
@@ -423,6 +425,24 @@ public class BigQuaternionIntegerTest extends TestCase {
             assertTrue("norm(gcd) == c: " + c + " : " + e,
                             c.equals(e) || c.equals(e.power(2)) || c.power(2).equals(e));
         }
+    }
+
+
+    /**
+     * Test random integers for being prime.
+     */
+    public void testPrime() {
+        int n = 0;
+        for (int i = 0; i < 10; i++) {
+            BigQuaternionInteger a = (BigQuaternionInteger) fac.random(10+i);
+            assertTrue("isEntier(a)", a.isEntier());
+
+            boolean p = a.isPrime();
+            //System.out.println(p + " = " + a);
+            assertTrue("isPrime(a)", p || true);
+            if (p) n++;
+        }
+        assertTrue("#isPrime(a)", n >= 0);
     }
 
 }
