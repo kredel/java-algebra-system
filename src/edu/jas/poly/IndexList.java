@@ -23,6 +23,7 @@ import edu.jas.structure.MonoidFactory;
  * lists are implemented as arrays of Java int type. Objects of this
  * class are intended to be immutable, except for the sign. If in
  * doubt use <code>valueOf</code> to get a conformant index list.
+ * @see "masnc.DIPE.mi#ILEXPR from SAC2/MAS"
  * @author Heinz Kredel
  */
 
@@ -38,17 +39,18 @@ public class IndexList implements MonoidElem<IndexList> {
     /**
      * Representation of index list as int arrays.
      */
-    public final int[] val;
+    public final int[] val; // != null, when s != 0
 
 
     /**
      * Sign of index list.
      */
-    public int sign;
+    public int sign; // = -1, 0, 1
 
 
     /**
      * Constructor for IndexList.
+     * No argument constructor defining 0 index list.
      */
     public IndexList() {
         this(0, null);
@@ -57,6 +59,7 @@ public class IndexList implements MonoidElem<IndexList> {
 
     /**
      * Constructor for IndexList.
+     * @param v array with indices.
      */
     public IndexList(int[] v) {
         this(1, v);
@@ -65,6 +68,9 @@ public class IndexList implements MonoidElem<IndexList> {
 
     /**
      * Constructor for IndexList.
+     * <b>Note:</b> A copy of v is internally created.
+     * @param s sign of index list.
+     * @param v array with indices.
      */
     public IndexList(int s, int[] v) {
         sign = s;
@@ -174,8 +180,8 @@ public class IndexList implements MonoidElem<IndexList> {
         }
         int r = e.length;
         IndexList w = new IndexList(new int[] {}); // = 1
+        int[] v = new int[1];
         for (int i = 0; i < r; i++) {
-            int[] v = new int[1];
             v[0] = e[i];
             IndexList vs = new IndexList(v);
             w = w.exteriorProduct(vs);
@@ -267,8 +273,8 @@ public class IndexList implements MonoidElem<IndexList> {
 
     /**
      * Set the index at position i to e.
-     * @param i
-     * @param e
+     * @param i position
+     * @param e new index
      * @return old val[i].
      */
     protected int setVal(int i, int e) {
@@ -280,8 +286,8 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-     * Get the length of this index vector.
-     * @return val.length.
+     * Get the length of this index list.
+     * @return val.length or -1 for 0 index list.
      */
     public int length() {
         if (sign == 0) {
@@ -300,7 +306,12 @@ public class IndexList implements MonoidElem<IndexList> {
         if (sign == 0) {
             return "0";
         }
-        StringBuffer s = new StringBuffer(sign + "*(");
+        StringBuffer s = new StringBuffer();
+        if (sign > 0) {
+            s.append("E(");
+        } else {
+            s.append("E[-1](");
+        }
         for (int i = 0; i < length(); i++) {
             s.append(getVal(i));
             if (i < length() - 1) {
@@ -449,7 +460,7 @@ public class IndexList implements MonoidElem<IndexList> {
 
     /**
      * IndexList exterior product. Also called wegde product.
-     * @param V
+     * @param V other index list
      * @return this /\ V.
      */
     public IndexList exteriorProduct(IndexList V) {
@@ -505,7 +516,7 @@ public class IndexList implements MonoidElem<IndexList> {
     /**
      * IndexList multiply.
      * <b>Note:</b> implemented by exteriorProduct.
-     * @param V
+     * @param V other index list
      * @return this * V.
      */
     public IndexList multiply(IndexList V) {
@@ -515,7 +526,7 @@ public class IndexList implements MonoidElem<IndexList> {
 
     /**
      * IndexList inner left product.
-     * @param V
+     * @param V other index list
      * @return this _| V.
      */
     public IndexList innerLeftProduct(IndexList V) {
@@ -525,7 +536,7 @@ public class IndexList implements MonoidElem<IndexList> {
 
     /**
      * IndexList inner right product.
-     * @param V
+     * @param V other index list
      * @return this |_ V.
      */
     public IndexList innerRightProduct(IndexList V) {
@@ -606,7 +617,7 @@ public class IndexList implements MonoidElem<IndexList> {
     /**
      * Generate a random IndexList.
      * @param r length of new IndexList.
-     * @param q density of nozero indexs.
+     * @param q density of nozero indexes.
      * @return random IndexList.
      */
     public final static IndexList random(int r, float q) {
@@ -709,7 +720,7 @@ public class IndexList implements MonoidElem<IndexList> {
 
     /**
      * IndexList divides test. Test if this is contained in V.
-     * @param V
+     * @param V other index list
      * @return true if this divides V, else false.
      */
     public boolean divides(IndexList V) {
@@ -739,7 +750,7 @@ public class IndexList implements MonoidElem<IndexList> {
 
     /**
      * IndexList compareTo.
-     * @param V
+     * @param V other index list
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     @Override
@@ -750,7 +761,8 @@ public class IndexList implements MonoidElem<IndexList> {
 
     /**
      * IndexList weekCompareTo.
-     * @param V
+     * Ignoring the degree in first pass.
+     * @param V other index list
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public int weekCompareTo(IndexList V) {
@@ -793,7 +805,8 @@ public class IndexList implements MonoidElem<IndexList> {
 
     /**
      * IndexList strongCompareTo.
-     * @param V
+     * Sort by degree in first pass, then by indices.
+     * @param V other index list
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
     public int strongCompareTo(IndexList V) {
@@ -807,14 +820,13 @@ public class IndexList implements MonoidElem<IndexList> {
             return +1;
         }
         // both not zero :: ignore sign
-        // if (sign < V.sign) {
-        //     return -1;
-        // }
-        // if (sign > V.sign) {
-        //     return 1;
-        // }
-        // both have same sign
         int[] vval = V.val;
+        if (val.length < vval.length) {
+                return -1;
+        }
+        if (val.length > vval.length) {
+                return 1;
+        }
         int m = Math.min(val.length, vval.length);
         int tl = 0;
         for (int i = 0; i < m; i++) {
@@ -827,16 +839,8 @@ public class IndexList implements MonoidElem<IndexList> {
                 break;
             }
         }
-        if (val.length == vval.length) {
-                return tl;
-        }
-        if (val.length < vval.length) {
-                return -1;
-        }
-        if (val.length > vval.length) {
-                return 1;
-        }
-        return 0;
+        // now val.length == vval.length
+        return tl;
     }
 
 
@@ -858,7 +862,6 @@ public class IndexList implements MonoidElem<IndexList> {
 
         @Override
         public int compare(IndexList e1, IndexList e2) {
-            //return e1.gradCompareTo(e2);
             return -e1.strongCompareTo(e2);
         }
     };
@@ -872,7 +875,6 @@ public class IndexList implements MonoidElem<IndexList> {
 
         @Override
         public int compare(IndexList e1, IndexList e2) {
-            //return -e1.gradCompareTo(e2);
             return e1.strongCompareTo(e2);
         }
     };

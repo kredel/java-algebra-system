@@ -100,11 +100,11 @@ public class GenExteriorPolynomialTest extends TestCase {
 
         String s = pf.toScript();
         //System.out.println("pf.toScript: " + s + ", " + s.length());
-        assertEquals("#s == 38: " + s, s.length(), 38);
+        assertEquals("#s == 37: " + s, s.length(), 37);
 
         s = pf.toString();
         //System.out.println("pf.toString: " + s + ", " + s.length());
-        assertEquals("#s == 38: " + s, s.length(), 38);
+        assertEquals("#s == 37: " + s, s.length(), 37);
 
         GenExteriorPolynomial<BigInteger> p = pf.getONE();
         //System.out.println("p = " + p);
@@ -196,7 +196,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertTrue("ppp == 0", ppp.isZERO());
 
         List<GenExteriorPolynomial<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>>> ppgens = pppf.generators();
-        //System.out.println("ppgens = " + ppgens);
+        System.out.println("ppgens = " + ppgens);
         assertTrue("#ppgens == 7+3+3", ppgens.size() == 13);
 
         RingElem<GenExteriorPolynomial<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>>> pppe;

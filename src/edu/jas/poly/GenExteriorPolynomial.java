@@ -29,6 +29,7 @@ import edu.jas.structure.UnaryFunctor;
  * generic types, the "exponents" are fixed to IndexList. C can also
  * be a non integral domain, e.g.  a ModInteger, i.e. it may contain
  * zero divisors, since multiply() does check for zeros.
+ * @see "masnc.DIPE.mi#EIVEPR from SAC2/MAS"
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
