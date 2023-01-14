@@ -44,7 +44,7 @@ public final class IndexListMonomial<C extends RingElem<C> > {
 
     /**
      * Constructor of word monomial.
-     * @param e word.
+     * @param e index list.
      * @param c coefficient.
      */
     public IndexListMonomial(IndexList e, C c) {
@@ -54,8 +54,8 @@ public final class IndexListMonomial<C extends RingElem<C> > {
 
 
     /**
-     * Getter for word.
-     * @return word.
+     * Getter for index list.
+     * @return index list.
      */
     public IndexList indexlist() {
         return e;

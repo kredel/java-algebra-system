@@ -28,7 +28,8 @@ import edu.jas.structure.UnaryFunctor;
  * index lists to coefficients. Only the coefficients are modeled with
  * generic types, the "exponents" are fixed to IndexList. C can also
  * be a non integral domain, e.g.  a ModInteger, i.e. it may contain
- * zero divisors, since multiply() does check for zeros.
+ * zero divisors, since multiply() does check for zero coefficients
+ * and index lists.
  * @see "masnc.DIPE.mi#EIVEPR from SAC2/MAS"
  * @param <C> coefficient type
  * @author Heinz Kredel
@@ -80,7 +81,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * @param r polynomial ring factory.
      */
     public GenExteriorPolynomial(GenExteriorPolynomialRing<C> r) {
-        this(r, new TreeMap<IndexList, C>(r.alphabet.getDescendComparator()));
+        this(r, new TreeMap<IndexList, C>(r.ixlist.getDescendComparator()));
     }
 
 
@@ -92,7 +93,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      */
     public GenExteriorPolynomial(GenExteriorPolynomialRing<C> r, C c, IndexList e) {
         this(r);
-        if (!c.isZERO()) {
+        if (!c.isZERO() && !e.isZERO()) {
             val.put(e, c);
         }
     }
@@ -111,7 +112,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
     /**
      * Constructor for GenExteriorPolynomial x<sup>e</sup>.
      * @param r polynomial ring factory.
-     * @param e word.
+     * @param e index list.
      */
     public GenExteriorPolynomial(GenExteriorPolynomialRing<C> r, IndexList e) {
         this(r, r.coFac.getONE(), e);
@@ -124,7 +125,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * @param e exponent vector.
      */
     public GenExteriorPolynomial(GenExteriorPolynomialRing<C> r, ExpVector e) {
-        this(r, r.coFac.getONE(), r.alphabet.valueOf(e));
+        this(r, r.coFac.getONE(), r.ixlist.valueOf(e));
     }
 
 
@@ -135,7 +136,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * @param e exponent vector.
      */
     public GenExteriorPolynomial(GenExteriorPolynomialRing<C> r, C c, ExpVector e) {
-        this(r, c, r.alphabet.valueOf(e));
+        this(r, c, r.ixlist.valueOf(e));
     }
 
 
@@ -146,7 +147,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      */
     protected GenExteriorPolynomial(GenExteriorPolynomialRing<C> r, SortedMap<IndexList, C> v) {
         this(r);
-        val.putAll(v); // assume no zero coefficients
+        val.putAll(v); // assume no zero coefficients and index lists
     }
 
 
@@ -194,7 +195,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * constructing a new polynomial. this is modified and breaks the
      * immutability promise of this class.
      * @param c coefficient.
-     * @param e word.
+     * @param e index list.
      */
     public void doPutToMap(IndexList e, C c) {
         if (debug) {
@@ -203,7 +204,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
                 logger.error("map entry exists {} to {} new {}", e, a, c);
             }
         }
-        if (!c.isZERO()) {
+        if (!c.isZERO() && !e.isZERO()) {
             val.put(e, c);
         }
     }
@@ -231,11 +232,11 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * Put an a sorted map of words to coefficients into the internal map of
+     * Put an a sorted map of index list to coefficients into the internal map of
      * this GenExteriorPolynomial. <b>Note:</b> Do not use this method unless you
      * are constructing a new polynomial. this is modified and breaks the
      * immutability promise of this class.
-     * @param vals sorted map of words and coefficients.
+     * @param vals sorted map of index list and coefficients.
      */
     public void doPutToMap(SortedMap<IndexList, C> vals) {
         for (Map.Entry<IndexList, C> me : vals.entrySet()) {
@@ -247,7 +248,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
                 }
             }
             C c = me.getValue();
-            if (!c.isZERO()) {
+            if (!c.isZERO() && !e.isZERO()) {
                 val.put(e, c);
             }
         }
@@ -518,11 +519,11 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             if (s != 0) {
                 return s;
             }
-            if (c == 0) {
+            //if (c == 0) { // ??
                 C ac = aie.getValue(); //av.get(ae);
                 C bc = bie.getValue(); //bv.get(be);
                 c = ac.compareTo(bc);
-            }
+            //}
         }
         if (ai.hasNext()) {
             return 1;
@@ -551,10 +552,10 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
     /**
      * Number of variables.
-     * @return ring.alphabet.length().
+     * @return ring.ixlist.length().
      */
     public int numberOfVariables() {
-        return ring.alphabet.length();
+        return ring.ixlist.length(); // some times
     }
 
 
@@ -571,8 +572,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * Leading word.
-     * @return first highest word.
+     * Leading index list.
+     * @return first highest index list.
      */
     public IndexList leadingIndexList() {
         if (val.size() == 0) {
@@ -583,8 +584,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * Trailing word.
-     * @return last lowest word.
+     * Trailing index list.
+     * @return last lowest index list.
      */
     public IndexList trailingIndexList() {
         if (val.size() == 0) {
@@ -621,8 +622,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
     /**
      * Coefficient.
-     * @param e word.
-     * @return coefficient for given word.
+     * @param e index list.
+     * @return coefficient for given index list.
      */
     public C coefficient(IndexList e) {
         C c = val.get(e);
@@ -713,13 +714,13 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         if (this.isZERO()) {
             return S;
         }
-        assert (ring.alphabet == S.ring.alphabet);
-        GenExteriorPolynomial<C> n = this.copy(); //new GenExteriorPolynomial<C>(ring, val);
+        assert (ring.ixlist == S.ring.ixlist);
+        GenExteriorPolynomial<C> n = this.copy();
         SortedMap<IndexList, C> nv = n.val;
         SortedMap<IndexList, C> sv = S.val;
         for (Map.Entry<IndexList, C> me : sv.entrySet()) {
             IndexList e = me.getKey();
-            C y = me.getValue(); //sv.get(e); // assert y != null
+            C y = me.getValue(); // assert y != null
             C x = nv.get(e);
             if (x != null) {
                 x = x.sum(y);
@@ -740,7 +741,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * GenExteriorPolynomial addition. This method is not very efficient, since this
      * is copied.
      * @param a coefficient.
-     * @param e word.
+     * @param e index list.
      * @return this + a e.
      */
     public GenExteriorPolynomial<C> sum(C a, IndexList e) {
@@ -756,7 +757,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         if (e.isZERO()) {
             return this;
         }
-        GenExteriorPolynomial<C> n = this.copy(); //new GenExteriorPolynomial<C>(ring, val);
+        GenExteriorPolynomial<C> n = this.copy();
         SortedMap<IndexList, C> nv = n.val;
         C x = nv.get(e);
         if (x != null) {
@@ -799,13 +800,13 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         if (this.isZERO()) {
             return S.negate();
         }
-        assert (ring.alphabet == S.ring.alphabet);
-        GenExteriorPolynomial<C> n = this.copy(); //new GenExteriorPolynomial<C>(ring, val);
+        assert (ring.ixlist == S.ring.ixlist);
+        GenExteriorPolynomial<C> n = this.copy();
         SortedMap<IndexList, C> nv = n.val;
         SortedMap<IndexList, C> sv = S.val;
         for (Map.Entry<IndexList, C> me : sv.entrySet()) {
             IndexList e = me.getKey();
-            C y = me.getValue(); //sv.get(e); // assert y != null
+            C y = me.getValue(); // assert y != null
             C x = nv.get(e);
             if (x != null) {
                 x = x.subtract(y);
@@ -826,7 +827,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * GenExteriorPolynomial subtraction. This method is not very efficient, since
      * this is copied.
      * @param a coefficient.
-     * @param e word.
+     * @param e index list.
      * @return this - a e.
      */
     public GenExteriorPolynomial<C> subtract(C a, IndexList e) {
@@ -836,7 +837,13 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         if (a.isZERO()) {
             return this;
         }
-        GenExteriorPolynomial<C> n = this.copy(); //new GenExteriorPolynomial<C>(ring, val);
+        if (e == null) {
+            return this;
+        }
+        if (e.isZERO()) {
+            return this;
+        }
+        GenExteriorPolynomial<C> n = this.copy();
         SortedMap<IndexList, C> nv = n.val;
         C x = nv.get(e);
         if (x != null) {
@@ -906,7 +913,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         if (this.isZERO()) {
             return this;
         }
-        assert (ring.alphabet == S.ring.alphabet) : " " + ring + " != " + S.ring;
+        assert (ring.ixlist == S.ring.ixlist) : " " + ring + " != " + S.ring;
         GenExteriorPolynomial<C> p = ring.getZERO().copy();
         SortedMap<IndexList, C> pv = p.val;
         for (Map.Entry<IndexList, C> m1 : val.entrySet()) {
@@ -1043,9 +1050,9 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial multiplication. Product with ring element and word.
+     * GenExteriorPolynomial multiplication. Product with ring element and index list.
      * @param s coefficient.
-     * @param e left word.
+     * @param e left index list.
      * @return this * s e.
      */
     public GenExteriorPolynomial<C> multiply(C s, IndexList e) {
@@ -1053,6 +1060,12 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             return ring.getZERO();
         }
         if (s.isZERO()) {
+            return ring.getZERO();
+        }
+        if (e == null) {
+            return ring.getZERO();
+        }
+        if (e.isZERO()) {
             return ring.getZERO();
         }
         if (this.isZERO()) {
@@ -1082,12 +1095,24 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
     /**
      * GenExteriorPolynomial left and right multiplication. Product with ring
-     * element and two words.
-     * @param e left word.
-     * @param f right word.
+     * element and two index lists.
+     * @param e left index list.
+     * @param f right index list.
      * @return e * this * f.
      */
     public GenExteriorPolynomial<C> multiply(IndexList e, IndexList f) {
+        if (e == null) {
+            return ring.getZERO();
+        }
+        if (e.isZERO()) {
+            return ring.getZERO();
+        }
+        if (f == null) {
+            return ring.getZERO();
+        }
+        if (f.isZERO()) {
+            return ring.getZERO();
+        }
         if (this.isZERO()) {
             return this;
         }
@@ -1099,7 +1124,15 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         for (Map.Entry<IndexList, C> m1 : val.entrySet()) {
             C c = m1.getValue();
             IndexList e1 = m1.getKey();
-            IndexList e2 = e.multiply(e1.multiply(f));
+            IndexList ef = e1.multiply(f);
+            if (ef.isZERO()) { // since exterior algebra
+                continue;
+            }
+            if (ef.sign < 0) { // propagate sign to coefficient
+                c = c.negate();
+                ef = ef.negate();
+            }
+            IndexList e2 = e.multiply(ef);
             if (e2.isZERO()) { // since exterior algebra
                 continue;
             }
@@ -1115,10 +1148,10 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
     /**
      * GenExteriorPolynomial left and right multiplication. Product with ring
-     * element and two words.
+     * element and two index lists.
      * @param s coefficient.
-     * @param e left word.
-     * @param f right word.
+     * @param e left index list.
+     * @param f right index list.
      * @return e * this * s * f.
      */
     public GenExteriorPolynomial<C> multiply(C s, IndexList e, IndexList f) {
@@ -1126,6 +1159,18 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             return ring.getZERO();
         }
         if (s.isZERO()) {
+            return ring.getZERO();
+        }
+        if (e == null) {
+            return ring.getZERO();
+        }
+        if (e.isZERO()) {
+            return ring.getZERO();
+        }
+        if (f == null) {
+            return ring.getZERO();
+        }
+        if (f.isZERO()) {
             return ring.getZERO();
         }
         if (this.isZERO()) {
@@ -1141,11 +1186,11 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
     /**
      * GenExteriorPolynomial left and right multiplication. Product with ring
-     * element and two words.
+     * element and two index lists.
      * @param s coefficient.
-     * @param e left word.
+     * @param e left index list.
      * @param t coefficient.
-     * @param f right word.
+     * @param f right index list.
      * @return s * e * this * t * f.
      */
     public GenExteriorPolynomial<C> multiply(C s, IndexList e, C t, IndexList f) {
@@ -1153,6 +1198,24 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             return ring.getZERO();
         }
         if (s.isZERO()) {
+            return ring.getZERO();
+        }
+        if (t == null) {
+            return ring.getZERO();
+        }
+        if (t.isZERO()) {
+            return ring.getZERO();
+        }
+        if (e == null) {
+            return ring.getZERO();
+        }
+        if (e.isZERO()) {
+            return ring.getZERO();
+        }
+        if (f == null) {
+            return ring.getZERO();
+        }
+        if (f.isZERO()) {
             return ring.getZERO();
         }
         if (this.isZERO()) {
@@ -1165,7 +1228,16 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             C c = s.multiply(c1).multiply(t); // check non zero if not domain
             if (!c.isZERO()) {
                 IndexList e1 = m1.getKey();
-                IndexList e2 = e.multiply(e1).multiply(f);
+                //IndexList e2 = e.multiply(e1).multiply(f);
+                IndexList ef = e1.multiply(f);
+                if (ef.isZERO()) { // since exterior algebra
+                    continue;
+                }
+                if (ef.sign < 0) { // propagate sign to coefficient
+                    c = c.negate();
+                    ef = ef.negate();
+                }
+                IndexList e2 = e.multiply(ef);
                 if (e2.isZERO()) { // since exterior algebra
                     continue;
                 }
@@ -1181,11 +1253,17 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial multiplication. Product with word.
-     * @param e word (!= null).
+     * GenExteriorPolynomial multiplication. Product with index list.
+     * @param e index list (!= null).
      * @return this * e.
      */
     public GenExteriorPolynomial<C> multiply(IndexList e) {
+        if (e == null) {
+            return ring.getZERO();
+        }
+        if (e.isZERO()) {
+            return ring.getZERO();
+        }
         if (this.isZERO()) {
             return this;
         }
@@ -1281,8 +1359,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         }
         C ci = c.inverse();
         C one = ring.coFac.getONE();
-        assert (ring.alphabet == S.ring.alphabet);
-        IndexList.IndexListComparator cmp = ring.alphabet.getDescendComparator();
+        assert (ring.ixlist == S.ring.ixlist);
+        IndexList.IndexListComparator cmp = ring.ixlist.getDescendComparator();
         IndexList e = S.leadingIndexList();
         GenExteriorPolynomial<C> h;
         GenExteriorPolynomial<C> q = ring.getZERO().copy();
@@ -1353,7 +1431,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         if (this.isZERO()) {
             return S;
         }
-        if (ring.alphabet.length() != 1) {
+        if (ring.ixlist.length() != 1) {
             throw new IllegalArgumentException("no univariate polynomial " + ring);
         }
         GenExteriorPolynomial<C> x;
@@ -1392,7 +1470,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             ret[2] = this.ring.getONE();
             return ret;
         }
-        if (ring.alphabet.length() != 1) {
+        if (ring.ixlist.length() != 1) {
             throw new IllegalArgumentException("no univariate polynomial " + ring);
         }
         if (this.isConstant() && S.isConstant()) {
@@ -1463,7 +1541,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             ret[0] = S;
             return ret;
         }
-        if (ring.alphabet.length() != 1) {
+        if (ring.ixlist.length() != 1) {
             throw new IllegalArgumentException("no univariate polynomial " + ring);
         }
         GenExteriorPolynomial<C>[] qr;
@@ -1541,7 +1619,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * Iterator over words.
+     * Iterator over index lists.
      * @return val.keySet().iterator().
      */
     public Iterator<IndexList> indexListIterator() {
