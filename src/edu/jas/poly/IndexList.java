@@ -69,7 +69,11 @@ public class IndexList implements MonoidElem<IndexList> {
     public IndexList(int s, int[] v) {
         sign = s;
         if (v == null) {
+            if (s != 0) {
+                throw new IllegalArgumentException("inconsistent: s = " + s + ", v = " +v);
+            }
             val = v;
+            sign = 0; // only when exception deactivated
         } else {
             val = Arrays.copyOf(v, v.length);
         }
@@ -423,7 +427,7 @@ public class IndexList implements MonoidElem<IndexList> {
      * @return abs(this).
      */
     public IndexList abs() {
-        if (sign == 1) {
+        if (sign >= 0) {
             return this;
         }
         return new IndexList(1, val);
