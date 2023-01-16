@@ -33,6 +33,8 @@ import edu.jas.arith.ModIntRing;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.ModLongRing;
+import edu.jas.structure.Power;
+import edu.jas.structure.MonoidElem;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
@@ -494,7 +496,7 @@ public class GenPolynomialTokenizer {
                         //}
                         ie = nextExponent();
                         //  System.out.println("ie: " + ie);
-                        r = (RingElem) r.power(ie); //Power.<RingElem> positivePower(r, ie);
+                        r = (RingElem) r.power(ie);
                         b = b.multiply(r);
                     } else { // found
                         //  System.out.println("ix: " + ix);
@@ -513,7 +515,7 @@ public class GenPolynomialTokenizer {
                 logger.debug("factor {}", c);
                 ie = nextExponent();
                 logger.debug("ie {}", ie);
-                c = (GenPolynomial) c.power(ie); //Power.<GenPolynomial> positivePower(c, ie);
+                c = (GenPolynomial) c.power(ie);
                 logger.debug("factor^ie {}", c);
                 b = b.multiply(c);
 
@@ -560,7 +562,6 @@ public class GenPolynomialTokenizer {
 
     /**
      * Parsing method for exponent (of variable). Syntax:
-     * 
      * <pre>
      * ^long | **long
      * </pre>
@@ -1663,7 +1664,7 @@ public class GenPolynomialTokenizer {
                     ie = nextExponent();
                     logger.debug("ie {}", ie);
                     // r = r^ie;
-                    r = (RingElem) r.power(ie); //Power.<RingElem> positivePower(r, ie);
+                    r = (RingElem) r.power(ie);
                     logger.debug("coeff^ie {}", r);
                     b = b.multiply(r, leer);
 
@@ -1712,7 +1713,7 @@ public class GenPolynomialTokenizer {
                 logger.debug("factor {}", c);
                 ie = nextExponent();
                 logger.debug("ie {}", ie);
-                c = (GenWordPolynomial) c.power(ie); //Power.<GenPolynomial> positivePower(c, ie);
+                c = (GenWordPolynomial) c.power(ie);
                 logger.debug("factor^ie {}", c);
                 b = b.multiply(c);
 
@@ -1807,6 +1808,381 @@ public class GenPolynomialTokenizer {
             } else {
                 tok.pushBack();
                 a = nextWordPolynomial(wfac);
+            }
+            logger.info("next pol = {}", a);
+            L.add(a);
+            if (tok.ttype == StreamTokenizer.TT_EOF)
+                break;
+            if (tok.ttype == ')')
+                break;
+        }
+        return L;
+    }
+
+
+    /**
+     * Parsing method for exterior polynomial. Syntax: same as for polynomial.
+     * Multiplication will be non commutative.
+     * @return the next polynomial.
+     * @throws IOException
+     */
+    @SuppressWarnings("unchecked")
+    public GenExteriorPolynomial nextExteriorPolynomial() throws IOException {
+        GenExteriorPolynomialRing wfac = new GenExteriorPolynomialRing(pfac);
+        return nextExteriorPolynomial(wfac);
+    }
+
+
+    /**
+     * Parsing method for exterior polynomial. Syntax: except for
+     * index list same as for polynomial. Multiplication will be
+     * anti-commutative.
+     * @param wfac exterior polynomial ring.
+     * @return the next polynomial.
+     * @throws IOException
+     */
+    @SuppressWarnings("unchecked")
+    public GenExteriorPolynomial nextExteriorPolynomial(GenExteriorPolynomialRing wfac) throws IOException {
+        logger.info("wfac = {}", wfac);
+        IndexList wf = wfac.ixlist;
+
+        GenExteriorPolynomial a = wfac.getZERO();
+        GenExteriorPolynomial a1 = wfac.getONE();
+        IndexList leer = wfac.wone;
+        RingFactory fac = wfac.coFac;
+        if (debug) {
+            logger.debug("a = {}", a);
+            logger.debug("a1 = {}", a1);
+        }
+        GenExteriorPolynomial b = a1;
+        GenExteriorPolynomial c;
+        int tt;
+        char first;
+        RingElem r;
+        IndexList e;
+        //int ix;
+        long ie;
+        while (true) {
+            // next input. determine next action
+            tt = tok.nextToken();
+            //System.out.println("while tt = " + tok);
+            logger.debug("while tt = {}", tok);
+            if (tt == StreamTokenizer.TT_EOF)
+                break;
+            switch (tt) {
+            case ')':
+            case ',':
+                logger.info("nextExteriorPolynomial = {}", a);
+                return a; // do not change or remove
+            case '-':
+                b = b.negate();
+            case '+':
+            case '*':
+                tt = tok.nextToken();
+                break;
+            default: // skip
+            }
+            // read coefficient, monic monomial and polynomial
+            if (tt == StreamTokenizer.TT_EOF)
+                break;
+            switch (tt) {
+            // case '_': removed
+            case '}':
+                throw new InvalidExpressionException("mismatch of braces after " + a + ", error at " + b);
+            case '{': // recursion
+                StringBuffer rf = new StringBuffer();
+                int level = 0;
+                do {
+                    tt = tok.nextToken();
+                    //System.out.println("token { = " + ((char)tt) + ", " + tt + ", level = " + level);
+                    if (tt == StreamTokenizer.TT_EOF) {
+                        throw new InvalidExpressionException(
+                                        "mismatch of braces after " + a + ", error at " + b);
+                    }
+                    if (tt == '{') {
+                        level++;
+                    }
+                    if (tt == '}') {
+                        level--;
+                        if (level < 0) {
+                            continue; // skip last closing brace
+                        }
+                    }
+                    if (tok.sval != null) {
+                        if (rf.length() > 0 && rf.charAt(rf.length() - 1) != '.') {
+                            rf.append(" ");
+                        }
+                        rf.append(tok.sval); // " " +
+                    } else {
+                        rf.append((char) tt);
+                    }
+                } while (level >= 0);
+                //System.out.println("coeff{} = " + rf.toString() );
+                try {
+                    r = (RingElem) fac.parse(rf.toString());
+                } catch (NumberFormatException re) {
+                    throw new InvalidExpressionException("not a number :" + rf + ": " + fac, re);
+                }
+                logger.debug("coeff {}", r);
+                ie = nextExponent();
+                logger.debug("ie {}", ie);
+                r = (RingElem) r.power(ie);
+                logger.debug("coeff^ie {}", r);
+                b = b.multiply(r, leer);
+
+                tt = tok.nextToken();
+                logger.debug("tt,digit = {}", tok);
+                //no break;
+                break;
+
+            //case '.': // eventually a float
+            //System.out.println("start . = " + reader);
+            //throw new InvalidExpressionException("float must start with a digit ");
+
+            case StreamTokenizer.TT_WORD:
+                //System.out.println("TT_WORD: " + tok.sval);
+                if (tok.sval == null || tok.sval.length() == 0)
+                    break;
+                // read coefficient
+                first = tok.sval.charAt(0);
+                if (digit(first) || first == '/' || first == '.' || first == '~') {
+                    //System.out.println("coeff 0 = " + tok.sval );
+                    StringBuffer df = new StringBuffer();
+                    df.append(tok.sval);
+                    if (tok.sval.length() > 1 && digit(tok.sval.charAt(1))) {
+                        //System.out.println("start / or . = " + tok.sval);
+                        if (first == '/') { // let x/2 be x 1/2
+                            df.insert(0, "1");
+                        }
+                        if (first == '.') { // let x.2 be x 0.2
+                            df.insert(0, "0");
+                        }
+                    }
+                    if (tok.sval.charAt(tok.sval.length() - 1) == 'i') { // complex number
+                        tt = tok.nextToken();
+                        logger.debug("tt,im = {}", tok);
+                        if (tok.sval != null || tt == '-') {
+                            if (tok.sval != null) {
+                                df.append(tok.sval);
+                            } else {
+                                df.append("-");
+                            }
+                            if (tt == '-') {
+                                tt = tok.nextToken(); // todo: decimal number
+                                if (tok.sval != null && digit(tok.sval.charAt(0))) {
+                                    df.append(tok.sval);
+
+                                } else {
+                                    tok.pushBack();
+                                }
+                            }
+                        } else {
+                            tok.pushBack();
+                        }
+                    }
+                    tt = tok.nextToken();
+                    if (tt == '.') { // decimal number, obsolete by word char?
+                        tt = tok.nextToken();
+                        logger.debug("tt,dot = {}", tok);
+                        if (tok.sval != null) {
+                            df.append(".");
+                            df.append(tok.sval);
+                        } else {
+                            tok.pushBack();
+                            tok.pushBack();
+                        }
+                    } else {
+                        tok.pushBack();
+                    }
+                    try {
+                        //System.out.println("df = " + df + ", fac = " + fac.getClass());
+                        r = (RingElem) fac.parse(df.toString());
+                        //System.out.println("r = " + r);
+                    } catch (NumberFormatException re) {
+                        //System.out.println("re = " + re);
+                        throw new InvalidExpressionException("not a number :" + df + ": " + fac, re);
+                    }
+                    logger.debug("coeff {}", r);
+                    //System.out.println("r = " + r.toScriptFactory());
+                    ie = nextExponent();
+                    logger.debug("ie {}", ie);
+                    // r = r^ie;
+                    r = (RingElem) r.power(ie);
+                    logger.debug("coeff^ie {}", r);
+                    b = b.multiply(r, leer);
+
+                    tt = tok.nextToken();
+                    logger.debug("tt,digit = {}", tok);
+                }
+                if (tt == StreamTokenizer.TT_EOF)
+                    break;
+                if (tok.sval == null)
+                    break;
+                // read monomial, index list or recursion
+                first = tok.sval.charAt(0);
+                if (letter(first)) {
+                    //ix = leer.indexVar(tok.sval, vars);
+                    if ("E".charAt(0) == first) {
+                       StringBuffer ri = new StringBuffer();
+                       ri.append(tok.sval);
+                       //System.out.println("index tok.sval " + tok.sval);
+                       while (true) {
+                          tt = tok.nextToken();
+                          if (tt == '(') {
+                              ri.append("(");
+			      continue;
+                          }
+                          if (tt == ',') {
+                              ri.append(",");
+			      continue;
+                          }
+                          if (tok.sval != null) {
+                              ri.append(tok.sval);
+                              //System.out.println("index tok.sval " + tok.sval);
+                          }
+                          if (tt == ')') {
+                              ri.append(")");
+                              break;
+                          }
+                       }
+                       //System.out.println("index list, ri " + ri.toString());
+                       try {
+                           e = wf.parse(ri.toString());
+                       } catch (IllegalArgumentException ee) {
+                           e = null;
+                       }
+                    } else {
+                       e = wf;
+                    }
+                    logger.info("monom {}", e);
+                    //System.out.println("index list, e " + e);
+                    if (e == null) { // not found, look for coeff var
+                        try {
+                            r = (RingElem) fac.parse(tok.sval);
+                        } catch (NumberFormatException re) {
+                            throw new InvalidExpressionException("recursively unknown variable " + tok.sval);
+                        }
+                        ie = nextExponent();
+                        //  System.out.println("ie: " + ie);
+                        r = (RingElem) r.power(ie);
+                        //  System.out.println("re:  " + r);
+                        b = b.multiply(r, leer);
+                    } else { // found
+                        ie = nextExponent();
+                        //  System.out.println("ie: " + ie);
+                        //no RingElem: e = e.power(ie);
+                        //no RingElem: e = Power.<IndexList> positivePower(e, ie);
+                        if (ie > 1) { // exterior product is 0
+                            e = wf.getZERO();
+                        } if (ie <= 0) {
+                            e = wf.getONE();
+                        }
+                        //System.out.println("e:  " + e);
+                        b = b.multiply(e);
+                    }
+                    tt = tok.nextToken();
+                    logger.debug("tt,letter = {}", tok);
+                }
+                break;
+
+            case '(':
+                c = nextExteriorPolynomial(wfac);
+                logger.debug("factor {}", c);
+                ie = nextExponent();
+                logger.debug("ie {}", ie);
+                c = (GenExteriorPolynomial) c.power(ie);
+                logger.debug("factor^ie {}", c);
+                b = b.multiply(c);
+
+                tt = tok.nextToken();
+                logger.debug("tt,digit = {}", tok);
+                //no break;
+                break;
+
+            default: //skip
+            }
+            if (tt == StreamTokenizer.TT_EOF)
+                break;
+            // complete polynomial
+            tok.pushBack();
+            switch (tt) {
+            case '-':
+            case '+':
+            case ')':
+            case ',':
+                logger.debug("b, = {}", b);
+                a = a.sum(b);
+                b = a1;
+                break;
+            case '*':
+                logger.debug("b, = {}", b);
+                //a = a.sum(b);
+                //b = a1;
+                break;
+            case '\n':
+                tt = tok.nextToken();
+                logger.debug("tt,nl = {}", tt);
+                break;
+            default: // skip or finish ?
+                logger.debug("default: {}", tok);
+            }
+        }
+        logger.debug("b = {}", b);
+        a = a.sum(b);
+        logger.info("nextExteriorPolynomial = {}", a);
+        // b = a1;
+        return a;
+    }
+
+
+    /**
+     * Parsing method for exterior polynomial list. Syntax:
+     * <pre>
+     * ( p1, p2, p3, ..., pn )
+     * </pre>
+     *
+     * @return the next exterior polynomial list.
+     * @throws IOException
+     */
+    @SuppressWarnings("unchecked")
+    public List<GenExteriorPolynomial> nextExteriorPolynomialList() throws IOException {
+        GenExteriorPolynomialRing wfac = new GenExteriorPolynomialRing(pfac);
+        return nextExteriorPolynomialList(wfac);
+    }
+
+
+    /**
+     * Parsing method for exterior polynomial list. Syntax:
+     * <pre>
+     * ( p1, p2, p3, ..., pn )
+     * </pre>
+     *
+     * @param wfac exterior polynomial ring.
+     * @return the next exterior polynomial list.
+     * @throws IOException
+     */
+    public List<GenExteriorPolynomial> nextExteriorPolynomialList(GenExteriorPolynomialRing wfac) throws IOException {
+        GenExteriorPolynomial a;
+        List<GenExteriorPolynomial> L = new ArrayList<GenExteriorPolynomial>();
+        int tt;
+        tt = tok.nextToken();
+        if (tt == StreamTokenizer.TT_EOF)
+            return L;
+        if (tt != '(')
+            return L;
+        logger.debug("exterior polynomial list");
+        while (true) {
+            tt = tok.nextToken();
+            if (tok.ttype == ',')
+                continue;
+            if (tt == '(') {
+                a = nextExteriorPolynomial(wfac);
+                tt = tok.nextToken();
+                if (tok.ttype != ')')
+                    tok.pushBack();
+            } else {
+                tok.pushBack();
+                a = nextExteriorPolynomial(wfac);
             }
             logger.info("next pol = {}", a);
             L.add(a);

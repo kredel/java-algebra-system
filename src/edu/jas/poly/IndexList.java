@@ -93,6 +93,7 @@ public class IndexList implements MonoidElem<IndexList> {
      * @see edu.jas.structure.Element#factory()
      */
     public MonoidFactory<IndexList> factory() {
+        //return (MonoidFactory<IndexList>) this;
         throw new UnsupportedOperationException("no factory implemented for IndexList");
     }
 
@@ -335,6 +336,55 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
+     * Constructor for IndexList. Converts a String representation to an
+     * IndexList. Accepted format = E(1,2,3,4,5,6,7).
+     * @param s String representation.
+     */
+    public IndexList(String s) throws NumberFormatException {
+        this(parse(s).val);
+    }
+
+
+    /**
+     * Parser for IndexList. Converts a String representation to an
+     * IndexList. Accepted format = E(1,2,3,4,5,6,7).
+     * @param s String representation.
+     * @return parsed IndexList
+     */
+    public static IndexList parse(String s) throws NumberFormatException {
+        int[] v = null;
+        // first format = (1,2,3,4,5,6,7)
+        List<Integer> idxs = new ArrayList<Integer>();
+        s = s.trim();
+        int b = s.indexOf('(');
+        int e = s.indexOf(')', b + 1);
+        String teil;
+        int k;
+        int a;
+        if (b >= 0 && e >= 0) {
+            b++;
+            while ((k = s.indexOf(',', b)) >= 0) {
+                teil = s.substring(b, k);
+                a = Integer.parseInt(teil);
+                idxs.add(Integer.valueOf(a));
+                b = k + 1;
+            }
+            if (b <= e) {
+                teil = s.substring(b, e);
+                a = Integer.parseInt(teil);
+                idxs.add(Integer.valueOf(a));
+            }
+            int length = idxs.size();
+            v = new int[length];
+            for (int j = 0; j < length; j++) {
+                v[j] = idxs.get(j).intValue();
+            }
+        }
+        return IndexList.valueOf(v); // sort and compute sign
+    }
+
+
+    /**
      * Get a scripting compatible string representation of the factory.
      * @return script compatible representation for this ElemFactory.
      * @see edu.jas.structure.Element#toScriptFactory()
@@ -468,7 +518,7 @@ public class IndexList implements MonoidElem<IndexList> {
             return new IndexList(); // = 0
         }
         int s = 1;
-        int m = 0, n = 0;
+        int m = 0, n = 0; // todo: remove or rename
         int[] u = val;
         int[] v = V.val;
         int ii = 0;
@@ -548,7 +598,7 @@ public class IndexList implements MonoidElem<IndexList> {
         int[] w = new int[v.length - u.length];
         int ii = 0;
         int s = 1;
-        int m = 0;
+        int m = 0; // todo: remove or rename
         for (int i = 0; i < v.length; i++) {
             int vl = v[i];
             boolean found = false;
@@ -628,7 +678,7 @@ public class IndexList implements MonoidElem<IndexList> {
     /**
      * Generate a random IndexList.
      * @param r length of new IndexList.
-     * @param q density of nozero indexs.
+     * @param q density of nozero indexes.
      * @param rnd is a source for random bits.
      * @return random IndexList.
      */

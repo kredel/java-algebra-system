@@ -172,9 +172,9 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
         } else {
             s.append(coFac.toString().trim());
         }
-        s.append(",");
+        s.append(", \"");
         s.append(ixlist.toString());
-        s.append(")");
+        s.append("\")");
         return s.toString();
     }
 
@@ -200,9 +200,9 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
         } else {
             s.append(coFac.toScript().trim());
         }
-        s.append(",");
+        s.append(", \"");
         s.append(ixlist.toScript());
-        s.append(")");
+        s.append("\")");
         return s.toString();
     }
 
@@ -573,35 +573,37 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
     }
 
 
-    /**
-     * Parse a polynomial with the use of GenExteriorPolynomialTokenizer.
-     * @param r Reader.
-     * @return next GenExteriorPolynomial from r.
-     */
-    @SuppressWarnings("unchecked")
-    public GenExteriorPolynomial<C> parse(Reader r) {
-        throw new UnsupportedOperationException("not implemented");
-    }
-
     /*
      * Parse a polynomial with the use of GenExteriorPolynomialTokenizer.
      * @param r Reader.
      * @return next GenExteriorPolynomial from r.
     @SuppressWarnings("unchecked")
     public GenExteriorPolynomial<C> parse(Reader r) {
-        if (ixlist.length() <= 1) { // hack for univariate = commuative like cases
-            // obsolete case
-            GenPolynomialRing<C> cr = new GenPolynomialRing<C>(coFac, ixlist.getVars());
-            GenPolynomialTokenizer pt = new GenPolynomialTokenizer(cr, r);
-            GenPolynomial<C> p = cr.getZERO();
-            try {
-                p = pt.nextPolynomial();
-            } catch (IOException e) {
-                logger.error("{} parse {}", e, this);
-            }
-            GenExteriorPolynomial<C> wp = this.valueOf(p);
-            return wp;
-        }
+        throw new UnsupportedOperationException("not implemented");
+    }
+     */
+
+
+    /**
+     * Parse a polynomial with the use of GenPolynomialTokenizer.
+     * @param r Reader.
+     * @return next GenExteriorPolynomial from r.
+     */
+    @SuppressWarnings("unchecked")
+    public GenExteriorPolynomial<C> parse(Reader r) {
+        // if (ixlist.length() <= 1) { // hack for univariate = commuative like cases
+        //     // ??
+        //     GenPolynomialRing<C> cr = new GenPolynomialRing<C>(coFac, ixlist.getVars());
+        //     GenPolynomialTokenizer pt = new GenPolynomialTokenizer(cr, r);
+        //     GenPolynomial<C> p = cr.getZERO();
+        //     try {
+        //         p = pt.nextPolynomial();
+        //     } catch (IOException e) {
+        //         logger.error("{} parse {}", e, this);
+        //     }
+        //     GenExteriorPolynomial<C> wp = this.valueOf(p);
+        //     return wp;
+        // }
         GenPolynomialTokenizer tok = new GenPolynomialTokenizer(r);
         GenExteriorPolynomial<C> a;
         try {
@@ -614,7 +616,6 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
         return a;
         //throw new UnsupportedOperationException("not implemented");
     }
-     */
 
 
     /**
