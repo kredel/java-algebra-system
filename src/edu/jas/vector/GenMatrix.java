@@ -181,6 +181,19 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
 
     /**
+     * Trace.
+     * @return sum of diagonal elements.
+     */
+    public C trace() {
+        C cl = ring.coFac.getZERO();
+        for (int i = 0; i < ring.rows; i++) {
+            cl = cl.sum(matrix.get(i).get(i));
+        }
+        return cl;
+    }
+
+
+    /**
      * Get upper triangular U matrix.
      * @return U as matrix with equal length rows.
      */

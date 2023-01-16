@@ -30,6 +30,8 @@ import edu.jas.util.CartesianProduct;
 import edu.jas.util.CartesianProductInfinite;
 import edu.jas.util.LongIterable;
 import edu.jas.vector.GenVector;
+import edu.jas.vector.GenMatrix;
+import edu.jas.vector.GenMatrixRing;
 
 
 /**
@@ -1317,6 +1319,85 @@ public class GenPolynomialRing<C extends RingElem<C>>
             v2[i] = vp[vp.length - 1 - i];
         }
         return new GenPolynomialRing<C>(coFac, nvar, tp, v2);
+    }
+
+
+    /**
+     * Characterisic polynomial of matrix.
+     * <b>Note:</b> using Faddeev–LeVerrier algorithm
+     * @see https://en.wikipedia.org/wiki/Faddeev%E2%80%93LeVerrier_algorithm
+     * @param A a GenMatrix
+     * @return characteristic polynomial of A.
+     */
+    public GenPolynomial<C> charPolynomial(GenMatrix<C> A) {
+        if (A == null || A.isZERO()) {
+            return ZERO;
+        }
+        if (nvar != 1) {
+            throw new IllegalArgumentException("no univariate polynomial ring");
+        }
+        GenMatrixRing<C> mfac = A.ring;
+        int n = mfac.rows;
+        java.math.BigInteger c0 = coFac.characteristic();
+        if (c0.signum() > 0 && c0.compareTo(java.math.BigInteger.valueOf(n)) <= 0) {
+            throw new UnsupportedOperationException("characteristic <= n: " + c0 + " <= " + n);
+        }
+        GenPolynomial<C> ret = copy(ZERO);
+        //SortedMap<ExpVector, C> tm = ret.val;
+        GenMatrix<C> M = mfac.getZERO(); //new GenMatrix<C>(A.ring);
+        GenMatrix<C> I = mfac.getONE();
+        ExpVector e = ExpVector.create(1, 0, n);
+        C one = coFac.getONE();
+        ret = ret.sum(one, e);
+        C c = coFac.getONE();
+        GenMatrix<C> Ms = null;
+        GenMatrix<C> Mp = null, Mc;
+        // M_0 = 0, c_n = 1
+        // k = 1..n: M_k = A*M_{k-1} + c_{n-k+1}*I, c_{n-k} = -1/k*trace(A*M_k)
+        for (int k = 1; k <= n; k++) {
+	    if (Ms == null) {
+                Mp = A.multiply(M); // reuse A*Mp? todo
+            } else {
+                Mp = Ms;
+            }
+            Mc = I.multiply(c);
+	    Mp = Mp.sum(Mc);
+            Ms = A.multiply(Mp);
+            C cp = Ms.trace();
+            C ki = coFac.fromInteger(k).inverse(); // characteristic != k
+            cp = cp.multiply(ki).negate();
+            M = Mp;
+            c = cp;
+            e = ExpVector.create(1, 0, n-k);
+            ret = ret.sum(c, e);
+            //System.out.println("k = " + k + ", c = " + c + ", M = " + M);
+        }
+        // only for demonstrating how to get the determinant, trace and inverse:
+        C det = coFac.getZERO(); //ret.trailingBaseCoefficient();
+        if (n % 2 != 0) {
+            det = det.negate();
+        }
+        e = ExpVector.create(1, 0, n-1);
+        c = ret.coefficient(e).negate();
+        if (! det.isZERO()) {
+            C d = det.inverse();
+            if ((n-1) % 2 != 0) {
+                d = d.negate();
+            }
+            Mc = Mp.multiply(d);
+        } else {
+            Mc = null;
+        }
+        //System.out.println("det = " + det + ", trace = " + c + ", A^{-1} = " + Mc);
+        // test trace and inverse:
+        if (Mc != null) {
+            Mc = A.multiply(Mc);
+            if (!Mc.isONE()) { // assert
+                c = A.trace();
+                System.out.println("det = " + det + ", trace = " + c + ", A*A^{-1} = " + Mc);
+            }
+        }
+        return ret;
     }
 
 

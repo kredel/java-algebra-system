@@ -24,6 +24,8 @@ import edu.jas.arith.BigInteger;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
 import edu.jas.arith.BigRational;
+import edu.jas.vector.GenMatrix;
+import edu.jas.vector.GenMatrixRing;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.util.ListUtil;
@@ -729,6 +731,50 @@ public class GenPolynomialTest extends TestCase {
         assertTrue("blen(random) >= 0", 0 <= c.bitLength());
         assertTrue("blen(random)+blen(random) >= blen(random+random)",
                    a.bitLength() + b.bitLength() >= c.bitLength());
+    }
+
+
+    /**
+     * Test matrix and vector.
+     */
+    public void testMatrix() {
+        // rational numbers
+        BigRational rf = new BigRational();
+        // System.out.println("rf = " + rf);
+
+        // polynomials over rational numbers
+        String[] vars = new String[] {"lambda"};
+        GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(rf, vars);
+        //System.out.println("pf = " + pf.toScript());
+
+        // matrix over rational numbers
+        int r = 11;
+        GenMatrixRing<BigRational> mf = new GenMatrixRing<BigRational>(rf, r, r);
+        //System.out.println("mf = " + mf.toScript());
+
+        GenMatrix<BigRational> A = mf.getONE();
+        //System.out.println("A = " + A);
+        GenPolynomial<BigRational> cf = pf.charPolynomial(A);
+        //System.out.println("cf = " + cf);
+        assertTrue("tcf(charPol(A)) == 1", cf.trailingBaseCoefficient().abs().isONE());
+
+        A = mf.getZERO();
+        //System.out.println("A = " + A);
+        cf = pf.charPolynomial(A);
+        //System.out.println("cf = " + cf);
+        assertTrue("charPol(A) == 0", cf.isZERO());
+
+        A = mf.randomUpper(3, 0.6f);
+        //System.out.println("A = " + A);
+        cf = pf.charPolynomial(A); // mostly == 0
+        //System.out.println("cf = " + cf);
+        assertTrue("tcf(charPol(A)) == 0: " + cf, cf.trailingBaseCoefficient().isZERO());
+
+        A = mf.random(3, 0.6f);
+        //System.out.println("A = " + A);
+        cf = pf.charPolynomial(A); // mostly != 0
+        System.out.println("cf = " + cf);
+        assertFalse("tcf(charPol(A)) == 0: " + cf, cf.trailingBaseCoefficient().isZERO());
     }
 
 }
