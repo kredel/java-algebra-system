@@ -5,21 +5,20 @@
 
 package edu.jas.poly;
 
+
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.Iterator;
 
 import edu.jas.structure.RingElem;
 
 
 /**
- * IndexListMonomial class.
- * Represents pairs of index lists and coefficients.
+ * IndexListMonomial class. Represents pairs of index lists and coefficients.
  * Adaptor for Map.Entry.
  * @author Heinz Kredel
  */
 
-public final class IndexListMonomial<C extends RingElem<C> > {
+public final class IndexListMonomial<C extends RingElem<C>> {
+
 
     /**
      * IndexList of monomial.
@@ -37,8 +36,8 @@ public final class IndexListMonomial<C extends RingElem<C> > {
      * Constructor of word monomial.
      * @param me a MapEntry.
      */
-    public IndexListMonomial(Map.Entry<IndexList,C> me){
-        this( me.getKey(), me.getValue() );
+    public IndexListMonomial(Map.Entry<IndexList, C> me) {
+        this(me.getKey(), me.getValue());
     }
 
 
@@ -69,6 +68,7 @@ public final class IndexListMonomial<C extends RingElem<C> > {
     public C coefficient() {
         return c;
     }
+
 
     /**
      * String representation of Monomial.

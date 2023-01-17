@@ -6,12 +6,12 @@ package edu.jas.poly;
 
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.structure.MonoidElem;
@@ -19,10 +19,10 @@ import edu.jas.structure.MonoidFactory;
 
 
 /**
- * IndexList implements index lists for exterior polynomials. Index
- * lists are implemented as arrays of Java int type. Objects of this
- * class are intended to be immutable, except for the sign. If in
- * doubt use <code>valueOf</code> to get a conformant index list.
+ * IndexList implements index lists for exterior polynomials. Index lists are
+ * implemented as arrays of Java int type. Objects of this class are intended to
+ * be immutable, except for the sign. If in doubt use <code>valueOf</code> to
+ * get a conformant index list.
  * @see "masnc.DIPE.mi#ILEXPR from SAC2/MAS"
  * @author Heinz Kredel
  */
@@ -49,8 +49,7 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-     * Constructor for IndexList.
-     * No argument constructor defining 0 index list.
+     * Constructor for IndexList. No argument constructor defining 0 index list.
      */
     public IndexList() {
         this(0, null);
@@ -67,8 +66,8 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-     * Constructor for IndexList.
-     * <b>Note:</b> A copy of v is internally created.
+     * Constructor for IndexList. <b>Note:</b> A copy of v is internally
+     * created.
      * @param s sign of index list.
      * @param v array with indices.
      */
@@ -76,7 +75,7 @@ public class IndexList implements MonoidElem<IndexList> {
         sign = s;
         if (v == null) {
             if (s != 0) {
-                throw new IllegalArgumentException("inconsistent: s = " + s + ", v = " +v);
+                throw new IllegalArgumentException("inconsistent: s = " + s + ", v = " + v);
             }
             val = v;
             sign = 0; // only when exception deactivated
@@ -172,7 +171,8 @@ public class IndexList implements MonoidElem<IndexList> {
 
     /**
      * Value of other.
-     * @param e other int[] of indexes, may not be conform to IndexList specification.
+     * @param e other int[] of indexes, may not be conform to IndexList
+     *            specification.
      * @return value as IndexList.
      */
     public static IndexList valueOf(int[] e) {
@@ -285,7 +285,6 @@ public class IndexList implements MonoidElem<IndexList> {
     }
 
 
-
     /**
      * Get the length of this index list.
      * @return val.length or -1 for 0 index list.
@@ -346,8 +345,8 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-     * Parser for IndexList. Converts a String representation to an
-     * IndexList. Accepted format = E(1,2,3,4,5,6,7).
+     * Parser for IndexList. Converts a String representation to an IndexList.
+     * Accepted format = E(1,2,3,4,5,6,7).
      * @param s String representation.
      * @return parsed IndexList
      */
@@ -413,8 +412,8 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-     * hashCode. Optimized for small indexs, i.e. &le; 2<sup>4</sup> and
-     * small number of variables, i.e. &le; 8.
+     * hashCode. Optimized for small indexs, i.e. &le; 2<sup>4</sup> and small
+     * number of variables, i.e. &le; 8.
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -432,7 +431,7 @@ public class IndexList implements MonoidElem<IndexList> {
     public long bitLength() {
         long blen = 2; // sign
         for (int i = 0; i < val.length; i++) {
-             blen += BigInteger.bitLength(val[i]);
+            blen += BigInteger.bitLength(val[i]);
         }
         return blen;
     }
@@ -458,7 +457,8 @@ public class IndexList implements MonoidElem<IndexList> {
 
     /**
      * Is IndexList one.
-     * @return If this sign != 0 and length val is zero then true returned, else false.
+     * @return If this sign != 0 and length val is zero then true returned, else
+     *         false.
      */
     public boolean isONE() {
         return (sign != 0 && val.length == 0);
@@ -495,7 +495,6 @@ public class IndexList implements MonoidElem<IndexList> {
     }
 
 
-
     /**
      * IndexList negate.
      * @return -this.
@@ -504,7 +503,7 @@ public class IndexList implements MonoidElem<IndexList> {
         if (sign == 0) {
             return this;
         }
-        return new IndexList( -sign, val);
+        return new IndexList(-sign, val);
     }
 
 
@@ -564,8 +563,7 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-     * IndexList multiply.
-     * <b>Note:</b> implemented by exteriorProduct.
+     * IndexList multiply. <b>Note:</b> implemented by exteriorProduct.
      * @param V other index list
      * @return this * V.
      */
@@ -590,7 +588,7 @@ public class IndexList implements MonoidElem<IndexList> {
      * @return this |_ V.
      */
     public IndexList innerRightProduct(IndexList V) {
-        if (! this.divides(V)) {
+        if (!this.divides(V)) {
             return new IndexList(); // = 0
         }
         int[] u = val;
@@ -608,7 +606,7 @@ public class IndexList implements MonoidElem<IndexList> {
                     break;
                 }
             }
-            if (! found) {
+            if (!found) {
                 w[ii++] = vl;
                 m++;
             } else {
@@ -617,14 +615,13 @@ public class IndexList implements MonoidElem<IndexList> {
                 }
             }
         }
-	//int[] x = Arrays.copyOf(w, ii);
+        //int[] x = Arrays.copyOf(w, ii);
         return new IndexList(s, w);
     }
 
 
     /**
-     * IndexList inverse.
-     * <b>Note:</b> not implemented.
+     * IndexList inverse. <b>Note:</b> not implemented.
      * @return 1 / this.
      */
     public IndexList inverse() {
@@ -633,8 +630,7 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-     * IndexList divide.
-     * <b>Note:</b> not implemented.
+     * IndexList divide. <b>Note:</b> not implemented.
      * @param V other IndexList.
      * @return this/V. <b>Note:</b> not useful.
      */
@@ -644,8 +640,7 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-     * IndexList remainder.
-     * <b>Note:</b> not implemented.
+     * IndexList remainder. <b>Note:</b> not implemented.
      * @param V other IndexList.
      * @return this - (this/V). <b>Note:</b> not useful.
      */
@@ -687,10 +682,10 @@ public class IndexList implements MonoidElem<IndexList> {
         int s = 1;
         float f;
         f = rnd.nextFloat();
-        if (f < q*0.001f) {
+        if (f < q * 0.001f) {
             return new IndexList(); // = 0
         }
-        if (f < q*q) {
+        if (f < q * q) {
             s = -1;
         }
         int ii = 0;
@@ -715,7 +710,7 @@ public class IndexList implements MonoidElem<IndexList> {
     public final static IndexList sequence(int s, int r) {
         int[] w = new int[r];
         for (int i = 0; i < w.length; i++) {
-             w[i] = s+i;
+            w[i] = s + i;
         }
         //System.out.println("v = " + Arrays.toString(w));
         return new IndexList(w);
@@ -755,12 +750,11 @@ public class IndexList implements MonoidElem<IndexList> {
     }
 
 
-
     /**
      * IndexList minimal degree.
      * @return minimal index.
      */
-    public int minDeg()  {
+    public int minDeg() {
         if (degree() < 1) {
             return -1;
         }
@@ -778,7 +772,7 @@ public class IndexList implements MonoidElem<IndexList> {
             return false;
         }
         if (val.length > V.val.length) {
-                return false;
+            return false;
         }
         int[] vval = V.val;
         for (int i = 0; i < val.length; i++) {
@@ -790,7 +784,7 @@ public class IndexList implements MonoidElem<IndexList> {
                     break;
                 }
             }
-            if (! found) {
+            if (!found) {
                 return false;
             }
         }
@@ -810,8 +804,7 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-     * IndexList weekCompareTo.
-     * Ignoring the degree in first pass.
+     * IndexList weekCompareTo. Ignoring the degree in first pass.
      * @param V other index list
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
@@ -836,26 +829,25 @@ public class IndexList implements MonoidElem<IndexList> {
         int[] vval = V.val;
         int m = Math.min(val.length, vval.length);
         for (int i = 0; i < m; i++) {
-	    if (val[i] < vval[i]) {
+            if (val[i] < vval[i]) {
                 return -1;
             }
-	    if (val[i] > vval[i]) {
+            if (val[i] > vval[i]) {
                 return 1;
             }
         }
         if (val.length < vval.length) {
-                return -1;
+            return -1;
         }
         if (val.length > vval.length) {
-                return 1;
+            return 1;
         }
         return 0;
     }
 
 
     /**
-     * IndexList strongCompareTo.
-     * Sort by degree in first pass, then by indices.
+     * IndexList strongCompareTo. Sort by degree in first pass, then by indices.
      * @param V other index list
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
@@ -872,19 +864,19 @@ public class IndexList implements MonoidElem<IndexList> {
         // both not zero :: ignore sign
         int[] vval = V.val;
         if (val.length < vval.length) {
-                return -1;
+            return -1;
         }
         if (val.length > vval.length) {
-                return 1;
+            return 1;
         }
         int m = Math.min(val.length, vval.length);
         int tl = 0;
         for (int i = 0; i < m; i++) {
-	    if (val[i] < vval[i]) {
+            if (val[i] < vval[i]) {
                 tl = -1;
                 break;
             }
-	    if (val[i] > vval[i]) {
+            if (val[i] > vval[i]) {
                 tl = 1;
                 break;
             }

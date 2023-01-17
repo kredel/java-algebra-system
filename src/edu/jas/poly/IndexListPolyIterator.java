@@ -5,34 +5,34 @@
 
 package edu.jas.poly;
 
+
+import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
-import java.util.Iterator;
 
 import edu.jas.structure.RingElem;
 
 
 /**
- * Iterator over monomials of a polynomial.
- * Adaptor for val.entrySet().iterator().
+ * Iterator over monomials of a polynomial. Adaptor for
+ * val.entrySet().iterator().
  * @author Heinz Kredel
  */
 
-public class IndexListPolyIterator<C extends RingElem<C> >
-             implements Iterator< IndexListMonomial<C> > {
+public class IndexListPolyIterator<C extends RingElem<C>> implements Iterator<IndexListMonomial<C>> {
 
 
     /**
      * Internal iterator over polynomial map.
      */
-    protected final Iterator< Map.Entry<IndexList,C> > ms;
+    protected final Iterator<Map.Entry<IndexList, C>> ms;
 
 
     /**
      * Constructor of polynomial iterator.
      * @param m SortetMap of a polynomial.
      */
-    public IndexListPolyIterator( SortedMap<IndexList,C> m ) {
+    public IndexListPolyIterator(SortedMap<IndexList, C> m) {
         ms = m.entrySet().iterator();
     }
 
@@ -51,7 +51,7 @@ public class IndexListPolyIterator<C extends RingElem<C> >
      * @return next monomial.
      */
     public IndexListMonomial<C> next() {
-        return new IndexListMonomial<C>( ms.next() );
+        return new IndexListMonomial<C>(ms.next());
     }
 
 

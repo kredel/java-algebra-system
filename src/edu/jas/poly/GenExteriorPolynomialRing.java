@@ -25,21 +25,21 @@ import edu.jas.structure.RingFactory;
 
 /**
  * GenExteriorPolynomialRing generic antisymmetric polynomial factory
- * implementing RingFactory; Factory for antisymmetric polynomials (in
- * fact vectors) over C. Objects of this class are intended to be
- * immutable. Only the coefficients are modeled with generic types,
- * the "exponents" are fixed to IndexList. C can also be a non
- * integral domain, e.g.  a ModInteger, i.e. it may contain zero
- * divisors, since multiply() does check for zero coefficients and
- * index lists.
+ * implementing RingFactory; Factory for antisymmetric polynomials (in fact
+ * vectors) over C. Objects of this class are intended to be immutable. Only the
+ * coefficients are modeled with generic types, the "exponents" are fixed to
+ * IndexList. C can also be a non integral domain, e.g. a ModInteger, i.e. it
+ * may contain zero divisors, since multiply() does check for zero coefficients
+ * and index lists.
  * @see "masnc.DIPE.mi from SAC2/MAS"
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 
 public final class GenExteriorPolynomialRing<C extends RingElem<C>>
-    implements RingFactory<GenExteriorPolynomial<C>> {
-    /*, Iterable<GenExteriorPolynomial<C>>*/ 
+                implements RingFactory<GenExteriorPolynomial<C>> {
+    /*, Iterable<GenExteriorPolynomial<C>>*/
+
 
     /**
      * The factory for the coefficients.
@@ -106,7 +106,7 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
         ixlist = wf;
         ZERO = new GenExteriorPolynomial<C>(this);
         C coeff = coFac.getONE();
-        wone = wf.getONE();
+        wone = IndexList.getONE();
         ONE = new GenExteriorPolynomial<C>(this, coeff, wone);
     }
 
@@ -347,8 +347,8 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a (constant) GenExteriorPolynomial&lt;C&gt; element from a coefficient
-     * value.
+     * Get a (constant) GenExteriorPolynomial&lt;C&gt; element from a
+     * coefficient value.
      * @param a coefficient.
      * @return a GenExteriorPolynomial&lt;C&gt;.
      */
@@ -378,7 +378,8 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial&lt;C&gt; element from a coeffcient and a IndexList.
+     * Get a GenExteriorPolynomial&lt;C&gt; element from a coeffcient and a
+     * IndexList.
      * @param a coefficient.
      * @param e word.
      * @return a GenExteriorPolynomial&lt;C&gt;.
@@ -401,7 +402,8 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial&lt;C&gt; element from a GenPolynomial&lt;C&gt;.
+     * Get a GenExteriorPolynomial&lt;C&gt; element from a
+     * GenPolynomial&lt;C&gt;.
      * @param a GenPolynomial.
      * @return a GenExteriorPolynomial&lt;C&gt;.
      */
@@ -417,7 +419,7 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
             C c = m.getValue();
             ExpVector e = m.getKey();
             IndexList w = IndexList.valueOf(e);
-            if (! w.isZERO()) {
+            if (!w.isZERO()) {
                 p.doPutToMap(w, c);
             }
         }
@@ -442,9 +444,9 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
         for (Map.Entry<IndexList, C> m : a.val.entrySet()) {
             C c = m.getValue();
             IndexList e = m.getKey();
-            if (! e.isZERO()) {
+            if (!e.isZERO()) {
                 IndexList w = IndexList.valueOf(e.val);
-                if (! w.isZERO()) {
+                if (!w.isZERO()) {
                     p.doPutToMap(w, c);
                 }
             }
@@ -473,7 +475,8 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a (constant) GenExteriorPolynomial&lt;C&gt; element from a long value.
+     * Get a (constant) GenExteriorPolynomial&lt;C&gt; element from a long
+     * value.
      * @param a long.
      * @return a GenExteriorPolynomial&lt;C&gt;.
      */
@@ -540,7 +543,7 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
         // add l random coeffs and words of maximal length d
         for (int i = 0; i < l; i++) {
             int di = Math.abs(rnd.nextInt() % d);
-            IndexList e = ixlist.random(di, 0.5f, rnd).abs(); // s only = 0, 1
+            IndexList e = IndexList.random(di, 0.5f, rnd).abs(); // s only = 0, 1
             C a = coFac.random(k, rnd);
             //System.out.println("e = " + e + " a = " + a);
             r = r.sum(a, e); // somewhat inefficient but clean
@@ -573,17 +576,6 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
     }
 
 
-    /*
-     * Parse a polynomial with the use of GenExteriorPolynomialTokenizer.
-     * @param r Reader.
-     * @return next GenExteriorPolynomial from r.
-    @SuppressWarnings("unchecked")
-    public GenExteriorPolynomial<C> parse(Reader r) {
-        throw new UnsupportedOperationException("not implemented");
-    }
-     */
-
-
     /**
      * Parse a polynomial with the use of GenPolynomialTokenizer.
      * @param r Reader.
@@ -591,19 +583,6 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
      */
     @SuppressWarnings("unchecked")
     public GenExteriorPolynomial<C> parse(Reader r) {
-        // if (ixlist.length() <= 1) { // hack for univariate = commuative like cases
-        //     // ??
-        //     GenPolynomialRing<C> cr = new GenPolynomialRing<C>(coFac, ixlist.getVars());
-        //     GenPolynomialTokenizer pt = new GenPolynomialTokenizer(cr, r);
-        //     GenPolynomial<C> p = cr.getZERO();
-        //     try {
-        //         p = pt.nextPolynomial();
-        //     } catch (IOException e) {
-        //         logger.error("{} parse {}", e, this);
-        //     }
-        //     GenExteriorPolynomial<C> wp = this.valueOf(p);
-        //     return wp;
-        // }
         GenPolynomialTokenizer tok = new GenPolynomialTokenizer(r);
         GenExteriorPolynomial<C> a;
         try {
@@ -672,7 +651,8 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
     public List<GenExteriorPolynomial<C>> generators() {
         List<C> cogens = coFac.generators();
         List<GenExteriorPolynomial<C>> univs = univariateList();
-        List<GenExteriorPolynomial<C>> gens = new ArrayList<GenExteriorPolynomial<C>>(univs.size() + cogens.size());
+        List<GenExteriorPolynomial<C>> gens = new ArrayList<GenExteriorPolynomial<C>>(
+                        univs.size() + cogens.size());
         for (C c : cogens) {
             gens.add(getONE().multiply(c));
         }

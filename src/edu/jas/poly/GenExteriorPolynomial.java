@@ -21,21 +21,19 @@ import edu.jas.structure.UnaryFunctor;
 
 
 /**
- * GenExteriorPolynomial generic polynomials implementing
- * RingElem. Antisymmetric polynomials (in fact vectors) over
- * C. Objects of this class are intended to be immutable. The
- * implementation is based on TreeMap respectively SortedMap from
- * index lists to coefficients. Only the coefficients are modeled with
- * generic types, the "exponents" are fixed to IndexList. C can also
- * be a non integral domain, e.g.  a ModInteger, i.e. it may contain
- * zero divisors, since multiply() does check for zero coefficients
- * and index lists.
+ * GenExteriorPolynomial generic polynomials implementing RingElem.
+ * Antisymmetric polynomials (in fact vectors) over C. Objects of this class are
+ * intended to be immutable. The implementation is based on TreeMap respectively
+ * SortedMap from index lists to coefficients. Only the coefficients are modeled
+ * with generic types, the "exponents" are fixed to IndexList. C can also be a
+ * non integral domain, e.g. a ModInteger, i.e. it may contain zero divisors,
+ * since multiply() does check for zero coefficients and index lists.
  * @see "masnc.DIPE.mi#EIVEPR from SAC2/MAS"
  * @param <C> coefficient type
  * @author Heinz Kredel
  */
 public final class GenExteriorPolynomial<C extends RingElem<C>>
-    implements RingElem<GenExteriorPolynomial<C>>, Iterable<IndexListMonomial<C>> {
+                implements RingElem<GenExteriorPolynomial<C>>, Iterable<IndexListMonomial<C>> {
 
 
     /**
@@ -125,7 +123,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * @param e exponent vector.
      */
     public GenExteriorPolynomial(GenExteriorPolynomialRing<C> r, ExpVector e) {
-        this(r, r.coFac.getONE(), r.ixlist.valueOf(e));
+        this(r, r.coFac.getONE(), IndexList.valueOf(e));
     }
 
 
@@ -136,7 +134,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * @param e exponent vector.
      */
     public GenExteriorPolynomial(GenExteriorPolynomialRing<C> r, C c, ExpVector e) {
-        this(r, c, r.ixlist.valueOf(e));
+        this(r, c, IndexList.valueOf(e));
     }
 
 
@@ -232,9 +230,9 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * Put an a sorted map of index list to coefficients into the internal map of
-     * this GenExteriorPolynomial. <b>Note:</b> Do not use this method unless you
-     * are constructing a new polynomial. this is modified and breaks the
+     * Put an a sorted map of index list to coefficients into the internal map
+     * of this GenExteriorPolynomial. <b>Note:</b> Do not use this method unless
+     * you are constructing a new polynomial. this is modified and breaks the
      * immutability promise of this class.
      * @param vals sorted map of index list and coefficients.
      */
@@ -520,9 +518,9 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
                 return s;
             }
             //if (c == 0) { // ??
-                C ac = aie.getValue(); //av.get(ae);
-                C bc = bie.getValue(); //bv.get(be);
-                c = ac.compareTo(bc);
+            C ac = aie.getValue(); //av.get(ae);
+            C bc = bie.getValue(); //bv.get(be);
+            c = ac.compareTo(bc);
             //}
         }
         if (ai.hasNext()) {
@@ -738,8 +736,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial addition. This method is not very efficient, since this
-     * is copied.
+     * GenExteriorPolynomial addition. This method is not very efficient, since
+     * this is copied.
      * @param a coefficient.
      * @param e index list.
      * @return this + a e.
@@ -775,8 +773,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial addition. This method is not very efficient, since this
-     * is copied.
+     * GenExteriorPolynomial addition. This method is not very efficient, since
+     * this is copied.
      * @param a coefficient.
      * @return this + a x<sup>0</sup>.
      */
@@ -824,8 +822,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial subtraction. This method is not very efficient, since
-     * this is copied.
+     * GenExteriorPolynomial subtraction. This method is not very efficient,
+     * since this is copied.
      * @param a coefficient.
      * @param e index list.
      * @return this - a e.
@@ -861,8 +859,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial subtract. This method is not very efficient, since this
-     * is copied.
+     * GenExteriorPolynomial subtract. This method is not very efficient, since
+     * this is copied.
      * @param a coefficient.
      * @return this + a x<sup>0</sup>.
      */
@@ -1076,7 +1074,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial multiplication. Product with coefficient ring element.
+     * GenExteriorPolynomial multiplication. Product with coefficient ring
+     * element.
      * @param s coefficient.
      * @return this*s.
      */
@@ -1105,7 +1104,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial multiplication. Product with coefficient ring element.
+     * GenExteriorPolynomial multiplication. Product with coefficient ring
+     * element.
      * @param s coefficient.
      * @param t coefficient.
      * @return s*this*t.
@@ -1154,7 +1154,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial multiplication. Product with ring element and index list.
+     * GenExteriorPolynomial multiplication. Product with ring element and index
+     * list.
      * @param s coefficient.
      * @param e left index list.
      * @return this * s e.
@@ -1383,7 +1384,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             if (e2.sign < 0) { // propagate sign to coefficient
                 c1 = c1.negate();
                 e2 = e2.negate();
-                }
+            }
             pv.put(e2, c1);
         }
         return p;
@@ -1404,8 +1405,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial division. Division by coefficient ring element. Fails,
-     * if exact division is not possible.
+     * GenExteriorPolynomial division. Division by coefficient ring element.
+     * Fails, if exact division is not possible.
      * @param s coefficient.
      * @return this/s.
      */
@@ -1443,10 +1444,11 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial division with remainder. Fails, if exact division by
-     * leading base coefficient is not possible. Meaningful only for univariate
-     * polynomials over fields, but works in any case.
-     * @param S nonzero GenExteriorPolynomial with invertible leading coefficient.
+     * GenExteriorPolynomial division with remainder. Fails, if exact division
+     * by leading base coefficient is not possible. Meaningful only for
+     * univariate polynomials over fields, but works in any case.
+     * @param S nonzero GenExteriorPolynomial with invertible leading
+     *            coefficient.
      * @return [ quotient , remainder ] with this = quotient * S + remainder and
      *         deg(remainder) &lt; deg(S) or remiander = 0.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
@@ -1480,7 +1482,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
                 h = S.multiply(a, g, one, IndexList.getONE()); // g[0], g[1]
                 r = r.subtract(h);
                 IndexList fr = r.leadingIndexList();
-                if (cmp.compare(f, fr) > 0) { // non noetherian reduction
+                if (cmp.compare(f, fr) > 0) { // non noetherian reduction // todo
                     throw new RuntimeException("possible infinite loop: f = " + f + ", fr = " + fr);
                 }
             } else {
@@ -1498,7 +1500,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * GenExteriorPolynomial division. Fails, if exact division by leading base
      * coefficient is not possible. Meaningful only for univariate polynomials
      * over fields, but works in any case.
-     * @param S nonzero GenExteriorPolynomial with invertible leading coefficient.
+     * @param S nonzero GenExteriorPolynomial with invertible leading
+     *            coefficient.
      * @return quotient with this = quotient * S + remainder.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
      *      .
@@ -1512,7 +1515,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * GenExteriorPolynomial remainder. Fails, if exact division by leading base
      * coefficient is not possible. Meaningful only for univariate polynomials
      * over fields, but works in any case.
-     * @param S nonzero GenExteriorPolynomial with invertible leading coefficient.
+     * @param S nonzero GenExteriorPolynomial with invertible leading
+     *            coefficient.
      * @return remainder with this = quotient * S + remainder.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
      *      .
@@ -1551,8 +1555,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial extended greatest comon divisor. Only for univariate
-     * polynomials over fields.
+     * GenExteriorPolynomial extended greatest comon divisor. Only for
+     * univariate polynomials over fields.
      * @param S GenExteriorPolynomial.
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
      */
@@ -1678,8 +1682,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial inverse. Required by RingElem. Throws not invertible
-     * exception.
+     * GenExteriorPolynomial inverse. Required by RingElem. Throws not
+     * invertible exception.
      */
     public GenExteriorPolynomial<C> inverse() {
         if (isUnit()) { // only possible if ldbcf is unit
@@ -1691,8 +1695,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial modular inverse. Only for univariate polynomials over
-     * fields.
+     * GenExteriorPolynomial modular inverse. Only for univariate polynomials
+     * over fields.
      * @param m GenExteriorPolynomial.
      * @return a with with a*this = 1 mod m.
      */
@@ -1748,7 +1752,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
     public GenExteriorPolynomial<C> map(final UnaryFunctor<? super C, C> f) {
         GenExteriorPolynomial<C> n = ring.getZERO().copy();
         SortedMap<IndexList, C> nv = n.val;
-        for (Map.Entry<IndexList,C> m : this.val.entrySet()) {
+        for (Map.Entry<IndexList, C> m : this.val.entrySet()) {
             //logger.info("m = {}", m);
             C c = f.eval(m.getValue());
             if (c != null && !c.isZERO()) {
