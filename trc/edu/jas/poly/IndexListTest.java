@@ -5,20 +5,16 @@
 package edu.jas.poly;
 
 
-import java.util.Collection;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 
-
 /**
- * IndexList tests with JUnit. Tests construction and arithmetic
- * operations.
+ * IndexList tests with JUnit. Tests construction and arithmetic operations.
  * @author Heinz Kredel
  */
 
@@ -179,9 +175,9 @@ public class IndexListTest extends TestCase {
      */
     public void testSequence() {
         int r = 7;
-        a = IndexList.sequence(0,r);
-        b = IndexList.sequence(r,r);
-        c = IndexList.sequence(0,2*r);
+        a = IndexList.sequence(0, r);
+        b = IndexList.sequence(r, r);
+        c = IndexList.sequence(0, 2 * r);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
@@ -220,30 +216,30 @@ public class IndexListTest extends TestCase {
 
         a = IndexList.valueOf(ef);
         //System.out.println("a = " + a);
-        if (! a.isZERO()) {
-           assertTrue("depend(ef) == deg(a): " + ef + ", " + a, ef.dependentVariables() == a.degree() );
+        if (!a.isZERO()) {
+            assertTrue("depend(ef) == deg(a): " + ef + ", " + a, ef.dependentVariables() == a.degree());
         }
 
         String as = a.toString() + " = " + a.toScript();
         //System.out.println("as = " + as);
-        assertTrue("as != ''" + as, as.length() >= 0 );
+        assertTrue("as != ''" + as, as.length() >= 0);
 
         List<Integer> W = Arrays.<Integer> asList(1, 4, 7, 8, 13, 17);
         //System.out.println("W = " + W);
 
         a = IndexList.valueOf(W);
         //System.out.println("a = " + a);
-        assertTrue("deg(a) == #W " + W + ", " + a, W.size() == a.degree() );
+        assertTrue("deg(a) == #W " + W + ", " + a, W.size() == a.degree());
 
         int[] w = new int[] { 1, 4, 7, 8, 13, 17, 4, 1 };
         //System.out.println("w = " + w);
 
         a = IndexList.valueOf(w);
         //System.out.println("a = " + a);
-        assertTrue("a == 0: " + a, a.isZERO() );
+        assertTrue("a == 0: " + a, a.isZERO());
         a = IndexList.valueOf((int[]) null);
         //System.out.println("a = " + a);
-        assertTrue("a == 0: " + a, a.isZERO() );
+        assertTrue("a == 0: " + a, a.isZERO());
 
         w = new int[] { 7, 8, 13, 17, 4, 1 };
         //System.out.println("w = " + w);
@@ -251,7 +247,7 @@ public class IndexListTest extends TestCase {
         a = IndexList.valueOf(w);
         //System.out.println("a = " + a);
         assertTrue("deg(a) == #w: " + a, a.degree() == w.length);
-        assertTrue("sign(a) < 0: " + a, a.signum() < 0 );
+        assertTrue("sign(a) < 0: " + a, a.signum() < 0);
         assertTrue("check(a) == true: " + a, a.isConformant());
 
         b = new IndexList(w);
