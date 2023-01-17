@@ -7,12 +7,9 @@ package edu.jas.poly;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.List;
 
-import edu.jas.arith.BigComplex;
 import edu.jas.arith.BigInteger;
-import edu.jas.arith.BigRational;
 import edu.jas.structure.RingElem;
 
 import junit.framework.Test;
@@ -142,7 +139,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         //System.out.println("wf2 = " + wf2);
 
         GenExteriorPolynomialRing<GenExteriorPolynomial<BigInteger>> ppf;
-	ppf = new GenExteriorPolynomialRing<GenExteriorPolynomial<BigInteger>>(pf, wf2);
+        ppf = new GenExteriorPolynomialRing<GenExteriorPolynomial<BigInteger>>(pf, wf2);
         //System.out.println("ppf = " + ppf);
 
         GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>> pp = ppf.getONE();
@@ -160,7 +157,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertTrue("#pgens == 7+3", pgens.size() == 10);
 
         RingElem<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>> ppe;
-	ppe = new GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>(ppf);
+        ppe = new GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>(ppf);
         //System.out.println("ppe = " + ppe);
         //System.out.println("pp.equals(ppe) = " + pp.equals(ppe) );
         //System.out.println("pp.equals(pp) = " + pp.equals(pp) );
@@ -182,7 +179,8 @@ public class GenExteriorPolynomialTest extends TestCase {
         IndexList wf3 = IndexList.valueOf("uvw");
         //System.out.println("wf3 = " + wf3);
         GenExteriorPolynomialRing<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>> pppf;
-	pppf = new GenExteriorPolynomialRing<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>>(ppf, wf3);
+        pppf = new GenExteriorPolynomialRing<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>>(ppf,
+                        wf3);
         //System.out.println("pppf = " + pppf);
 
         GenExteriorPolynomial<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>> ppp = pppf.getONE();
@@ -195,12 +193,13 @@ public class GenExteriorPolynomialTest extends TestCase {
         //System.out.println("ppp = " + ppp);
         assertTrue("ppp == 0", ppp.isZERO());
 
-        List<GenExteriorPolynomial<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>>> ppgens = pppf.generators();
+        List<GenExteriorPolynomial<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>>> ppgens = pppf
+                        .generators();
         //System.out.println("ppgens = " + ppgens);
         assertTrue("#ppgens == 7+3+3", ppgens.size() == 13);
 
         RingElem<GenExteriorPolynomial<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>>> pppe;
-	pppe = new GenExteriorPolynomial<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>>(pppf);
+        pppe = new GenExteriorPolynomial<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>>(pppf);
         //System.out.println("pppe = " + pppe);
         // System.out.println("ppp.equals(pppe) = " + ppp.equals(pppe) );
         // System.out.println("ppp.equals(ppp) = " + ppp.equals(ppp) );
@@ -327,7 +326,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         //System.out.println("d-e = " + d.subtract(e) );
         assertEquals("a+(b+c) = (a+b)+c", d, e);
 
-        IndexList u = wf.random(rl);
+        IndexList u = IndexList.random(rl);
         BigInteger x = rf.random(kl);
 
         b = new GenExteriorPolynomial<BigInteger>(fac, x, u);
@@ -401,7 +400,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         //System.out.println("d-e = " + d.subtract(e) );
         assertEquals("a*(b*c) = (a*b)*c:", d, e);
 
-        IndexList u = wf.random(rl);
+        IndexList u = IndexList.random(rl);
         BigInteger x = rf.random(kl);
 
         b = new GenExteriorPolynomial<BigInteger>(fac, x, u);
@@ -514,7 +513,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         //System.out.println("a = " + a);
         assertEquals("parse() == 1 E(1,2) - 1 E(3,4): ", a, epol);
 
-	// commutative polynomials over integers
+        // commutative polynomials over integers
         GenPolynomialRing<BigInteger> fac = new GenPolynomialRing<BigInteger>(rf, sa);
         //System.out.println("fac = " + fac.toScript());
         assertTrue("commutative", fac.isCommutative());
@@ -581,8 +580,8 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertTrue("associative", pf.isAssociative());
         assertFalse("not field", pf.isField());
 
-        GenExteriorPolynomial<BigInteger> emaxd, p1, p2, q1, q2, s, g1, g2, e1, e2,
-	    e1dual, e2dual, q, qs, qt, g1dual, g2dual, s1, s2;
+        GenExteriorPolynomial<BigInteger> emaxd, p1, p2, q1, q2, s, g1, g2, e1, e2, e1dual, e2dual, q, qs, qt,
+                        g1dual, g2dual, s1, s2;
         // parse points in 4-space as polynomials
         emaxd = pf.parse("E(1,2,3,4)");
         System.out.println("emaxd = " + emaxd);

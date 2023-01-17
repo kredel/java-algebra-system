@@ -9,27 +9,22 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.SortedMap;
 import java.util.Spliterator;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
-import java.util.concurrent.ForkJoinPool;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInteger;
 import edu.jas.arith.ModIntegerRing;
-import edu.jas.arith.BigRational;
-import edu.jas.vector.GenMatrix;
-import edu.jas.vector.GenMatrixRing;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.util.ListUtil;
 import edu.jas.util.MapEntry;
+import edu.jas.vector.GenMatrix;
+import edu.jas.vector.GenMatrixRing;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 
 /**
@@ -142,7 +137,7 @@ public class GenPolynomialTest extends TestCase {
 
         // polynomials over (polynomials over rational numbers)
         GenPolynomialRing<GenPolynomial<BigRational>> ppf = new GenPolynomialRing<GenPolynomial<BigRational>>(
-                                                                                                              pf, 3);
+                        pf, 3);
         // System.out.println("ppf = " + ppf);
 
         GenPolynomial<GenPolynomial<BigRational>> pp = ppf.getONE();
@@ -153,7 +148,7 @@ public class GenPolynomialTest extends TestCase {
         // System.out.println("pp = " + pp);
 
         RingElem<GenPolynomial<GenPolynomial<BigRational>>> ppe = new GenPolynomial<GenPolynomial<BigRational>>(
-                                                                                                                ppf);
+                        ppf);
         // System.out.println("ppe = " + ppe);
         // System.out.println("pp.equals(ppe) = " + pp.equals(ppe) );
         // System.out.println("pp.equals(pp) = " + pp.equals(pp) );
@@ -171,7 +166,7 @@ public class GenPolynomialTest extends TestCase {
 
         // polynomials over (polynomials over (polynomials over rational numbers))
         GenPolynomialRing<GenPolynomial<GenPolynomial<BigRational>>> pppf = new GenPolynomialRing<GenPolynomial<GenPolynomial<BigRational>>>(
-                                                                                                                                             ppf, 4);
+                        ppf, 4);
         // System.out.println("pppf = " + pppf);
 
         GenPolynomial<GenPolynomial<GenPolynomial<BigRational>>> ppp = pppf.getONE();
@@ -182,7 +177,7 @@ public class GenPolynomialTest extends TestCase {
         // System.out.println("ppp = " + ppp);
 
         RingElem<GenPolynomial<GenPolynomial<GenPolynomial<BigRational>>>> pppe = new GenPolynomial<GenPolynomial<GenPolynomial<BigRational>>>(
-                                                                                                                                               pppf);
+                        pppf);
         // System.out.println("pppe = " + pppe);
         // System.out.println("ppp.equals(pppe) = " + ppp.equals(pppe) );
         // System.out.println("ppp.equals(ppp) = " + ppp.equals(ppp) );
@@ -530,7 +525,7 @@ public class GenPolynomialTest extends TestCase {
             }
             String s = m.toString() + ",  " + m.toScript();
             //System.out.println("s = " + s);
-            assertTrue("#s >= 2*rl + 5: ", s.length() >= 2*rl + 5);
+            assertTrue("#s >= 2*rl + 5: ", s.length() >= 2 * rl + 5);
         }
 
         // test exponents
@@ -572,28 +567,28 @@ public class GenPolynomialTest extends TestCase {
         //System.out.println("ps = "); printCharacteristic(psplit);
         //psplit.forEachRemaining( m -> System.out.print(m.c.toScript() + ", "));
         //System.out.println("\n");
-        psplit.forEachRemaining( m -> coeffs.add(m.c.multiply(num)) );
+        psplit.forEachRemaining(m -> coeffs.add(m.c.multiply(num)));
         assertTrue("#coeffs == size: ", p.val.size() == coeffs.size());
         coeffs.clear();
-        
+
         // create spliterator and split it
         //psplit = new PolySpliterator<BigInteger>(p.val);
-        Spliterator<Monomial<BigInteger>> split = p.spliterator(); 
+        Spliterator<Monomial<BigInteger>> split = p.spliterator();
         //System.out.println("ps = " + split);
         //PolySpliterator<BigInteger> rest = split.trySplit();
-        Spliterator<Monomial<BigInteger>> rest = split.trySplit(); 
+        Spliterator<Monomial<BigInteger>> rest = split.trySplit();
         //System.out.println("rest = "); printCharacteristic(rest);
         //System.out.println("ps = "); printCharacteristic(split);
 
         //System.out.println("rest = " + rest);
         //rest.forEachRemaining( m -> System.out.print(m.c.toScript() + ", "));
-        rest.forEachRemaining( m -> coeffs.add(m.c.multiply(num)) );
+        rest.forEachRemaining(m -> coeffs.add(m.c.multiply(num)));
         //System.out.println("\nps = " + split);
         //split.forEachRemaining( m -> System.out.print(m.c.toScript() + ", "));
-        split.forEachRemaining( m -> coeffs.add(m.c.multiply(num)) );
+        split.forEachRemaining(m -> coeffs.add(m.c.multiply(num)));
         assertTrue("#coeffs == size: ", p.val.size() == coeffs.size());
 
-        assertTrue("coeffs == p.coefficients: ", ListUtil.<BigInteger>equals(coeffs,p.val.values()));
+        assertTrue("coeffs == p.coefficients: ", ListUtil.<BigInteger> equals(coeffs, p.val.values()));
     }
 
 
@@ -605,7 +600,7 @@ public class GenPolynomialTest extends TestCase {
         }
     }
 
-    
+
     /**
      * Test coefficient map function.
      */
@@ -636,7 +631,7 @@ public class GenPolynomialTest extends TestCase {
         assertEquals("p == q ", p.negate(), q);
     }
 
-    
+
     /**
      * Test streams.
      */
@@ -648,7 +643,7 @@ public class GenPolynomialTest extends TestCase {
         GenPolynomialRing<ModInteger> pf = new GenPolynomialRing<ModInteger>(rf, rl);
         //System.out.println("pf = " + pf.toScript());
         // random polynomial
-        GenPolynomial<ModInteger> p = pf.random(kl, 222 * ll, 2+el, q);
+        GenPolynomial<ModInteger> p = pf.random(kl, 222 * ll, 2 + el, q);
         //System.out.println("p = " + p.length());
         GenPolynomial<ModInteger> q;
 
@@ -672,7 +667,8 @@ public class GenPolynomialTest extends TestCase {
 
         // map multiply to coefficients stream
         long ts = System.nanoTime();
-        q = p.mapOnStream(me -> new MapEntry<ExpVector,ModInteger>(me.getKey(), me.getValue().multiply(num)), false);
+        q = p.mapOnStream(me -> new MapEntry<ExpVector, ModInteger>(me.getKey(), me.getValue().multiply(num)),
+                        false);
         ts = System.nanoTime() - ts;
         //System.out.println("q = " + q.length() + ", seq time = " + ts);
         assertTrue("time >= 0 ", ts >= 0);
@@ -681,7 +677,8 @@ public class GenPolynomialTest extends TestCase {
 
         // map multiply to coefficients parallel stream
         long tp = System.nanoTime();
-        q = p.mapOnStream(me -> new MapEntry<ExpVector,ModInteger>(me.getKey(), me.getValue().multiply(num)), true);
+        q = p.mapOnStream(me -> new MapEntry<ExpVector, ModInteger>(me.getKey(), me.getValue().multiply(num)),
+                        true);
         tp = System.nanoTime() - tp;
         //System.out.println("q = " + q.length() + ", par time = " + tp);
         assertTrue("time >= 0 ", tp >= 0);
@@ -692,7 +689,7 @@ public class GenPolynomialTest extends TestCase {
         //System.out.println("ForkJoinPool: " + ForkJoinPool.commonPool());
     }
 
-    
+
     /**
      * Test bitLength.
      */
@@ -730,7 +727,7 @@ public class GenPolynomialTest extends TestCase {
         //System.out.println("blen(c) = " + c.bitLength());
         assertTrue("blen(random) >= 0", 0 <= c.bitLength());
         assertTrue("blen(random)+blen(random) >= blen(random+random)",
-                   a.bitLength() + b.bitLength() >= c.bitLength());
+                        a.bitLength() + b.bitLength() >= c.bitLength());
     }
 
 
@@ -743,7 +740,7 @@ public class GenPolynomialTest extends TestCase {
         // System.out.println("rf = " + rf);
 
         // polynomials over rational numbers
-        String[] vars = new String[] {"lambda"};
+        String[] vars = new String[] { "lambda" };
         GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(rf, vars);
         //System.out.println("pf = " + pf.toScript());
 
