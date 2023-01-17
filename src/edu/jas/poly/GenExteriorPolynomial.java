@@ -951,6 +951,110 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
+     * GenExteriorPolynomial inner left multiplication.
+     * @param S GenExteriorPolynomial.
+     * @return this _| S.
+     */
+    public GenExteriorPolynomial<C> innerLeftProduct(GenExteriorPolynomial<C> S) {
+        if (S == null) {
+            return ring.getZERO();
+        }
+        if (S.isZERO()) {
+            return ring.getZERO();
+        }
+        if (this.isZERO()) {
+            return this;
+        }
+        assert (ring.ixlist == S.ring.ixlist) : " " + ring + " != " + S.ring;
+        GenExteriorPolynomial<C> p = ring.getZERO().copy();
+        SortedMap<IndexList, C> pv = p.val;
+        for (Map.Entry<IndexList, C> m1 : val.entrySet()) {
+            C c1 = m1.getValue();
+            IndexList e1 = m1.getKey();
+            for (Map.Entry<IndexList, C> m2 : S.val.entrySet()) {
+                C c2 = m2.getValue();
+                IndexList e2 = m2.getKey();
+                C c = c1.multiply(c2); // check non zero if not domain
+                if (!c.isZERO()) {
+                    IndexList e = e1.innerLeftProduct(e2);
+                    if (e.isZERO()) { // since exterior algebra
+                        continue;
+                    }
+                    if (e.sign < 0) { // propagate sign to coefficient
+                        c = c.negate();
+                        e = e.negate();
+                    }
+                    C c0 = pv.get(e);
+                    if (c0 == null) {
+                        pv.put(e, c);
+                    } else {
+                        c0 = c0.sum(c);
+                        if (!c0.isZERO()) {
+                            pv.put(e, c0);
+                        } else {
+                            pv.remove(e);
+                        }
+                    }
+                }
+            }
+        }
+        return p;
+    }
+
+
+    /**
+     * GenExteriorPolynomial inner right multiplication.
+     * @param S GenExteriorPolynomial.
+     * @return this |_ S.
+     */
+    public GenExteriorPolynomial<C> innerRightProduct(GenExteriorPolynomial<C> S) {
+        if (S == null) {
+            return ring.getZERO();
+        }
+        if (S.isZERO()) {
+            return ring.getZERO();
+        }
+        if (this.isZERO()) {
+            return this;
+        }
+        assert (ring.ixlist == S.ring.ixlist) : " " + ring + " != " + S.ring;
+        GenExteriorPolynomial<C> p = ring.getZERO().copy();
+        SortedMap<IndexList, C> pv = p.val;
+        for (Map.Entry<IndexList, C> m1 : val.entrySet()) {
+            C c1 = m1.getValue();
+            IndexList e1 = m1.getKey();
+            for (Map.Entry<IndexList, C> m2 : S.val.entrySet()) {
+                C c2 = m2.getValue();
+                IndexList e2 = m2.getKey();
+                C c = c1.multiply(c2); // check non zero if not domain
+                if (!c.isZERO()) {
+                    IndexList e = e1.innerRightProduct(e2);
+                    if (e.isZERO()) { // since exterior algebra
+                        continue;
+                    }
+                    if (e.sign < 0) { // propagate sign to coefficient
+                        c = c.negate();
+                        e = e.negate();
+                    }
+                    C c0 = pv.get(e);
+                    if (c0 == null) {
+                        pv.put(e, c);
+                    } else {
+                        c0 = c0.sum(c);
+                        if (!c0.isZERO()) {
+                            pv.put(e, c0);
+                        } else {
+                            pv.remove(e);
+                        }
+                    }
+                }
+            }
+        }
+        return p;
+    }
+
+
+    /**
      * GenExteriorPolynomial left and right multiplication. Product with two
      * polynomials.
      * @param S GenExteriorPolynomial.

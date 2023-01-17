@@ -89,22 +89,22 @@ public class GenExteriorPolynomialTest extends TestCase {
 
         // non-commuting vars: abcdef
         IndexList wf = IndexList.valueOf("abcdef");
-        System.out.println("wf = " + wf);
+        //System.out.println("wf = " + wf);
 
         // polynomials over integers
         GenExteriorPolynomialRing<BigInteger> pf = new GenExteriorPolynomialRing<BigInteger>(rf, wf);
-        System.out.println("pf = " + pf);
+        //System.out.println("pf = " + pf);
         assertFalse("not commutative", pf.isCommutative());
         assertTrue("associative", pf.isAssociative());
         assertFalse("not field", pf.isField());
 
         String s = pf.toScript();
         //System.out.println("pf.toScript: " + s + ", " + s.length());
-        assertEquals("#s == 37: " + s, s.length(), 37);
+        assertEquals("#s == 40: " + s, s.length(), 40);
 
         s = pf.toString();
         //System.out.println("pf.toString: " + s + ", " + s.length());
-        assertEquals("#s == 37: " + s, s.length(), 37);
+        assertEquals("#s == 40: " + s, s.length(), 40);
 
         GenExteriorPolynomial<BigInteger> p = pf.getONE();
         //System.out.println("p = " + p);
@@ -116,7 +116,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         //System.out.println("p = " + p);
 
         List<GenExteriorPolynomial<BigInteger>> gens = pf.generators();
-        System.out.println("gens = " + gens);
+        //System.out.println("gens = " + gens);
         assertTrue("#gens == 7", gens.size() == 7);
 
         RingElem<GenExteriorPolynomial<BigInteger>> pe = new GenExteriorPolynomial<BigInteger>(pf);
@@ -143,7 +143,7 @@ public class GenExteriorPolynomialTest extends TestCase {
 
         GenExteriorPolynomialRing<GenExteriorPolynomial<BigInteger>> ppf;
 	ppf = new GenExteriorPolynomialRing<GenExteriorPolynomial<BigInteger>>(pf, wf2);
-        System.out.println("ppf = " + ppf);
+        //System.out.println("ppf = " + ppf);
 
         GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>> pp = ppf.getONE();
         //System.out.println("pp = " + pp);
@@ -156,7 +156,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertTrue("pp == 0", pp.isZERO());
 
         List<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>> pgens = ppf.generators();
-        System.out.println("pgens = " + pgens);
+        //System.out.println("pgens = " + pgens);
         assertTrue("#pgens == 7+3", pgens.size() == 10);
 
         RingElem<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>> ppe;
@@ -183,7 +183,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         //System.out.println("wf3 = " + wf3);
         GenExteriorPolynomialRing<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>> pppf;
 	pppf = new GenExteriorPolynomialRing<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>>(ppf, wf3);
-        System.out.println("pppf = " + pppf);
+        //System.out.println("pppf = " + pppf);
 
         GenExteriorPolynomial<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>> ppp = pppf.getONE();
         //System.out.println("ppp = " + ppp);
@@ -196,7 +196,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertTrue("ppp == 0", ppp.isZERO());
 
         List<GenExteriorPolynomial<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>>> ppgens = pppf.generators();
-        System.out.println("ppgens = " + ppgens);
+        //System.out.println("ppgens = " + ppgens);
         assertTrue("#ppgens == 7+3+3", ppgens.size() == 13);
 
         RingElem<GenExteriorPolynomial<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>>> pppe;
@@ -460,6 +460,7 @@ public class GenExteriorPolynomialTest extends TestCase {
 
     /*
      * Test constructors and factory.
+     */
     @SuppressWarnings("unchecked")
     public void testParser() {
         BigInteger rf = new BigInteger();
@@ -467,7 +468,8 @@ public class GenExteriorPolynomialTest extends TestCase {
 
         // non-commuting vars: abcdef
         String[] sa = new String[] { "a", "b", "c", "d", "e", "f" };
-        IndexList wf = new IndexList(sa);
+        String ss = "E(1,2,3,4,5,6)";
+        IndexList wf = new IndexList(ss);
         //System.out.println("wf = " + wf.toScript());
 
         // index list polynomials over integers
@@ -478,57 +480,59 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertFalse("not field", pf.isField());
 
         List<GenExteriorPolynomial<BigInteger>> gens = pf.generators();
-        //System.out.println("pf = " + gens);
-        GenExteriorPolynomial<BigInteger> ga, gb, crel;
-        ga = gens.get(1);
-        gb = gens.get(2);
-        //System.out.println("ga = " + ga + ", " + ga.toScript());
-        //System.out.println("gb = " + gb);
-        assertEquals("#s == 3: ", ga.toString().length(), 3);
-        assertEquals("#s == 1: ", ga.toScript().length(), 1);
+        //System.out.println("gens = " + gens);
+        GenExteriorPolynomial<BigInteger> g1, g2, g3, g4, epol;
+        g1 = gens.get(1);
+        g2 = gens.get(2);
+        g3 = gens.get(3);
+        g4 = gens.get(4);
+        //System.out.println("g1 = " + g1 + ", " + g1.toScript());
+        //System.out.println("g2 = " + g2);
+        assertEquals("#s == 4: ", g1.toString().length(), 4);
+        assertEquals("#s == 4: ", g2.toScript().length(), 4);
 
-        crel = ga.multiply(gb).subtract(gb.multiply(ga));
-        //System.out.println("crel = " + crel);
+        epol = g1.multiply(g2).subtract(g3.multiply(g4));
+        //System.out.println("epol = " + epol);
 
-        StringReader sr = new StringReader("a b - b a, b c - c b");
+        //StringReader sr = new StringReader("1 E(1,2)**2 + E(1,2) - 1 E(3,4)**0");
+        StringReader sr = new StringReader("1 E(1,2) - 1 E(3,4)");
         GenPolynomialTokenizer tok = new GenPolynomialTokenizer(sr);
 
         GenExteriorPolynomial<BigInteger> a;
         // parse of tokenizer
         try {
-            a = (GenExteriorPolynomial) tok.nextWordPolynomial(pf);
+            a = (GenExteriorPolynomial) tok.nextExteriorPolynomial(pf);
         } catch (IOException e) {
             a = null;
             e.printStackTrace();
         }
         //System.out.println("a = " + a);
-        assertEquals("parse() == ab - ba: ", a, crel);
+        assertEquals("parse() == ab - ba: ", a, epol);
 
         // now parse of factory
-        a = pf.parse("a b - b a");
+        a = pf.parse("1 E(1,2) - 1 E(3,4)");
         //System.out.println("a = " + a);
-        assertEquals("parse() == ab - ba: ", a, crel);
+        assertEquals("parse() == 1 E(1,2) - 1 E(3,4): ", a, epol);
 
-        // polynomials over integers
+	// commutative polynomials over integers
         GenPolynomialRing<BigInteger> fac = new GenPolynomialRing<BigInteger>(rf, sa);
         //System.out.println("fac = " + fac.toScript());
         assertTrue("commutative", fac.isCommutative());
         assertTrue("associative", fac.isAssociative());
         assertFalse("not field", fac.isField());
 
-        sr = new StringReader("a b - b a, b c - c b");
+        sr = new StringReader("E(1,2) - E(3,4)");
         tok = new GenPolynomialTokenizer(fac, sr);
-        // parse of tokenizer
+        // parse exterior with tokenizer
         try {
-            a = (GenExteriorPolynomial) tok.nextWordPolynomial();
+            a = (GenExteriorPolynomial) tok.nextExteriorPolynomial();
         } catch (IOException e) {
             a = null;
             e.printStackTrace();
         }
         //System.out.println("a = " + a);
-        assertEquals("parse() == ab - ba: ", a, crel);
+        assertEquals("parse() == E(1,2) - E(3,4): ", a, epol);
     }
-     */
 
 
     /**
@@ -553,6 +557,78 @@ public class GenExteriorPolynomialTest extends TestCase {
             assertFalse("m.c == 0 ", m.coefficient().isZERO());
             assertFalse("m.e == 0 ", m.indexlist().isZERO());
         }
+    }
+
+
+    /*
+     * Test old example.
+     */
+    @SuppressWarnings("unchecked")
+    public void testExample() {
+        BigInteger rf = new BigInteger();
+        //System.out.println("rf = " + rf.toScriptFactory());
+
+        // non-commuting indexes: 1 2 3 4 5 6
+        String ss = "E(1,2,3,4)";
+        IndexList wf = new IndexList(ss);
+        //System.out.println("wf = " + wf.toScript());
+
+        // index list polynomials over integers
+        GenExteriorPolynomialRing<BigInteger> pf;
+        pf = new GenExteriorPolynomialRing<BigInteger>(rf, wf);
+        System.out.println("pf = " + pf.toScript());
+        assertFalse("not commutative", pf.isCommutative());
+        assertTrue("associative", pf.isAssociative());
+        assertFalse("not field", pf.isField());
+
+        GenExteriorPolynomial<BigInteger> emaxd, p1, p2, q1, q2, s, g1, g2, e1, e2,
+	    e1dual, e2dual, q, qs, qt, g1dual, g2dual, s1, s2;
+        // parse points in 4-space as polynomials
+        emaxd = pf.parse("E(1,2,3,4)");
+        System.out.println("emaxd = " + emaxd);
+        p1 = pf.parse("1 E(1) + 5 E(2) - 2 E(3) + 1 E(4)");
+        p2 = pf.parse("4 E(1) + 3 E(2) + 6 E(3) + 1 E(4)");
+        System.out.println("p1 = " + p1);
+        System.out.println("p2 = " + p2);
+        q1 = pf.parse("3 E(1) - 2 E(2) - 1 E(3) + 1 E(4)");
+        q2 = pf.parse("1 E(2) + 5 E(3) + 1 E(4)");
+        System.out.println("q1 = " + q1);
+        System.out.println("q2 = " + q2);
+        s = pf.parse("1 E(3) + 1 E(4)");
+        System.out.println("s = " + s);
+
+        g1 = p1.multiply(p2).abs();
+        g2 = q1.multiply(q2).abs().divide(new BigInteger(3));
+        System.out.println("g1 = p1 /\\ p2 = " + g1);
+        System.out.println("g2 = q1 /\\ q2 = " + g2);
+
+        e1 = g1.multiply(s).abs().divide(new BigInteger(17));
+        e2 = g2.multiply(s);
+        System.out.println("e1 = g1 /\\ s = " + e1);
+        System.out.println("e2 = g2 /\\ s = " + e2);
+
+        e1dual = e1.innerRightProduct(emaxd).abs();
+        e2dual = e2.innerRightProduct(emaxd).abs();
+        System.out.println("e1dual = e1 |_ emaxd = " + e1dual);
+        System.out.println("e2dual = e2 |_ emaxd = " + e2dual);
+
+        q = e1dual.multiply(e2dual).abs().divide(new BigInteger(5));
+        System.out.println("q  = (e1dual /\\ e2dual) = " + q);
+        qs = q.innerRightProduct(emaxd).abs();
+        System.out.println("qs = (e1dual /\\ e2dual) |_ emaxd = " + qs);
+        qt = e1.innerLeftProduct(e2dual).abs().divide(new BigInteger(5));
+        System.out.println("qt = e1 _| e2dual                = " + qt);
+        assertEquals("qs == qt: ", qs, qt);
+
+        g1dual = g1.innerRightProduct(emaxd);
+        g2dual = g2.innerRightProduct(emaxd).abs();
+        System.out.println("g1dual = g1 |_ emaxd = " + g1dual);
+        System.out.println("g2dual = g2 |_ emaxd = " + g2dual);
+
+        s1 = e2.innerLeftProduct(g1dual).abs().divide(new BigInteger(5));
+        System.out.println("s1 = e2 _| g1dual = " + s1);
+        s2 = e1.innerLeftProduct(g2dual).abs().divide(new BigInteger(5));
+        System.out.println("s2 = e1 _| g2dual = " + s2);
     }
 
 }
