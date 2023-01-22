@@ -31,12 +31,6 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-     * Random number generator.
-     */
-    private final static Random random = new Random();
-
-
-    /**
      * Representation of index list as int arrays.
      */
     public final int[] val; // != null, when s != 0
@@ -49,10 +43,16 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
+     * Reference to IndexFactory.
+     */
+    public final IndexFactory mono;
+
+
+    /**
      * Constructor for IndexList. No argument constructor defining 0 index list.
      */
-    public IndexList() {
-        this(0, null);
+    public IndexList(IndexFactory m) {
+        this(m, 0, null);
     }
 
 
@@ -60,8 +60,8 @@ public class IndexList implements MonoidElem<IndexList> {
      * Constructor for IndexList.
      * @param v array with indices.
      */
-    public IndexList(int[] v) {
-        this(1, v);
+    public IndexList(IndexFactory m, int[] v) {
+        this(m, 1, v);
     }
 
 
@@ -71,8 +71,9 @@ public class IndexList implements MonoidElem<IndexList> {
      * @param s sign of index list.
      * @param v array with indices.
      */
-    public IndexList(int s, int[] v) {
+    public IndexList(IndexFactory m, int s, int[] v) {
         sign = s;
+        mono = m;
         if (v == null) {
             if (s != 0) {
                 throw new IllegalArgumentException("inconsistent: s = " + s + ", v = " + v);
@@ -92,119 +93,8 @@ public class IndexList implements MonoidElem<IndexList> {
      * @see edu.jas.structure.Element#factory()
      */
     public MonoidFactory<IndexList> factory() {
-        //return (MonoidFactory<IndexList>) this;
-        throw new UnsupportedOperationException("no factory implemented for IndexList");
-    }
-
-
-    /**
-     * Is this structure finite or infinite.
-     * @return true if this structure is finite, else false.
-     * @see edu.jas.structure.ElemFactory#isFinite() <b>Note: </b> returns true
-     *      because of finite set of values in each index.
-     */
-    public boolean isFinite() {
-        return true;
-    }
-
-
-    /**
-     * Value of other.
-     * @param e other ExpVector.
-     * @return value as IndexList.
-     */
-    public static IndexList valueOf(ExpVector e) {
-        if (e == null) {
-            return new IndexList();
-        }
-        int r = e.length();
-        int[] w = new int[r];
-        int ii = 0;
-        for (int i = 0; i < r; i++) {
-            long x = e.getVal(i);
-            if (x <= 0l) {
-                continue;
-            }
-            if (x > 1l) {
-                return new IndexList(); // = 0
-            }
-            w[ii++] = i;
-        }
-        int[] v = Arrays.copyOf(w, ii);
-        return new IndexList(v);
-    }
-
-
-    /**
-     * Value of other.
-     * @param e String of index names.
-     * @return value as IndexList.
-     */
-    public static IndexList valueOf(String var) {
-        return IndexList.sequence(0, var.length());
-    }
-
-
-    /**
-     * Value of other.
-     * @param e other Collection of Integer indexes.
-     * @return value as IndexList.
-     */
-    public static IndexList valueOf(Collection<Integer> e) {
-        if (e == null) {
-            return new IndexList();
-        }
-        int r = e.size();
-        int[] w = new int[r];
-        int ii = 0;
-        for (Integer x : e) {
-            int xi = (int) x;
-            if (xi < 0) {
-                continue;
-            }
-            w[ii++] = xi;
-        }
-        int[] v = Arrays.copyOf(w, ii);
-        return new IndexList(v);
-    }
-
-
-    /**
-     * Value of other.
-     * @param e other int[] of indexes, may not be conform to IndexList
-     *            specification.
-     * @return value as IndexList.
-     */
-    public static IndexList valueOf(int[] e) {
-        if (e == null) {
-            return new IndexList();
-        }
-        int r = e.length;
-        IndexList w = new IndexList(new int[] {}); // = 1
-        int[] v = new int[1];
-        for (int i = 0; i < r; i++) {
-            v[0] = e[i];
-            IndexList vs = new IndexList(v);
-            w = w.exteriorProduct(vs);
-            if (w.isZERO()) {
-                return w;
-            }
-        }
-        //System.out.println("valueOf: " + w);
-        return w;
-    }
-
-
-    /**
-     * Value of other.
-     * @param e other IndexList, may not be conform to IndexList specification.
-     * @return value as IndexList.
-     */
-    public static IndexList valueOf(IndexList e) {
-        if (e == null) {
-            return new IndexList();
-        }
-        return IndexList.valueOf(e.val);
+        return mono; //(MonoidFactory<IndexList>) this;
+        //throw new UnsupportedOperationException("no factory implemented for IndexList");
     }
 
 
@@ -216,30 +106,8 @@ public class IndexList implements MonoidElem<IndexList> {
         if (sign == 0 && val == null) {
             return true;
         }
-        IndexList ck = IndexList.valueOf(val);
+        IndexList ck = mono.valueOf(val);
         return this.abs().equals(ck.abs());
-    }
-
-
-    /**
-     * Generators.
-     * @return list of generators for this index list.
-     */
-    public List<IndexList> generators() {
-        List<IndexList> gens = new ArrayList<IndexList>();
-        if (isZERO()) {
-            return gens;
-        }
-        //IndexList one = getONE();
-        //gens.add(one);
-        for (int i = 0; i < val.length; i++) {
-            int[] v = new int[1];
-            v[0] = val[i];
-            IndexList vs = new IndexList(v);
-            gens.add(vs);
-        }
-        //System.out.println("gens: " + gens + ", val = " + Arrays.toString(val));
-        return gens;
     }
 
 
@@ -249,7 +117,7 @@ public class IndexList implements MonoidElem<IndexList> {
      */
     @Override
     public IndexList copy() {
-        return new IndexList(sign, val);
+        return new IndexList(mono, sign, val);
     }
 
 
@@ -339,47 +207,8 @@ public class IndexList implements MonoidElem<IndexList> {
      * IndexList. Accepted format = E(1,2,3,4,5,6,7).
      * @param s String representation.
      */
-    public IndexList(String s) throws NumberFormatException {
-        this(parse(s).val);
-    }
-
-
-    /**
-     * Parser for IndexList. Converts a String representation to an IndexList.
-     * Accepted format = E(1,2,3,4,5,6,7).
-     * @param s String representation.
-     * @return parsed IndexList
-     */
-    public static IndexList parse(String s) throws NumberFormatException {
-        int[] v = null;
-        // first format = (1,2,3,4,5,6,7)
-        List<Integer> idxs = new ArrayList<Integer>();
-        s = s.trim();
-        int b = s.indexOf('(');
-        int e = s.indexOf(')', b + 1);
-        String teil;
-        int k;
-        int a;
-        if (b >= 0 && e >= 0) {
-            b++;
-            while ((k = s.indexOf(',', b)) >= 0) {
-                teil = s.substring(b, k);
-                a = Integer.parseInt(teil);
-                idxs.add(Integer.valueOf(a));
-                b = k + 1;
-            }
-            if (b <= e) {
-                teil = s.substring(b, e);
-                a = Integer.parseInt(teil);
-                idxs.add(Integer.valueOf(a));
-            }
-            int length = idxs.size();
-            v = new int[length];
-            for (int j = 0; j < length; j++) {
-                v[j] = idxs.get(j).intValue();
-            }
-        }
-        return IndexList.valueOf(v); // sort and compute sign
+    public IndexList(IndexFactory m, String s) throws NumberFormatException {
+        this(m, m.parse(s).val);
     }
 
 
@@ -391,7 +220,7 @@ public class IndexList implements MonoidElem<IndexList> {
     @Override
     public String toScriptFactory() {
         // Python case
-        return "IndexList()";
+        return "IndexFactory()";
     }
 
 
@@ -447,30 +276,12 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-     * Get IndexList zero.
-     * @return 0 IndexList.
-     */
-    public static IndexList getZERO() {
-        return new IndexList();
-    }
-
-
-    /**
      * Is IndexList one.
      * @return If this sign != 0 and length val is zero then true returned, else
      *         false.
      */
     public boolean isONE() {
         return (sign != 0 && val.length == 0);
-    }
-
-
-    /**
-     * Get IndexList one.
-     * @return 1 IndexList.
-     */
-    public static IndexList getONE() {
-        return new IndexList(new int[0]);
     }
 
 
@@ -491,7 +302,7 @@ public class IndexList implements MonoidElem<IndexList> {
         if (sign >= 0) {
             return this;
         }
-        return new IndexList(1, val);
+        return new IndexList(mono, 1, val);
     }
 
 
@@ -503,7 +314,7 @@ public class IndexList implements MonoidElem<IndexList> {
         if (sign == 0) {
             return this;
         }
-        return new IndexList(-sign, val);
+        return new IndexList(mono, -sign, val);
     }
 
 
@@ -514,7 +325,7 @@ public class IndexList implements MonoidElem<IndexList> {
      */
     public IndexList exteriorProduct(IndexList V) {
         if (isZERO() || V.isZERO()) {
-            return new IndexList(); // = 0
+            return mono.getZERO(); // = 0
         }
         int s = 1;
         int m = 0, n = 0; // todo: remove or rename
@@ -527,7 +338,7 @@ public class IndexList implements MonoidElem<IndexList> {
             int ul = u[i];
             int vl = v[j];
             if (ul == vl) {
-                return new IndexList(); // = 0
+                return mono.getZERO(); // = 0
             }
             if (ul < vl) {
                 w[ii++] = ul;
@@ -558,7 +369,7 @@ public class IndexList implements MonoidElem<IndexList> {
         //System.out.println("i = " + i + ", j = " + j + ", m = " + m + ", n = " + n);
         //System.out.println("s = " + s + ", w = " + Arrays.toString(w));
         //int[] x = Arrays.copyOf(w, ii);
-        return new IndexList(s, w);
+        return new IndexList(mono, s, w);
     }
 
 
@@ -589,7 +400,7 @@ public class IndexList implements MonoidElem<IndexList> {
      */
     public IndexList innerRightProduct(IndexList V) {
         if (!this.divides(V)) {
-            return new IndexList(); // = 0
+            return mono.getZERO(); // = 0
         }
         int[] u = val;
         int[] v = V.val;
@@ -616,7 +427,37 @@ public class IndexList implements MonoidElem<IndexList> {
             }
         }
         //int[] x = Arrays.copyOf(w, ii);
-        return new IndexList(s, w);
+        return new IndexList(mono, s, w);
+    }
+
+
+    /**
+      * IndexList divides test. Test if this is contained in V.
+     * @param V other index list
+     * @return true if this divides V, else false.
+     */
+    public boolean divides(IndexList V) {
+        if (isZERO() || V.isZERO()) {
+            return false;
+        }
+        if (val.length > V.val.length) {
+            return false;
+        }
+        int[] vval = V.val;
+        for (int i = 0; i < val.length; i++) {
+            int v = val[i];
+            boolean found = false;
+            for (int j = i; j < vval.length; j++) {
+                if (v == vval[j]) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                return false;
+            }
+        }
+        return true;
     }
 
 
@@ -646,74 +487,6 @@ public class IndexList implements MonoidElem<IndexList> {
      */
     public IndexList remainder(IndexList V) {
         throw new UnsupportedOperationException("remainder not implemented");
-    }
-
-
-    /**
-     * Generate a random IndexList.
-     * @param r length of new IndexList.
-     * @return random IndexList.
-     */
-    public final static IndexList random(int r) {
-        return random(r, 0.5f, random);
-    }
-
-
-    /**
-     * Generate a random IndexList.
-     * @param r length of new IndexList.
-     * @param q density of nozero indexes.
-     * @return random IndexList.
-     */
-    public final static IndexList random(int r, float q) {
-        return random(r, q, random);
-    }
-
-
-    /**
-     * Generate a random IndexList.
-     * @param r length of new IndexList.
-     * @param q density of nozero indexes.
-     * @param rnd is a source for random bits.
-     * @return random IndexList.
-     */
-    public final static IndexList random(int r, float q, Random rnd) {
-        int[] w = new int[r];
-        int s = 1;
-        float f;
-        f = rnd.nextFloat();
-        if (f < q * 0.001f) {
-            return new IndexList(); // = 0
-        }
-        if (f < q * q) {
-            s = -1;
-        }
-        int ii = 0;
-        for (int i = 0; i < w.length; i++) {
-            f = rnd.nextFloat();
-            if (f < q) {
-                w[ii++] = i;
-            }
-        }
-        int[] v = Arrays.copyOf(w, ii);
-        //System.out.println("v = " + Arrays.toString(v));
-        return new IndexList(s, v);
-    }
-
-
-    /**
-     * Generate a sequence IndexList.
-     * @param s starting index.
-     * @param r length of new IndexList.
-     * @return sequence (s, s+1, ..., s+r-1) IndexList.
-     */
-    public final static IndexList sequence(int s, int r) {
-        int[] w = new int[r];
-        for (int i = 0; i < w.length; i++) {
-            w[i] = s + i;
-        }
-        //System.out.println("v = " + Arrays.toString(w));
-        return new IndexList(w);
     }
 
 
@@ -759,36 +532,6 @@ public class IndexList implements MonoidElem<IndexList> {
             return -1;
         }
         return val[0];
-    }
-
-
-    /**
-     * IndexList divides test. Test if this is contained in V.
-     * @param V other index list
-     * @return true if this divides V, else false.
-     */
-    public boolean divides(IndexList V) {
-        if (isZERO() || V.isZERO()) {
-            return false;
-        }
-        if (val.length > V.val.length) {
-            return false;
-        }
-        int[] vval = V.val;
-        for (int i = 0; i < val.length; i++) {
-            int v = val[i];
-            boolean found = false;
-            for (int j = i; j < vval.length; j++) {
-                if (v == vval[j]) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                return false;
-            }
-        }
-        return true;
     }
 
 
@@ -883,60 +626,6 @@ public class IndexList implements MonoidElem<IndexList> {
         }
         // now val.length == vval.length
         return tl;
-    }
-
-
-    /**
-     * Comparator for IndexLists.
-     */
-    public static abstract class IndexListComparator implements Comparator<IndexList>, Serializable {
-
-
-        public abstract int compare(IndexList e1, IndexList e2);
-    }
-
-
-    /**
-     * Defined descending order comparator. Sorts the highest terms first.
-     */
-    private static final IndexListComparator horder = new IndexListComparator() {
-
-
-        @Override
-        public int compare(IndexList e1, IndexList e2) {
-            return -e1.strongCompareTo(e2);
-        }
-    };
-
-
-    /**
-     * Defined ascending order comparator. Sorts the lowest terms first.
-     */
-    private static final IndexListComparator lorder = new IndexListComparator() {
-
-
-        @Override
-        public int compare(IndexList e1, IndexList e2) {
-            return e1.strongCompareTo(e2);
-        }
-    };
-
-
-    /**
-     * Get the descending order comparator. Sorts the highest terms first.
-     * @return horder.
-     */
-    public IndexListComparator getDescendComparator() {
-        return horder;
-    }
-
-
-    /**
-     * Get the ascending order comparator. Sorts the lowest terms first.
-     * @return lorder.
-     */
-    public IndexListComparator getAscendComparator() {
-        return lorder;
     }
 
 }

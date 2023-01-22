@@ -49,8 +49,12 @@ public class IndexListTest extends TestCase {
     IndexList a, b, c, d, e;
 
 
+    IndexFactory idf;
+
+
     @Override
     protected void setUp() {
+        idf = new IndexFactory(11);
         a = b = c = d = null;
     }
 
@@ -68,7 +72,7 @@ public class IndexListTest extends TestCase {
      * Test constructor and toString.
      */
     public void testConstructor() {
-        a = IndexList.random(0, q);
+        a = idf.random(0, q);
         b = a;
         //System.out.println("a = " + a);
         assertEquals("() = ()", a, b);
@@ -77,14 +81,14 @@ public class IndexListTest extends TestCase {
         assertTrue("isONE( () )", a.isONE());
         assertTrue("isUnit( () )", a.isUnit());
 
-        b = IndexList.random(10, q);
+        b = idf.random(10, q);
         //System.out.println("b = " + b);
         assertTrue("length( () ) = 0", b.length() >= 0);
         assertFalse("isZERO( () )", b.isZERO());
         assertFalse("isONE( () )", b.isONE());
         assertFalse("isUnit( () )", b.isUnit());
 
-        c = new IndexList();
+        c = new IndexList(idf);
         //System.out.println("c = " + c);
         //assertNotEquals("() = ()", a, c);
         assertTrue("length( 0 ) = -1", c.length() < 0);
@@ -104,9 +108,9 @@ public class IndexListTest extends TestCase {
      * Test random IndexList.
      */
     public void testRandom() {
-        a = IndexList.random(5);
-        b = IndexList.random(7);
-        c = IndexList.random(9);
+        a = idf.random(5);
+        b = idf.random(7);
+        c = idf.random(9);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
@@ -133,15 +137,15 @@ public class IndexListTest extends TestCase {
      * Test multiplication.
      */
     public void testMultiplication() {
-        a = IndexList.random(9, 0.2f);
-        b = IndexList.random(7, 0.3f);
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        a = idf.random(9, 0.2f);
+        b = idf.random(7, 0.3f);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
 
         c = a.multiply(b);
         d = b.multiply(a);
-        System.out.println("c = " + c);
-        System.out.println("d = " + d);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
         //assertTrue("ab = -ba: " + c + " ==? " + d, c.isZERO() || d.isZERO() || a.isONE() || b.isONE() || c.equals(d.negate()));
 
         if (c.isZERO()) {
@@ -157,16 +161,16 @@ public class IndexListTest extends TestCase {
         IndexList ca, cb;
         ca = a.innerRightProduct(c);
         cb = b.innerRightProduct(c);
-        System.out.println("ca = " + ca);
-        System.out.println("cb = " + cb);
+        //System.out.println("ca = " + ca);
+        //System.out.println("cb = " + cb);
 
         assertEquals("a == cb: ", a.abs(), cb.abs());
         assertEquals("b == ca: ", b.abs(), ca.abs());
 
         ca = c.innerLeftProduct(a);
         cb = c.innerLeftProduct(b);
-        System.out.println("ca_l = " + ca);
-        System.out.println("cb_l = " + cb);
+        //System.out.println("ca_l = " + ca);
+        //System.out.println("cb_l = " + cb);
     }
 
 
@@ -174,10 +178,9 @@ public class IndexListTest extends TestCase {
      * Test sequence IndexList.
      */
     public void testSequence() {
-        int r = 7;
-        a = IndexList.sequence(0, r);
-        b = IndexList.sequence(r, r);
-        c = IndexList.sequence(0, 2 * r);
+        a = idf.sequence(0, 4);
+        b = idf.sequence(4, 3);
+        c = idf.sequence(0, 7);
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
@@ -214,7 +217,7 @@ public class IndexListTest extends TestCase {
         ExpVector ef = ExpVector.random(4, 2L, 0.8f);
         //System.out.println("ef = " + ef);
 
-        a = IndexList.valueOf(ef);
+        a = idf.valueOf(ef);
         //System.out.println("a = " + a);
         if (!a.isZERO()) {
             assertTrue("depend(ef) == deg(a): " + ef + ", " + a, ef.dependentVariables() == a.degree());
@@ -227,34 +230,34 @@ public class IndexListTest extends TestCase {
         List<Integer> W = Arrays.<Integer> asList(1, 4, 7, 8, 13, 17);
         //System.out.println("W = " + W);
 
-        a = IndexList.valueOf(W);
+        a = idf.valueOf(W);
         //System.out.println("a = " + a);
         assertTrue("deg(a) == #W " + W + ", " + a, W.size() == a.degree());
 
         int[] w = new int[] { 1, 4, 7, 8, 13, 17, 4, 1 };
         //System.out.println("w = " + w);
 
-        a = IndexList.valueOf(w);
+        a = idf.valueOf(w);
         //System.out.println("a = " + a);
         assertTrue("a == 0: " + a, a.isZERO());
-        a = IndexList.valueOf((int[]) null);
+        a = idf.valueOf((int[]) null);
         //System.out.println("a = " + a);
         assertTrue("a == 0: " + a, a.isZERO());
 
         w = new int[] { 7, 8, 13, 17, 4, 1 };
         //System.out.println("w = " + w);
 
-        a = IndexList.valueOf(w);
+        a = idf.valueOf(w);
         //System.out.println("a = " + a);
         assertTrue("deg(a) == #w: " + a, a.degree() == w.length);
         assertTrue("sign(a) < 0: " + a, a.signum() < 0);
         assertTrue("check(a) == true: " + a, a.isConformant());
 
-        b = new IndexList(w);
+        b = new IndexList(idf, w);
         //System.out.println("b = " + b);
         assertFalse("check(b) == false: " + b, b.isConformant());
 
-        c = IndexList.valueOf(b);
+        c = idf.valueOf(b);
         //System.out.println("c = " + c);
         assertTrue("check(b) == true: " + c, c.isConformant());
     }
