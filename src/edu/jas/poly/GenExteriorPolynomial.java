@@ -79,7 +79,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * @param r polynomial ring factory.
      */
     public GenExteriorPolynomial(GenExteriorPolynomialRing<C> r) {
-        this(r, new TreeMap<IndexList, C>(r.ixlist.getDescendComparator()));
+        this(r, new TreeMap<IndexList, C>(r.ixfac.getDescendComparator()));
     }
 
 
@@ -123,7 +123,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * @param e exponent vector.
      */
     public GenExteriorPolynomial(GenExteriorPolynomialRing<C> r, ExpVector e) {
-        this(r, r.coFac.getONE(), IndexList.valueOf(e));
+        this(r, r.coFac.getONE(), r.ixfac.valueOf(e));
     }
 
 
@@ -134,7 +134,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * @param e exponent vector.
      */
     public GenExteriorPolynomial(GenExteriorPolynomialRing<C> r, C c, ExpVector e) {
-        this(r, c, IndexList.valueOf(e));
+        this(r, c, r.ixfac.valueOf(e));
     }
 
 
@@ -550,10 +550,10 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
     /**
      * Number of variables.
-     * @return ring.ixlist.length().
+     * @return ring.ixfac.length().
      */
     public int numberOfVariables() {
-        return ring.ixlist.length(); // some times
+        return ring.ixfac.length(); // some times
     }
 
 
@@ -712,7 +712,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         if (this.isZERO()) {
             return S;
         }
-        assert (ring.ixlist == S.ring.ixlist);
+        assert (ring.ixfac == S.ring.ixfac);
         GenExteriorPolynomial<C> n = this.copy();
         SortedMap<IndexList, C> nv = n.val;
         SortedMap<IndexList, C> sv = S.val;
@@ -798,7 +798,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         if (this.isZERO()) {
             return S.negate();
         }
-        assert (ring.ixlist == S.ring.ixlist);
+        assert (ring.ixfac == S.ring.ixfac);
         GenExteriorPolynomial<C> n = this.copy();
         SortedMap<IndexList, C> nv = n.val;
         SortedMap<IndexList, C> sv = S.val;
@@ -911,7 +911,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         if (this.isZERO()) {
             return this;
         }
-        assert (ring.ixlist == S.ring.ixlist) : " " + ring + " != " + S.ring;
+        assert (ring.ixfac == S.ring.ixfac) : " " + ring + " != " + S.ring;
         GenExteriorPolynomial<C> p = ring.getZERO().copy();
         SortedMap<IndexList, C> pv = p.val;
         for (Map.Entry<IndexList, C> m1 : val.entrySet()) {
@@ -963,7 +963,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         if (this.isZERO()) {
             return this;
         }
-        assert (ring.ixlist == S.ring.ixlist) : " " + ring + " != " + S.ring;
+        assert (ring.ixfac == S.ring.ixfac) : " " + ring + " != " + S.ring;
         GenExteriorPolynomial<C> p = ring.getZERO().copy();
         SortedMap<IndexList, C> pv = p.val;
         for (Map.Entry<IndexList, C> m1 : val.entrySet()) {
@@ -1015,7 +1015,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         if (this.isZERO()) {
             return this;
         }
-        assert (ring.ixlist == S.ring.ixlist) : " " + ring + " != " + S.ring;
+        assert (ring.ixfac == S.ring.ixfac) : " " + ring + " != " + S.ring;
         GenExteriorPolynomial<C> p = ring.getZERO().copy();
         SortedMap<IndexList, C> pv = p.val;
         for (Map.Entry<IndexList, C> m1 : val.entrySet()) {
@@ -1465,8 +1465,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         }
         C ci = c.inverse();
         C one = ring.coFac.getONE();
-        assert (ring.ixlist == S.ring.ixlist);
-        IndexList.IndexListComparator cmp = ring.ixlist.getDescendComparator();
+        assert (ring.ixfac == S.ring.ixfac);
+        IndexFactory.IndexListComparator cmp = ring.ixfac.getDescendComparator();
         IndexList e = S.leadingIndexList();
         GenExteriorPolynomial<C> h;
         GenExteriorPolynomial<C> q = ring.getZERO().copy();
@@ -1479,7 +1479,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
                 //logger.info("div: f = {}, e = {}, g = {}, {}", f, e, g[0], g[1]);
                 a = a.multiply(ci);
                 q = q.sum(a, g); // g[0].multiply(g[1])
-                h = S.multiply(a, g, one, IndexList.getONE()); // g[0], g[1]
+                h = S.multiply(a, g, one, ring.ixfac.getONE()); // g[0], g[1]
                 r = r.subtract(h);
                 IndexList fr = r.leadingIndexList();
                 if (cmp.compare(f, fr) > 0) { // non noetherian reduction // todo
@@ -1539,7 +1539,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         if (this.isZERO()) {
             return S;
         }
-        if (ring.ixlist.length() != 1) {
+        if (ring.ixfac.length() != 1) {
             throw new IllegalArgumentException("no univariate polynomial " + ring);
         }
         GenExteriorPolynomial<C> x;
@@ -1578,7 +1578,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             ret[2] = this.ring.getONE();
             return ret;
         }
-        if (ring.ixlist.length() != 1) {
+        if (ring.ixfac.length() != 1) {
             throw new IllegalArgumentException("no univariate polynomial " + ring);
         }
         if (this.isConstant() && S.isConstant()) {
@@ -1649,7 +1649,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             ret[0] = S;
             return ret;
         }
-        if (ring.ixlist.length() != 1) {
+        if (ring.ixfac.length() != 1) {
             throw new IllegalArgumentException("no univariate polynomial " + ring);
         }
         GenExteriorPolynomial<C>[] qr;

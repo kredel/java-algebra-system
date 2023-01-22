@@ -84,8 +84,8 @@ public class GenExteriorPolynomialTest extends TestCase {
         BigInteger rf = new BigInteger();
         //System.out.println("rf = " + rf);
 
-        // non-commuting vars: abcdef
-        IndexList wf = IndexList.valueOf("abcdef");
+        // 6 non-commuting vars
+        IndexFactory wf = new IndexFactory(6);
         //System.out.println("wf = " + wf);
 
         // polynomials over integers
@@ -134,8 +134,8 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertTrue("p.isZERO() = ", p.isZERO());
 
         // polynomials over (polynomials over integers)
-        // non-commuting vars: xyz
-        IndexList wf2 = IndexList.valueOf("xyz");
+        // 3 non-commuting vars
+        IndexFactory wf2 = new IndexFactory(3);
         //System.out.println("wf2 = " + wf2);
 
         GenExteriorPolynomialRing<GenExteriorPolynomial<BigInteger>> ppf;
@@ -175,8 +175,8 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertTrue("pp.isZERO() = ", pp.isZERO());
 
         // polynomials over (polynomials over (polynomials over integers))
-        // non-commuting vars: uvw
-        IndexList wf3 = IndexList.valueOf("uvw");
+        // 3 non-commuting vars
+        IndexFactory wf3 = new IndexFactory(3);
         //System.out.println("wf3 = " + wf3);
         GenExteriorPolynomialRing<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>> pppf;
         pppf = new GenExteriorPolynomialRing<GenExteriorPolynomial<GenExteriorPolynomial<BigInteger>>>(ppf,
@@ -226,8 +226,8 @@ public class GenExteriorPolynomialTest extends TestCase {
         BigInteger rf = new BigInteger();
         // System.out.println("rf = " + rf);
 
-        // non-commuting vars: abcdef
-        IndexList wf = IndexList.valueOf("abcdef");
+        // 6 non-commuting vars
+        IndexFactory wf = new IndexFactory(6);
         //System.out.println("wf = " + wf);
 
         // polynomials over integers
@@ -294,8 +294,8 @@ public class GenExteriorPolynomialTest extends TestCase {
         BigInteger rf = new BigInteger();
         // System.out.println("rf = " + rf);
 
-        // non-commuting vars: abcdef
-        IndexList wf = IndexList.valueOf("abcdef");
+        // 6 non-commuting vars
+        IndexFactory wf = new IndexFactory(6);
         //System.out.println("wf = " + wf);
 
         // polynomials over integers
@@ -326,7 +326,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         //System.out.println("d-e = " + d.subtract(e) );
         assertEquals("a+(b+c) = (a+b)+c", d, e);
 
-        IndexList u = IndexList.random(rl);
+        IndexList u = wf.random(rl);
         BigInteger x = rf.random(kl);
 
         b = new GenExteriorPolynomial<BigInteger>(fac, x, u);
@@ -368,8 +368,8 @@ public class GenExteriorPolynomialTest extends TestCase {
         BigInteger rf = new BigInteger();
         // System.out.println("rf = " + rf);
 
-        // non-commuting vars: abcdef
-        IndexList wf = IndexList.valueOf("abcdef");
+        // 6 non-commuting vars
+        IndexFactory wf = new IndexFactory(6);
         //System.out.println("wf = " + wf);
 
         // polynomials over integers
@@ -400,7 +400,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         //System.out.println("d-e = " + d.subtract(e) );
         assertEquals("a*(b*c) = (a*b)*c:", d, e);
 
-        IndexList u = IndexList.random(rl);
+        IndexList u = wf.random(rl);
         BigInteger x = rf.random(kl);
 
         b = new GenExteriorPolynomial<BigInteger>(fac, x, u);
@@ -437,8 +437,8 @@ public class GenExteriorPolynomialTest extends TestCase {
         BigInteger rf = new BigInteger();
         // System.out.println("rf = " + rf);
 
-        // non-commuting vars: abcdef
-        IndexList wf = IndexList.valueOf("abcdef");
+        // 6 non-commuting vars
+        IndexFactory wf = new IndexFactory(6);
         //System.out.println("wf = " + wf);
 
         // polynomials over integers
@@ -465,10 +465,10 @@ public class GenExteriorPolynomialTest extends TestCase {
         BigInteger rf = new BigInteger();
         //System.out.println("rf = " + rf.toScriptFactory());
 
-        // non-commuting vars: abcdef
+        // commuting vars: abcdef
         String[] sa = new String[] { "a", "b", "c", "d", "e", "f" };
-        String ss = "E(1,2,3,4,5,6)";
-        IndexList wf = new IndexList(ss);
+        //String ss = "E(1,2,3,4,5,6)";
+        IndexFactory wf = new IndexFactory(6);
         //System.out.println("wf = " + wf.toScript());
 
         // index list polynomials over integers
@@ -481,10 +481,10 @@ public class GenExteriorPolynomialTest extends TestCase {
         List<GenExteriorPolynomial<BigInteger>> gens = pf.generators();
         //System.out.println("gens = " + gens);
         GenExteriorPolynomial<BigInteger> g1, g2, g3, g4, epol;
-        g1 = gens.get(1);
-        g2 = gens.get(2);
-        g3 = gens.get(3);
-        g4 = gens.get(4);
+        g1 = gens.get(2);
+        g2 = gens.get(3);
+        g3 = gens.get(4);
+        g4 = gens.get(5);
         //System.out.println("g1 = " + g1 + ", " + g1.toScript());
         //System.out.println("g2 = " + g2);
         assertEquals("#s == 4: ", g1.toString().length(), 4);
@@ -567,9 +567,9 @@ public class GenExteriorPolynomialTest extends TestCase {
         BigInteger rf = new BigInteger();
         //System.out.println("rf = " + rf.toScriptFactory());
 
-        // non-commuting indexes: 1 2 3 4 5 6
-        String ss = "E(1,2,3,4)";
-        IndexList wf = new IndexList(ss);
+        // non-commuting indexes: 0 1 2 3
+        //String ss = "E(1,2,3,4)";
+        IndexFactory wf = new IndexFactory(4);
         //System.out.println("wf = " + wf.toScript());
 
         // index list polynomials over integers
@@ -628,6 +628,9 @@ public class GenExteriorPolynomialTest extends TestCase {
         System.out.println("s1 = e2 _| g1dual = " + s1);
         s2 = e1.innerLeftProduct(g2dual).abs().divide(new BigInteger(5));
         System.out.println("s2 = e1 _| g2dual = " + s2);
+
+        //System.out.println("s1 * s2 = " + s1.multiply(s2));
+        //assertTrue("s1 /\\ s2 == 0: ", s1.multiply(s2).isZERO());
     }
 
 }

@@ -1844,7 +1844,7 @@ public class GenPolynomialTokenizer {
     @SuppressWarnings("unchecked")
     public GenExteriorPolynomial nextExteriorPolynomial(GenExteriorPolynomialRing wfac) throws IOException {
         logger.info("wfac = {}", wfac);
-        IndexList wf = wfac.ixlist;
+        IndexFactory wf = wfac.ixfac;
 
         GenExteriorPolynomial a = wfac.getZERO();
         GenExteriorPolynomial a1 = wfac.getONE();
@@ -2052,7 +2052,7 @@ public class GenPolynomialTokenizer {
                            e = null;
                        }
                     } else {
-                       e = wf;
+			e = null; //wf.valueOf(tok.sval);
                     }
                     logger.info("monom {}", e);
                     //System.out.println("index list, e " + e);
