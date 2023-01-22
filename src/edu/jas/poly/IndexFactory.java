@@ -14,19 +14,17 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import edu.jas.kern.StringUtil;
-import edu.jas.structure.MonoidElem;
 import edu.jas.structure.MonoidFactory;
 
 
 /**
- * IndexList factory implements a factory for index lists for exterior polynomials.
- * Objects of this class are intended to
- * be immutable. If in doubt use <code>valueOf</code> to
- * get a conformant index list.
+ * IndexList factory implements a factory for index lists for exterior
+ * polynomials. Objects of this class are intended to be immutable. If in doubt
+ * use <code>valueOf</code> to get a conformant index list.
  * @see "masnc.DIPE.mi#ILEXPR from SAC2/MAS"
  * @author Heinz Kredel
  */
@@ -80,15 +78,28 @@ public class IndexFactory implements MonoidFactory<IndexList> {
 
     /**
      * Constructor for IndexFactory.
-     * @param r length of index lists.
+     * @param r length of index lists, starting with index 1.
      */
     public IndexFactory(int r) {
+        this(1, r);
+    }
+
+
+    /**
+     * Constructor for IndexFactory.
+     * @param s start index.
+     * @param r length of index lists.
+     */
+    public IndexFactory(int s, int r) {
         if (r < 0) {
             throw new IllegalArgumentException("negative length index not allowed");
         }
+        if (s < 0) {
+            throw new IllegalArgumentException("negative start index not allowed");
+        }
         imaxlength = r;
-        imax = new IndexList(this, 1, sequenceArray(0, imaxlength));
-        ONE = new IndexList(this, 1, sequenceArray(0, 0));
+        imax = new IndexList(this, 1, sequenceArray(s, imaxlength));
+        ONE = new IndexList(this, 1, sequenceArray(s, 0));
     }
 
 
@@ -103,7 +114,7 @@ public class IndexFactory implements MonoidFactory<IndexList> {
         int b = o.minDeg();
         int e = o.maxDeg();
         imaxlength = e - b;
-        imax = new IndexList(this, 1, sequenceArray(0, imaxlength));
+        imax = new IndexList(this, 1, sequenceArray(b, imaxlength));
         if (imaxlength != o.length()) {
             logger.warn("length do not match: {} != {}", imaxlength, o.length());
         }

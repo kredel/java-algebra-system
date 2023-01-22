@@ -481,10 +481,10 @@ public class GenExteriorPolynomialTest extends TestCase {
         List<GenExteriorPolynomial<BigInteger>> gens = pf.generators();
         //System.out.println("gens = " + gens);
         GenExteriorPolynomial<BigInteger> g1, g2, g3, g4, epol;
-        g1 = gens.get(2);
-        g2 = gens.get(3);
-        g3 = gens.get(4);
-        g4 = gens.get(5);
+        g1 = gens.get(1);
+        g2 = gens.get(2);
+        g3 = gens.get(3);
+        g4 = gens.get(4);
         //System.out.println("g1 = " + g1 + ", " + g1.toScript());
         //System.out.println("g2 = " + g2);
         assertEquals("#s == 4: ", g1.toString().length(), 4);
@@ -569,7 +569,7 @@ public class GenExteriorPolynomialTest extends TestCase {
 
         // non-commuting indexes: 0 1 2 3
         //String ss = "E(1,2,3,4)";
-        IndexFactory wf = new IndexFactory(4);
+        IndexFactory wf = new IndexFactory(4); // (1,4)
         //System.out.println("wf = " + wf.toScript());
 
         // index list polynomials over integers
@@ -580,10 +580,10 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertTrue("associative", pf.isAssociative());
         assertFalse("not field", pf.isField());
 
-        GenExteriorPolynomial<BigInteger> emaxd, p1, p2, q1, q2, s, g1, g2, e1, e2, e1dual, e2dual, q, qs, qt,
-                        g1dual, g2dual, s1, s2;
+        GenExteriorPolynomial<BigInteger> emaxd, p1, p2, q1, q2, s, g1, g2, e1, e2,
+            e1dual, e2dual, q, qs, qt, g1dual, g2dual, s1, s2;
         // parse points in 4-space as polynomials
-        emaxd = pf.parse("E(1,2,3,4)");
+        emaxd = pf.parse("E(1,2,3,4)"); // wf.imax 
         System.out.println("emaxd = " + emaxd);
         p1 = pf.parse("1 E(1) + 5 E(2) - 2 E(3) + 1 E(4)");
         p2 = pf.parse("4 E(1) + 3 E(2) + 6 E(3) + 1 E(4)");
@@ -596,21 +596,25 @@ public class GenExteriorPolynomialTest extends TestCase {
         s = pf.parse("1 E(3) + 1 E(4)");
         System.out.println("s = " + s);
 
+        // compute line(gerade) p1..p2 and q1..q2
         g1 = p1.multiply(p2).abs();
         g2 = q1.multiply(q2).abs().divide(new BigInteger(3));
         System.out.println("g1 = p1 /\\ p2 = " + g1);
         System.out.println("g2 = q1 /\\ q2 = " + g2);
 
+        // compute plane(ebene) g1..s and g2..s
         e1 = g1.multiply(s).abs().divide(new BigInteger(17));
         e2 = g2.multiply(s);
         System.out.println("e1 = g1 /\\ s = " + e1);
         System.out.println("e2 = g2 /\\ s = " + e2);
 
+        // compute dual planes of e1, e2 as e1..emaxd and e2..emaxd
         e1dual = e1.innerRightProduct(emaxd).abs();
         e2dual = e2.innerRightProduct(emaxd).abs();
         System.out.println("e1dual = e1 |_ emaxd = " + e1dual);
         System.out.println("e2dual = e2 |_ emaxd = " + e2dual);
 
+        // compute intersection of plane e1, e2 via dual plane sum
         q = e1dual.multiply(e2dual).abs().divide(new BigInteger(5));
         System.out.println("q  = (e1dual /\\ e2dual) = " + q);
         qs = q.innerRightProduct(emaxd).abs();
@@ -619,18 +623,25 @@ public class GenExteriorPolynomialTest extends TestCase {
         System.out.println("qt = e1 _| e2dual                = " + qt);
         assertEquals("qs == qt: ", qs, qt);
 
+        // compute dual line(gerade) of g1, g2
         g1dual = g1.innerRightProduct(emaxd);
         g2dual = g2.innerRightProduct(emaxd).abs();
         System.out.println("g1dual = g1 |_ emaxd = " + g1dual);
         System.out.println("g2dual = g2 |_ emaxd = " + g2dual);
 
+        // compute intersection of g1..e2 and g2..e1
         s1 = e2.innerLeftProduct(g1dual).abs().divide(new BigInteger(5));
         System.out.println("s1 = e2 _| g1dual = " + s1);
         s2 = e1.innerLeftProduct(g2dual).abs().divide(new BigInteger(5));
         System.out.println("s2 = e1 _| g2dual = " + s2);
 
-        //System.out.println("s1 * s2 = " + s1.multiply(s2));
-        //assertTrue("s1 /\\ s2 == 0: ", s1.multiply(s2).isZERO());
+        // check intersection of s..qs, qs..e1 and qs..e2
+        System.out.println(" s /\\ qs =  s \\in qs = " + s.multiply(qs));
+        System.out.println("qs /\\ e1 = qs \\in e1 = " + qs.multiply(e1));
+        System.out.println("qs /\\ e2 = qs \\in e2 = " + qs.multiply(e2));
+        assertTrue("qs /\\ s == 0: ", qs.multiply(s).isZERO());
+        assertTrue("qs /\\ e1 == 0: ", qs.multiply(e1).isZERO());
+        assertTrue("qs /\\ e2 == 0: ", qs.multiply(e2).isZERO());
     }
 
 }

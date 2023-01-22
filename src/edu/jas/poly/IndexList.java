@@ -5,13 +5,7 @@
 package edu.jas.poly;
 
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.structure.MonoidElem;
@@ -432,7 +426,7 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-      * IndexList divides test. Test if this is contained in V.
+     * IndexList divides test. Test if this is contained in V.
      * @param V other index list
      * @return true if this divides V, else false.
      */
