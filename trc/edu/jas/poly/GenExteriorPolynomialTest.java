@@ -10,6 +10,9 @@ import java.io.StringReader;
 import java.util.List;
 
 import edu.jas.arith.BigInteger;
+import edu.jas.arith.BigRational;
+import edu.jas.vector.GenMatrix;
+import edu.jas.vector.GenMatrixRing;
 import edu.jas.structure.RingElem;
 
 import junit.framework.Test;
@@ -559,6 +562,67 @@ public class GenExteriorPolynomialTest extends TestCase {
     }
 
 
+    /**
+     * Test matrix and vector.
+     */
+    public void testMatrix() {
+        // rational numbers
+        BigRational rf = new BigRational();
+        // System.out.println("rf = " + rf);
+
+        // matrix size
+        int c = 11; // to big 23;
+        IndexFactory ixfac = new IndexFactory(c);
+        //System.out.println("ixfac = " + ixfac);
+
+        // exterior polynomials over rational numbers
+        GenExteriorPolynomialRing<BigRational> epf;
+           epf = new GenExteriorPolynomialRing<BigRational>(rf, ixfac);
+        System.out.println("epf = " + epf.toScript());
+
+        // matrix over rational numbers
+        int r = c;
+        GenMatrixRing<BigRational> mf = new GenMatrixRing<BigRational>(rf, r, r);
+        System.out.println("mf = " + mf.toScript());
+
+        GenMatrix<BigRational> A = mf.getONE();
+        //System.out.println("A = " + A);
+        List<GenExteriorPolynomial<BigRational>> em = epf.fromMatrix(A);
+        //System.out.println("em = " + em);
+        assertEquals("#em == #A: ", em.size(), A.ring.rows);
+        BigRational dr = epf.determinant(em);
+        //System.out.println("dr = " + dr);
+        assertTrue("det(em) == 1: ", dr.isONE());
+
+        A = mf.getZERO();
+        //System.out.println("A = " + A);
+        em = epf.fromMatrix(A);
+        //System.out.println("em = " + em);
+        assertEquals("#em == #A: ", em.size(), 0);
+        dr = epf.determinant(em);
+        //System.out.println("dr = " + dr);
+        assertTrue("det(em) == 0: ", dr.isZERO());
+
+        A = mf.randomUpper(3, 0.55f);
+        //System.out.println("A = " + A);
+        em = epf.fromMatrix(A);
+        //System.out.println("em = " + em);
+        assertTrue("#em <= #A: ", em.size() <= A.matrix.size());
+        dr = epf.determinant(em);
+        System.out.println("dr = " + dr);
+        assertTrue("det(em) == 0: ", dr.isZERO());
+
+        A = mf.random(5, 0.67f);
+        //System.out.println("A = " + A);
+        em = epf.fromMatrix(A);
+        //System.out.println("em = " + em);
+        assertTrue("#em <= #A: ", em.size() <= A.matrix.size());
+        dr = epf.determinant(em);
+        System.out.println("dr = " + dr);
+        assertFalse("det(em) != 0: ", dr.isZERO());
+    }
+
+
     /*
      * Test old example.
      */
@@ -567,7 +631,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         BigInteger rf = new BigInteger();
         //System.out.println("rf = " + rf.toScriptFactory());
 
-        // non-commuting indexes: 0 1 2 3
+        // non-commuting indexes: 1 2 3 4
         //String ss = "E(1,2,3,4)";
         IndexFactory wf = new IndexFactory(4); // (1,4)
         //System.out.println("wf = " + wf.toScript());

@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.Random;
 
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +20,8 @@ import org.apache.logging.log4j.Logger;
 
 import edu.jas.kern.PreemptStatus;
 import edu.jas.kern.Scripting;
+import edu.jas.vector.GenVector;
+import edu.jas.vector.GenMatrix;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
 
@@ -493,6 +496,92 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
      */
     public GenExteriorPolynomial<C> fromInteger(BigInteger a) {
         return new GenExteriorPolynomial<C>(this, coFac.fromInteger(a), wone);
+    }
+
+
+    /**
+     * Get a GenExteriorPolynomial&lt;C&gt; from a GenVector&lt;C&gt;.
+     * @param a GenVector&lt;C&gt;.
+     * @return a GenExteriorPolynomial&lt;C&gt;.
+     */
+    public GenExteriorPolynomial<C> fromVector(GenVector<C> a) {
+        if (a == null || a.isZERO()) {
+            return ZERO;
+        }
+        //if (nvar != 1) {
+        //    throw new IllegalArgumentException("no univariate polynomial ring");
+        //}
+        List<IndexList> gen = ixfac.generators();
+        //System.out.println("gen = " + gen);
+        GenExteriorPolynomial<C> ret = copy(ZERO);
+        SortedMap<IndexList, C> tm = ret.val;
+        int i = -1;
+        for (C m : a.val) {
+            i++;
+            if (m.isZERO()) {
+                continue;
+            }
+            IndexList ix = gen.get(i); //new IndexList(ixfac, new int[]{ i });
+            tm.put(ix, m);
+        }
+        return ret;
+    }
+
+
+    /**
+     * Get a list of GenExteriorPolynomials from a GenMatrix.
+     * @param A GenMatrix
+     * @return a list of GenExteriorPolynomials.
+     */
+    public List<GenExteriorPolynomial<C>> fromMatrix(GenMatrix<C> A) {
+        List<GenExteriorPolynomial<C>> L = new ArrayList<GenExteriorPolynomial<C>>();
+        if (A == null || A.isZERO()) { //|| A.isZERO()
+            return L;
+        }
+        for (int i = 0; i < A.ring.rows; i++) {
+	    GenVector<C> v = A.getRow(i);
+            if (v.isZERO()) {
+                continue;
+            }
+            GenExteriorPolynomial<C> ep = fromVector(v);
+            //System.out.println("ep = " + ep);
+            L.add(ep);
+        }
+        return L;
+    }
+
+
+    /**
+     * Determinant form exterior polynomial / matrix.
+     * @param A list of GenExteriorPolynomials
+     * @return determinant of matrix.
+     */
+    public C determinant(List<GenExteriorPolynomial<C>> A) {
+        C det = coFac.getZERO();
+        if (A == null || A.isEmpty()) {
+            return det;
+        }
+        GenExteriorPolynomial<C> p = getONE();
+        for (GenExteriorPolynomial<C> ep : A) {
+            if (ep.isZERO()) {
+                return det;
+            }
+            p = p.multiply(ep);
+            //System.out.println("p = " + p);
+            if (p.isZERO()) {
+                return det;
+            }
+        }
+        if (p.length() > 1) {
+            return det;
+        }
+	IndexList di = p.leadingIndexList();
+        if (di.equals(ixfac.imax)) {
+            det = p.leadingBaseCoefficient();
+        } else {
+            System.out.println("p, nodet = " + p);
+        }
+        return det;
     }
 
 
