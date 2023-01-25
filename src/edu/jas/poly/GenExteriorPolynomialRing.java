@@ -575,12 +575,89 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
         if (p.length() > 1) {
             return det;
         }
-	IndexList di = p.leadingIndexList();
-        if (di.equals(ixfac.imax)) {
-            det = p.leadingBaseCoefficient();
-        } else {
-            System.out.println("p, nodet = " + p);
+        det = p.leadingBaseCoefficient();
+        // IndexList di = p.leadingIndexList();
+        // if (di.equals(ixfac.imax)) {
+        //     det = p.leadingBaseCoefficient();
+        // } else {
+        //     System.out.println("p in det = " + p);
+        // }
+        return det;
+    }
+
+
+    /**
+     * Get a GenExteriorPolynomial&lt;C&gt; from a univariate
+     * GenPolynomial&lt;C&gt;. Exponents are converted to indexes.
+     * @param a GenPolynomial&lt;C&gt;.
+     * @return a GenExteriorPolynomial&lt;C&gt;.
+     */
+    @SuppressWarnings("unchecked")
+    public GenExteriorPolynomial<C> fromPolynomial(GenPolynomial<C> a) {
+        if (a == null || a.isZERO()) {
+            return ZERO;
         }
+        if (a.ring.nvar != 1) {
+            throw new IllegalArgumentException("no univariate polynomial");
+        }
+        int deg = (int) a.degree();
+        if (deg > ixfac.imax.maxDeg()) {
+            throw new IllegalArgumentException("ensure deg <= ixfax.maxDeg: " + deg + " > " + ixfac.imax.maxDeg());
+        }
+        if (ixfac.imax.minDeg() > 0) {
+            throw new IllegalArgumentException("ensure ixfax.minDeg == 0: " + ixfac.imax.minDeg());
+        }
+        List<IndexList> gen = ixfac.generators();
+        //System.out.println("gen = " + gen);
+        GenExteriorPolynomial<C> ret = copy(ZERO);
+        SortedMap<IndexList, C> tm = ret.val;
+        for (Monomial m : a) {
+            int e = (int) m.e.getVal(0);
+            IndexList ix = gen.get(e); //new IndexList(ixfac, new int[]{ e });
+            C co = (C) m.c;
+            tm.put(ix, co);
+        }
+        return ret;
+    }
+
+
+    /**
+     * Resultant of two commutative polynaomials.
+     * @param A GenPolynomial
+     * @param B GenPolynomial
+     * @return res(A,B).
+     */
+    public C resultant(GenPolynomial<C> A, GenPolynomial<C> B) {
+        C det = coFac.getZERO();
+        if (A == null || A.isZERO() || B == null || B.isZERO()) {
+            return det;
+        }
+        int m = (int) A.degree();
+        int n = (int) B.degree();
+        GenExteriorPolynomial<C> a, b;
+        a = fromPolynomial(A);
+        b = fromPolynomial(B);
+        if (m < n) {
+            GenExteriorPolynomial<C> c = a;
+            a = b;
+            b = c;
+            int t = m;
+            m = n;
+            n = t;
+        }
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        List<GenExteriorPolynomial<C>> mat = new ArrayList<GenExteriorPolynomial<C>>(m+n);
+        for (int i = n-1; i >= 0; i--) {
+            GenExteriorPolynomial<C> c = a.shiftIndex(i);
+            mat.add(c);
+        }
+        for (int i = m-1; i >= 0; i--) {
+            GenExteriorPolynomial<C> c = b.shiftIndex(i);
+            mat.add(c);
+        }
+        //System.out.println("mat = " + mat);
+        det = determinant(mat);
         return det;
     }
 

@@ -7,6 +7,7 @@ package edu.jas.poly;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -649,8 +650,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * Maximal degree.
-     * @return maximal degree in any variables.
+     * Index degree.
+     * @return maximal length of indexes.
      */
     public long degree() {
         if (val.size() == 0) {
@@ -659,6 +660,25 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         long deg = 0;
         for (IndexList e : val.keySet()) {
             long d = e.degree();
+            if (d > deg) {
+                deg = d;
+            }
+        }
+        return deg;
+    }
+
+
+    /**
+     * Index maximal degree.
+     * @return maximal degree of indexes.
+     */
+    public long maxDegree() {
+        if (val.size() == 0) {
+            return 0; // 0 or -1 ?;
+        }
+        long deg = 0;
+        for (IndexList e : val.keySet()) {
+            long d = e.maxDeg();
             if (d > deg) {
                 deg = d;
             }
@@ -1714,6 +1734,42 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             throw new NotInvertibleException("element not invertible, divisible by modul");
         }
         return b;
+    }
+
+
+    /**
+     * GenExteriorPolynomial shift index. Add number to each index.
+     * @param s shift index by this number.
+     * @return this.shift(s).
+     */
+    public GenExteriorPolynomial<C> shiftIndex(int s) {
+        //if (ring.ixfac.length() != 1) {
+        //    throw new IllegalArgumentException("only 'univariate' polynomials");
+        //}
+        if (s == 0) {
+            return this;
+        }
+        if (this.isZERO()) {
+            return this;
+        }
+        List<IndexList> gen = ring.ixfac.generators();
+        //System.out.println("gen = " + gen);
+        long d = maxDegree();
+        //System.out.println("d = " + d);
+        if (d + s >= gen.size()) {
+            throw new IllegalArgumentException("ixfac to small: " + (d+s) + " >= " + gen.size());
+        }
+        GenExteriorPolynomial<C> p = ring.getZERO().copy();
+        SortedMap<IndexList, C> pv = p.val;
+        for (Map.Entry<IndexList, C> m1 : val.entrySet()) {
+            C c = m1.getValue();
+            IndexList ei = m1.getKey();
+            int e = ei.getVal(0);
+            e = e + s;
+            IndexList fi = gen.get(e);
+            pv.put(fi, c);
+        }
+        return p;
     }
 
 
