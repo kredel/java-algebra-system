@@ -577,7 +577,7 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
         }
         det = p.leadingBaseCoefficient();
         // IndexList di = p.leadingIndexList();
-        // if (di.equals(ixfac.imax)) {
+        // if (di.equals(ixfac.imax)) { // to big
         //     det = p.leadingBaseCoefficient();
         // } else {
         //     System.out.println("p in det = " + p);
@@ -645,8 +645,8 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
             m = n;
             n = t;
         }
-        System.out.println("a = " + a);
-        System.out.println("b = " + b);
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
         List<GenExteriorPolynomial<C>> mat = new ArrayList<GenExteriorPolynomial<C>>(m+n);
         for (int i = n-1; i >= 0; i--) {
             GenExteriorPolynomial<C> c = a.shiftIndex(i);

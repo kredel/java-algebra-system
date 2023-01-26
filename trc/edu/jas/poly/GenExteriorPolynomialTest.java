@@ -571,7 +571,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         // System.out.println("rf = " + rf);
 
         // matrix size
-        int c = 11; // to big 23;
+        int c = 13; // to big 23;
         IndexFactory ixfac = new IndexFactory(c);
         //System.out.println("ixfac = " + ixfac);
 
@@ -620,6 +620,20 @@ public class GenExteriorPolynomialTest extends TestCase {
         dr = epf.determinant(em);
         //System.out.println("dr = " + dr);
         assertFalse("det(em) != 0: ", dr.isZERO());
+
+        GenPolynomialRing<BigRational> fac;
+        fac = new GenPolynomialRing<BigRational>(rf, new String[] { "lambda" });
+        //System.out.println("fac = " + fac.toScript());
+
+        //System.out.println("A = " + A);
+        //GenPolynomial<BigRational> cp = fac.charPolynomial(A);
+        //System.out.println("cp = " + cp);
+        //BigRational er = fac.determinantFromCharPol(cp);
+
+        BigRational er = fac.determinant(A);
+        System.out.println("\ner = " + er);
+        System.out.println("dr = " + dr);
+        assertEquals("det_ext(A) == det_charpol(A): ", dr, er);
     }
 
 
@@ -631,45 +645,51 @@ public class GenExteriorPolynomialTest extends TestCase {
         //System.out.println("rf = " + rf.toScriptFactory());
 
         IndexFactory wf = new IndexFactory(0,20);
-        System.out.println("wf = " + wf.toScript());
+        //System.out.println("wf = " + wf.toScript());
 
         // index list polynomials over integers
         GenExteriorPolynomialRing<BigRational> pf;
         pf = new GenExteriorPolynomialRing<BigRational>(rf, wf);
-        System.out.println("pf = " + pf.toScript());
+        //System.out.println("pf = " + pf.toScript());
 
         GenPolynomialRing<BigRational> fac;
         fac = new GenPolynomialRing<BigRational>(rf, new String[] { "i" });
-        System.out.println("fac = " + fac.toScript());
+        //System.out.println("fac = " + fac.toScript());
 
         GenExteriorPolynomial<BigRational> a, b;
         GenPolynomial<BigRational> p = fac.random(kl/2, ll, el, ql);
-        System.out.println("p = " + p);
+        //System.out.println("p = " + p);
         a = pf.fromPolynomial(p);
-        System.out.println("a = " + a);
+        //System.out.println("a = " + a);
+        assertTrue("deg(a) == deg(p): ", a.maxDegree() == p.degree());
 
         b = a.shiftIndex(3);
-        System.out.println("b = " + b);
+        //System.out.println("b = " + b);
+        assertTrue("deg(b) == deg(a)+3: ", b.maxDegree() == a.maxDegree() + 3);
 
         GenPolynomial<BigRational> q = fac.random(kl/2, ll, el, ql);
-        System.out.println("q = " + q);
+        //System.out.println("q = " + q);
         BigRational r = pf.resultant(p, q);
-        System.out.println("r = " + r);
+        //System.out.println("r = " + r);
 
         GenPolynomial<BigRational> g = p.gcd(q);
-        System.out.println("g = " + g);
+        //System.out.println("g = " + g);
+        assertTrue("res != 0 && gcd == 1: " + r + ", " + g, !r.isZERO() && g.isONE());
 
+        //System.out.println("fac.gens = " + fac.generators());
         GenPolynomial<BigRational> f = fac.random(kl/3, ll, el/2, ql);
-        System.out.println("f = " + f);
+        f = f.sum( fac.generators().get(1) );
+        //System.out.println("f = " + f);
         p = p.multiply(f);
         q = q.multiply(f);
-        System.out.println("p = " + p);
-        System.out.println("q = " + q);
+        //System.out.println("p = " + p);
+        //System.out.println("q = " + q);
         r = pf.resultant(p, q);
-        System.out.println("r = " + r);
+        //System.out.println("r = " + r);
 
         g = p.gcd(q);
-        System.out.println("g = " + g);
+        //System.out.println("g = " + g);
+        assertTrue("res == 0 && gcd != 1: " + r + ", " + g, r.isZERO() && !g.isONE());
     }
 
 

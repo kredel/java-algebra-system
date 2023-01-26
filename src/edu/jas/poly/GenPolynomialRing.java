@@ -1326,7 +1326,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
      * Characterisic polynomial of matrix.
      * <b>Note:</b> using Faddeev–LeVerrier algorithm
      * @see https://en.wikipedia.org/wiki/Faddeev%E2%80%93LeVerrier_algorithm
-     * @param A a GenMatrix
+     * @param A a square matrix.
      * @return characteristic polynomial of A.
      */
     public GenPolynomial<C> charPolynomial(GenMatrix<C> A) {
@@ -1374,6 +1374,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
         }
         // only for demonstrating how to get the determinant, trace and inverse:
         C det = coFac.getZERO(); //ret.trailingBaseCoefficient();
+        //System.out.println("n = " + n + ", deg = " + ret.degree());
         if (n % 2 != 0) {
             det = det.negate();
         }
@@ -1398,6 +1399,39 @@ public class GenPolynomialRing<C extends RingElem<C>>
             }
         }
         return ret;
+    }
+
+
+    /**
+     * Determinant of matrix from characterisic polynomial.
+     * <b>Note:</b> using Faddeev–LeVerrier algorithm
+     * @see https://en.wikipedia.org/wiki/Faddeev%E2%80%93LeVerrier_algorithm
+     * @param P characteristic polynomial of a matrix.
+     * @return determinant from characteristic polynomial.
+     */
+    public C determinantFromCharPol(GenPolynomial<C> P) {
+        C det = coFac.getZERO();
+        if (P == null || P.isZERO()) {
+            return det;
+        }
+        det = P.trailingBaseCoefficient();
+        if (P.degree() % 2 != 0) {
+            det = det.negate();
+        }
+        return det;
+    }
+
+
+    /**
+     * Determinant of matrix via characterisic polynomial.
+     * <b>Note:</b> using Faddeev–LeVerrier algorithm
+     * @see https://en.wikipedia.org/wiki/Faddeev%E2%80%93LeVerrier_algorithm
+     * @param A square matrix.
+     * @return determinant of A from characteristic polynomial of A.
+     */
+    public C determinant(GenMatrix<C> A) {
+        GenPolynomial<C> P = charPolynomial(A);
+        return determinantFromCharPol(P);
     }
 
 
