@@ -631,9 +631,9 @@ public class GenExteriorPolynomialTest extends TestCase {
         //BigRational er = fac.determinantFromCharPol(cp);
 
         BigRational er = fac.determinant(A);
-        System.out.println("\ner = " + er);
-        System.out.println("dr = " + dr);
-        assertEquals("det_ext(A) == det_charpol(A): ", dr, er);
+        //System.out.println("\ner = " + er);
+        //System.out.println("dr = " + dr);
+        assertEquals("det_exterior(A) == det_charpol(A): ", dr, er);
     }
 
 

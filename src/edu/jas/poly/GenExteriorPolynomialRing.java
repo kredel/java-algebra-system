@@ -350,10 +350,10 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a (constant) GenExteriorPolynomial&lt;C&gt; element from a
+     * Get a (constant) GenExteriorPolynomial element from a
      * coefficient value.
      * @param a coefficient.
-     * @return a GenExteriorPolynomial&lt;C&gt;.
+     * @return a constant GenExteriorPolynomial.
      */
     public GenExteriorPolynomial<C> valueOf(C a) {
         return new GenExteriorPolynomial<C>(this, a);
@@ -361,9 +361,9 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial&lt;C&gt; element from a index list.
+     * Get a GenExteriorPolynomial element from a index list.
      * @param e index list.
-     * @return a GenExteriorPolynomial&lt;C&gt;.
+     * @return a GenExteriorPolynomial.
      */
     public GenExteriorPolynomial<C> valueOf(IndexList e) {
         return valueOf(coFac.getONE(), ixfac.valueOf(e));
@@ -371,9 +371,9 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial&lt;C&gt; element from an ExpVector.
+     * Get a GenExteriorPolynomial from an ExpVector.
      * @param e exponent vector.
-     * @return a GenExteriorPolynomial&lt;C&gt;.
+     * @return a GenExteriorPolynomial, if exponents are &gt; 1 return ZERO.
      */
     public GenExteriorPolynomial<C> valueOf(ExpVector e) {
         return valueOf(coFac.getONE(), ixfac.valueOf(e));
@@ -381,11 +381,10 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial&lt;C&gt; element from a coeffcient and a
-     * IndexList.
+     * Get a GenExteriorPolynomial from a coeffcient and a IndexList.
      * @param a coefficient.
      * @param e word.
-     * @return a GenExteriorPolynomial&lt;C&gt;.
+     * @return a GenExteriorPolynomial.
      */
     public GenExteriorPolynomial<C> valueOf(C a, IndexList e) {
         return new GenExteriorPolynomial<C>(this, a, e);
@@ -393,11 +392,10 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial&lt;C&gt; element from a coeffcient and an
-     * ExpVector.
+     * Get a GenExteriorPolynomial from a coeffcient and an ExpVector.
      * @param a coefficient.
      * @param e exponent vector.
-     * @return a GenExteriorPolynomial&lt;C&gt;.
+     * @return a GenExteriorPolynomial, if exponents are &gt; 1 return ZERO.
      */
     public GenExteriorPolynomial<C> valueOf(C a, ExpVector e) {
         return new GenExteriorPolynomial<C>(this, a, ixfac.valueOf(e));
@@ -405,10 +403,10 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial&lt;C&gt; element from a
-     * GenPolynomial&lt;C&gt;.
-     * @param a GenPolynomial.
-     * @return a GenExteriorPolynomial&lt;C&gt;.
+     * Get a GenExteriorPolynomial from a multivariate GenPolynomial,
+     * terms with exponents &gt; 1 are set to zero.
+     * @param a multivariate GenPolynomial.
+     * @return multivariate a GenExteriorPolynomial.
      */
     public GenExteriorPolynomial<C> valueOf(GenPolynomial<C> a) {
         if (a.isZERO()) {
@@ -431,10 +429,10 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial&lt;C&gt; element from a
-     * GenExteriorPolynomial&lt;C&gt; with conformant index lists.
+     * Get a GenExteriorPolynomial from a GenExteriorPolynomial with
+     * conformant index lists.
      * @param a GenExteriorPolynomial.
-     * @return a GenExteriorPolynomial&lt;C&gt;.
+     * @return a GenExteriorPolynomial with conformant index lists.
      */
     public GenExteriorPolynomial<C> valueOf(GenExteriorPolynomial<C> a) {
         if (a.isZERO()) {
@@ -459,10 +457,10 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a list of GenExteriorPolynomial&lt;C&gt; element from a list of
-     * GenPolynomial&lt;C&gt;.
+     * Get a list of GenExteriorPolynomials from a list of
+     * GenPolynomials.
      * @param A GenPolynomial list.
-     * @return a GenExteriorPolynomial&lt;C&gt; list.
+     * @return a GenExteriorPolynomial list.
      */
     public List<GenExteriorPolynomial<C>> valueOf(List<GenPolynomial<C>> A) {
         List<GenExteriorPolynomial<C>> B = new ArrayList<GenExteriorPolynomial<C>>(A.size());
@@ -478,10 +476,9 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a (constant) GenExteriorPolynomial&lt;C&gt; element from a long
-     * value.
+     * Get a (constant) GenExteriorPolynomial from a long value.
      * @param a long.
-     * @return a GenExteriorPolynomial&lt;C&gt;.
+     * @return a GenExteriorPolynomial.
      */
     public GenExteriorPolynomial<C> fromInteger(long a) {
         return new GenExteriorPolynomial<C>(this, coFac.fromInteger(a), wone);
@@ -489,8 +486,7 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a (constant) GenExteriorPolynomial&lt;C&gt; element from a BigInteger
-     * value.
+     * Get a (constant) GenExteriorPolynomial from a BigInteger value.
      * @param a BigInteger.
      * @return a GenExteriorPolynomial&lt;C&gt;.
      */
@@ -500,17 +496,14 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial&lt;C&gt; from a GenVector&lt;C&gt;.
-     * @param a GenVector&lt;C&gt;.
-     * @return a GenExteriorPolynomial&lt;C&gt;.
+     * Get a GenExteriorPolynomial from a GenVector.
+     * @param a GenVector.
+     * @return a GenExteriorPolynomial.
      */
     public GenExteriorPolynomial<C> fromVector(GenVector<C> a) {
         if (a == null || a.isZERO()) {
             return ZERO;
         }
-        //if (nvar != 1) {
-        //    throw new IllegalArgumentException("no univariate polynomial ring");
-        //}
         List<IndexList> gen = ixfac.generators();
         //System.out.println("gen = " + gen);
         GenExteriorPolynomial<C> ret = copy(ZERO);
@@ -554,7 +547,7 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
     /**
      * Determinant form exterior polynomial / matrix.
      * @param A list of GenExteriorPolynomials
-     * @return determinant of matrix.
+     * @return determinant of 'matrix' A.
      */
     public C determinant(List<GenExteriorPolynomial<C>> A) {
         C det = coFac.getZERO();
@@ -587,10 +580,11 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial&lt;C&gt; from a univariate
-     * GenPolynomial&lt;C&gt;. Exponents are converted to indexes.
-     * @param a GenPolynomial&lt;C&gt;.
-     * @return a GenExteriorPolynomial&lt;C&gt;.
+     * Get a GenExteriorPolynomial from a univariate
+     * GenPolynomial. Different exponents are converted to different
+     * indexes.
+     * @param a univariate GenPolynomial.
+     * @return a multivariate GenExteriorPolynomial.
      */
     @SuppressWarnings("unchecked")
     public GenExteriorPolynomial<C> fromPolynomial(GenPolynomial<C> a) {
