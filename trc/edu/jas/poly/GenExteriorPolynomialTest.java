@@ -429,6 +429,13 @@ public class GenExteriorPolynomialTest extends TestCase {
         d = a.multiply(y, x);
         //System.out.println("d = " + d);
         assertEquals("x a y = y a x", c, d);
+
+        IndexList v = wf.random(rl);
+        c = a.multiply(x, u, y, v);
+        //System.out.println("c = " + c);
+        d = a.multiply(y, u, x, v);
+        //System.out.println("d = " + d);
+        assertEquals("x u a y v = y u a x v", c, d);
     }
 
 
@@ -490,7 +497,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         g4 = gens.get(4);
         //System.out.println("g1 = " + g1 + ", " + g1.toScript());
         //System.out.println("g2 = " + g2);
-        assertEquals("#s == 4: ", g1.toString().length(), 4);
+        assertEquals("#s == 5: ", g1.toString().length(), 5);
         assertEquals("#s == 4: ", g2.toScript().length(), 4);
 
         epol = g1.multiply(g2).subtract(g3.multiply(g4));
@@ -638,35 +645,58 @@ public class GenExteriorPolynomialTest extends TestCase {
 
 
     /*
-     * Test conversions and resultant.
+     * Test conversions.
      */
-    public void testRes() {
+    public void testConversion() {
         BigRational rf = new BigRational();
         //System.out.println("rf = " + rf.toScriptFactory());
 
         IndexFactory wf = new IndexFactory(0,20);
         //System.out.println("wf = " + wf.toScript());
 
-        // index list polynomials over integers
+        // exterior polynomials over integers
         GenExteriorPolynomialRing<BigRational> pf;
         pf = new GenExteriorPolynomialRing<BigRational>(rf, wf);
         //System.out.println("pf = " + pf.toScript());
 
+        // commutative polynomials over rationals
+        GenPolynomialRing<BigRational> fac;
+        fac = new GenPolynomialRing<BigRational>(rf, new String[] { "a", "b", "c", "d" });
+        //System.out.println("fac = " + fac.toScript());
+
+        GenPolynomial<BigRational> p = fac.random(kl/2, ll, 2, ql);
+        //System.out.println("p = " + p);
+
+        GenExteriorPolynomial<BigRational> a = pf.valueOf(p);
+        //System.out.println("a = " + a);
+
+        GenExteriorPolynomial<BigRational> b = pf.valueOf(a);
+        //System.out.println("b = " + b);
+        assertEquals("a == b: ", a, b);
+    }
+
+
+    /*
+     * Test resultant.
+     */
+    public void testResultant() {
+        BigRational rf = new BigRational();
+        //System.out.println("rf = " + rf.toScriptFactory());
+        IndexFactory wf = new IndexFactory(0,20);
+        //System.out.println("wf = " + wf.toScript());
+
+        // exterior polynomials over rationals
+        GenExteriorPolynomialRing<BigRational> pf;
+        pf = new GenExteriorPolynomialRing<BigRational>(rf, wf);
+        //System.out.println("pf = " + pf.toScript());
+
+        // commutative univariate polynomials over rationals
         GenPolynomialRing<BigRational> fac;
         fac = new GenPolynomialRing<BigRational>(rf, new String[] { "i" });
         //System.out.println("fac = " + fac.toScript());
 
-        GenExteriorPolynomial<BigRational> a, b;
         GenPolynomial<BigRational> p = fac.random(kl/2, ll, el, ql);
         //System.out.println("p = " + p);
-        a = pf.fromPolynomial(p);
-        //System.out.println("a = " + a);
-        assertTrue("deg(a) == deg(p): ", a.maxDegree() == p.degree());
-
-        b = a.shiftIndex(3);
-        //System.out.println("b = " + b);
-        assertTrue("deg(b) == deg(a)+3: ", b.maxDegree() == a.maxDegree() + 3);
-
         GenPolynomial<BigRational> q = fac.random(kl/2, ll, el, ql);
         //System.out.println("q = " + q);
         BigRational r = pf.resultant(p, q);
@@ -709,7 +739,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         // index list polynomials over integers
         GenExteriorPolynomialRing<BigInteger> pf;
         pf = new GenExteriorPolynomialRing<BigInteger>(rf, wf);
-        System.out.println("pf = " + pf.toScript());
+        //System.out.println("pf = " + pf.toScript());
         assertFalse("not commutative", pf.isCommutative());
         assertTrue("associative", pf.isAssociative());
         assertFalse("not field", pf.isField());
@@ -718,7 +748,7 @@ public class GenExteriorPolynomialTest extends TestCase {
             e1dual, e2dual, q, qs, qt, g1dual, g2dual, s1, s2;
         // parse points in 4-space as polynomials
         emaxd = pf.parse("E(1,2,3,4)"); // wf.imax 
-        System.out.println("emaxd = " + emaxd);
+        System.out.println("emaxd = " + emaxd + ", imax = " + pf.ixfac.imax);
         p1 = pf.parse("1 E(1) + 5 E(2) - 2 E(3) + 1 E(4)");
         p2 = pf.parse("4 E(1) + 3 E(2) + 6 E(3) + 1 E(4)");
         System.out.println("p1 = " + p1);

@@ -298,10 +298,11 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
                 if (parenthesis) {
                     s.append(" )");
                 }
-                if (!e.isONE()) {
-                    s.append(" ");
-                }
+                //if (!e.isONE()) {
+                //    s.append(" ");
+                //}
             }
+            s.append(" ");
             s.append(e.toString());
         }
         if (val.size() > 1) {

@@ -770,7 +770,7 @@ public class GenPolynomialTest extends TestCase {
         A = mf.random(3, 0.6f);
         //System.out.println("A = " + A);
         cf = pf.charPolynomial(A); // mostly != 0
-        System.out.println("cf = " + cf);
+        //System.out.println("cf = " + cf);
         assertFalse("tcf(charPol(A)) == 0: " + cf, cf.trailingBaseCoefficient().isZERO());
     }
 
