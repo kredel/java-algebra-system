@@ -467,6 +467,54 @@ public class GenExteriorPolynomialTest extends TestCase {
     }
 
 
+    /**
+     * Test division.
+     */
+    public void testDivision() {
+        // rational
+        BigRational rf = new BigRational();
+        // System.out.println("rf = " + rf);
+
+        // 6 non-commuting vars
+        IndexFactory wf = new IndexFactory(6);
+        //System.out.println("wf = " + wf);
+
+        // polynomials over integers
+        GenExteriorPolynomialRing<BigRational> fac = new GenExteriorPolynomialRing<BigRational>(rf, wf);
+        //System.out.println("fac = " + fac);
+
+        GenExteriorPolynomial<BigRational> a = fac.random(kl+2, ll, el);
+        GenExteriorPolynomial<BigRational> b = fac.random(kl-1, ll, 2);
+        GenExteriorPolynomial<BigRational> c, d, e;
+
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+
+        //c = fac.getZERO();
+        //d = a;
+        GenExteriorPolynomial<BigRational>[] qr = a.quotientRemainder(fac.getONE());
+        c = qr[0];
+        d = qr[1];
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+        e = c.multiply(fac.getONE()).sum(d);
+        //System.out.println("e = " + e);
+        assertEquals("a = 0 a + a: ", a, e);
+
+        //c = fac.getONE();
+        //d = fac.getZERO();
+        qr = a.quotientRemainder(b);
+        c = qr[0];
+        d = qr[1];
+        //System.out.println("q = " + c);
+        //System.out.println("r = " + d);
+        e = c.multiply(b).sum(d);
+        //System.out.println("q b = " + c.multiply(b));
+        //System.out.println("e = " + e);
+        assertEquals("a = q b + r: ", a, e);
+    }
+
+
     /*
      * Test constructors and factory.
      */

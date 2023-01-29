@@ -1471,18 +1471,24 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * @param S nonzero GenExteriorPolynomial with invertible leading
      *            coefficient.
      * @return [ quotient , remainder ] with this = quotient * S + remainder and
-     *         deg(remainder) &lt; deg(S) or remiander = 0.
+     *         deg(remainder) &lt; deg(S) or remainder = 0.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
      *      .
      */
     @SuppressWarnings("unchecked")
     public GenExteriorPolynomial<C>[] quotientRemainder(GenExteriorPolynomial<C> S) {
         if (S == null || S.isZERO()) {
-            throw new ArithmeticException(this.getClass().getName() + " division by zero");
+            throw new ArithmeticException("division by zero");
+        }
+        GenExteriorPolynomial<C>[] ret = new GenExteriorPolynomial[2];
+        if (this.isZERO()) {
+            ret[0] = ring.getZERO();
+            ret[1] = ring.getZERO();
+            return ret;
         }
         C c = S.leadingBaseCoefficient();
         if (!c.isUnit()) {
-            throw new ArithmeticException(this.getClass().getName() + " lbcf not invertible " + c);
+            throw new ArithmeticException("lbcf not invertible " + c);
         }
         C ci = c.inverse();
         C one = ring.coFac.getONE();
@@ -1494,13 +1500,14 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         GenExteriorPolynomial<C> r = this.copy();
         while (!r.isZERO()) {
             IndexList f = r.leadingIndexList();
-            if (e.divides(f)) { // f.multipleOf(e)
+            if (e.divides(f)) {
                 C a = r.leadingBaseCoefficient();
-                IndexList g = e.divide(f); // divide not sufficient
-                //logger.info("div: f = {}, e = {}, g = {}, {}", f, e, g[0], g[1]);
+                //IndexList gl = e.innerLeftProduct(f);
+                IndexList g = e.innerRightProduct(f);
+                //System.out.println("divRem: f = " + f + ", e = " + e + ", g = " + g);
                 a = a.multiply(ci);
-                q = q.sum(a, g); // g[0].multiply(g[1])
-                h = S.multiply(a, g, one, ring.ixfac.getONE()); // g[0], g[1]
+                q = q.sum(a, g); // q + a g
+                h = S.multiply(a, g); // a g * S
                 r = r.subtract(h);
                 IndexList fr = r.leadingIndexList();
                 if (cmp.compare(f, fr) > 0) { // non noetherian reduction // todo
@@ -1510,7 +1517,6 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
                 break;
             }
         }
-        GenExteriorPolynomial<C>[] ret = new GenExteriorPolynomial[2];
         ret[0] = q;
         ret[1] = r;
         return ret;
@@ -1548,157 +1554,24 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial greatest common divisor. Only for univariate
-     * polynomials over fields.
+     * GenExteriorPolynomial greatest common divisor. <b>Note:</b> not
+     * implemented.
      * @param S GenExteriorPolynomial.
      * @return gcd(this,S).
      */
     public GenExteriorPolynomial<C> gcd(GenExteriorPolynomial<C> S) {
-        if (S == null || S.isZERO()) {
-            return this;
-        }
-        if (this.isZERO()) {
-            return S;
-        }
-        if (ring.ixfac.length() != 1) {
-            throw new IllegalArgumentException("no univariate polynomial " + ring);
-        }
-        GenExteriorPolynomial<C> x;
-        GenExteriorPolynomial<C> q = this;
-        GenExteriorPolynomial<C> r = S;
-        while (!r.isZERO()) {
-            x = q.remainder(r);
-            q = r;
-            r = x;
-        }
-        return q.monic(); // normalize
+        throw new UnsupportedOperationException("no gcd for exterior polynomials");
     }
 
 
     /**
-     * GenExteriorPolynomial extended greatest comon divisor. Only for
-     * univariate polynomials over fields.
+     * GenExteriorPolynomial extended greatest comon
+     * divisor. <b>Note:</b> not implemented.
      * @param S GenExteriorPolynomial.
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
      */
-    @SuppressWarnings("unchecked")
     public GenExteriorPolynomial<C>[] egcd(GenExteriorPolynomial<C> S) {
-        GenExteriorPolynomial<C>[] ret = new GenExteriorPolynomial[3];
-        ret[0] = null;
-        ret[1] = null;
-        ret[2] = null;
-        if (S == null || S.isZERO()) {
-            ret[0] = this;
-            ret[1] = this.ring.getONE();
-            ret[2] = this.ring.getZERO();
-            return ret;
-        }
-        if (this.isZERO()) {
-            ret[0] = S;
-            ret[1] = this.ring.getZERO();
-            ret[2] = this.ring.getONE();
-            return ret;
-        }
-        if (ring.ixfac.length() != 1) {
-            throw new IllegalArgumentException("no univariate polynomial " + ring);
-        }
-        if (this.isConstant() && S.isConstant()) {
-            C t = this.leadingBaseCoefficient();
-            C s = S.leadingBaseCoefficient();
-            C[] gg = t.egcd(s);
-            //System.out.println("coeff gcd = " + Arrays.toString(gg));
-            GenExteriorPolynomial<C> z = this.ring.getZERO();
-            ret[0] = z.sum(gg[0]);
-            ret[1] = z.sum(gg[1]);
-            ret[2] = z.sum(gg[2]);
-            return ret;
-        }
-        GenExteriorPolynomial<C>[] qr;
-        GenExteriorPolynomial<C> q = this;
-        GenExteriorPolynomial<C> r = S;
-        GenExteriorPolynomial<C> c1 = ring.getONE().copy();
-        GenExteriorPolynomial<C> d1 = ring.getZERO().copy();
-        GenExteriorPolynomial<C> c2 = ring.getZERO().copy();
-        GenExteriorPolynomial<C> d2 = ring.getONE().copy();
-        GenExteriorPolynomial<C> x1;
-        GenExteriorPolynomial<C> x2;
-        while (!r.isZERO()) {
-            qr = q.quotientRemainder(r);
-            q = qr[0];
-            x1 = c1.subtract(q.multiply(d1));
-            x2 = c2.subtract(q.multiply(d2));
-            c1 = d1;
-            c2 = d2;
-            d1 = x1;
-            d2 = x2;
-            q = r;
-            r = qr[1];
-        }
-        // normalize ldcf(q) to 1, i.e. make monic
-        C g = q.leadingBaseCoefficient();
-        if (g.isUnit()) {
-            C h = g.inverse();
-            q = q.multiply(h);
-            c1 = c1.multiply(h);
-            c2 = c2.multiply(h);
-        }
-        //assert ( ((c1.multiply(this)).sum( c2.multiply(S)).equals(q) ));
-        ret[0] = q;
-        ret[1] = c1;
-        ret[2] = c2;
-        return ret;
-    }
-
-
-    /**
-     * GenExteriorPolynomial half extended greatest comon divisor. Only for
-     * univariate polynomials over fields.
-     * @param S GenExteriorPolynomial.
-     * @return [ gcd(this,S), a ] with a*this + b*S = gcd(this,S).
-     */
-    @SuppressWarnings("unchecked")
-    public GenExteriorPolynomial<C>[] hegcd(GenExteriorPolynomial<C> S) {
-        GenExteriorPolynomial<C>[] ret = new GenExteriorPolynomial[2];
-        ret[0] = null;
-        ret[1] = null;
-        if (S == null || S.isZERO()) {
-            ret[0] = this;
-            ret[1] = this.ring.getONE();
-            return ret;
-        }
-        if (this.isZERO()) {
-            ret[0] = S;
-            return ret;
-        }
-        if (ring.ixfac.length() != 1) {
-            throw new IllegalArgumentException("no univariate polynomial " + ring);
-        }
-        GenExteriorPolynomial<C>[] qr;
-        GenExteriorPolynomial<C> q = this;
-        GenExteriorPolynomial<C> r = S;
-        GenExteriorPolynomial<C> c1 = ring.getONE().copy();
-        GenExteriorPolynomial<C> d1 = ring.getZERO().copy();
-        GenExteriorPolynomial<C> x1;
-        while (!r.isZERO()) {
-            qr = q.quotientRemainder(r);
-            q = qr[0];
-            x1 = c1.subtract(q.multiply(d1));
-            c1 = d1;
-            d1 = x1;
-            q = r;
-            r = qr[1];
-        }
-        // normalize ldcf(q) to 1, i.e. make monic
-        C g = q.leadingBaseCoefficient();
-        if (g.isUnit()) {
-            C h = g.inverse();
-            q = q.multiply(h);
-            c1 = c1.multiply(h);
-        }
-        //assert ( ((c1.multiply(this)).remainder(S).equals(q) ));
-        ret[0] = q;
-        ret[1] = c1;
-        return ret;
+        throw new UnsupportedOperationException("no gcd for exterior polynomials");
     }
 
 
@@ -1712,29 +1585,6 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             return ring.getONE().multiply(c);
         }
         throw new NotInvertibleException("element not invertible " + this + " :: " + ring);
-    }
-
-
-    /**
-     * GenExteriorPolynomial modular inverse. Only for univariate polynomials
-     * over fields.
-     * @param m GenExteriorPolynomial.
-     * @return a with with a*this = 1 mod m.
-     */
-    public GenExteriorPolynomial<C> modInverse(GenExteriorPolynomial<C> m) {
-        if (this.isZERO()) {
-            throw new NotInvertibleException("zero is not invertible");
-        }
-        GenExteriorPolynomial<C>[] hegcd = this.hegcd(m);
-        GenExteriorPolynomial<C> a = hegcd[0];
-        if (!a.isUnit()) { // gcd != 1
-            throw new NotInvertibleException("element not invertible, gcd != 1");
-        }
-        GenExteriorPolynomial<C> b = hegcd[1];
-        if (b.isZERO()) { // when m divides this, e.g. m.isUnit()
-            throw new NotInvertibleException("element not invertible, divisible by modul");
-        }
-        return b;
     }
 
 
