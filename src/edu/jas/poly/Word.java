@@ -403,7 +403,7 @@ public final class Word implements MonoidElem<Word> {
 
     /**
      * Word dependency on letters.
-     * @return sorted map of letters and the number of its occurences.
+     * @return sorted map of letters and the number of its occurrences.
      */
     public SortedMap<String, Integer> dependencyOnVariables() {
         return histogram(val);
@@ -413,7 +413,7 @@ public final class Word implements MonoidElem<Word> {
     /**
      * String dependency on letters.
      * @param v string.
-     * @return sorted map of letters and the number of its occurences.
+     * @return sorted map of letters and the number of its occurrences.
      */
     public static SortedMap<String, Integer> histogram(String v) {
         SortedMap<String, Integer> map = new TreeMap<String, Integer>();

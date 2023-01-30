@@ -603,7 +603,7 @@ public final class WordFactory implements MonoidFactory<Word> {
     /**
      * Concat variable names.
      * @param v an array of strings.
-     * @return the concatination of the strings in v.
+     * @return the concatenation of the strings in v.
      */
     public static String concat(String[] v) {
         StringBuffer s = new StringBuffer();
@@ -691,7 +691,7 @@ public final class WordFactory implements MonoidFactory<Word> {
     /**
      * Translate variable name.
      * @param c internal char.
-     * @return the extenal translated string.
+     * @return the external translated string.
      */
     public String transVar(char c) {
         int k = alphabet.indexOf(c);

@@ -569,7 +569,7 @@ public final class BigComplex
     }
 
 
-    /* arithmetic operations: conjugate, absolut value 
+    /* arithmetic operations: conjugate, absolute value 
      */
 
     /**

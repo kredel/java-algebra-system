@@ -152,7 +152,7 @@ public class ModuleList<C extends RingElem<C>> implements Serializable {
 
     /**
      * Test if list is empty.
-     * @return true if this is empty, alse false.
+     * @return true if this is empty, else false.
      */
     public boolean isEmpty() {
         if (list == null) {
@@ -167,7 +167,7 @@ public class ModuleList<C extends RingElem<C>> implements Serializable {
 
     /**
      * Test all elements are zero.
-     * @return true if all elements are zero, alse false.
+     * @return true if all elements are zero, else false.
      */
     public boolean isZERO() {
         if (list == null) {
@@ -307,7 +307,7 @@ public class ModuleList<C extends RingElem<C>> implements Serializable {
      * columns.
      * @param ring polynomial ring factory.
      * @param l list of list of polynomials.
-     * @return list of list of polynomials with same number of colums.
+     * @return list of list of polynomials with same number of columns.
      */
     public static <C extends RingElem<C>> List<List<GenPolynomial<C>>> padCols(GenPolynomialRing<C> ring,
                     List<List<GenPolynomial<C>>> l) {

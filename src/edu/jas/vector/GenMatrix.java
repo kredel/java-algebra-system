@@ -225,8 +225,8 @@ public class GenMatrix<C extends RingElem<C>> implements AlgebraElem<GenMatrix<C
 
 
     /**
-     * Get upper triangular U matrix with diagonale 1.
-     * @return U as matrix with equal length rows and diagonale 1.
+     * Get upper triangular U matrix with diagonal 1.
+     * @return U as matrix with equal length rows and diagonal 1.
      */
     public GenMatrix<C> getUpperScaled() {
         final C zero = ring.coFac.getZERO();

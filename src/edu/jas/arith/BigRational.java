@@ -1435,7 +1435,7 @@ class BigRationalIterator implements Iterator<BigRational> {
      * Remove an element if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove elements");
+        throw new UnsupportedOperationException("cannot remove elements");
     }
 }
 
@@ -1503,6 +1503,6 @@ class BigRationalUniqueIterator implements Iterator<BigRational> {
      * Remove an element if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove elements");
+        throw new UnsupportedOperationException("cannot remove elements");
     }
 }

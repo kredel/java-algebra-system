@@ -443,7 +443,7 @@ public class AlgebraicNumberRing<C extends RingElem<C>>
     /**
      * AlgebraicNumber interpolation algorithm. Assert deg(c.modul) &ge;
      * deg(A.modul) and c.modul * A.modul = this.modul. Special case with
-     * deg(A.modul) == 1. Similar algorithm as chinese remainder algortihm.
+     * deg(A.modul) == 1. Similar algorithm as chinese remainder algorithm.
      * @param c AlgebraicNumber.
      * @param ci inverse of (c.modul)(a) in ring of A.
      * @param am trailing base coefficient of modul of other AlgebraicNumber A.
@@ -619,7 +619,7 @@ class AlgebraicNumberIterator<C extends RingElem<C>> implements Iterator<Algebra
      * Remove a tuple if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove tuples");
+        throw new UnsupportedOperationException("cannot remove tuples");
     }
 
 }

@@ -1893,7 +1893,7 @@ public class GenPolynomial<C extends RingElem<C>>
      * polynomials over fields, but works in any case.
      * @param S nonzero GenPolynomial with invertible leading coefficient.
      * @return [ quotient , remainder ] with this = quotient * S + remainder and
-     *         deg(remainder) &lt; deg(S) or remiander = 0.
+     *         deg(remainder) &lt; deg(S) or remainder = 0.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
      */
     @SuppressWarnings("unchecked")
@@ -2027,7 +2027,7 @@ public class GenPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenPolynomial extended greatest comon divisor. Only for univariate
+     * GenPolynomial extended greatest common divisor. Only for univariate
      * polynomials over fields.
      * @param S GenPolynomial.
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
@@ -2103,7 +2103,7 @@ public class GenPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenPolynomial half extended greatest comon divisor. Only for univariate
+     * GenPolynomial half extended greatest common divisor. Only for univariate
      * polynomials over fields.
      * @param S GenPolynomial.
      * @return [ gcd(this,S), a ] with a*this + b*S = gcd(this,S).

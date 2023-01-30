@@ -888,6 +888,6 @@ class BigIntegerIterator implements Iterator<BigInteger> {
      * Remove an element if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove elements");
+        throw new UnsupportedOperationException("cannot remove elements");
     }
 }

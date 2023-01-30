@@ -83,7 +83,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
 
 
     /**
-     * Flag to enable if preemptive interrrupt is checked.
+     * Flag to enable if preemptive interrupt is checked.
      */
     final boolean checkPreempt = PreemptStatus.isAllowed();
 
@@ -395,7 +395,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
 
 
     /**
-     * Get a GenWordPolynomial&lt;C&gt; element from a coeffcient and a word.
+     * Get a GenWordPolynomial&lt;C&gt; element from a coefficient and a word.
      * @param a coefficient.
      * @param e word.
      * @return a GenWordPolynomial&lt;C&gt;.
@@ -406,7 +406,7 @@ public final class GenWordPolynomialRing<C extends RingElem<C>> implements RingF
 
 
     /**
-     * Get a GenWordPolynomial&lt;C&gt; element from a coeffcient and an
+     * Get a GenWordPolynomial&lt;C&gt; element from a coefficient and an
      * ExpVector.
      * @param a coefficient.
      * @param e exponent vector.

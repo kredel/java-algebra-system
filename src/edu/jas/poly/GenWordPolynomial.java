@@ -1223,7 +1223,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
      * polynomials over fields, but works in any case.
      * @param S nonzero GenWordPolynomial with invertible leading coefficient.
      * @return [ quotient , remainder ] with this = quotient * S + remainder and
-     *         deg(remainder) &lt; deg(S) or remiander = 0.
+     *         deg(remainder) &lt; deg(S) or remainder = 0.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
      *      .
      */
@@ -1357,7 +1357,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenWordPolynomial extended greatest comon divisor. Only for univariate
+     * GenWordPolynomial extended greatest common divisor. Only for univariate
      * polynomials over fields.
      * @param S GenWordPolynomial.
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
@@ -1432,7 +1432,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenWordPolynomial half extended greatest comon divisor. Only for
+     * GenWordPolynomial half extended greatest common divisor. Only for
      * univariate polynomials over fields.
      * @param S GenWordPolynomial.
      * @return [ gcd(this,S), a ] with a*this + b*S = gcd(this,S).
@@ -1590,7 +1590,7 @@ public final class GenWordPolynomial<C extends RingElem<C>>
                 return fac.getZERO(); // or null?
             }
             C y = me.getValue();
-            if (sv.get(ec) != null) { // eventualy need sum
+            if (sv.get(ec) != null) { // eventually need sum
                 throw new RuntimeException("x != null: need sum " + sv.get(ec) + " + " + y);
             }
             sv.put(ec, y);

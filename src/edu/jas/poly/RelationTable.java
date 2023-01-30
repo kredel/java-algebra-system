@@ -655,7 +655,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
                 }
             }
         }
-        // unreacheable code!
+        // unreachable code!
         throw new RuntimeException("no entry found in relation table for " + evp);
     }
 
@@ -978,7 +978,7 @@ public class RelationTable<C extends RingElem<C>> implements Serializable {
     /**
      * Add list of polynomial triples as relations.
      * @param rel = (e1,f1,p1, ...) where ei * fi = pi are solvable relations.
-     *            <b>Note:</b> Only because of type erasure, aequivalent to
+     *            <b>Note:</b> Only because of type erasure, equivalent to
      *            addRelations().
      */
     public void addSolvRelations(List<GenSolvablePolynomial<C>> rel) {

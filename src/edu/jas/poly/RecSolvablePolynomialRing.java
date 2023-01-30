@@ -412,7 +412,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a RecSolvablePolynomial&lt;C&gt; element from a coeffcient and an
+     * Get a RecSolvablePolynomial&lt;C&gt; element from a coefficient and an
      * exponent vector.
      * @param a coefficient.
      * @param e exponent vector.
@@ -726,7 +726,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
 
     /**
      * Reverse variables. Used e.g. in opposite rings.
-     * @param partial true for partialy reversed term orders.
+     * @param partial true for partially reversed term orders.
      * @return solvable polynomial ring factory with reversed variables.
      */
     @Override

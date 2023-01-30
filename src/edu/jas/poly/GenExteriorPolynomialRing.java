@@ -93,7 +93,7 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Flag to enable if preemptive interrrupt is checked.
+     * Flag to enable if preemptive interrupt is checked.
      */
     final boolean checkPreempt = PreemptStatus.isAllowed();
 
@@ -381,7 +381,7 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial from a coeffcient and a IndexList.
+     * Get a GenExteriorPolynomial from a coefficient and a IndexList.
      * @param a coefficient.
      * @param e word.
      * @return a GenExteriorPolynomial.
@@ -392,7 +392,7 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial from a coeffcient and an ExpVector.
+     * Get a GenExteriorPolynomial from a coefficient and an ExpVector.
      * @param a coefficient.
      * @param e exponent vector.
      * @return a GenExteriorPolynomial, if exponents are &gt; 1 return ZERO.

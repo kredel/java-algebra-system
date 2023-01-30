@@ -89,7 +89,7 @@ public class TermOrderOptimization {
     /**
      * Degree matrix of coefficient polynomials.
      * @param A polynomial to be considered.
-     * @return degree matrix for the coeficients.
+     * @return degree matrix for the coefficients.
      */
     public static <C extends RingElem<C>> List<GenPolynomial<BigInteger>> degreeMatrixOfCoefficients(
                     GenPolynomial<GenPolynomial<C>> A) {
@@ -128,7 +128,7 @@ public class TermOrderOptimization {
     /**
      * Degree matrix of coefficient polynomials.
      * @param L list of polynomial to be considered.
-     * @return degree matrix for the coeficients.
+     * @return degree matrix for the coefficients.
      */
     public static <C extends RingElem<C>> List<GenPolynomial<BigInteger>> degreeMatrixOfCoefficients(
                     Collection<GenPolynomial<GenPolynomial<C>>> L) {

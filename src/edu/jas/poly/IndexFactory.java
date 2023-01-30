@@ -416,7 +416,7 @@ public class IndexFactory implements MonoidFactory<IndexList> {
 
 
     /**
-     * hashCode. Optimized for small indexs, i.e. &le; 2<sup>4</sup> and small
+     * hashCode. Optimized for small indexes, i.e. &le; 2<sup>4</sup> and small
      * number of variables, i.e. &le; 8.
      * @see java.lang.Object#hashCode()
      */

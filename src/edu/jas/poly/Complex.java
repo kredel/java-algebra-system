@@ -364,7 +364,7 @@ public class Complex<C extends RingElem<C>> implements StarRingElem<Complex<C>>,
     }
 
 
-    /* arithmetic operations: conjugate, absolut value 
+    /* arithmetic operations: conjugate, absolute value 
      */
 
     /**

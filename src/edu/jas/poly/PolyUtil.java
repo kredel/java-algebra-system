@@ -121,7 +121,7 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param rfac recursive polynomial ring factory.
      * @param L list of polynomials to be converted.
-     * @return Recursive represenations of the list in the ring rfac.
+     * @return Recursive representations of the list in the ring rfac.
      */
     public static <C extends RingElem<C>> List<GenPolynomial<GenPolynomial<C>>> recursive(
                     GenPolynomialRing<GenPolynomial<C>> rfac, List<GenPolynomial<C>> L) {
@@ -787,7 +787,7 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param rfac recursive polynomial ring factory.
      * @param A polynomial to be converted.
-     * @return Recursive represenations of A in the ring rfac.
+     * @return Recursive representations of A in the ring rfac.
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> toRecursive(
                     GenPolynomialRing<GenPolynomial<C>> rfac, GenPolynomial<C> A) {
@@ -817,7 +817,7 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param rfac recursive solvable polynomial ring factory.
      * @param A solvable polynomial to be converted.
-     * @return Recursive represenations of A in the ring rfac.
+     * @return Recursive representations of A in the ring rfac.
      */
     public static <C extends RingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> toRecursive(
                     GenSolvablePolynomialRing<GenPolynomial<C>> rfac, GenSolvablePolynomial<C> A) {
@@ -2119,7 +2119,7 @@ public class PolyUtil {
     /**
      * Evaluate at main variable.
      * @param <C> coefficient type.
-     * @param cfac coefficent polynomial ring factory.
+     * @param cfac coefficient polynomial ring factory.
      * @param A recursive polynomial to be evaluated.
      * @param a value to evaluate at.
      * @return A( x_1, ..., x_{n-1}, a ).
@@ -2163,7 +2163,7 @@ public class PolyUtil {
     /**
      * Evaluate at main variable.
      * @param <C> coefficient type.
-     * @param cfac coefficent polynomial ring factory.
+     * @param cfac coefficient polynomial ring factory.
      * @param A distributed polynomial to be evaluated.
      * @param a value to evaluate at.
      * @return A( x_1, ..., x_{n-1}, a ).
@@ -2175,7 +2175,7 @@ public class PolyUtil {
         }
         GenPolynomialRing<GenPolynomial<C>> rfac = A.ring.recursive(1);
         if (rfac.nvar + cfac.nvar != A.ring.nvar) {
-            throw new IllegalArgumentException("evaluateMain number of variabes mismatch");
+            throw new IllegalArgumentException("evaluateMain number of variables mismatch");
         }
         GenPolynomial<GenPolynomial<C>> Ap = recursive(rfac, A);
         return PolyUtil.<C> evaluateMainRecursive(cfac, Ap, a);
@@ -2185,7 +2185,7 @@ public class PolyUtil {
     /**
      * Evaluate at main variable.
      * @param <C> coefficient type.
-     * @param cfac coefficent ring factory.
+     * @param cfac coefficient ring factory.
      * @param L list of univariate polynomials to be evaluated.
      * @param a value to evaluate at.
      * @return list( A( x_1, ..., x_{n-1}, a ) ) for A in L.
@@ -2199,7 +2199,7 @@ public class PolyUtil {
     /**
      * Evaluate at main variable.
      * @param <C> coefficient type.
-     * @param cfac coefficent ring factory.
+     * @param cfac coefficient ring factory.
      * @param A univariate polynomial to be evaluated.
      * @param a value to evaluate at.
      * @return A( a ).
@@ -2242,7 +2242,7 @@ public class PolyUtil {
     /**
      * Evaluate at main variable.
      * @param <C> coefficient type.
-     * @param cfac coefficent ring factory.
+     * @param cfac coefficient ring factory.
      * @param L list of univariate polynomial to be evaluated.
      * @param a value to evaluate at.
      * @return list( A( a ) ) for A in L.
@@ -2261,7 +2261,7 @@ public class PolyUtil {
      * @param rfac coefficient polynomial ring C[x_1, ..., x_{k-1}] [x_k]
      *            factory, a recursive polynomial ring in 1 variable with
      *            coefficients in k-1 variables.
-     * @param nfac polynomial ring in n-1 varaibles C[x_1, ..., x_{k-1}]
+     * @param nfac polynomial ring in n-1 variables C[x_1, ..., x_{k-1}]
      *            [x_{k+1}, ..., x_n] factory, a recursive polynomial ring in
      *            n-k+1 variables with coefficients in k-1 variables.
      * @param dfac polynomial ring in n-1 variables. C[x_1, ..., x_{k-1},
@@ -2448,7 +2448,7 @@ public class PolyUtil {
         if (t.ring.nvar > 1) {
             fac = t.ring;
         }
-        // assert decending exponents, i.e. compatible term order
+        // assert descending exponents, i.e. compatible term order
         Map<ExpVector, C> val = f.getMap();
         GenPolynomial<C> s = null;
         long el1 = -1; // undefined
@@ -2622,7 +2622,7 @@ public class PolyUtil {
 
 
     /**
-     * Recursive GenPolynomial switch varaible blocks.
+     * Recursive GenPolynomial switch variable blocks.
      * @param <C> coefficient type.
      * @param P recursive GenPolynomial in R[X,Y].
      * @return this in R[Y,X].
@@ -2746,7 +2746,7 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param pfac polynomial ring factory.
      * @param L list of polynomials to be represented.
-     * @return Product represenation of L in the polynomial ring pfac.
+     * @return Product representation of L in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>> List<GenPolynomial<Product<C>>> toProductGen(
                     GenPolynomialRing<Product<C>> pfac, List<GenPolynomial<C>> L) {
@@ -2768,7 +2768,7 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param pfac polynomial ring factory.
      * @param A polynomial to be represented.
-     * @return Product represenation of A in the polynomial ring pfac.
+     * @return Product representation of A in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>> GenPolynomial<Product<C>> toProductGen(
                     GenPolynomialRing<Product<C>> pfac, GenPolynomial<C> A) {
@@ -2796,7 +2796,7 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param pfac product ring factory.
      * @param c coefficient to be represented.
-     * @return Product represenation of c in the ring pfac.
+     * @return Product representation of c in the ring pfac.
      */
     public static <C extends GcdRingElem<C>> Product<C> toProductGen(ProductRing<C> pfac, C c) {
 
@@ -2818,7 +2818,7 @@ public class PolyUtil {
      * @param pfac product polynomial ring factory.
      * @param c coefficient to be used.
      * @param e exponent vector.
-     * @return Product represenation of c X^e in the ring pfac.
+     * @return Product representation of c X^e in the ring pfac.
      */
     public static <C extends RingElem<C>> Product<GenPolynomial<C>> toProduct(
                     ProductRing<GenPolynomial<C>> pfac, C c, ExpVector e) {
@@ -2846,7 +2846,7 @@ public class PolyUtil {
      * @param <C> coefficient type.
      * @param pfac product polynomial ring factory.
      * @param A polynomial.
-     * @return Product represenation of the terms of A in the ring pfac.
+     * @return Product representation of the terms of A in the ring pfac.
      */
     public static <C extends RingElem<C>> Product<GenPolynomial<C>> toProduct(
                     ProductRing<GenPolynomial<C>> pfac, GenPolynomial<C> A) {
@@ -2868,7 +2868,7 @@ public class PolyUtil {
      * Product representation.
      * @param pfac product ring factory.
      * @param c coefficient to be represented.
-     * @return Product represenation of c in the ring pfac.
+     * @return Product representation of c in the ring pfac.
      */
     public static Product<ModInteger> toProduct(ProductRing<ModInteger> pfac, BigInteger c) {
 
@@ -2889,7 +2889,7 @@ public class PolyUtil {
      * Product representation.
      * @param pfac polynomial ring factory.
      * @param A polynomial to be represented.
-     * @return Product represenation of A in the polynomial ring pfac.
+     * @return Product representation of A in the polynomial ring pfac.
      */
     public static GenPolynomial<Product<ModInteger>> toProduct(GenPolynomialRing<Product<ModInteger>> pfac,
                     GenPolynomial<BigInteger> A) {
@@ -2916,7 +2916,7 @@ public class PolyUtil {
      * Product representation.
      * @param pfac polynomial ring factory.
      * @param L list of polynomials to be represented.
-     * @return Product represenation of L in the polynomial ring pfac.
+     * @return Product representation of L in the polynomial ring pfac.
      */
     public static List<GenPolynomial<Product<ModInteger>>> toProduct(
                     GenPolynomialRing<Product<ModInteger>> pfac, List<GenPolynomial<BigInteger>> L) {

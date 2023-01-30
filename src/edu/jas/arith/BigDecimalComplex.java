@@ -601,7 +601,7 @@ public final class BigDecimalComplex implements StarRingElem<BigDecimalComplex>,
     }
 
 
-    /* arithmetic operations: conjugate, absolut value 
+    /* arithmetic operations: conjugate, absolute value 
      */
 
     /**

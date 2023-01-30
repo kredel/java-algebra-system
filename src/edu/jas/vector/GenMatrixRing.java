@@ -68,7 +68,7 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
      * Constructors for GenMatrixRing.
      * @param b coefficient factory.
      * @param r number of rows.
-     * @param c number of colums.
+     * @param c number of columns.
      */
     public GenMatrixRing(RingFactory<C> b, int r, int c) {
         this(b, r, c, DEFAULT_BSIZE);
@@ -79,7 +79,7 @@ public class GenMatrixRing<C extends RingElem<C>> implements AlgebraFactory<GenM
      * Constructors for GenMatrixRing.
      * @param b coefficient factory.
      * @param r number of rows.
-     * @param c number of colums.
+     * @param c number of columns.
      * @param s block size for blocked operations.
      */
     @SuppressWarnings("unchecked")

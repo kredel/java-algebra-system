@@ -1565,7 +1565,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial extended greatest comon
+     * GenExteriorPolynomial extended greatest common
      * divisor. <b>Note:</b> not implemented.
      * @param S GenExteriorPolynomial.
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).

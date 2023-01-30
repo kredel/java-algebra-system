@@ -28,7 +28,7 @@ import edu.jas.structure.RingFactory;
  * <code>ExpVectorShort</code> and <code>ExpVectorByte</code>. The static
  * factory methods <code>create()</code> of <code>ExpVector</code> select the
  * respective storage unit. The selection of the desired storage unit is
- * internally done via the static variable <code>storunit</code>. This varaible
+ * internally done via the static variable <code>storunit</code>. This variable
  * should not be changed dynamically.
  * @author Heinz Kredel
  */
@@ -809,7 +809,7 @@ public abstract class ExpVector implements AbelianGroupElem<ExpVector> {
      * ExpVector sign.
      * @param U
      * @return 0 if U is zero, -1 if some entry is negative, 1 if no entry is
-     *         negativ and at least one entry is positive.
+     *         negative and at least one entry is positive.
      */
     public final static int EVSIGN(ExpVector U) {
         return U.signum();

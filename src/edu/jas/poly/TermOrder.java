@@ -18,7 +18,7 @@ import edu.jas.kern.Scripting;
 
 /**
  * Term order class for ordered polynomials. Implements the most used term
- * orders: graded, lexicographical, weight aray and block orders. For the
+ * orders: graded, lexicographical, weight array and block orders. For the
  * definitions see for example the articles
  * <a href="http://doi.acm.org/10.1145/43882.43887">Kredel "Admissible term
  * orderings used in computer algebra systems"</a> and

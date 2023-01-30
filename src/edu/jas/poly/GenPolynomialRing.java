@@ -128,7 +128,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Flag to enable if preemptive interrrupt is checked.
+     * Flag to enable if preemptive interrupt is checked.
      */
     volatile boolean checkPreempt = PreemptStatus.isAllowed();
 
@@ -465,7 +465,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
 
     /**
      * Get a String representation of the variable names.
-     * @return names seperated by commas.
+     * @return names separated by commas.
      */
     public String varsToString() {
         if (vars == null) {
@@ -613,7 +613,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenPolynomial&lt;C&gt; element from a coeffcient and an exponent
+     * Get a GenPolynomial&lt;C&gt; element from a coefficient and an exponent
      * vector.
      * @param a coefficient.
      * @param e exponent vector.
@@ -1163,7 +1163,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
 
     /**
      * Reverse variables. Used e.g. in opposite rings.
-     * @param partial true for partialy reversed term orders.
+     * @param partial true for partially reversed term orders.
      * @return polynomial ring factory with reversed variables.
      */
     public GenPolynomialRing<C> reverse(boolean partial) {
@@ -1270,7 +1270,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
         }
         // synchronized (knownVars) {
         //   for (int i = 0; i < vars.length; i++) {
-        //      knownVars.add(vars[i]); // eventualy names 'overwritten'
+        //      knownVars.add(vars[i]); // eventually names 'overwritten'
         //   }
         // }
     }
@@ -1323,7 +1323,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Characterisic polynomial of matrix.
+     * Characteristic polynomial of matrix.
      * <b>Note:</b> using Faddeev–LeVerrier algorithm
      * @see https://en.wikipedia.org/wiki/Faddeev%E2%80%93LeVerrier_algorithm
      * @param A a square matrix.
@@ -1403,7 +1403,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Determinant of matrix from characterisic polynomial.
+     * Determinant of matrix from characteristic polynomial.
      * <b>Note:</b> using Faddeev–LeVerrier algorithm
      * @see https://en.wikipedia.org/wiki/Faddeev%E2%80%93LeVerrier_algorithm
      * @param P characteristic polynomial of a matrix.
@@ -1423,7 +1423,7 @@ public class GenPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Determinant of matrix via characterisic polynomial.
+     * Determinant of matrix via characteristic polynomial.
      * <b>Note:</b> using Faddeev–LeVerrier algorithm
      * @see https://en.wikipedia.org/wiki/Faddeev%E2%80%93LeVerrier_algorithm
      * @param A square matrix.
@@ -1534,7 +1534,7 @@ class GenPolynomialIterator<C extends RingElem<C>> implements Iterator<GenPolyno
             powers.add(0, e); // add new ev at beginning
             //System.out.println("new e = " + e);
             //System.out.println("powers = " + powers);
-            if (coeffiter.size() == 1) { // shorten frist iterator by one element
+            if (coeffiter.size() == 1) { // shorten first iterator by one element
                 coeffiter.add(coeffiter.get(0));
                 Iterable<C> it = coeffiter.get(0);
                 List<C> elms = new ArrayList<C>();
@@ -1577,7 +1577,7 @@ class GenPolynomialIterator<C extends RingElem<C>> implements Iterator<GenPolyno
      * Remove an element if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove elements");
+        throw new UnsupportedOperationException("cannot remove elements");
     }
 }
 
@@ -1625,7 +1625,7 @@ class GenPolynomialMonomialIterator<C extends RingElem<C>> implements Iterator<G
             throw new IllegalArgumentException("only for infinite iterable coefficients implemented");
         }
 
-        // Cantor iterator for exponents and coeffcients
+        // Cantor iterator for exponents and coefficients
         List<Iterable> eci = new ArrayList<Iterable>(2); // no type parameter
         eci.add(ei);
         eci.add(coeffiter);
@@ -1679,6 +1679,6 @@ class GenPolynomialMonomialIterator<C extends RingElem<C>> implements Iterator<G
      * Remove an element if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove elements");
+        throw new UnsupportedOperationException("cannot remove elements");
     }
 }
