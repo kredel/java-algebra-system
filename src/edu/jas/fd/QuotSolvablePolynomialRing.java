@@ -700,7 +700,7 @@ public class QuotSolvablePolynomialRing<C extends GcdRingElem<C>>
 
     /**
      * Reverse variables. Used e.g. in opposite rings.
-     * @param partial true for partialy reversed term orders.
+     * @param partial true for partially reversed term orders.
      * @return solvable polynomial ring factory with reversed variables.
      */
     @Override

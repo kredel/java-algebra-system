@@ -94,7 +94,7 @@ public class GreatestCommonDivisorModEval<MOD extends GcdRingElem<MOD> & Modular
             return S;
         }
         GenPolynomialRing<MOD> fac = P.ring;
-        // recusion base case for univariate polynomials
+        // recursion base case for univariate polynomials
         if (fac.nvar <= 1) {
             GenPolynomial<MOD> T = baseGcd(P, S);
             return T;
@@ -357,7 +357,7 @@ public class GreatestCommonDivisorModEval<MOD extends GcdRingElem<MOD> & Modular
             return P;
         }
         GenPolynomialRing<MOD> fac = P.ring;
-        // recusion base case for univariate polynomials
+        // recursion base case for univariate polynomials
         if (fac.nvar <= 1) {
             GenPolynomial<MOD> T = baseResultant(P, S);
             return T;

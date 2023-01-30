@@ -61,7 +61,7 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
 
 
     /**
-     * GenPolynomial greatest comon divisor.
+     * GenPolynomial greatest common divisor.
      * @param P GenPolynomial.
      * @param S GenPolynomial.
      * @return gcd(P,S).
@@ -70,7 +70,7 @@ public interface GreatestCommonDivisor<C extends GcdRingElem<C>> extends Seriali
 
 
     /**
-     * GenPolynomial least comon multiple.
+     * GenPolynomial least common multiple.
      * @param P GenPolynomial.
      * @param S GenPolynomial.
      * @return lcm(P,S).

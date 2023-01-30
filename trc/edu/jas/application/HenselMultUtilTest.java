@@ -29,7 +29,7 @@ import junit.framework.TestSuite;
 
 
 /**
- * HenselMultUtil tests with JUnit. Two seperate classes because of package
+ * HenselMultUtil tests with JUnit. Two separate classes because of package
  * dependency.
  * @see edu.jas.ufd.HenselMultUtilTest
  * @author Heinz Kredel

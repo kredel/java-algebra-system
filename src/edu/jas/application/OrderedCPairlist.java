@@ -302,7 +302,7 @@ public class OrderedCPairlist<C extends GcdRingElem<C>> implements Serializable 
 
     /**
      * Remove the next required pair from the pairlist and reduction matrix.
-     * Appy the criterions 3 and 4 to see if the S-polynomial is required.
+     * Apply the criterions 3 and 4 to see if the S-polynomial is required.
      * @return the next pair if one exists, otherwise null.
      */
     public synchronized CPair<C> removeNext() {

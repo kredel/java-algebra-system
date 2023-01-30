@@ -77,7 +77,7 @@ public abstract class SquarefreeFieldCharP<C extends GcdRingElem<C>> extends Squ
             logger.warn("fac should be a field: {}", fac.toScript());
         }
         if (fac.characteristic().signum() == 0) {
-            throw new IllegalArgumentException("characterisic(fac) must be non-zero");
+            throw new IllegalArgumentException("characteristic(fac) must be non-zero");
         }
         coFac = fac;
         Object oFac = coFac;

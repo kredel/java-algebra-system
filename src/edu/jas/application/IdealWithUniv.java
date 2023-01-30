@@ -27,7 +27,7 @@ public class IdealWithUniv<C extends GcdRingElem<C>> implements Serializable {
 
 
     /**
-     * The list of univariate polynomials. Contains polynomials from serveral
+     * The list of univariate polynomials. Contains polynomials from several
      * rings, depending on the stage of the decomposition. 1) polynomials in a
      * ring of one variable, 2) polynomials depending on only one variable but
      * in a ring with multiple variables, 3) after contraction to a non-zero

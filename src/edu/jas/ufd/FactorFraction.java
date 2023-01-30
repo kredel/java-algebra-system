@@ -120,7 +120,7 @@ public class FactorFraction<C extends GcdRingElem<C>,
 
 
     /**
-     * Test if a non trivial factorization exsists.
+     * Test if a non trivial factorization exists.
      * @param P quotient pair (num,den), with gcd(num,den) == 1.
      * @return true if P is reducible, else false.
      */

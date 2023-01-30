@@ -406,16 +406,16 @@ public abstract class FactorAbsolute<C extends GcdRingElem<C>> extends FactorAbs
 
         GreatestCommonDivisorAbstract<AlgebraicNumber<C>> aengine = GCDFactory.getProxy(afacs.afac);
         //System.out.println("denom         = " + Pa);
-        //System.out.println("numer         = " + Aa);
-        List<GenPolynomial<AlgebraicNumber<C>>> numers = aengine.basePartialFraction(Aa, fact);
-        //System.out.println("part frac     = " + numers);
-        GenPolynomial<AlgebraicNumber<C>> A0 = numers.remove(0);
+        //System.out.println("number         = " + Aa);
+        List<GenPolynomial<AlgebraicNumber<C>>> numbers = aengine.basePartialFraction(Aa, fact);
+        //System.out.println("part frac     = " + numbers);
+        GenPolynomial<AlgebraicNumber<C>> A0 = numbers.remove(0);
         if (!A0.isZERO()) {
             throw new ArithmeticException(" A0 != 0: deg(A)>= deg(P)");
         }
         int i = 0;
         for (GenPolynomial<AlgebraicNumber<C>> fa : fact) {
-            GenPolynomial<AlgebraicNumber<C>> an = numers.get(i++);
+            GenPolynomial<AlgebraicNumber<C>> an = numbers.get(i++);
             if (fa.degree(0) <= 1) {
                 afactors.add(an.leadingBaseCoefficient());
                 adenom.add(fa);

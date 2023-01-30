@@ -408,7 +408,7 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
 
 
     /**
-     * Get a ResidueSolvableWordPolynomial&lt;C&gt; element from a coeffcient
+     * Get a ResidueSolvableWordPolynomial&lt;C&gt; element from a coefficient
      * and an ExpVector.
      * @param a coefficient.
      * @param e exponent vector.
@@ -722,7 +722,7 @@ public class ResidueSolvableWordPolynomialRing<C extends GcdRingElem<C>> extends
 
     /**
      * Reverse variables. Used e.g. in opposite rings.
-     * @param partial true for partialy reversed term orders.
+     * @param partial true for partially reversed term orders.
      * @return solvable polynomial ring factory with reversed variables.
      */
     @Override

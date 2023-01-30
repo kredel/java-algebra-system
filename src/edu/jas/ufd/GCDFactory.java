@@ -36,9 +36,9 @@ import edu.jas.structure.RingFactory;
  * the <code>GreatestCommonDivisor</code>r interface. The proxy will run two
  * implementations in parallel, return the first computed result and cancel the
  * second running task. On systems with one CPU the computing time will be two
- * times the time of the fastest algorithm implmentation. On systems with more
+ * times the time of the fastest algorithm implementation. On systems with more
  * than two CPUs the computing time will be the time of the fastest algorithm
- * implmentation.
+ * implementation.
  * 
  * <pre>
  * GreatestCommonDivisor&lt;CT&gt; engine;

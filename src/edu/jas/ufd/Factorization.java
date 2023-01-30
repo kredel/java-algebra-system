@@ -55,7 +55,7 @@ public interface Factorization<C extends GcdRingElem<C>> extends Serializable {
 
 
     /**
-     * GenPolynomial test if a non trivial factorization exsists.
+     * GenPolynomial test if a non trivial factorization exists.
      * @param P GenPolynomial.
      * @return true if P is reducible, else false.
      */

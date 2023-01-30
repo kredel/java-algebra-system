@@ -536,7 +536,7 @@ public class GenPolynomialTest extends TestCase {
             assertFalse("e < (0) ", e.signum() < 0);
         }
 
-        // test coefficents
+        // test coefficients
         Iterator<BigInteger> ct = p.coefficientIterator();
         while (ct.hasNext()) {
             BigInteger i = ct.next();

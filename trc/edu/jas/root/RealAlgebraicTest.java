@@ -88,12 +88,12 @@ public class RealAlgebraicTest extends TestCase {
         a = b = c = d = e = null;
         BigRational l = new BigRational(1);
         BigRational r = new BigRational(2);
-        Interval<BigRational> positiv = new Interval<BigRational>(l, r);
+        Interval<BigRational> positive = new Interval<BigRational>(l, r);
         String[] vars = new String[] { "alpha" };
         mfac = new GenPolynomialRing<BigRational>(new BigRational(1), rl, vars);
         GenPolynomial<BigRational> mo = mfac.univariate(0, 2);
         mo = mo.subtract(mfac.fromInteger(2)); // alpha^2 -2 
-        fac = new RealAlgebraicRing<BigRational>(mo, positiv);
+        fac = new RealAlgebraicRing<BigRational>(mo, positive);
         alpha = fac.getGenerator();
     }
 

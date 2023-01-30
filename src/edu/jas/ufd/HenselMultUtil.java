@@ -867,7 +867,7 @@ public class HenselMultUtil {
             for (GenPolynomial<MOD> Upp : U) {
                 Uf = Uf.multiply(Upp);
             }
-            if (false && !Cp.leadingExpVector().equals(Uf.leadingExpVector())) { // not meanigfull test
+            if (false && !Cp.leadingExpVector().equals(Uf.leadingExpVector())) { // not meaningful test
                 System.out.println("\nU    = " + U);
                 System.out.println("Cp   = " + Cp);
                 System.out.println("Uf   = " + Uf);

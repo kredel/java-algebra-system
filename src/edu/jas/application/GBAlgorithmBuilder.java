@@ -69,14 +69,14 @@ import edu.jas.ufd.QuotientRing;
  * the respective iterative signature based GB algorithm (over field
  * coefficients) to compute a Gr&ouml;bner base adding one polynomial after
  * another,</li>
- * <li><code>parallel()</code> additionaly compute a Gr&ouml;bner base over a
+ * <li><code>parallel()</code> additionally compute a Gr&ouml;bner base over a
  * field or integral domain in parallel,</li>
  * <li><code>euclideanDomain()</code> for computing a e-Gr&ouml;bner base,</li>
  * <li><code>domainAlgorithm(Algo)</code> for computing a d- or e-Gr&ouml;bner
  * base,</li>
  * </ul>
  * <p>
- * Finally call the method <code>build()</code> to obtain an implementaton of
+ * Finally call the method <code>build()</code> to obtain an implementation of
  * class <code>GroebnerBaseAbstract</code>. For example
  * 
  * <pre>
@@ -178,8 +178,8 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
 
 
     /**
-     * Build the GB algorithm implementaton.
-     * @return GB algorithm implementaton as GroebnerBaseAbstract object.
+     * Build the GB algorithm implementation.
+     * @return GB algorithm implementation as GroebnerBaseAbstract object.
      */
     public GroebnerBaseAbstract<C> build() {
         if (algo == null) {
@@ -324,7 +324,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
 
 
     /**
-     * Request parallel algorithm. Additionaly run a parallel algorithm via
+     * Request parallel algorithm. Additionally run a parallel algorithm via
      * GBProxy.
      * @return GBAlgorithmBuilder object.
      */
@@ -335,7 +335,7 @@ public class GBAlgorithmBuilder<C extends GcdRingElem<C>> implements Serializabl
 
 
     /**
-     * Request parallel algorithm. Additionaly run a parallel algorithm via
+     * Request parallel algorithm. Additionally run a parallel algorithm via
      * GBProxy.
      * @param threads number of threads requested.
      * @return GBAlgorithmBuilder object.

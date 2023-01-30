@@ -82,7 +82,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
 
 
     /**
-     * Univariate GenPolynomial greatest comon divisor. Uses univariate Hensel
+     * Univariate GenPolynomial greatest common divisor. Uses univariate Hensel
      * lifting.
      * @param P univariate GenPolynomial.
      * @param S univariate GenPolynomial.
@@ -269,7 +269,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                             && PolyUtil.<BigInteger> baseSparsePseudoRemainder(S, q).isZERO()) {
                 break;
             }
-            logger.info("final devision not successfull");
+            logger.info("final division not successful");
             //System.out.println("P rem q = " + PolyUtil.<BigInteger>baseSparsePseudoRemainder(P,q));
             //System.out.println("S rem q = " + PolyUtil.<BigInteger>baseSparsePseudoRemainder(S,q));
             //break;
@@ -279,7 +279,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
 
 
     /**
-     * Univariate GenPolynomial recursive greatest comon divisor. Uses
+     * Univariate GenPolynomial recursive greatest common divisor. Uses
      * multivariate Hensel list.
      * @param P univariate recursive GenPolynomial.
      * @param S univariate recursive GenPolynomial.
@@ -669,7 +669,7 @@ public class GreatestCommonDivisorHensel<MOD extends GcdRingElem<MOD> & Modular>
                 //System.out.println("exception : " + ni);
                 continue;
             }
-            //if (!HenselMultUtil.<MOD> isHenselLift(ui, uq, F, k, lift)) { // not meaningfull test
+            //if (!HenselMultUtil.<MOD> isHenselLift(ui, uq, F, k, lift)) { // not meaningful test
             //    logger.info("isHenselLift: false");
             //    //continue;
             //}

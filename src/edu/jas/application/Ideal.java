@@ -1468,7 +1468,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
      * Ideal head term containment test.
      * @param G list of polynomials.
      * @param H index set.
-     * @return true, if the vaiables of the head terms of each polynomial in G
+     * @return true, if the variables of the head terms of each polynomial in G
      *         are contained in H, else false.
      */
     protected boolean containsHT(Set<Integer> H, List<GenPolynomial<C>> G) {
@@ -1546,7 +1546,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Zero dimensional radical decompostition. See Seidenbergs lemma 92, and
+     * Zero dimensional radical decomposition. See Seidenbergs lemma 92, and
      * BWK lemma 8.13.
      * @return intersection of radical ideals G_i with ideal(this) subseteq
      *         cap_i( ideal(G_i) )
@@ -1664,7 +1664,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Zero dimensional ideal irreducible decompostition. See algorithm DIRGZD
+     * Zero dimensional ideal irreducible decomposition. See algorithm DIRGZD
      * of BGK 1986 and also PREDEC of the Gr&ouml;bner bases book 1993.
      * @return intersection H, of ideals G_i with ideal(this) subseteq cap_i(
      *         ideal(G_i) ) and each ideal G_i has only irreducible minimal
@@ -1721,7 +1721,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Zero dimensional ideal irreducible decompostition extension. One step
+     * Zero dimensional ideal irreducible decomposition extension. One step
      * decomposition via a minimal univariate polynomial in the lowest variable,
      * used after each normalPosition step.
      * @param upol list of univariate polynomials
@@ -1776,7 +1776,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Test for zero dimensional ideal decompostition.
+     * Test for zero dimensional ideal decomposition.
      * @param L intersection of ideals G_i with ideal(G) subseteq cap_i(
      *            ideal(G_i) ) and all minimal univariate polynomials of all G_i
      *            are irreducible
@@ -2222,7 +2222,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Zero dimensional ideal decompostition for real roots. See algorithm
+     * Zero dimensional ideal decomposition for real roots. See algorithm
      * mas.masring.DIPDEC0#DINTSR.
      * @return intersection of ideals G_i with ideal(this) subseteq cap_i(
      *         ideal(G_i) ) and each G_i contains at most bi-variate polynomials
@@ -2254,7 +2254,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Zero dimensional ideal prime decompostition. See algorithm
+     * Zero dimensional ideal prime decomposition. See algorithm
      * mas.masring.DIPDEC0#DINTSS.
      * @return intersection of ideals G_i with ideal(this) subseteq cap_i(
      *         ideal(G_i) ) and each G_i is a prime ideal
@@ -2297,7 +2297,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Zero dimensional ideal prime decompostition, with field extension. See
+     * Zero dimensional ideal prime decomposition, with field extension. See
      * algorithm mas.masring.DIPDEC0#DINTSS.
      * @return intersection of ideals G_i with ideal(this) subseteq cap_i(
      *         ideal(G_i) ) and each G_i is a prime ideal with eventually
@@ -2360,7 +2360,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Zero dimensional ideal primary decompostition.
+     * Zero dimensional ideal primary decomposition.
      * @return list of primary components of primary ideals G_i (pairwise
      *         co-prime) with ideal(this) = cap_i( ideal(G_i) ) together with
      *         the associated primes
@@ -2447,7 +2447,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Zero dimensional ideal primary decompostition.
+     * Zero dimensional ideal primary decomposition.
      * @param pdec list of prime ideals G_i with no field extensions
      * @return list of primary components of primary ideals G_i (pairwise
      *         co-prime) with ideal(this) = cap_i( ideal(G_i) ) together with
@@ -2473,7 +2473,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Test for primary ideal decompostition.
+     * Test for primary ideal decomposition.
      * @param L list of primary components G_i
      * @return true if ideal(this) == cap_i( ideal(G_i) )
      */
@@ -2708,7 +2708,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Ideal radical decompostition.
+     * Ideal radical decomposition.
      * @return intersection of ideals G_i with radical(this) eq cap_i(
      *         ideal(G_i) ) and each G_i is a radical ideal and the G_i are
      *         pairwise co-prime
@@ -2816,7 +2816,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Ideal irreducible decompostition.
+     * Ideal irreducible decomposition.
      * @return intersection of ideals G_i with ideal(this) subseteq cap_i(
      *         ideal(G_i) ) and each G_i is an ideal with irreducible univariate
      *         polynomials (after extension to a zero dimensional ideal) and the
@@ -2907,7 +2907,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Ideal prime decompostition.
+     * Ideal prime decomposition.
      * @return intersection of ideals G_i with ideal(this) subseteq cap_i(
      *         ideal(G_i) ) and each G_i is a prime ideal and the G_i are
      *         pairwise co-prime
@@ -2996,7 +2996,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Test for ideal decompostition.
+     * Test for ideal decomposition.
      * @param L intersection of ideals G_i with ideal(G) eq cap_i(ideal(G_i) )
      * @return true if L is a decomposition of this, else false
      */
@@ -3053,7 +3053,7 @@ public class Ideal<C extends GcdRingElem<C>> implements Comparable<Ideal<C>>, Se
 
 
     /**
-     * Ideal primary decompostition.
+     * Ideal primary decomposition.
      * @return list of primary components of primary ideals G_i (pairwise
      *         co-prime) with ideal(this) = cap_i( ideal(G_i) ) together with
      *         the associated primes

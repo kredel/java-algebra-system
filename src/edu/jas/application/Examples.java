@@ -84,7 +84,7 @@ public class Examples {
 
 
     /**
-     * example2. abtract types:
+     * example2. abstract types:
      * List&lt;GenPolynomial&lt;Product&lt;Residue&lt;BigRational&gt;&gt;&gt;&gt;.
      */
     public static void example2() {
@@ -151,7 +151,7 @@ public class Examples {
 
 
     /**
-     * example3. abtract types: GB of List&lt;GenPolynomial&lt;Residue&lt;BigRational&gt;&gt;&gt;.
+     * example3. abstract types: GB of List&lt;GenPolynomial&lt;Residue&lt;BigRational&gt;&gt;&gt;.
      */
     public static void example3() {
         List<GenPolynomial<Residue<BigRational>>> L = null;
@@ -212,7 +212,7 @@ public class Examples {
 
 
     /**
-     * example4. abtract types: comprehensive GB of
+     * example4. abstract types: comprehensive GB of
      * List&lt;GenPolynomial&lt;GenPolynomial&lt;BigRational&gt;&gt;&gt;.
      */
     public static void example4() {
@@ -545,7 +545,7 @@ public class Examples {
 
 
     /**
-     * example10. abtract types: GB of
+     * example10. abstract types: GB of
      * List&lt;GenPolynomial&lt;AlgebraicNumber&lt;Quotient
      * &lt;AlgebraicNumber&lt;BigRational&gt;&gt;&gt;&gt;&gt;.
      */
@@ -635,7 +635,7 @@ public class Examples {
 
 
     /**
-     * example11. abtract types: GB of List&lt;GenPolynomial&lt;BigRational&gt;&gt;&gt;.
+     * example11. abstract types: GB of List&lt;GenPolynomial&lt;BigRational&gt;&gt;&gt;.
      */
     public static void example11() {
         Scripting.setLang(Scripting.Lang.Ruby);
@@ -683,7 +683,7 @@ public class Examples {
 
 
     /**
-     * example12. abtract types: GB of
+     * example12. abstract types: GB of
      * List&lt;GenPolynomial&lt;Quotient&lt;BigRational&gt;&gt;&gt;&gt;.
      */
     public static void example12() {

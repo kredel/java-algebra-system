@@ -435,8 +435,8 @@ public class ComprehensiveGroebnerBaseSeq<C extends GcdRingElem<C>>
         while (CSs.size() > 0) {
             cs = CSs.get(0); // remove(0);
             si++;
-            logger.info("poped GBsys number    {} with condition = {}", si, cs.condition);
-            logger.info("poped GBsys (remaining {}) with pairlist  = {}", (CSs.size() - 1), cs.pairlist);
+            logger.info("popped GBsys number    {} with condition = {}", si, cs.condition);
+            logger.info("popped GBsys (remaining {}) with pairlist  = {}", (CSs.size() - 1), cs.pairlist);
             if (!cs.isDetermined()) {
                 cs = cs.reDetermine();
             }

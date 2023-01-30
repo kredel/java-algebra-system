@@ -324,7 +324,7 @@ public class QuotSolvablePolynomialTest extends TestCase {
 
 
     /**
-     * Test converions.
+     * Test conversions.
      */
     public void testConversion() {
         GenSolvablePolynomialRing<GenPolynomial<BigRational>> pring;

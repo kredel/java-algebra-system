@@ -140,7 +140,7 @@ public class ExtensionFieldBuilder implements Serializable {
     /**
      * Algebraic field extension.
      * @param var name(s) for the algebraic generator(s).
-     * @param expr generating expresion, a univariate or multivariate polynomial
+     * @param expr generating expression, a univariate or multivariate polynomial
      *            in vars.
      */
     @SuppressWarnings("unchecked")
@@ -185,7 +185,7 @@ public class ExtensionFieldBuilder implements Serializable {
     /**
      * Real algebraic field extension.
      * @param var name for the algebraic generator.
-     * @param expr generating expresion, a univariate polynomial in var.
+     * @param expr generating expression, a univariate polynomial in var.
      * @param root isolating interval for a real root.
      */
     @SuppressWarnings("unchecked")
@@ -210,7 +210,7 @@ public class ExtensionFieldBuilder implements Serializable {
     /**
      * Complex algebraic field extension.
      * @param var name for the algebraic generator.
-     * @param expr generating expresion, a univariate polynomial in var.
+     * @param expr generating expression, a univariate polynomial in var.
      * @param root isolating rectangle for a complex root.
      */
     @SuppressWarnings("unchecked")

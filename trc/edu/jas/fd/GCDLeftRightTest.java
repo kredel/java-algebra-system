@@ -338,7 +338,7 @@ public class GCDLeftRightTest extends TestCase {
             //a = fd.basePrimitivePart(a);
             //b = fd.basePrimitivePart(b);
             //c = (GenSolvablePolynomial<BigQuaternion>) fd.basePrimitivePart(c).abs();
-            // replace - by ~ in coefficents for polynomial tokenizer
+            // replace - by ~ in coefficients for polynomial tokenizer
             //a = dfac.parse("( 3/2i1/2j1/2k~1/2 ) x^3 - ( 1i~1j0k~2 ) x + ( 11/2i15/2j1/2k~1/2 )");
             //b = dfac.parse("( ~1i2j3k1 ) x^4 + ( 0i1j~2k0 ) x^2 + ( 1/2i~3/2j1/2k3/2 )");
             //c = dfac.parse("( 1/2i1/2j~1/2k1/2 ) x^4 + ( 1i~1j0k0 ) x^3 + 1i1j0k1 x");
@@ -433,7 +433,7 @@ public class GCDLeftRightTest extends TestCase {
                 // skip for this turn
                 continue;
             }
-            // replace - by ~ in coefficents for polynomial tokenizer
+            // replace - by ~ in coefficients for polynomial tokenizer
             //a = dfac.parse("( 1i0j~1k0 ) x^2 - ( 9/2i5/2j~1/2k~1/2 ) x + 5/2i5/2j9/2k3/2");
             //b = dfac.parse("1i1j1k1 x^3 + ( 1i~1j1k1 )");
             ////c = dfac.parse("( ~3i11j~3k~1 ) x^2 - ( 5i~10j~5k0 ) x");
@@ -486,7 +486,7 @@ public class GCDLeftRightTest extends TestCase {
                 // skip for this turn
                 continue;
             }
-            // replace - by ~ in coefficents for polynomial tokenizer
+            // replace - by ~ in coefficients for polynomial tokenizer
             //a = dfac.parse("( 5/2i~1/2j~3/2k~3/2 ) x^2 - ( 1i0j0k~1 )");
             //b = dfac.parse("( 1i~1j1k0 ) x^2 - 1i2j0k0 x + ( 1/2i1/2j~1/2k3/2 )");
             //c = dfac.parse("( 0i~1j~2k~14 ) x");
@@ -638,7 +638,7 @@ public class GCDLeftRightTest extends TestCase {
                 // skip for this turn
                 continue;
             }
-            // replace - by ~ in coefficents for polynomial tokenizer
+            // replace - by ~ in coefficients for polynomial tokenizer
             //a = dfac.parse("( 1i~3j~3k~3 ) x^3 - ( 9i7j~12k~8 ) x^2 + 20i17j14k10 x + ( 19/2i27/2j~31/2k~7/2 ) ");
             //b = dfac.parse("( 3i2j~1k0 ) x^4 + ( 2i1j~3k~1 ) x^3 + ( 3i0j2k~1 ) x + ( 5/2i3/2j1/2k~5/2 ) ");
             //c = dfac.parse("0i0j4k0 x - ( 1/2i~1/2j~5/2k~5/2 ) ");

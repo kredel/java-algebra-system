@@ -50,7 +50,7 @@ public class SquarefreeRingChar0<C extends GcdRingElem<C>>
             throw new IllegalArgumentException("fac is a field: use SquarefreeFieldChar0");
         }
         if (fac.characteristic().signum() != 0) {
-            throw new IllegalArgumentException("characterisic(fac) must be zero");
+            throw new IllegalArgumentException("characteristic(fac) must be zero");
         }
         coFac = fac;
     }

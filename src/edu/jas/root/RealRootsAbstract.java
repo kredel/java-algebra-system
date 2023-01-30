@@ -204,7 +204,7 @@ public abstract class RealRootsAbstract<C extends RingElem<C> & Rational> implem
     /**
      * Isolating intervals for the real roots.
      * @param f univariate polynomial.
-     * @return a list of isolating intervalls for the real roots of f.
+     * @return a list of isolating intervals for the real roots of f.
      */
     public abstract List<Interval<C>> realRoots(GenPolynomial<C> f);
 

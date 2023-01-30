@@ -1510,7 +1510,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test product represenation conversion, rational numbers.
+     * Test product representation conversion, rational numbers.
      */
     public void testProductConversionRN() {
         GenPolynomialRing<BigRational> ufac;
@@ -1541,7 +1541,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test polynomal over product represenation conversion, algebraic numbers.
+     * Test polynomal over product representation conversion, algebraic numbers.
      */
     public void testPolyProductConversionAN() {
         GenPolynomialRing<BigRational> ufac;
@@ -1586,7 +1586,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test remove unused upper varaibles.
+     * Test remove unused upper variables.
      */
     public void testRemoveUnusedUpper() {
         //System.out.println("dfac = " + dfac);
@@ -1616,7 +1616,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test remove unused lower varaibles.
+     * Test remove unused lower variables.
      */
     public void testRemoveUnusedLower() {
         //System.out.println("dfac = " + dfac);
@@ -1646,7 +1646,7 @@ public class PolyUtilTest extends TestCase {
 
 
     /**
-     * Test remove unused middle varaibles.
+     * Test remove unused middle variables.
      */
     public void testRemoveUnusedMiddle() {
         //System.out.println("dfac = " + dfac);

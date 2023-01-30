@@ -90,15 +90,15 @@ public class ComplexAlgebraicTest extends TestCase {
         Complex<BigRational> sw = new Complex<BigRational>(cfac, rfac.getZERO(), rfac.getZERO());
         Complex<BigRational> se = new Complex<BigRational>(cfac, two, rfac.getZERO());
         Complex<BigRational> ne = new Complex<BigRational>(cfac, two, two);
-        Rectangle<BigRational> positiv = new Rectangle<BigRational>(nw, sw, se, ne);
-        //System.out.println("postiv = " + positiv);
+        Rectangle<BigRational> positive = new Rectangle<BigRational>(nw, sw, se, ne);
+        //System.out.println("postiv = " + positive);
         String[] vars = new String[] { "alpha" };
         mfac = new GenPolynomialRing<Complex<BigRational>>(cfac, rl, vars);
         Complex<BigRational> r1 = cfac.fromInteger(1).sum(im);
         Complex<BigRational> r2 = r1.conjugate();
         GenPolynomial<Complex<BigRational>> mo = mfac.univariate(0, 1);
         mo = mo.subtract(r1).multiply(mo.subtract(r2)); // (x - (1+i))((x - (1-i))) 
-        fac = new ComplexAlgebraicRing<BigRational>(mo, positiv);
+        fac = new ComplexAlgebraicRing<BigRational>(mo, positive);
         alpha = fac.getGenerator();
         //System.out.println("fac = " + fac);
     }

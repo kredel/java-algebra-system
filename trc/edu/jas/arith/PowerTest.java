@@ -247,7 +247,7 @@ public class PowerTest extends TestCase {
         assertEquals("a rem_r b == a rem b", c, e);
         e = c;
 
-        // no test since overriden in BigInteger:
+        // no test since overridden in BigInteger:
         BigInteger[] qr = a.quotientRemainder(b);
         assertEquals("qr[0] == a/b", qr[0], f);
         assertEquals("qr[1] == a rem b", qr[1], e);

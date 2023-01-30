@@ -114,7 +114,7 @@ public class Local<C extends GcdRingElem<C>> implements RingElem<Local<C>>, Quot
         if (p == null || p.isZERO()) {
             throw new IllegalArgumentException("denominator may not be in ideal");
         }
-        //d = p; cant do this
+        //d = p; can't do this
         C lc = d.leadingBaseCoefficient();
         if (!lc.isONE() && lc.isUnit()) {
             lc = lc.inverse();

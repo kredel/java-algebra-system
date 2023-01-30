@@ -68,7 +68,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
 
 
     /**
-     * Univariate GenPolynomial greatest comon divisor. Uses pseudoRemainder for
+     * Univariate GenPolynomial greatest common divisor. Uses pseudoRemainder for
      * remainder.
      * @param P univariate GenPolynomial.
      * @param S univariate GenPolynomial.
@@ -143,7 +143,7 @@ public class GreatestCommonDivisorSubres<C extends GcdRingElem<C>> extends Great
 
 
     /**
-     * Univariate GenPolynomial recursive greatest comon divisor. Uses
+     * Univariate GenPolynomial recursive greatest common divisor. Uses
      * pseudoRemainder for remainder.
      * @param P univariate recursive GenPolynomial.
      * @param S univariate recursive GenPolynomial.

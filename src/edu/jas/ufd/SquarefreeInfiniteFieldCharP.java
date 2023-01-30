@@ -119,7 +119,7 @@ public class SquarefreeInfiniteFieldCharP<C extends GcdRingElem<C>>
     /**
      * Characteristics root of a Quotient.
      * @param P Quotient.
-     * @return [p -&gt; k] if exists k with e=charactristic(P)*k and P = p**e,
+     * @return [p -&gt; k] if exists k with e=characteristic(P)*k and P = p**e,
      *         else null.
      */
     public SortedMap<Quotient<C>, Long> rootCharacteristic(Quotient<C> P) {

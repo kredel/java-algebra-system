@@ -223,7 +223,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
      * Winding number of complex function A on rectangle.
      * @param rect rectangle.
      * @param A univariate complex polynomial.
-     * @return winding number of A arround rect.
+     * @return winding number of A around rect.
      */
     public long windingNumber(Rectangle<C> rect, GenPolynomial<Complex<C>> A)
                     throws InvalidBoundaryException {
@@ -409,7 +409,7 @@ public class ComplexRootsSturm<C extends RingElem<C> & Rational> extends Complex
 
 
     /**
-     * Exclude zero. If an axis intersects with the rectangle, it is shrinked to
+     * Exclude zero. If an axis intersects with the rectangle, it is shrunk to
      * exclude the axis. Not used.
      * @param rect root isolating rectangle for f which contains exactly one
      *            root.

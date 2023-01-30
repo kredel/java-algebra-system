@@ -55,7 +55,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
      * Characteristics root of a coefficient. <b>Note:</b> not needed at the
      * moment.
      * @param p coefficient.
-     * @return [p -&gt; k] if exists k with e=k*charactristic(c) and c = p**e,
+     * @return [p -&gt; k] if exists k with e=k*characteristic(c) and c = p**e,
      *         else null.
      */
     public SortedMap<C, Long> rootCharacteristic(C p) {
@@ -116,7 +116,7 @@ public class SquarefreeFiniteFieldCharP<C extends GcdRingElem<C>> extends Square
      * Characteristics root of a polynomial. <b>Note:</b> call only in
      * recursion.
      * @param P polynomial.
-     * @return [p -&gt; k] if exists k with e=k*charactristic(P) and P = p**e,
+     * @return [p -&gt; k] if exists k with e=k*characteristic(P) and P = p**e,
      *         else null.
      */
     public SortedMap<GenPolynomial<C>, Long> rootCharacteristic(GenPolynomial<C> P) {

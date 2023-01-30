@@ -1100,7 +1100,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
 
 
     /**
-     * Univariate GenSolvablePolynomial half extended greatest comon divisor.
+     * Univariate GenSolvablePolynomial half extended greatest common divisor.
      * Uses sparse pseudoRemainder for remainder.
      * @param S GenSolvablePolynomial.
      * @return [ gcd(P,S), a ] with a*P + b*S = gcd(P,S).
@@ -1326,7 +1326,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
 
 
     /**
-     * Coefficient rigth Ore condition. Generators for the right Ore condition
+     * Coefficient right Ore condition. Generators for the right Ore condition
      * of two coefficients.
      * @param a coefficient.
      * @param b coefficient.

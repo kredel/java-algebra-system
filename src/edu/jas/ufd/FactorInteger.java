@@ -250,7 +250,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
                 // initialize polynomial factory and map polynomial
                 mfac = new GenPolynomialRing<MOD>(cofac, pfac);
                 am = PolyUtil.<MOD> fromIntegerCoefficients(mfac, P);
-                if (!am.degreeVector().equals(degv)) { // allways true
+                if (!am.degreeVector().equals(degv)) { // always true
                     logger.info("unlucky prime (deg) = {}", p);
                     continue;
                 }
@@ -859,7 +859,7 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
         }
         GenPolynomial<BigInteger> lprr = prr.leadingBaseCoefficient();
         //System.out.println("prr  = " + prr);
-        logger.info("leading coeffcient = {}", lprr);
+        logger.info("leading coefficient = {}", lprr);
         boolean isMonic = false; // multivariate monic
         if (lprr.isConstant()) { // isONE ?
             isMonic = true;
@@ -1505,11 +1505,11 @@ public class FactorInteger<MOD extends GcdRingElem<MOD> & Modular> extends Facto
     }
 
 
-    // not useable
+    // not usable
     boolean isNearlySquarefree(GenPolynomial<BigInteger> P) { // unused
         // in main variable
         GenPolynomialRing<BigInteger> pfac = P.ring;
-        if (pfac.nvar >= 0) { // allways true
+        if (pfac.nvar >= 0) { // always true
             return sengine.isSquarefree(P);
         }
         GenPolynomialRing<GenPolynomial<BigInteger>> rfac = pfac.recursive(1);

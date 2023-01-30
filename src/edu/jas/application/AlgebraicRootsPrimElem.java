@@ -163,7 +163,7 @@ public class AlgebraicRootsPrimElem<C extends GcdRingElem<C> & Rational>
         } catch (ClassCastException e) {
             return false;
         }
-                                  // not realy required, since depends on A, B
+                                  // not really required, since depends on A, B
         return super.equals(a) && pelem.equals(a.pelem) && runit.equals(a.runit);
     }
 
@@ -174,7 +174,7 @@ public class AlgebraicRootsPrimElem<C extends GcdRingElem<C> & Rational>
      */
     @Override
     public int hashCode() {
-                                               // not realy required, since depends on A, B
+                                               // not really required, since depends on A, B
         return (161 * super.hashCode() + 37) * pelem.hashCode() + runit.hashCode();
     }
 

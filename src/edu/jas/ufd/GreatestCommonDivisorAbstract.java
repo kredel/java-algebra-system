@@ -476,7 +476,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      */
     @SuppressWarnings("unused")
     public GenPolynomial<C> baseResultant(GenPolynomial<C> P, GenPolynomial<C> S) {
-        throw new UnsupportedOperationException("not implmented");
+        throw new UnsupportedOperationException("not implemented");
     }
 
 
@@ -491,7 +491,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
     @SuppressWarnings("unused")
     public GenPolynomial<GenPolynomial<C>> recursiveUnivariateResultant(GenPolynomial<GenPolynomial<C>> P,
                     GenPolynomial<GenPolynomial<C>> S) {
-        throw new UnsupportedOperationException("not implmented");
+        throw new UnsupportedOperationException("not implemented");
     }
 
 
@@ -772,7 +772,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
 
 
     /**
-     * Univariate GenPolynomial half extended greatest comon divisor. Uses
+     * Univariate GenPolynomial half extended greatest common divisor. Uses
      * sparse pseudoRemainder for remainder.
      * @param S GenPolynomial.
      * @return [ gcd(P,S), a ] with a*P + b*S = gcd(P,S).

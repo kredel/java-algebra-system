@@ -69,7 +69,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param <C> coefficient type.
      * @param pfac polynomial ring factory.
      * @param L list of polynomials to be represented.
-     * @return Product represenation of L in the polynomial ring pfac.
+     * @return Product representation of L in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>> List<GenPolynomial<Product<Residue<C>>>> toProductRes(
                     GenPolynomialRing<Product<Residue<C>>> pfac, List<GenPolynomial<GenPolynomial<C>>> L) {
@@ -92,7 +92,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param <C> coefficient type.
      * @param pfac polynomial ring factory.
      * @param A polynomial to be represented.
-     * @return Product represenation of A in the polynomial ring pfac.
+     * @return Product representation of A in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>> GenPolynomial<Product<Residue<C>>> toProductRes(
                     GenPolynomialRing<Product<Residue<C>>> pfac, GenPolynomial<GenPolynomial<C>> A) {
@@ -121,7 +121,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param <C> coefficient type.
      * @param pfac product ring factory.
      * @param c coefficient to be represented.
-     * @return Product represenation of c in the ring pfac.
+     * @return Product representation of c in the ring pfac.
      */
     public static <C extends GcdRingElem<C>> Product<Residue<C>> toProductRes(ProductRing<Residue<C>> pfac,
                     GenPolynomial<C> c) {
@@ -144,7 +144,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * Product residue representation.
      * @param <C> coefficient type.
      * @param CS list of ColoredSystems from comprehensive GB system.
-     * @return Product residue represenation of CS.
+     * @return Product residue representation of CS.
      */
     public static <C extends GcdRingElem<C>> List<GenPolynomial<Product<Residue<C>>>> toProductRes(
                     List<ColoredSystem<C>> CS) {
@@ -186,7 +186,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * Residue coefficient representation.
      * @param pfac polynomial ring factory.
      * @param L list of polynomials to be represented.
-     * @return Represenation of L in the polynomial ring pfac.
+     * @return Representation of L in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>> List<GenPolynomial<Residue<C>>> toResidue(
                     GenPolynomialRing<Residue<C>> pfac, List<GenPolynomial<GenPolynomial<C>>> L) {
@@ -209,7 +209,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * Residue coefficient representation.
      * @param pfac polynomial ring factory.
      * @param A polynomial to be represented.
-     * @return Represenation of A in the polynomial ring pfac.
+     * @return Representation of A in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>> GenPolynomial<Residue<C>> toResidue(
                     GenPolynomialRing<Residue<C>> pfac, GenPolynomial<GenPolynomial<C>> A) {
@@ -236,7 +236,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * Product slice.
      * @param <C> coefficient type.
      * @param L list of polynomials with product coefficients.
-     * @return Slices represenation of L.
+     * @return Slices representation of L.
      */
     public static <C extends GcdRingElem<C>> Map<Ideal<C>, PolynomialList<GenPolynomial<C>>> productSlice(
                     PolynomialList<Product<Residue<C>>> L) {
@@ -273,7 +273,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
     /**
      * Product slice at i.
      * @param <C> coefficient type.
-     * @param L list of polynomials with product coeffients.
+     * @param L list of polynomials with product coefficients.
      * @param i index of slice.
      * @return Slice of of L at i.
      */
@@ -304,7 +304,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param pfac polynomial ring factory.
      * @param L list of polynomials to be converted from product representation.
      * @param i index of product representation to be taken.
-     * @return Represenation of i-slice of L in the polynomial ring pfac.
+     * @return Representation of i-slice of L in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>> List<GenPolynomial<GenPolynomial<C>>> fromProduct(
                     GenPolynomialRing<GenPolynomial<C>> pfac, List<GenPolynomial<Product<Residue<C>>>> L,
@@ -335,7 +335,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * @param pfac polynomial ring factory.
      * @param P polynomial to be converted from product representation.
      * @param i index of product representation to be taken.
-     * @return Represenation of i-slice of P in the polynomial ring pfac.
+     * @return Representation of i-slice of P in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>> GenPolynomial<GenPolynomial<C>> fromProduct(
                     GenPolynomialRing<GenPolynomial<C>> pfac, GenPolynomial<Product<Residue<C>>> P, int i) {
@@ -364,7 +364,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * Product slice to String.
      * @param <C> coefficient type.
      * @param L list of polynomials with to be represented.
-     * @return Product represenation of L in the polynomial ring pfac.
+     * @return Product representation of L in the polynomial ring pfac.
      */
     public static <C extends GcdRingElem<C>> String productSliceToString(
                     Map<Ideal<C>, PolynomialList<GenPolynomial<C>>> L) {
@@ -392,7 +392,7 @@ public class PolyUtilApp<C extends RingElem<C>> {
      * Product slice to String.
      * @param <C> coefficient type.
      * @param L list of polynomials with product coefficients.
-     * @return string represenation of slices of L.
+     * @return string representation of slices of L.
      */
     public static <C extends GcdRingElem<C>> String productToString(PolynomialList<Product<Residue<C>>> L) {
         Map<Ideal<C>, PolynomialList<GenPolynomial<C>>> M;

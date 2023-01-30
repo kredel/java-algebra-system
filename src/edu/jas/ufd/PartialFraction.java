@@ -339,7 +339,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
             GenPolynomial<GenPolynomial<C>> pqden = PolyUtil.<C> fromAlgebraicCoefficients(prfac, aq.den);
             //System.out.println("pq = (" + pqnum + ") / (" + pqden + ")");
 
-            C one = cfac.coFac.getONE(); // varaible should no more occur in coefficient
+            C one = cfac.coFac.getONE(); // variable should no more occur in coefficient
             GenPolynomialRing<C> pfac = new GenPolynomialRing<C>(cfac.coFac, prfac);
             GenPolynomial<C> pnum = PolyUtil.<C> evaluateFirstRec(cfac, pfac, pqnum, one);
             GenPolynomial<C> pden = PolyUtil.<C> evaluateFirstRec(cfac, pfac, pqden, one);
@@ -355,7 +355,7 @@ public class PartialFraction<C extends GcdRingElem<C>> implements Serializable {
                 GenPolynomial<AlgebraicNumber<C>> prden = (GenPolynomial<AlgebraicNumber<C>>) pden;
                 pqnum = PolyUtil.<C> fromAlgebraicCoefficients(prfac, prnum);
                 pqden = PolyUtil.<C> fromAlgebraicCoefficients(prfac, prden);
-                one = cfac.coFac.getONE(); // varaible should no more occur in coefficient
+                one = cfac.coFac.getONE(); // variable should no more occur in coefficient
                 pfac = new GenPolynomialRing<C>(cfac.coFac, prfac);
                 pnum = PolyUtil.<C> evaluateFirstRec(cfac, pfac, pqnum, one);
                 pden = PolyUtil.<C> evaluateFirstRec(cfac, pfac, pqden, one);

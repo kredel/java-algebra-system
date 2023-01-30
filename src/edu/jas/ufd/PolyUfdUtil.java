@@ -111,7 +111,7 @@ public class PolyUfdUtil {
     /**
      * Evaluate at main variable.
      * @param <C> coefficient type.
-     * @param cfac coefficent polynomial ring factory.
+     * @param cfac coefficient polynomial ring factory.
      * @param A polynomial quotient to be evaluated.
      * @param a value to evaluate at.
      * @return A( x_1, ..., x_{n-1}, a ).
@@ -769,7 +769,7 @@ public class PolyUfdUtil {
         GenPolynomial<GenPolynomial<C>> Ac = PolyUfdUtil.<C> introduceLowerVariable(rfac, agen);
 
         // transform to bi-variate polynomial, 
-        // switching varaible sequence from Q[alpha][x] to Q[X][alpha]
+        // switching variable sequence from Q[alpha][x] to Q[X][alpha]
         GenPolynomial<GenPolynomial<C>> Pc = PolyUfdUtil.<C> substituteFromAlgebraicCoefficients(rfac, A, k);
         Pc = PolyUtil.<C> monic(Pc);
         //System.out.println("Pc = " + Pc.toScript() + " :: " + Pc.ring.toScript());

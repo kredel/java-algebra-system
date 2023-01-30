@@ -69,7 +69,7 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
 
 
     /**
-     * Univariate GenPolynomial greatest comon divisor. Always returns 1.
+     * Univariate GenPolynomial greatest common divisor. Always returns 1.
      * @param P univariate GenPolynomial.
      * @param S univariate GenPolynomial.
      * @return gcd(P,S).
@@ -131,7 +131,7 @@ public class GreatestCommonDivisorFake<C extends GcdRingElem<C>> extends Greates
 
 
     /**
-     * Univariate GenPolynomial recursive greatest comon divisor. Always returns
+     * Univariate GenPolynomial recursive greatest common divisor. Always returns
      * 1.
      * @param P univariate recursive GenPolynomial.
      * @param S univariate recursive GenPolynomial.

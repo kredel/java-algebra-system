@@ -520,7 +520,7 @@ public class CReductionSeq<C extends GcdRingElem<C>> implements Serializable
     /**
      * Determine polynomial list.
      * @param H polynomial list.
-     * @param cd case distiction, a condition list.
+     * @param cd case distinction, a condition list.
      * @return new determined list of colored systems.
      */
     public List<ColoredSystem<C>> determine(List<Condition<C>> cd, List<GenPolynomial<GenPolynomial<C>>> H) {

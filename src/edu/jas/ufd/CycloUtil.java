@@ -121,7 +121,7 @@ public class CycloUtil {
     /**
      * Compute the factors of the cyclotomic polynomial.
      * @param p cyclotomic polynomial.
-     * @return list of factors of cyclotomic polynomial p or emtpy list.
+     * @return list of factors of cyclotomic polynomial p or empty list.
      */
     public static List<GenPolynomial<BigInteger>> cyclotomicFactors(GenPolynomial<BigInteger> p) {
         List<GenPolynomial<BigInteger>> H = new ArrayList<GenPolynomial<BigInteger>>();

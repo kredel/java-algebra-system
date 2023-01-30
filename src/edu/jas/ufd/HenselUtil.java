@@ -131,7 +131,7 @@ public class HenselUtil {
             try {
                 E = E.divide(Qi);
             } catch (RuntimeException e) {
-                // useful in debuging
+                // useful in debugging
                 //System.out.println("C  = " + C );
                 //System.out.println("Ai = " + Ai );
                 //System.out.println("Bi = " + Bi );

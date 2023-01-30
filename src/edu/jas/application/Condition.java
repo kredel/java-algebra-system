@@ -388,7 +388,7 @@ public class Condition<C extends GcdRingElem<C>> implements Serializable {
                 System.out.println("undetermined poly    Bp = " + Bp);
                 System.out.println("undetermined coeff    c = " + c);
                 throw new RuntimeException("undetermined, c is white = " + c);
-                // is catched in minimalGB
+                // is caught in minimalGB
             }
         }
         cp = new ColorPolynomial<C>(green, red, white);
