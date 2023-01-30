@@ -57,7 +57,7 @@ public class GBDistSP<C extends RingElem<C>> {
 
     /**
      * Constructor.
-     * @param threads number of threads respectivly processes.
+     * @param threads number of threads respectively processes.
      * @param mfile name of the machine file.
      * @param port for GB server.
      */

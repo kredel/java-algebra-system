@@ -24,7 +24,7 @@ import edu.jas.structure.RingElem;
  * <pre>
  *   wbb.timestatus.setLimit(newLimit);
  * </pre>
- * or decativate it for inifinite running time
+ * or decativate it for infinite running time
  * <pre>
  *   wbb.timestatus.setNotActive();
  * </pre>

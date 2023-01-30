@@ -22,7 +22,7 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
 
 
 /**
- * Characteristic Set class acccording to the simple algorithm, where the
+ * Characteristic Set class according to the simple algorithm, where the
  * leading coefficients are <strong>not</strong> rereduced. Implements methods
  * for Characteristic Sets and tests.
  * @param <C> coefficient type

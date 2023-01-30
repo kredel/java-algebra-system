@@ -40,7 +40,7 @@ public class UnivPowerSeries<C extends RingElem<C>> implements RingElem<UnivPowe
 
 
     /**
-     * Data structure / generating function for coeffcients. Cannot be final
+     * Data structure / generating function for coefficients. Cannot be final
      * because of fixPoint, must be accessible in factory.
      */
     /*package*/Coefficients<C> lazyCoeffs;

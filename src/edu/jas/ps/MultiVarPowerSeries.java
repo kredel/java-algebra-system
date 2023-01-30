@@ -49,7 +49,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
 
     /**
-     * Data structure / generating function for coeffcients. Cannot be final
+     * Data structure / generating function for coefficients. Cannot be final
      * because of fixPoint, must be accessible in factory.
      */
     /*package*/MultiVarCoefficients<C> lazyCoeffs;
@@ -503,7 +503,7 @@ public class MultiVarPowerSeries<C extends RingElem<C>> implements RingElem<Mult
 
     /**
      * Sum monomial.
-     * @param m ExpVector , coeffcient pair
+     * @param m ExpVector , coefficient pair
      * @return this + ONE.multiply(m.coefficient,m.exponent).
      */
     public MultiVarPowerSeries<C> sum(Map.Entry<ExpVector, C> m) {

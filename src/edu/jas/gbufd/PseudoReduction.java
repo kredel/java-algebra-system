@@ -13,7 +13,7 @@ import edu.jas.structure.RingElem;
 
 
 /**
- * Polynomial pseudo reduction interface. Defines additionaly normalformFactor.
+ * Polynomial pseudo reduction interface. Defines additionally normalformFactor.
  * @param <C> coefficient type.
  * @author Heinz Kredel
  */

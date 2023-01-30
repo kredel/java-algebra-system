@@ -199,7 +199,7 @@ public class OrderedWordPairlist<C extends RingElem<C>> implements WordPairList<
 
     /**
      * Remove the next required pair from the pairlist and reduction matrix.
-     * Appy the criterion 3 to see if the S-polynomial is required.
+     * Apply the criterion 3 to see if the S-polynomial is required.
      * @return the next pair if one exists, otherwise null.
      */
     public synchronized WordPair<C> removeNext() {

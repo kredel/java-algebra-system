@@ -147,7 +147,7 @@ class ExpVectorIterator implements Iterator<ExpVector> {
      * @param nv number of variables.
      * @param inf true, if all elements between 0 and upper bound are enumerated, 
                   false, if only elements of exact upper bund are to be processed.
-     * @param ub an upper bound for the entrys.
+     * @param ub an upper bound for the entries.
      */
     protected ExpVectorIterator(int nv, boolean inf, long ub) {
         infinite = inf; 
@@ -229,7 +229,7 @@ class ExpVectorIterator implements Iterator<ExpVector> {
      * Remove a tuple if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove elements");
+        throw new UnsupportedOperationException("cannot remove elements");
     }
 
 }

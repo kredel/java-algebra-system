@@ -190,7 +190,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
         //System.out.println("D:      " + D);
         //System.out.println("DP:     " + DP);
 
-        // get partial fraction decompostion 
+        // get partial fraction decomposition 
         List<GenPolynomial<C>> Ai = ufd.basePartialFraction(a, DP);
         //System.out.println("Ai:     " + Ai);
 
@@ -234,7 +234,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
 
 
     /**
-     * Univariate GenPolynomial integration of the logaritmic part, eventual
+     * Univariate GenPolynomial integration of the logarithmic part, eventual
      * preparation for irreducible factorization of P.
      * @param A univariate GenPolynomial, deg(A) &lt; deg(P).
      * @param P univariate squarefree GenPolynomial, gcd(A,P) == 1.
@@ -299,7 +299,7 @@ public class ElementaryIntegration<C extends GcdRingElem<C>> {
 
 
     /**
-     * Univariate GenPolynomial integration of the logaritmic part,
+     * Univariate GenPolynomial integration of the logarithmic part,
      * Rothstein-Trager algorithm.
      * @param A univariate GenPolynomial, deg(A) &lt; deg(P).
      * @param P univariate squarefree or irreducible GenPolynomial. // gcd(A,P)

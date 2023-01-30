@@ -74,7 +74,7 @@ final class GBTransportMessPoly<C extends RingElem<C>> extends GBTransportMess {
 
     /**
      * GBTransportMessPoly.
-     * @param p polynomial to transfered.
+     * @param p polynomial to transferred.
      */
     public GBTransportMessPoly(GenPolynomial<C> p) {
         this.pol = p;

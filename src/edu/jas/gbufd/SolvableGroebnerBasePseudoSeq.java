@@ -270,19 +270,19 @@ public class SolvableGroebnerBasePseudoSeq<C extends GcdRingElem<C>> extends Sol
         logger.info("right multipliers = {}", X);
         List<GenSolvablePolynomial<C>> F = new ArrayList<GenSolvablePolynomial<C>>(G.size() * (1 + X.size()));
         F.addAll(G);
-        logger.info("right multipy: F = {}", F);
+        logger.info("right multiply: F = {}", F);
         GenSolvablePolynomial<C> p, x, q;
         for (int i = 0; i < F.size(); i++) { // F changes
             p = F.get(i);
             for (int j = 0; j < X.size(); j++) {
                 x = X.get(j);
                 q = p.multiply(x);
-                logger.info("right multipy: p = {}, x = {}, q = {}", p, x, q);
+                logger.info("right multiply: p = {}, x = {}, q = {}", p, x, q);
                 q = sred.leftNormalform(F, q);
                 if (!q.isZERO()) {
                     q = (GenSolvablePolynomial<C>) engine.basePrimitivePart(q);
                     q = (GenSolvablePolynomial<C>) q.abs();
-                    logger.info("right multipy: red(q) = {}", q);
+                    logger.info("right multiply: red(q) = {}", q);
                     F.add(q);
                 }
             }

@@ -169,7 +169,7 @@ public class Katsura {
 
     /**
      * Generate variable string.
-     * @return varaible name as string.
+     * @return variable name as string.
      */
     String variable(int i) {
            if (i < 0) {

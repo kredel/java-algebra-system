@@ -252,7 +252,7 @@ public class RGroebnerBaseSeq<C extends RegularRingElem<C>> extends GroebnerBase
                     if (!a.isZERO()) { // happens
                         logger.info("minGB not zero {}", a);
                         bcH = rred.reducedBooleanClosure(G, a);
-                        if (bcH.size() > 1) { // never happend so far
+                        if (bcH.size() > 1) { // never happened so far
                             System.out.println("minGB not bc: bcH size = " + bcH.size());
                             F.add(b); // do not replace, stay with b
                         } else {

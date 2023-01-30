@@ -241,7 +241,7 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
      *         for Ap.
      */
     public WordPseudoReductionEntry<C> normalformFactor(List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
-        throw new UnsupportedOperationException("normalformFactor not imlemented");
+        throw new UnsupportedOperationException("normalformFactor not implemented");
     }
 
 
@@ -344,27 +344,27 @@ public class WordPseudoReductionSeq<C extends RingElem<C>> extends WordReduction
 
     @Override
     public GenWordPolynomial<C> leftNormalform(List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
-        throw new UnsupportedOperationException("leftNormalform not imlemented");
+        throw new UnsupportedOperationException("leftNormalform not implemented");
     }
 
 
     @Override
     public GenWordPolynomial<C> leftNormalform(List<GenWordPolynomial<C>> lrow,
                     List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
-        throw new UnsupportedOperationException("leftNormalform not imlemented");
+        throw new UnsupportedOperationException("leftNormalform not implemented");
     }
 
 
     @Override
     public GenWordPolynomial<C> rightNormalform(List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
-        throw new UnsupportedOperationException("rightNormalform not imlemented");
+        throw new UnsupportedOperationException("rightNormalform not implemented");
     }
 
 
     @Override
     public GenWordPolynomial<C> rightNormalform(List<GenWordPolynomial<C>> rrow,
                     List<GenWordPolynomial<C>> Pp, GenWordPolynomial<C> Ap) {
-        throw new UnsupportedOperationException("rightNormalform not imlemented");
+        throw new UnsupportedOperationException("rightNormalform not implemented");
     }
 
 }

@@ -99,7 +99,7 @@ public class GBFactory {
      * @return GB algorithm implementation for field coefficients.
      */
     public static <C extends GcdRingElem<C>> GroebnerBaseAbstract<C> getImplementation() {
-        logger.warn("no coefficent factory given, assuming field coeffcients");
+        logger.warn("no coefficient factory given, assuming field coefficients");
         GroebnerBaseAbstract<C> bba = new GroebnerBaseSeq<C>();
         return bba;
     }

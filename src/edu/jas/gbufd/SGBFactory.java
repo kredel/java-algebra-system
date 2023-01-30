@@ -92,7 +92,7 @@ public class SGBFactory {
      * @return GB algorithm implementation for field coefficients.
      */
     public static <C extends GcdRingElem<C>> SolvableGroebnerBaseAbstract<C> getImplementation() {
-        logger.warn("no coefficent factory given, assuming field coeffcients");
+        logger.warn("no coefficient factory given, assuming field coefficients");
         SolvableGroebnerBaseAbstract<C> bba = new SolvableGroebnerBaseSeq<C>();
         return bba;
     }

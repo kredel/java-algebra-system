@@ -346,7 +346,7 @@ public class RGroebnerBasePseudoSeq<C extends RegularRingElem<C>> extends RGroeb
                     if (!a.isZERO()) {
                         System.out.println("minGB nf(a) != 0 " + a);
                         bcH = red.reducedBooleanClosure(G, a);
-                        if (bcH.size() > 1) { // never happend so far
+                        if (bcH.size() > 1) { // never happened so far
                             System.out.println("minGB not bc: bcH size = " + bcH.size());
                             F.add(b); // do not replace, stay with b
                         } else {

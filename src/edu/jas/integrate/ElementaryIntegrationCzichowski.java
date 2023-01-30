@@ -54,7 +54,7 @@ public class ElementaryIntegrationCzichowski<C extends GcdRingElem<C>> extends E
 
 
     /**
-     * Univariate GenPolynomial integration of the logaritmic part, Czichowski
+     * Univariate GenPolynomial integration of the logarithmic part, Czichowski
      * 
      * @param A univariate GenPolynomial, deg(A) &lt; deg(P).
      * @param P univariate irreducible GenPolynomial. // gcd(A,P) == 1 automatic

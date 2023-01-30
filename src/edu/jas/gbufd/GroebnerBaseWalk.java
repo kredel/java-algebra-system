@@ -226,7 +226,7 @@ public class GroebnerBaseWalk<C extends GcdRingElem<C>> extends GroebnerBaseAbst
         logger.info("weight order: {}", word);
         ufweight = word.getWeight(); // because of weightDeg usage
 
-        // loop throught term orders
+        // loop through term orders
         ExpVector w = null;
         int iter = 0; // count #loops
         boolean done = false;

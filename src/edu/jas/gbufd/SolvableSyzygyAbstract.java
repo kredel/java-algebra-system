@@ -558,7 +558,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
 
     /**
      * Right syzygy for arbitrary base.
-     * @param M an arbitray base.
+     * @param M an arbitrary base.
      * @return rightSyz(M), a basis for the right module of syzygies for M.
      */
     @SuppressWarnings("unchecked")

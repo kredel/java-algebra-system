@@ -138,7 +138,7 @@ public class CriticalPairList<C extends RingElem<C>> extends OrderedPairlist<C> 
 
     /**
      * Get and remove the next required pair from the pairlist.
-     * Appy the criterions 3 and 4 to see if the S-polynomial is required.
+     * Apply the criterions 3 and 4 to see if the S-polynomial is required.
      * The pair is not removed from the pair list.
      * @return the next pair if one exists, otherwise null.
      */
@@ -153,7 +153,7 @@ public class CriticalPairList<C extends RingElem<C>> extends OrderedPairlist<C> 
 
     /**
      * Get the next required pair from the pairlist.
-     * Appy the criterions 3 and 4 to see if the S-polynomial is required.
+     * Apply the criterions 3 and 4 to see if the S-polynomial is required.
      * The pair is not removed from the pair list.
      * @return the next pair if one exists, otherwise null.
      */

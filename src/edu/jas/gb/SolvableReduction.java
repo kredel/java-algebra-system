@@ -128,7 +128,7 @@ public interface SolvableReduction<C extends RingElem<C>> extends Serializable {
 
     /**
      * Is top reducible. Condition is lt(B) | lt(A) for some B in F. Is left
-     * right symetric.
+     * right symmetric.
      * @param A polynomial.
      * @param P polynomial list.
      * @return true if A is top reducible with respect to P.
@@ -137,7 +137,7 @@ public interface SolvableReduction<C extends RingElem<C>> extends Serializable {
 
 
     /**
-     * Is reducible. Is left right symetric.
+     * Is reducible. Is left right symmetric.
      * @param A polynomial.
      * @param P polynomial list.
      * @return true if A is reducible with respect to P.
@@ -146,7 +146,7 @@ public interface SolvableReduction<C extends RingElem<C>> extends Serializable {
 
 
     /**
-     * Is in normalform. Is left right symetric.
+     * Is in normalform. Is left right symmetric.
      * @param A polynomial.
      * @param P polynomial list.
      * @return true if A is in normalform with respect to P.

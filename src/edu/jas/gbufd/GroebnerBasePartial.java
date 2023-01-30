@@ -125,7 +125,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
 
 
     /**
-     * Partial permuation for specific variables. Computes a permutation perm
+     * Partial permutation for specific variables. Computes a permutation perm
      * for the variables vars, such that perm(vars) == pvars ... (vars \ pvars).
      * Uses internal (reversed) variable sorting.
      * @param vars names for all variables.
@@ -197,7 +197,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
 
 
     /**
-     * Partial permuation for specific variables. Computes a permutation perm
+     * Partial permutation for specific variables. Computes a permutation perm
      * for the variables vars, such that perm(vars) == pvars ... (vars \ pvars).
      * Uses internal (reversed) variable sorting.
      * @param vars names for all variables.
@@ -298,7 +298,7 @@ public class GroebnerBasePartial<C extends GcdRingElem<C>> extends GroebnerBaseA
 
 
     /**
-     * Partial permuation for specific variables. Computes a permutation perm
+     * Partial permutation for specific variables. Computes a permutation perm
      * for the variables vars, such that perm(vars) == (evars, pvars, (vars \ {
      * evars, pvars }). Uses internal (reversed) variable sorting.
      * @param vars names for all variables.

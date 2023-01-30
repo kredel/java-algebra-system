@@ -292,7 +292,7 @@ public class GroebnerBaseSeqPairDistributed<C extends RingElem<C>> extends Groeb
 
     /**
      * GB distributed client.
-     * @param host the server runns on.
+     * @param host the server runs on.
      * @throws IOException
      */
     public void clientPart(String host) throws IOException {
@@ -690,7 +690,7 @@ class GBSPTransportMessPoly<C extends RingElem<C>> extends GBSPTransportMess {
 
     /**
      * GBSPTransportMessPoly.
-     * @param p polynomial to transfered.
+     * @param p polynomial to transferred.
      */
     public GBSPTransportMessPoly(GenPolynomial<C> p) {
         this.pol = p;

@@ -27,7 +27,7 @@ import edu.jas.util.Terminator;
 
 
 /**
- * Groebner Base parallel algortihm. Implements a shared memory parallel version
+ * Groebner Base parallel algorithm. Implements a shared memory parallel version
  * of Groebner bases.
  * @param <C> coefficient type
  * @author Heinz Kredel

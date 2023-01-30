@@ -241,8 +241,8 @@ public class PolyModUtil {
         B.add(d);
         List<GenPolynomial<C>> c = PolyGBUtil.<C> intersect(r, A, B);
         if (c.size() != 1) {
-            logger.warn("lcm not uniqe: {}", c);
-            //throw new RuntimeException("lcm not uniqe: " + c);
+            logger.warn("lcm not unique: {}", c);
+            //throw new RuntimeException("lcm not unique: " + c);
         }
         GenPolynomial<C> lcm = c.get(0);
         return lcm;

@@ -22,7 +22,7 @@ import edu.jas.ufd.GreatestCommonDivisorAbstract;
 
 
 /**
- * Characteristic Set class acccording to Wu. Implements methods for
+ * Characteristic Set class according to Wu. Implements methods for
  * Characteristic Sets and tests.
  * @param <C> coefficient type
  * @author Heinz Kredel

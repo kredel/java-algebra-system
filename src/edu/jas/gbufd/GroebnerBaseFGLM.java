@@ -382,7 +382,7 @@ public class GroebnerBaseFGLM<C extends GcdRingElem<C>> extends GroebnerBaseAbst
 
 
     /**
-     * Internal method to add new indeterminates. Add another variabe
+     * Internal method to add new indeterminates. Add another variable
      * (indeterminate) Y_{i+1} to existing ring
      * @return polynomial ring with variables Y1,..,Yi,Yi+1 and coefficients of
      *         ring.

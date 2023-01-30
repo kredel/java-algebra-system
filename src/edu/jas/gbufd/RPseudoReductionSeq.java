@@ -246,7 +246,7 @@ public class RPseudoReductionSeq<C extends RegularRingElem<C>> extends RReductio
 
 
     /**
-     * Normalform with recording. <b>Note:</b> Only meaningfull if all divisions
+     * Normalform with recording. <b>Note:</b> Only meaningful if all divisions
      * are exact. Compute first the multiplication factor <code>m</code> with
      * <code>normalform(Pp,Ap,m)</code>, then call this method with
      * <code>normalform(row,Pp,m*Ap)</code>.
