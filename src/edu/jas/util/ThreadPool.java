@@ -386,10 +386,10 @@ class PoolThread extends Thread {
                 running = false;
                 isWorking = false;
             } catch (PreemptingException e) {
-                logger.debug("catched {}", e);
+                logger.debug("caught {}", e);
                 //e.printStackTrace();
             } catch (RuntimeException e) {
-                logger.warn("catched {}", e);
+                logger.warn("caught {}", e);
                 e.printStackTrace();
             }
         }

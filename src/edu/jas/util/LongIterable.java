@@ -183,7 +183,7 @@ class LongIterator implements Iterator<Long> {
      * Remove a tuple if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove elements");
+        throw new UnsupportedOperationException("cannot remove elements");
     }
 
 }

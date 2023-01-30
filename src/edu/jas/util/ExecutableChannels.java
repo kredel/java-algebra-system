@@ -329,9 +329,9 @@ public class ExecutableChannels {
 
 
     /**
-     * recieve on channel i.
+     * receive on channel i.
      * @param i channel number.
-     * @return object recieved.
+     * @return object received.
      */
     public Object receive(int i) throws IOException, ClassNotFoundException {
         if (channels != null && 0 <= i && i < channels.length) {

@@ -159,7 +159,7 @@ class KsubSetIterator<E> implements Iterator<List<E>> {
      * Remove the last subset returned from underlying set if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove subsets");
+        throw new UnsupportedOperationException("cannot remove subsets");
     }
 
 }
@@ -222,7 +222,7 @@ class OneSubSetIterator<E> implements Iterator<List<E>> {
      * Remove the last subset returned from underlying set if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove subsets");
+        throw new UnsupportedOperationException("cannot remove subsets");
     }
 
 }
@@ -277,7 +277,7 @@ class ZeroSubSetIterator<E> implements Iterator<List<E>> {
      * Remove the last subset returned from underlying set if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove subsets");
+        throw new UnsupportedOperationException("cannot remove subsets");
     }
 
 }

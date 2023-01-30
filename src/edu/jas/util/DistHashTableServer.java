@@ -142,7 +142,7 @@ public class DistHashTableServer<K> extends Thread {
                 }
                 if (mythread.isInterrupted()) {
                     goon = false;
-                    //logger.info("list server {} interupted", this);
+                    //logger.info("list server {} interrupted", this);
                 } else {
                     s = new DHTBroadcaster<K>(channel, servers, /*listElem,*/theList);
                     int ls = 0;

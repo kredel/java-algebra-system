@@ -240,7 +240,7 @@ public class TaggedSocketChannel extends Thread {
                     r = e;
                 }
                 //logger.debug("Socket = {}", s);
-                logger.debug("object recieved");
+                logger.debug("object received");
                 if (r instanceof TaggedMessage) {
                     TaggedMessage tm = (TaggedMessage) r;
                     BlockingQueue tq = null;

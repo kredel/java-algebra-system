@@ -195,7 +195,7 @@ public class DistributedList /* implements List not jet */ {
 
 
 /**
- * Thread to comunicate with the list server.
+ * Thread to communicate with the list server.
  */
 
 class Listener extends Thread {

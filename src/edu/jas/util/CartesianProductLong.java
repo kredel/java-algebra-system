@@ -235,7 +235,7 @@ class CartesianProductLongIterator implements Iterator<List<Long>> {
      * Remove a tuple if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove tuples");
+        throw new UnsupportedOperationException("cannot remove tuples");
     }
 
 }

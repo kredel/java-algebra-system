@@ -148,7 +148,7 @@ public class ComputerThreads {
             if (r.size() != 0) {
                 logger.info("unfinished tasks          {}", r.size());
             }
-            logger.info("number of sheduled tasks  {}", tpe.getTaskCount());
+            logger.info("number of scheduled tasks  {}", tpe.getTaskCount());
             logger.info("number of completed tasks {}", tpe.getCompletedTaskCount());
         }
         pool = null;

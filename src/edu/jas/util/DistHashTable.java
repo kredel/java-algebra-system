@@ -396,7 +396,7 @@ public class DistHashTable<K, V> extends AbstractMap<K, V> /* implements Map<K,V
 
 
 /**
- * Thread to comunicate with the list server.
+ * Thread to communicate with the list server.
  */
 class DHTListener<K, V> extends Thread {
 

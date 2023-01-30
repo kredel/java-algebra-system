@@ -168,7 +168,7 @@ class CartesianProductIterator<E> implements Iterator<List<E>> {
      * Remove a tuple if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove tuples");
+        throw new UnsupportedOperationException("cannot remove tuples");
     }
 
 }

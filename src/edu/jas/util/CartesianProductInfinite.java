@@ -46,7 +46,7 @@ public class CartesianProductInfinite<E> implements Iterable<List<E>> {
         if (comps.size() == 1) {
             return new CartesianOneProductInfiniteIterator<E>(comps.get(0));
         }
-        //         if ( comps.size() == 2 ) { // this part is not realy required
+        //         if ( comps.size() == 2 ) { // this part is not really required
         //             return new CartesianTwoProductInfiniteIterator<E>(comps.get(0),comps.get(1));
         //         }
         int n = comps.size();
@@ -108,7 +108,7 @@ class CartesianOneProductInfiniteIterator<E> implements Iterator<List<E>> {
      * Remove a tuple if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove tuples");
+        throw new UnsupportedOperationException("cannot remove tuples");
     }
 
 }
@@ -247,7 +247,7 @@ class CartesianTwoProductInfiniteIterator<E> implements Iterator<List<E>> {
      * Remove a tuple if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove tuples");
+        throw new UnsupportedOperationException("cannot remove tuples");
     }
 
 }
@@ -386,7 +386,7 @@ class CartesianTwoProductInfiniteIteratorList<E> implements Iterator<List<E>> {
      * Remove a tuple if allowed.
      */
     public void remove() {
-        throw new UnsupportedOperationException("cannnot remove tuples");
+        throw new UnsupportedOperationException("cannot remove tuples");
     }
 
 }

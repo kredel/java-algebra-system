@@ -24,7 +24,7 @@ import org.apache.logging.log4j.LogManager;
 /**
  * Server for the distributed version of a list.
  * @author Heinz Kredel
- * TODO: redistribute list for late comming clients, removal of elements.
+ * TODO: redistribute list for late coming clients, removal of elements.
  */
 public class DistributedListServer extends Thread {
 
