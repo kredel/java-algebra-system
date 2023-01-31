@@ -8,6 +8,7 @@ package edu.jas.poly;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
+import java.util.ArrayList;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -97,6 +98,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertFalse("not commutative", pf.isCommutative());
         assertTrue("associative", pf.isAssociative());
         assertFalse("not field", pf.isField());
+        assertEquals("pf == pf: ", pf, pf);
 
         String s = pf.toScript();
         //System.out.println("pf.toScript: " + s + ", " + s.length());
@@ -116,6 +118,10 @@ public class GenExteriorPolynomialTest extends TestCase {
         //System.out.println("p = " + p);
 
         List<GenExteriorPolynomial<BigInteger>> gens = pf.generators();
+        //System.out.println("gens = " + gens);
+        assertTrue("#gens == 7", gens.size() == 7);
+
+        gens = pf.getGenerators();
         //System.out.println("gens = " + gens);
         assertTrue("#gens == 7", gens.size() == 7);
 
@@ -436,6 +442,12 @@ public class GenExteriorPolynomialTest extends TestCase {
         d = a.multiply(y, u, x, v);
         //System.out.println("d = " + d);
         assertEquals("x u a y v = y u a x v", c, d);
+
+        c = a.multiply(u, v);
+        //System.out.println("c = " + c);
+        d = a.multiply(rf.getONE(), u, v);
+        //System.out.println("d = " + d);
+        assertEquals("u a v = 1 u a v", c, d);
     }
 
 
@@ -717,10 +729,19 @@ public class GenExteriorPolynomialTest extends TestCase {
 
         GenExteriorPolynomial<BigRational> a = pf.valueOf(p);
         //System.out.println("a = " + a);
+        List<GenPolynomial<BigRational>> Pl = new ArrayList<GenPolynomial<BigRational>>();
+        Pl.add(p);
+        List<GenExteriorPolynomial<BigRational>> El = pf.valueOf(Pl);
+        assertEquals("a == El[0]: ", a, El.get(0));
+        assertEquals("sumNorm(p) == sumNorm(a): ", p.sumNorm(), a.sumNorm());
 
         GenExteriorPolynomial<BigRational> b = pf.valueOf(a);
         //System.out.println("b = " + b);
         assertEquals("a == b: ", a, b);
+
+        GenExteriorPolynomial<BigRational> c = pf.fromInteger(7);
+        //System.out.println("c = " + c);
+        assertEquals("7 == ldcf(c): ", rf.fromInteger(7), c.leadingBaseCoefficient());
     }
 
 
