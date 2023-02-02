@@ -299,9 +299,13 @@ public class SolvableQuotientRing<C extends GcdRingElem<C>> implements RingFacto
     public SolvableQuotient<C> random(int n) {
         GenSolvablePolynomial<C> r = ring.random(n).monic();
         GenSolvablePolynomial<C> s;
+        int z = 0;
         do {
             s = ring.random(n).monic();
-        } while (s.isZERO());
+        } while (s.isZERO() && z++ < 10);
+        if (s.isZERO()) {
+            s = ring.getONE();
+        }
         return new SolvableQuotient<C>(this, r, s, false);
     }
 
@@ -316,10 +320,14 @@ public class SolvableQuotientRing<C extends GcdRingElem<C>> implements RingFacto
      */
     public SolvableQuotient<C> random(int k, int l, int d, float q) {
         GenSolvablePolynomial<C> r = ring.random(k, l, d, q).monic();
-        GenSolvablePolynomial<C> s = ring.random(k, l, d, q).monic();
+        GenSolvablePolynomial<C> s;
+        int z = 0;
         do {
             s = ring.random(k, l, d, q).monic();
-        } while (s.isZERO());
+        } while (s.isZERO() && z++ < 10);
+        if (s.isZERO()) {
+            s = ring.getONE();
+        }
         return new SolvableQuotient<C>(this, r, s, false);
     }
 
@@ -332,10 +340,15 @@ public class SolvableQuotientRing<C extends GcdRingElem<C>> implements RingFacto
      */
     public SolvableQuotient<C> random(int n, Random rnd) {
         GenSolvablePolynomial<C> r = ring.random(n, rnd).monic();
-        GenSolvablePolynomial<C> s = ring.random(n, rnd).monic();
+        GenSolvablePolynomial<C> s;
+        int z = 0;
         do {
             s = ring.random(n, rnd).monic();
-        } while (s.isZERO());
+        } while (s.isZERO() && z++ < 10);
+        if (s.isZERO()) {
+            s = ring.getONE();
+        }
+        //System.out.println("r = " + r + ", s = " + s + ", z = " + z);
         return new SolvableQuotient<C>(this, r, s, false);
     }
 

@@ -494,19 +494,18 @@ public class GenSolvablePolynomialRing<C extends RingElem<C>> extends GenPolynom
      */
     @Override
     public GenSolvablePolynomial<C> random(int k, int l, int d, float q, Random rnd) {
-        GenSolvablePolynomial<C> r = getZERO(); //.clone();
-        // copy( ZERO ); 
-        // new GenPolynomial<C>( this, getZERO().val );
+        GenSolvablePolynomial<C> r = getZERO();
         ExpVector e;
         C a;
         // add random coeffs and exponents
         for (int i = 0; i < l; i++) {
             e = ExpVector.random(nvar, d, q, rnd);
             a = coFac.random(k, rnd);
-            if (!r.val.keySet().contains(e)) {
-                //r = (GenSolvablePolynomial<C>) r.sum(a, e); somewhat inefficient but clean
-                r.doPutToMap(e, a);
-            }
+            //System.out.println("i = " + i + ", e = " + e + ", a = " + a);
+            //if (!r.val.keySet().contains(e)) {
+            r = (GenSolvablePolynomial<C>) r.sum(a, e); //somewhat inefficient but clean
+                //r.doPutToMap(e, a);
+            //}
         }
         return r;
     }

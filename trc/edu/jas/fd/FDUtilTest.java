@@ -687,6 +687,7 @@ public class FDUtilTest extends TestCase {
 
         kl = 1;
         q = 0.3f;
+        //System.out.println("kl = " + kl + ", ll = " + ll + ", el = " + el + ", q = " + q);
         GenSolvablePolynomial<SolvableQuotient<BigRational>> aq, bq, cq, dq;
         do {
             aq = rqfac.random(kl, ll, el, q);

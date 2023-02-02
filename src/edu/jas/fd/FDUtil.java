@@ -705,7 +705,7 @@ public class FDUtil {
         }
         GenSolvablePolynomialRing<GenPolynomial<C>> rfac = (GenSolvablePolynomialRing<GenPolynomial<C>>) P.ring;
         GenSolvablePolynomial<GenPolynomial<C>> onep = rfac.getONE();
-        //ExpVector zero = rfac.evzero;
+        ExpVector zero = rfac.evzero;
         GenSolvablePolynomial<GenPolynomial<C>> q = rfac.getZERO();
         GenSolvablePolynomial<GenPolynomial<C>> r;
         GenSolvablePolynomial<GenPolynomial<C>> p = P; //.ring.getZERO().copy();
@@ -718,7 +718,8 @@ public class FDUtil {
             if (c.isZERO()) {
                 throw new RuntimeException("something is wrong: c is zero, c1 = " + c1 + ", s = " + s);
             }
-            r = onep.multiplyLeft(c.multiply(s), e1); // right: (c e1) * 1 * (s zero)
+            //r = onep.multiplyLeft(c.multiply(s), e1); // right: (c e1) * 1 * (s zero)
+            r = onep.multiply(c, e1, s, zero); // right: (c e1) * 1 * (s zero)
             if (!c1.equals(r.leadingBaseCoefficient())) {
                 System.out.println("recRightDivide: lc(r) = " + r.leadingBaseCoefficient() + ", c1 = " + c1);
                 System.out.println("recRightDivide: lc(r) = " + c.multiply(s) + ", c = " + c + ", s = " + s);

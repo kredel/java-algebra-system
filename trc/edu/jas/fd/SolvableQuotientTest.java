@@ -157,7 +157,7 @@ public class SolvableQuotientTest extends TestCase {
     public void testRandom() {
         for (int i = 0; i < 3; i++) {
             //a = efac.random(ll+i);
-            a = efac.random(kl * (i + 1), ll + i, el, q);
+            a = efac.random(kl * i, ll + i/2, el, q);
             //System.out.println("a = " + a);
             if (a.isZERO() || a.isONE()) {
                 continue;
