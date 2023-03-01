@@ -23,20 +23,35 @@
 
 <dl>
 
-<dt>2023, January </dt> <!-- 2.7.170 -->
+<dt>2023, March </dt> <!-- 2.7.180 -->
 <dd>
 
- Added more unit test cases to improve code coverage of statement and
- expression tests, for example: exponent vector storage units,
- polynomial conversions, complex constants, runGB distributed cases,
- ideal decomposition mod prime, and right solvable multiplicaton.
+ This release adds exterior algebra polynomials / vectors in classes
+ <code>GenExteriorPolynomial</code> and
+ <code>GenExteriorPolynomialRing</code>. With exterior multiplication
+ and inner left / right multiplication methods. Also included are
+ determinant and resultant methods via exterior algebra algorithms.
 
- Ensure compatibility with JRuby version 9.4.0.0 (Ruby 3.1.0
- compatible). Adjust for year 2023. Further cleanups and small bug
- fixes.
+ Add new characteristic polynomial method <code>charPolynomial()</code>
+ using Faddeev–LeVerrier algorithm in class
+ <code>GenPolynomialRing</code>. Add <code>trace()</code>method in
+ class <code>GenMatrix</code>.  Fixed many spelling errors, small bug
+ fixes and cleanups.
 
 </dd>
 
+
+<dt>2023, January </dt> <!-- 2.7.170 -->
+<dd>
+ Added more unit test cases to improve code coverage of statement and
+ expression tests together with eventual fixes, for example: exponent
+ vector storage units, polynomial conversions, complex constants,
+ runGB distributed cases, ideal decomposition mod prime, and right
+ solvable multiplicaton.
+ Ensure compatibility with JRuby version 9.4.0.0 (Ruby 3.1.0
+ compatible). Adjust for year 2023. Further cleanups and small bug
+ fixes.
+</dd>
 
 <dt>2022, November </dt> <!-- 2.7.160/1 -->
 <dd>
@@ -2996,7 +3011,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Mon Jan  2 13:08:57 CET 2023
+Last modified: Wed Mar  1 15:06:32 CET 2023
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
