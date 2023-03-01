@@ -206,7 +206,7 @@ public class IndexFactory implements MonoidFactory<IndexList> {
 
     /**
      * Value of other.
-     * @param e String of index names.
+     * @param var String of index names.
      * @return value as IndexList.
      */
     public IndexList valueOf(String var) {

@@ -133,6 +133,7 @@ public class TermOrderOptimizationTest extends TestCase {
         F.add(d);
         F.add(e);
         //System.out.println("F = " + F);
+        long t = F.toString().length();
 
         OptimizedPolynomialList<BigRational> Fo, Fo2;
         Fo = TermOrderOptimization.<BigRational> optimizeTermOrder(fac, F);
@@ -154,8 +155,8 @@ public class TermOrderOptimizationTest extends TestCase {
         assertEquals("F == Fi: ", F, Fi);
 
         String s = Fo.toString();
-        //System.out.println("Fo.toString: " + s + ", " + s.length());
-        assertTrue("#s >= 1000: " + s, s.length() >= 1000);
+        //System.out.println("t = " + t + ", #ss = " + s.length());
+        assertTrue("#s >= t: " + s, s.length() >= t);
     }
 
 
