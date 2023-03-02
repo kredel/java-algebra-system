@@ -926,6 +926,7 @@ public class FDUtil {
         }
         if (!(P instanceof RecSolvablePolynomial)) {
             //return FDUtil.<C> recursiveDivide(P,s);
+            System.out.println("not RecSolvablePolynomial");
         }
         RecSolvablePolynomialRing<C> rfac = (RecSolvablePolynomialRing<C>) P.ring;
         if (rfac.coeffTable.isEmpty()) {
@@ -954,6 +955,9 @@ public class FDUtil {
             ///r = onep.multiplyLeft(s.multiply(c), f); // left: (s*c f) * one
             if (!a.equals(r.leadingBaseCoefficient())) {
                 System.out.println("recLeftDivide: a        = " + a);
+                System.out.println("recLeftDivide: lc(r)    = " + r.leadingBaseCoefficient());
+                System.out.println("recLeftDivide: c        = " + c);
+                System.out.println("recLeftDivide: s        = " + s);
                 C ac = a.leadingBaseCoefficient();
                 C rc = r.leadingBaseCoefficient().leadingBaseCoefficient();
                 C cc = rc.inverse().multiply(ac);
@@ -961,7 +965,7 @@ public class FDUtil {
                 c = c.multiply(cc);
                 r = onep.multiplyLeft(c.multiply(s), f); // right: (1 f) * c * s
                 //System.out.println("recLeftDivide: lc(r)    = " + r.leadingBaseCoefficient());
-                throw new RuntimeException("something is wrong: c*s != a: " + rfac.toScript());
+                throw new RuntimeException("something is wrong: a != lc(r): " + rfac.toScript());
             }
             p = (RecSolvablePolynomial<C>) p.subtract(r);
             if (!p.isZERO() && f.compareTo(p.leadingExpVector()) == 0) {

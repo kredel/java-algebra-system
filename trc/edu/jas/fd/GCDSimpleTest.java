@@ -698,7 +698,7 @@ public class GCDSimpleTest extends TestCase {
         //System.out.println("c = " + c);
 
         // non commutative left
-        //System.out.println("right: ");
+        //System.out.println("left: ");
         d = c.multiply(a);
         e = c.multiply(b);
         //System.out.println("d = " + d);
@@ -720,7 +720,7 @@ public class GCDSimpleTest extends TestCase {
         assertEquals("cb = c*b: ", cb, e);
 
         // non commutative right
-        //System.out.println("left: ");
+        //System.out.println("right: ");
         d = a.multiply(c);
         e = b.multiply(c);
         //System.out.println("d = " + d);
