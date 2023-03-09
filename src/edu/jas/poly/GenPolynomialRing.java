@@ -1373,31 +1373,21 @@ public class GenPolynomialRing<C extends RingElem<C>>
             //System.out.println("k = " + k + ", c = " + c + ", M = " + M);
         }
         // only for demonstrating how to get the determinant, trace and inverse:
-        C det = coFac.getZERO(); //ret.trailingBaseCoefficient();
-        //System.out.println("n = " + n + ", deg = " + ret.degree());
-        if (n % 2 != 0) {
-            det = det.negate();
-        }
-        e = ExpVector.create(1, 0, n-1);
-        c = ret.coefficient(e).negate();
-        if (! det.isZERO()) {
-            C d = det.inverse();
-            if ((n-1) % 2 != 0) {
-                d = d.negate();
-            }
-            Mc = Mp.multiply(d);
-        } else {
-            Mc = null;
-        }
-        //System.out.println("det = " + det + ", trace = " + c + ", A^{-1} = " + Mc);
-        // test trace and inverse:
-        if (Mc != null) {
-            Mc = A.multiply(Mc);
-            if (!Mc.isONE()) { // assert
-                c = A.trace();
-                System.out.println("det = " + det + ", trace = " + c + ", A*A^{-1} = " + Mc);
-            }
-        }
+        // C det = coFac.getZERO(); //ret.trailingBaseCoefficient();
+        // //System.out.println("n = " + n + ", deg = " + ret.degree());
+        // if (n % 2 != 0) {
+        //     det = det.negate();
+        // }
+        // if (! det.isZERO()) {
+        //     C d = det.inverse();
+        //     if ((n-1) % 2 != 0) {
+        //         d = d.negate();
+        //     }
+        //     Mc = Mp.multiply(d);
+        // } else {
+        //     Mc = null;
+        // }
+        // //System.out.println("det = " + det + ", trace = " + c + ", A^{-1} = " + Mc);
         return ret;
     }
 
@@ -1432,6 +1422,22 @@ public class GenPolynomialRing<C extends RingElem<C>>
     public C determinant(GenMatrix<C> A) {
         GenPolynomial<C> P = charPolynomial(A);
         return determinantFromCharPol(P);
+    }
+
+
+    /**
+     * Trace of matrix from characteristic polynomial.
+     * @param P characteristic polynomial of a matrix.
+     * @return trace from characteristic polynomial.
+     */
+    public C traceFromCharPol(GenPolynomial<C> P) {
+        if (P == null || P.isZERO()) {
+            return coFac.getZERO();
+        }
+        long n = P.degree();
+        ExpVector e = ExpVector.create(1, 0, n-1);
+        C t = P.coefficient(e).negate();
+        return t;
     }
 
 

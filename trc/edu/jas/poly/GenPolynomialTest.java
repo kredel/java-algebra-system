@@ -754,6 +754,10 @@ public class GenPolynomialTest extends TestCase {
         GenPolynomial<BigRational> cf = pf.charPolynomial(A);
         //System.out.println("cf = " + cf);
         assertTrue("tcf(charPol(A)) == 1", cf.trailingBaseCoefficient().abs().isONE());
+        //System.out.println("det = " + pf.determinantFromCharPol(cf));
+        assertTrue("det(charPol(A)) == 1", pf.determinantFromCharPol(cf).abs().isONE());
+        //System.out.println("trace = " + pf.traceFromCharPol(cf));
+        assertEquals("trace(charPol(A)) == rl", pf.traceFromCharPol(cf), pf.coFac.fromInteger(r));
 
         A = mf.getZERO();
         //System.out.println("A = " + A);
