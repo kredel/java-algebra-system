@@ -170,9 +170,9 @@ public class IndexList implements MonoidElem<IndexList> {
         }
         StringBuffer s = new StringBuffer();
         if (sign > 0) {
-            s.append("E(");
+            s.append(mono.vname + "(");
         } else {
-            s.append("E[-1](");
+            s.append(mono.vname + "[-1](");
         }
         for (int i = 0; i < length(); i++) {
             s.append(getVal(i));

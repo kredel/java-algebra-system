@@ -192,11 +192,11 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
         StringBuffer s = new StringBuffer();
         switch (Scripting.getLang()) {
         case Ruby:
-            s.append("ExteriorPolyRing.new(");
+            s.append("ExtPolyRing.new(");
             break;
         case Python:
         default:
-            s.append("ExteriorPolyRing(");
+            s.append("ExtPolyRing(");
         }
         if (coFac instanceof RingElem) {
             s.append(((RingElem<C>) coFac).toScriptFactory());

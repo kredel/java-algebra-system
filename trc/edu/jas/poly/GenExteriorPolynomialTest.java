@@ -102,7 +102,7 @@ public class GenExteriorPolynomialTest extends TestCase {
 
         String s = pf.toScript();
         //System.out.println("pf.toScript: " + s + ", " + s.length());
-        assertEquals("#s == 40: " + s, s.length(), 40);
+        assertEquals("#s == 35: " + s, s.length(), 35);
 
         s = pf.toString();
         //System.out.println("pf.toString: " + s + ", " + s.length());
@@ -793,7 +793,7 @@ public class GenExteriorPolynomialTest extends TestCase {
 
 
     /*
-     * Test old example.
+     * Test old example after Blonski, 1983.
      */
     @SuppressWarnings("unchecked")
     public void testExample() {
@@ -834,12 +834,15 @@ public class GenExteriorPolynomialTest extends TestCase {
         g2 = q1.multiply(q2).abs().divide(new BigInteger(3));
         System.out.println("g1 = p1 /\\ p2 = " + g1);
         System.out.println("g2 = q1 /\\ q2 = " + g2);
+        System.out.println("pp(g2) = " + q1.multiply(q2).coeffPrimitivePart());
+        assertEquals("g2 == pp(g2): ", g2, q1.multiply(q2).coeffPrimitivePart());
 
         // compute plane(ebene) g1..s and g2..s
         e1 = g1.multiply(s).abs().divide(new BigInteger(17));
         e2 = g2.multiply(s);
         System.out.println("e1 = g1 /\\ s = " + e1);
         System.out.println("e2 = g2 /\\ s = " + e2);
+        assertEquals("e1 == pp(e1): ", e1, g1.multiply(s).coeffPrimitivePart());
 
         // compute dual planes of e1, e2 as e1..emaxd and e2..emaxd
         e1dual = e1.innerRightProduct(emaxd).abs();
@@ -850,10 +853,12 @@ public class GenExteriorPolynomialTest extends TestCase {
         // compute intersection of plane e1, e2 via dual plane sum
         q = e1dual.multiply(e2dual).abs().divide(new BigInteger(5));
         System.out.println("q  = (e1dual /\\ e2dual) = " + q);
+        assertEquals("q == pp(q): ", q, e1dual.multiply(e2dual).coeffPrimitivePart());
         qs = q.innerRightProduct(emaxd).abs();
         System.out.println("qs = (e1dual /\\ e2dual) |_ emaxd = " + qs);
         qt = e1.innerLeftProduct(e2dual).abs().divide(new BigInteger(5));
         System.out.println("qt = e1 _| e2dual                = " + qt);
+        assertEquals("qt == pp(qt): ", qt, e1.innerLeftProduct(e2dual).coeffPrimitivePart());
         assertEquals("qs == qt: ", qs, qt);
 
         // compute dual line(gerade) of g1, g2

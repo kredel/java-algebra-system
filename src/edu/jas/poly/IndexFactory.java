@@ -39,6 +39,12 @@ public class IndexFactory implements MonoidFactory<IndexList> {
 
 
     /**
+     * The coordinate variable name.
+     */
+    public final String vname;
+
+
+    /**
      * The maximal index list for this factory.
      */
     public final IndexList imax;
@@ -63,6 +69,12 @@ public class IndexFactory implements MonoidFactory<IndexList> {
 
 
     /**
+     * The default coordinate variable name.
+     */
+    public static final String DEFAULT_VNAME = "E";
+
+
+    /**
      * The default imaxlength for this index lists.
      */
     public static final int DEFAULT_SIZE = 4;
@@ -72,7 +84,7 @@ public class IndexFactory implements MonoidFactory<IndexList> {
      * Constructor for IndexFactory. No argument constructor .
      */
     public IndexFactory() {
-        this(DEFAULT_SIZE);
+        this(DEFAULT_SIZE, DEFAULT_VNAME);
     }
 
 
@@ -81,7 +93,17 @@ public class IndexFactory implements MonoidFactory<IndexList> {
      * @param r length of index lists, starting with index 1.
      */
     public IndexFactory(int r) {
-        this(1, r);
+        this(1, r, DEFAULT_VNAME);
+    }
+
+
+    /**
+     * Constructor for IndexFactory.
+     * @param r length of index lists, starting with index 1.
+     * @param v coordinate vname.
+     */
+    public IndexFactory(int r, String v) {
+        this(1, r, v);
     }
 
 
@@ -91,6 +113,17 @@ public class IndexFactory implements MonoidFactory<IndexList> {
      * @param r length of index lists.
      */
     public IndexFactory(int s, int r) {
+        this(s, r, DEFAULT_VNAME);
+    }
+
+
+    /**
+     * Constructor for IndexFactory.
+     * @param s start index.
+     * @param r length of index lists.
+     * @param v coordinate vname.
+     */
+    public IndexFactory(int s, int r, String v) {
         if (r < 0) {
             throw new IllegalArgumentException("negative length index not allowed");
         }
@@ -98,6 +131,7 @@ public class IndexFactory implements MonoidFactory<IndexList> {
             throw new IllegalArgumentException("negative start index not allowed");
         }
         imaxlength = r;
+        vname = v;
         imax = new IndexList(this, 1, sequenceArray(s, imaxlength));
         ONE = new IndexList(this, 1, sequenceArray(s, 0));
     }
@@ -108,12 +142,23 @@ public class IndexFactory implements MonoidFactory<IndexList> {
      * @param o some index list.
      */
     public IndexFactory(IndexList o) {
+        this(o, o.mono.vname);
+    }
+
+
+    /**
+     * Constructor for IndexFactory.
+     * @param o some index list.
+     * @param v coordinate vname.
+     */
+    public IndexFactory(IndexList o, String v) {
         if (o == null) {
             throw new IllegalArgumentException("null index list not allowed");
         }
         int b = o.minDeg();
         int e = o.maxDeg();
         imaxlength = e - b;
+        vname = v;
         imax = new IndexList(this, 1, sequenceArray(b, imaxlength));
         if (imaxlength != o.length()) {
             logger.warn("length do not match: {} != {}", imaxlength, o.length());

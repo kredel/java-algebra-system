@@ -1435,7 +1435,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         if (s == null || s.isZERO()) {
             throw new ArithmeticException(this.getClass().getName() + " division by zero");
         }
-        if (this.isZERO()) {
+        if (this.isZERO() || s.isONE()) {
             return this;
         }
         //C t = s.inverse();
@@ -1461,6 +1461,23 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             pv.put(e, c); // or m1.setValue( c )
         }
         return p;
+    }
+
+
+    /**
+     * GenExteriorPolynomial coefficient primitive part. Division by
+     * gcd of coefficients.
+     * @return this/gcd(coeff(this)).
+     */
+    public GenExteriorPolynomial<C> coeffPrimitivePart() {
+        if (this.isZERO() || this.isONE()) {
+            return this;
+        }
+        C s = ring.coFac.getZERO();
+        for (C c : val.values()) {
+            s = s.gcd(c);
+        }
+        return divide(s).abs();
     }
 
 
