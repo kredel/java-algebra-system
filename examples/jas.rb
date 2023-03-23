@@ -1539,6 +1539,37 @@ Get the coefficients of a polynomial.
         return ll
     end
 
+=begin rdoc
+(exterior) polynomial coefficient primitive part.
+=end
+    def cpp()
+        a = @elem;
+        r = a.coeffPrimitivePart();
+        return RingElem.new(r);
+    end
+
+=begin rdoc
+Inner left product of two exterior vectors / polynomials.
+=end
+    def innerLeftProduct(other)
+        #puts "* self  type(#{self.elem}) = #{self.elem.class}\n";
+        #puts "* other type(#{other.elem}) = #{other.elem.class}\n";
+        s,o = coercePair(self,other);
+        #puts "* s = #{s}, o = #{o}, s*o = #{s.elem.multiply(o.elem)}\n";
+        return RingElem.new( s.elem.innerLeftProduct( o.elem ) );
+    end
+
+=begin rdoc
+Inner right product of two exterior vectors / polynomials.
+=end
+    def innerRightProduct(other)
+        #puts "* self  type(#{self.elem}) = #{self.elem.class}\n";
+        #puts "* other type(#{other.elem}) = #{other.elem.class}\n";
+        s,o = coercePair(self,other);
+        #puts "* s = #{s}, o = #{o}, s*o = #{s.elem.multiply(o.elem)}\n";
+        return RingElem.new( s.elem.innerRightProduct( o.elem ) );
+    end
+
 
 #----------------
 # Compatibility methods for Sage/Singular:

@@ -476,6 +476,15 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
+     * Get a GenExteriorPolynomial maximal index list element.
+     * @return a GenExteriorPolynomial with maximal index list.
+     */
+    public GenExteriorPolynomial<C> getIMAX() {
+        return valueOf(coFac.getONE(), ixfac.imax);
+    }
+
+
+    /**
      * Get a (constant) GenExteriorPolynomial from a long value.
      * @param a long.
      * @return a GenExteriorPolynomial.

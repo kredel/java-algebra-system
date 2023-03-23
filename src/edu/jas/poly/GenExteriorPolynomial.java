@@ -920,7 +920,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
     /**
      * GenExteriorPolynomial multiplication.
      * @param S GenExteriorPolynomial.
-     * @return this*S.
+     * @return this /\\ S.
      */
     public GenExteriorPolynomial<C> multiply(GenExteriorPolynomial<C> S) {
         if (S == null) {
