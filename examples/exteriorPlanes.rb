@@ -96,11 +96,11 @@ puts;
 
 # compute intersection of plane plane1, plane2 via dual planes sum
 q = (e1dual * e2dual).cpp();
-puts "q = e1dual /\\ e2dual = " + str(q);
+puts "q = e1dual /\\ e2dual             = " + str(q);
 qs = q.innerRightProduct(emax).cpp();
 puts "qs = (e1dual /\\ e2dual) |_ emaxd = " + str(qs);
 qt = plane1.innerLeftProduct(e2dual).cpp();
-puts "qt = e1 _| e2dual                = " + str(qt);
+puts "qt = plane1 _| e2dual            = " + str(qt);
 puts;
 
 # compute dual line(gerade) of g1, g2
@@ -111,9 +111,9 @@ puts "g2dual = g2 |_ emax = " + str(g2dual);
 
 # compute intersection of g1..e2 and g2..e1
 s1 = plane2.innerLeftProduct(g1dual).cpp();
-puts "s1 = e2 _| g1dual = " + str(s1);
+puts "s1 = plane2 _| g1dual = " + str(s1);
 s2 = plane1.innerLeftProduct(g2dual).cpp();
-puts "s2 = e1 _| g2dual = " + str(s2);
+puts "s2 = plane1 _| g2dual = " + str(s2);
 puts
 
 # check intersection of s..qs, qs..e1 and qs..e2
