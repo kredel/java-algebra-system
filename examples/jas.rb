@@ -82,7 +82,7 @@ def inject_gens(env)
     if env.generators == nil
        env.generators = {};
     end
-    #puts "existing generators: " + env.generators.keys().join(", ");  
+    #puts "existing generators(#{env}): " + env.generators.keys().join(", ");
     redef = []
     for i in self.gens()
        begin 
@@ -99,6 +99,7 @@ def inject_gens(env)
           env.generators[ ivs ] = i;
           env.instance_eval( "def #{ivs}; @generators[ '#{ivs}' ]; end" )
           #puts "def #{ivs}; @generators[ '#{ivs}' ]; end"
+          #puts "@generators[ '#{ivs}' ] = #{i}"
           if self.class.auto_lowervar 
              first = ivs.slice(0,1);
              if first.count('A-Z') > 0
@@ -109,6 +110,7 @@ def inject_gens(env)
                    #puts "redefining global variable #{ivl}";
                    redef << ivl;
                 end
+                env.generators[ ivl ] = i;
                 env.instance_eval( "def #{ivl}; @generators[ '#{ivs}' ]; end" )
              end
           end
@@ -117,7 +119,7 @@ def inject_gens(env)
           puts "error: #{ivs} = " + i.to_s + ", e = " + e.to_s;
        end
     end
-    puts "globally defined variables: " + env.generators.keys().join(", ");  
+    puts "globally(#{env}) defined variables: " + env.generators.keys().join(", ");
     if redef.size > 0
        puts "WARN: redefined variables: " + redef.join(", ");  
     end
@@ -1772,6 +1774,9 @@ end
 
 java_import "edu.jas.poly.GenPolynomial";
 java_import "edu.jas.poly.GenPolynomialRing";
+java_import "edu.jas.poly.IndexFactory";
+java_import "edu.jas.poly.GenWordPolynomialRing";
+java_import "edu.jas.poly.GenExteriorPolynomialRing";
 java_import "edu.jas.poly.GenSolvablePolynomial";
 java_import "edu.jas.poly.GenSolvablePolynomialRing";
 java_import "edu.jas.poly.RecSolvablePolynomial";
@@ -1856,6 +1861,8 @@ ring JAS ring object.
         @sqf = Ring.getEngineSqf(@ring);
         @factor = Ring.getEngineFactor(@ring);
         variable_generators()
+        #puts "self.class.auto_inject = " + self.class.auto_inject.to_s
+        #puts "self.class.superclass.auto_inject = " + self.class.superclass.auto_inject.to_s
         if self.class.auto_inject or self.class.superclass.auto_inject # sic!
            inject_variables();
         end
@@ -1947,7 +1954,7 @@ Define instance variables for generators.
              #pass
           end
        end
-    #puts "locally defined generators: " + @generators.keys().join(", ");  
+    #puts "locally defined generators: " + @generators.keys().join(", ");
     end
 
 =begin rdoc
@@ -1958,8 +1965,9 @@ Inject variables for generators in top level environment.
            require "irb/frame" # must be placed here
            bin = IRB::Frame.bottom(0);
            env = eval "self", bin;
-           #puts "env = " + str(env)
+           puts "inject_gens: env1 = " + str(env)
            inject_gens(env)
+           puts "inject_gens: env2 = " + str(env)
         rescue => e
            puts "error: 'irb/frame' not found, e = " + str(e);
         end
@@ -2390,7 +2398,7 @@ order = term order or weight matrix.
         end
         @ring = GenPolynomialRing.new(cf,nv,to,names);
         #@ring = tring;
-        super("",@ring) 
+        super("",@ring)
     end
 
 =begin rdoc
@@ -4107,7 +4115,7 @@ Solvable polynomial ring constructor.
            puts "warning: ring is not associative";
         end
         #puts "SolvableRing to super()";
-        super("",@ring) 
+        super("",@ring)
     end
 
 =begin rdoc
@@ -4323,7 +4331,7 @@ rel = triple list of relations. (e,f,p,...) with e * f = p as relation.
         #puts "isAssoc " + str(ring.isAssociative());
         @ring = ring;
         #puts "SolvPolyRing to super()";
-        super("",@ring) 
+        super("",@ring)
         # puts "ai = " +  self.class.auto_inject.to_s
         # done in super():
         #if self.class.auto_inject or self.class.superclass.auto_inject
@@ -6022,6 +6030,185 @@ Get extension ring or field tower.
 
 end
 
+#------------------------------------
+
+=begin rdoc
+Represents a JAS exterior vector / polynomial ring: GenExteriorPolynomialRing.
+
+=end
+class ExtRing < Ring
+
+    #@auto_inject = true
+    #@auto_lowervar = false
+    #class << self  # means add to class
+    #   # inject variables into environment
+    #   attr_accessor :auto_inject
+    #   # avoid capital letter variables
+    #   attr_accessor :auto_lowervar
+    #end
+
+=begin rdoc
+Exterior vector / polynomial ring constructor.
+=end
+    def initialize(ringstr="",ring=nil)
+      #puts "ExtRing.new"
+      if ring == nil
+           #raise "parse of ext polynomial rings not implemented"
+           sr = StringReader.new( ringstr );
+           tok = RingFactoryTokenizer.new(sr);
+           pfac = tok.nextPolynomialRing();
+           efac = GenExtPolynomialRing.new(pfac);
+           #@list = tok.nextExtPolynomialList(wfac);
+           @ring = efac;
+        else
+           if ring.is_a? Ring
+              @ring = ring.ring
+           else
+              @ring = ring;
+           end
+        end
+        super("",@ring)
+        #puts "ExtRing.new: self.class.auto_inject = " + self.class.auto_inject.to_s
+        #inject_variables();
+        #puts "ExtRing.new: self.class.superclass.auto_inject = " + self.class.superclass.auto_inject.to_s
+    end
+
+=begin rdoc
+Create a string representation.
+=end
+    def to_s()
+        return @ring.toScript(); #.to_s;
+    end
+
+#=begin rdoc
+#Create a exterior ideal.
+#=end
+#    def ideal(ringstr="",list=nil)
+#        return ExtPolyIdeal.new(self, ringstr, list);
+#    end
+
+=begin rdoc
+Get the one of the exterior vector / polynomial ring.
+=end
+    def one()
+        return RingElem.new( @ring.getONE() );
+    end
+
+=begin rdoc
+Get the zero of the exterior vector / polynomial ring.
+=end
+    def zero()
+        return RingElem.new( @ring.getZERO() );
+    end
+
+=begin rdoc
+Get a random exterior vector / polynomial.
+=end
+    def random(n=5)
+        r = @ring.random(n);
+        if @ring.coFac.isField()
+            r = r.monic();
+        end
+        return RingElem.new( r );
+    end
+
+=begin rdoc
+Get a random exterior vector / polynomial.
+=end
+    def random(k=5,l=7,d=3)
+        r = @ring.random(k,l,d);
+        if @ring.coFac.isField()
+            r = r.monic();
+        end
+        return RingElem.new( r );
+    end
+
+=begin rdoc
+Create an element from a string or object.
+=end
+    def element(poly)
+        if not poly.is_a? String
+           begin
+              if @ring == poly.ring
+                 return RingElem.new(poly);
+              end
+           rescue => e
+              # pass
+           end
+           poly = str(poly);
+        end
+        sr = StringReader.new(poly);
+        tok = GenPolynomialTokenizer.new(sr);
+        ii = tok.nextExteriorPolynomial(@ring);
+        if ii != nil
+            return RingElem.new( ii );
+        end
+    end
+
+end
+
+
+=begin rdoc
+Represents a JAS exterior vector / polynomial ring: GenExteriorPolynomialRing.
+
+Provides more convenient constructor.
+Then returns a Ring.
+=end
+class ExtPolyRing < ExtRing
+
+    @auto_inject = true
+    @auto_lowervar = true
+
+    class << self  # means add to class
+       # inject variables into environment
+       attr_accessor :auto_inject
+       # avoid capital letter variables
+       attr_accessor :auto_lowervar
+    end
+
+=begin rdoc
+Ring constructor.
+
+coeff = factory for coefficients,
+s = size of index list,
+var = string with one variable name.
+=end
+    def initialize(coeff, s, var="E")
+        #puts "ExtPolyRing.new"
+        if coeff == nil
+            raise ArgumentError, "No coefficient given."
+        end
+        cf = coeff;
+        if coeff.is_a? RingElem
+            cf = coeff.elem.factory();
+        end
+        if coeff.is_a? Ring
+            cf = coeff.ring;
+        end
+        if s == nil
+            raise ArgumentError, "No variabl size given."
+        end
+        names = var;
+        if not var.is_a? String
+            names = GenPolynomialTokenizer.variableList(var);
+        end
+        wf = IndexFactory.new(s, names);
+        @ring = GenExteriorPolynomialRing.new(cf, wf);
+        super("",@ring)
+        #puts "ExtPolyRing.new: self.class.auto_inject = " + self.class.auto_inject.to_s
+        #inject_variables();
+        #puts "ExtPolyRing.new: self.class.superclass.auto_inject = " + self.class.superclass.auto_inject.to_s
+    end
+
+=begin rdoc
+Create a string representation.
+=end
+    def to_s()
+        return @ring.toScript();
+    end
+end
+
+#------------------------------------
 
 =begin rdoc
 Represents a JAS non-commutative polynomial ring: GenWordPolynomialRing.

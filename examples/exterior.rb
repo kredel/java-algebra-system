@@ -106,6 +106,7 @@ ps = """
 (
  ( a b + c f + g h ),
  ( u v + w x + y z ),
+ ( a v + w x + y z ),
  ( a^2 ),
  ( b^2 ),
  ( c^2 ),
