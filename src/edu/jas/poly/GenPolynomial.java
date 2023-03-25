@@ -1888,6 +1888,23 @@ public class GenPolynomial<C extends RingElem<C>>
 
 
     /**
+     * GenPolynomial coefficient primitive part. Division by
+     * gcd of coefficients.
+     * @return this/gcd(coeff(this)).
+     */
+    public GenPolynomial<C> coeffPrimitivePart() {
+        if (this.isZERO() || this.isONE()) {
+            return this;
+        }
+        C s = ring.coFac.getZERO();
+        for (C c : val.values()) {
+            s = s.gcd(c);
+        }
+        return divide(s).abs();
+    }
+
+
+    /**
      * GenPolynomial division with remainder. Fails, if exact division by
      * leading base coefficient is not possible. Meaningful only for univariate
      * polynomials over fields, but works in any case.

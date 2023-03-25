@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigInteger;
+import edu.jas.poly.PolyUtil;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -71,7 +73,8 @@ public class RatGenPolynomialTest extends TestCase {
     @Override
     protected void setUp() {
         a = b = c = d = e = null;
-        fac = new GenPolynomialRing<BigRational>(new BigRational(1), rl);
+        String[] vars = new String[] { "a", "b", "c", "d", "e", "f", "g" };
+        fac = new GenPolynomialRing<BigRational>(new BigRational(1), vars);
     }
 
 
@@ -86,9 +89,10 @@ public class RatGenPolynomialTest extends TestCase {
      * Test generate.
      */
     public void testGenerate() {
+        assertEquals("rl == #vars: ", rl, fac.nvar);
         String s = fac.toScript();
         //System.out.println("fac.toScript: " + s + ", " + s.length());
-        assertTrue("#s == 50: " + s, s.length() == 50);
+        assertTrue("#s == 50: " + s.length(), s.length() <= 50);
 
         List<GenPolynomial<BigRational>> gens = fac.generators();
         assertFalse("#gens != () ", gens.isEmpty());
@@ -473,6 +477,27 @@ public class RatGenPolynomialTest extends TestCase {
         //s = a.multiply(a).sumNorm();
         //System.out.println("s = " + s + ", r*r = " + r.multiply(r));
         //assertEquals("s*s == sumNorm(a*a) )", r.multiply(r), s );
+    }
+
+
+    /**
+     * Test monic and coefficient primitive part.
+     */
+    public void testMonicCPP() {
+        BigInteger bfac = new BigInteger(1);
+        GenPolynomialRing<BigInteger> ifac = new GenPolynomialRing<BigInteger>(bfac, fac);
+
+        GenPolynomial<BigInteger> ai = ifac.random(kl * 2, ll + 2, el, q);
+        ai = ai.multiply(bfac.random(kl));
+        //System.out.println("ai = " + ai);
+        GenPolynomial<BigInteger> bi = ai.coeffPrimitivePart();
+        //System.out.println("bi = " + bi);
+
+        a = PolyUtil.<BigRational> fromIntegerCoefficients(fac, ai).monic();
+        //System.out.println("a = " + a);
+        b = PolyUtil.<BigRational> fromIntegerCoefficients(fac, bi).monic();
+        //System.out.println("b = " + b);
+        assertEquals("a == b: " + a + " != " + b, a, b);
     }
 
 }
