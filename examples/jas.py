@@ -13,6 +13,7 @@ from edu.jas.arith       import BigInteger, BigRational, BigComplex, BigDecimal,
                                 BigQuaternion, BigQuaternionRing, BigOctonion,\
                                 Product, ProductRing, ArithUtil, PrimeList, PrimeInteger
 from edu.jas.poly        import GenPolynomial, GenPolynomialRing, Monomial,\
+                                IndexFactory, GenExteriorPolynomial, GenExteriorPolynomialRing,\
                                 GenSolvablePolynomial, GenSolvablePolynomialRing,\
                                 RecSolvablePolynomial, RecSolvablePolynomialRing,\
                                 RecSolvableWordPolynomial, RecSolvableWordPolynomialRing,\
@@ -4098,6 +4099,30 @@ class RingElem:
         L = [ RingElem(c) for c in a.coefficientIterator() ];
         return L
 
+    def cpp(self):
+        '''(exterior) polynomial coefficient primitive part.
+        '''
+        a = self.elem;
+        r = a.coeffPrimitivePart();
+        p = RingElem(r);
+        return p
+
+    def innerLeftProduct(self,other):
+        '''Inner left product of two exterior vectors / polynomials.
+        '''
+        [s,o] = coercePair(self,other);
+        #print "self  type(%s) = %s" % (s,type(s));
+        #print "other type(%s) = %s" % (o,type(o));
+        return RingElem( s.elem.innerLeftProduct( o.elem ) );
+
+    def innerRightProduct(self,other):
+        '''Inner right product of two exterior vectors / polynomials.
+        '''
+        [s,o] = coercePair(self,other);
+        #print "self  type(%s) = %s" % (s,type(s));
+        #print "other type(%s) = %s" % (o,type(o));
+        return RingElem( s.elem.innerRightProduct( o.elem ) );
+
 #----------------
 # Compatibility methods for Sage/Singular:
 # Note: the meaning of lt and lm is swapped compared to JAS.
@@ -4571,6 +4596,120 @@ class EF:
             return Ring("", rf);
 
 
+#------------------------------------
+
+class ExtRing(Ring):
+    '''Represents a JAS exterior vector / polynomial ring: GenExteriorPolynomialRing.
+
+    '''
+
+    def __init__(self,ringstr="",ring=None):
+        '''Exterior vector / polynomial ring constructor.
+        '''
+        print "ExtRing: ";
+        if ring == None:
+           #raise ValueError, "parse of exterior polynomials not implemented"
+           sr = StringReader( ringstr );
+           tok = RingFactoryTokenizer(sr);
+           pfac = tok.nextPolynomialRing();
+           wfac = GenExteriorPolynomialRing(pfac);
+           #list = tok.nextExtPolynomialList(wfac);
+           self.ring = wfac;
+        else:
+           if isinstance(ring,Ring):
+              self.ring = ring.ring;
+           else:
+              self.ring = ring;
+        Ring.__init__(self,ring=self.ring)
+
+    def __str__(self):
+        '''Create a string representation.
+        '''
+        return str(self.ring.toScript());
+
+#    def ideal(self,ringstr="",list=None):
+#        '''Create a word ideal.
+#        '''
+#        return ExtPolyIdeal(self,ringstr,list);
+
+    def one(self):
+        '''Get the one of the exterior vector / polynomial ring.
+        '''
+        return RingElem( self.ring.getONE() );
+
+    def zero(self):
+        '''Get the zero of the exterior vector / polynomial ring.
+        '''
+        return RingElem( self.ring.getZERO() );
+
+    def random(self,n):
+        '''Get a random exterior vector / polynomial.
+        '''
+        return RingElem( self.ring.random(n) );
+
+    def random(self,k,l,d):
+        '''Get a random exterior vector / polynomial.
+        '''
+        return RingElem( self.ring.random(k,l,d) );
+
+    def element(self,poly):
+        '''Create an element from a string or object.
+        '''
+        if not isinstance(poly,str):
+            try:
+                if self.ring == poly.ring:
+                    return RingElem(poly);
+            except Exception, e:
+                pass
+            poly = str(poly);
+        sr = StringReader(poly);
+        top = GenPolynomialTokenizer(sr);
+        ep = tok.nextExteriorPolynomial(self.ring);
+        if ep != None:
+            return RingElem( ep );
+
+
+class ExtPolyRing(ExtRing):
+    '''Represents a JAS exterior vector / polynomial ring: GenExteriorPolynomialRing.
+
+    Provides more convenient constructor.
+    Then returns a Ring.
+    '''
+
+    def __init__(self,coeff,s,var="E"):
+        '''Ring constructor.
+
+        coeff = factory for coefficients,
+        s = size of index list,
+        var = string with one variable name.
+        '''
+        print "ExtPolyRing: ";
+        if coeff == None:
+            raise ValueError, "No coefficient given."
+        cf = coeff;
+        if isinstance(coeff,RingElem):
+            cf = coeff.elem.factory();
+        if isinstance(coeff,Ring):
+            cf = coeff.ring;
+        if s == None:
+            raise ValueError, "No variable size given."
+        names = var;
+        if not isinstance(var,PyString):
+            names = GenPolynomialTokenizer.variableList(var);
+        wf = IndexFactory(s, names);
+        ring = GenExteriorPolynomialRing(cf,wf);
+        self.ring = ring;
+        Ring.__init__(self,ring=self.ring)
+
+    def __str__(self):
+        '''Create a string representation.
+        '''
+        return self.ring.toScript();
+
+
+#------------------------------------
+
+
 class WordRing(Ring):
     '''Represents a JAS free non-commutative polynomial ring: GenWordPolynomialRing.
 
@@ -4582,7 +4721,7 @@ class WordRing(Ring):
         '''Word polynomial ring constructor.
         '''
         if ring == None:
-           #raise ValueError, "parse of word polynomials not implemented" 
+           #raise ValueError, "parse of word polynomials not implemented"
            sr = StringReader( ringstr );
            tok = RingFactoryTokenizer(sr);
            pfac = tok.nextPolynomialRing();
@@ -4689,7 +4828,7 @@ class WordPolyIdeal:
         '''
         self.ring = ring;
         if list == None:
-           #raise ValueError, "parse of word polynomials not implemented" 
+           #raise ValueError, "parse of word polynomials not implemented"
            sr = StringReader( ringstr );
            tok = GenPolynomialTokenizer(sr);
            self.list = tok.nextWordPolynomialList(ring.ring);

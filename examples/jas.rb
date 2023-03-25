@@ -6170,9 +6170,9 @@ Create an element from a string or object.
         end
         sr = StringReader.new(poly);
         tok = GenPolynomialTokenizer.new(sr);
-        ii = tok.nextExteriorPolynomial(@ring);
-        if ii != nil
-            return RingElem.new( ii );
+        ep = tok.nextExteriorPolynomial(@ring);
+        if ep != nil
+            return RingElem.new( ep );
         end
     end
 
@@ -6217,7 +6217,7 @@ var = string with one variable name.
             cf = coeff.ring;
         end
         if s == nil
-            raise ArgumentError, "No variabl size given."
+            raise ArgumentError, "No variable size given."
         end
         names = var;
         if not var.is_a? String
