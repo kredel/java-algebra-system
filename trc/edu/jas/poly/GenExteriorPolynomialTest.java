@@ -845,8 +845,8 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertEquals("e1 == pp(e1): ", e1, g1.multiply(s).coeffPrimitivePart());
 
         // compute dual planes of e1, e2 as e1..emaxd and e2..emaxd
-        e1dual = e1.innerRightProduct(emaxd).abs();
-        e2dual = e2.innerRightProduct(emaxd).abs();
+        e1dual = e1.interiorRightProduct(emaxd).abs();
+        e2dual = e2.interiorRightProduct(emaxd).abs();
         System.out.println("e1dual = e1 |_ emaxd = " + e1dual);
         System.out.println("e2dual = e2 |_ emaxd = " + e2dual);
 
@@ -854,23 +854,23 @@ public class GenExteriorPolynomialTest extends TestCase {
         q = e1dual.multiply(e2dual).abs().divide(new BigInteger(5));
         System.out.println("q  = (e1dual /\\ e2dual) = " + q);
         assertEquals("q == pp(q): ", q, e1dual.multiply(e2dual).coeffPrimitivePart());
-        qs = q.innerRightProduct(emaxd).abs();
+        qs = q.interiorRightProduct(emaxd).abs();
         System.out.println("qs = (e1dual /\\ e2dual) |_ emaxd = " + qs);
-        qt = e1.innerLeftProduct(e2dual).abs().divide(new BigInteger(5));
+        qt = e1.interiorLeftProduct(e2dual).abs().divide(new BigInteger(5));
         System.out.println("qt = e1 _| e2dual                = " + qt);
-        assertEquals("qt == pp(qt): ", qt, e1.innerLeftProduct(e2dual).coeffPrimitivePart());
+        assertEquals("qt == pp(qt): ", qt, e1.interiorLeftProduct(e2dual).coeffPrimitivePart());
         assertEquals("qs == qt: ", qs, qt);
 
         // compute dual line(gerade) of g1, g2
-        g1dual = g1.innerRightProduct(emaxd);
-        g2dual = g2.innerRightProduct(emaxd).abs();
+        g1dual = g1.interiorRightProduct(emaxd);
+        g2dual = g2.interiorRightProduct(emaxd).abs();
         System.out.println("g1dual = g1 |_ emaxd = " + g1dual);
         System.out.println("g2dual = g2 |_ emaxd = " + g2dual);
 
         // compute intersection of g1..e2 and g2..e1
-        s1 = e2.innerLeftProduct(g1dual).abs().divide(new BigInteger(5));
+        s1 = e2.interiorLeftProduct(g1dual).abs().divide(new BigInteger(5));
         System.out.println("s1 = e2 _| g1dual = " + s1);
-        s2 = e1.innerLeftProduct(g2dual).abs().divide(new BigInteger(5));
+        s2 = e1.interiorLeftProduct(g2dual).abs().divide(new BigInteger(5));
         System.out.println("s2 = e1 _| g2dual = " + s2);
 
         // check intersection of s..qs, qs..e1 and qs..e2

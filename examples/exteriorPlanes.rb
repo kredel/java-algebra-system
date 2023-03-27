@@ -88,8 +88,8 @@ emax = RingElem.new( r.ring.getIMAX() );
 puts "emax = " + str(emax);
 
 # compute dual planes of e1, e2 as e1..emax and e2..emax
-e1dual = plane1.innerRightProduct(emax).abs();
-e2dual = plane2.innerRightProduct(emax).abs();
+e1dual = plane1.interiorRightProduct(emax).abs();
+e2dual = plane2.interiorRightProduct(emax).abs();
 puts "e1dual = plane1 |_ emax = " + str(e1dual);
 puts "e2dual = plane2 |_ emax = " + str(e2dual);
 puts;
@@ -97,22 +97,22 @@ puts;
 # compute intersection of plane plane1, plane2 via dual planes sum
 q = (e1dual * e2dual).cpp();
 puts "q = e1dual /\\ e2dual             = " + str(q);
-qs = q.innerRightProduct(emax).cpp();
+qs = q.interiorRightProduct(emax).cpp();
 puts "qs = (e1dual /\\ e2dual) |_ emaxd = " + str(qs);
-qt = plane1.innerLeftProduct(e2dual).cpp();
+qt = plane1.interiorLeftProduct(e2dual).cpp();
 puts "qt = plane1 _| e2dual            = " + str(qt);
 puts;
 
 # compute dual line(gerade) of g1, g2
-g1dual = g1.innerRightProduct(emax).cpp();
-g2dual = g2.innerRightProduct(emax).cpp();
+g1dual = g1.interiorRightProduct(emax).cpp();
+g2dual = g2.interiorRightProduct(emax).cpp();
 puts "g1dual = g1 |_ emax = " + str(g1dual);
 puts "g2dual = g2 |_ emax = " + str(g2dual);
 
 # compute intersection of g1..e2 and g2..e1
-s1 = plane2.innerLeftProduct(g1dual).cpp();
+s1 = plane2.interiorLeftProduct(g1dual).cpp();
 puts "s1 = plane2 _| g1dual = " + str(s1);
-s2 = plane1.innerLeftProduct(g2dual).cpp();
+s2 = plane1.interiorLeftProduct(g2dual).cpp();
 puts "s2 = plane1 _| g2dual = " + str(s2);
 puts
 

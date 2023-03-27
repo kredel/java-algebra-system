@@ -105,7 +105,7 @@ def inject_gens(env)
              if first.count('A-Z') > 0
                 first = first.downcase
                 ivl = first + ivs.slice(1,ivs.length);
-                puts "warning: '" + str(ivs) + "' additionaly renamed to '" + str(ivl) + "' to avoid constant semantics"
+                puts "warning: '" + str(ivs) + "' additionaly defined as '" + str(ivl) + "' to avoid constant semantics"
                 if env.generators[ ivl ] != nil
                    #puts "redefining global variable #{ivl}";
                    redef << ivl;
@@ -1551,23 +1551,23 @@ Get the coefficients of a polynomial.
 =begin rdoc
 Inner left product of two exterior vectors / polynomials.
 =end
-    def innerLeftProduct(other)
+    def interiorLeftProduct(other)
         #puts "* self  type(#{self.elem}) = #{self.elem.class}\n";
         #puts "* other type(#{other.elem}) = #{other.elem.class}\n";
         s,o = coercePair(self,other);
         #puts "* s = #{s}, o = #{o}, s*o = #{s.elem.multiply(o.elem)}\n";
-        return RingElem.new( s.elem.innerLeftProduct( o.elem ) );
+        return RingElem.new( s.elem.interiorLeftProduct( o.elem ) );
     end
 
 =begin rdoc
 Inner right product of two exterior vectors / polynomials.
 =end
-    def innerRightProduct(other)
+    def interiorRightProduct(other)
         #puts "* self  type(#{self.elem}) = #{self.elem.class}\n";
         #puts "* other type(#{other.elem}) = #{other.elem.class}\n";
         s,o = coercePair(self,other);
         #puts "* s = #{s}, o = #{o}, s*o = #{s.elem.multiply(o.elem)}\n";
-        return RingElem.new( s.elem.innerRightProduct( o.elem ) );
+        return RingElem.new( s.elem.interiorRightProduct( o.elem ) );
     end
 
 
@@ -1996,9 +1996,9 @@ Inject variables for generators in top level environment.
            require "irb/frame" # must be placed here
            bin = IRB::Frame.bottom(0);
            env = eval "self", bin;
-           puts "inject_gens: env1 = " + str(env)
+           #puts "inject_gens: env1 = " + str(env)
            inject_gens(env)
-           puts "inject_gens: env2 = " + str(env)
+           #puts "inject_gens: env2 = " + str(env)
         rescue => e
            puts "error: 'irb/frame' not found, e = " + str(e);
         end
@@ -5748,7 +5748,7 @@ end
 
 
 =begin rdoc
-(Was inner) class which extends edu.jas.ps.Coefficients
+(Was interior) class which extends edu.jas.ps.Coefficients
 =end
 class Coeff < Coefficients
 
@@ -5819,7 +5819,7 @@ end
 
 
 =begin rdoc
-(Was inner) class which extends edu.jas.ps.MultiVarCoefficients
+(Was interior) class which extends edu.jas.ps.MultiVarCoefficients
 =end
 class MCoeff < MultiVarCoefficients
 
@@ -6079,7 +6079,7 @@ class ExtRing < Ring
     #end
 
 =begin rdoc
-Exterior vector / polynomial ring constructor.
+Exterior form / vector / polynomial ring constructor.
 =end
     def initialize(ringstr="",ring=nil)
       #puts "ExtRing.new"
@@ -6089,7 +6089,7 @@ Exterior vector / polynomial ring constructor.
            tok = RingFactoryTokenizer.new(sr);
            pfac = tok.nextPolynomialRing();
            efac = GenExtPolynomialRing.new(pfac);
-           #@list = tok.nextExtPolynomialList(wfac);
+           @list = tok.nextExteriorPolynomialList(wfac);
            @ring = efac;
         else
            if ring.is_a? Ring
@@ -6180,7 +6180,7 @@ end
 
 
 =begin rdoc
-Represents a JAS exterior vector / polynomial ring: GenExteriorPolynomialRing.
+Represents a JAS exterior form / vector / polynomial ring: GenExteriorPolynomialRing.
 
 Provides more convenient constructor.
 Then returns a Ring.

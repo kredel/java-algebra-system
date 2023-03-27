@@ -970,11 +970,11 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial inner left multiplication.
+     * GenExteriorPolynomial interior left multiplication.
      * @param S GenExteriorPolynomial.
      * @return this _| S.
      */
-    public GenExteriorPolynomial<C> innerLeftProduct(GenExteriorPolynomial<C> S) {
+    public GenExteriorPolynomial<C> interiorLeftProduct(GenExteriorPolynomial<C> S) {
         if (S == null) {
             return ring.getZERO();
         }
@@ -995,7 +995,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
                 IndexList e2 = m2.getKey();
                 C c = c1.multiply(c2); // check non zero if not domain
                 if (!c.isZERO()) {
-                    IndexList e = e1.innerLeftProduct(e2);
+                    IndexList e = e1.interiorLeftProduct(e2);
                     if (e.isZERO()) { // since exterior algebra
                         continue;
                     }
@@ -1022,11 +1022,11 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial inner right multiplication.
+     * GenExteriorPolynomial interior right multiplication.
      * @param S GenExteriorPolynomial.
      * @return this |_ S.
      */
-    public GenExteriorPolynomial<C> innerRightProduct(GenExteriorPolynomial<C> S) {
+    public GenExteriorPolynomial<C> interiorRightProduct(GenExteriorPolynomial<C> S) {
         if (S == null) {
             return ring.getZERO();
         }
@@ -1047,7 +1047,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
                 IndexList e2 = m2.getKey();
                 C c = c1.multiply(c2); // check non zero if not domain
                 if (!c.isZERO()) {
-                    IndexList e = e1.innerRightProduct(e2);
+                    IndexList e = e1.interiorRightProduct(e2);
                     if (e.isZERO()) { // since exterior algebra
                         continue;
                     }
@@ -1519,8 +1519,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
             IndexList f = r.leadingIndexList();
             if (e.divides(f)) {
                 C a = r.leadingBaseCoefficient();
-                //IndexList gl = e.innerLeftProduct(f);
-                IndexList g = e.innerRightProduct(f);
+                //IndexList gl = e.interiorLeftProduct(f);
+                IndexList g = e.interiorRightProduct(f);
                 //System.out.println("divRem: f = " + f + ", e = " + e + ", g = " + g);
                 a = a.multiply(ci);
                 q = q.sum(a, g); // q + a g

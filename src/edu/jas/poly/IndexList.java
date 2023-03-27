@@ -378,21 +378,21 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-     * IndexList inner left product.
+     * IndexList interior left product.
      * @param V other index list
      * @return this _| V.
      */
-    public IndexList innerLeftProduct(IndexList V) {
-        return V.innerRightProduct(this);
+    public IndexList interiorLeftProduct(IndexList V) {
+        return V.interiorRightProduct(this);
     }
 
 
     /**
-     * IndexList inner right product.
+     * IndexList interior right product.
      * @param V other index list
      * @return this |_ V.
      */
-    public IndexList innerRightProduct(IndexList V) {
+    public IndexList interiorRightProduct(IndexList V) {
         if (!this.divides(V)) {
             return mono.getZERO(); // = 0
         }
@@ -467,10 +467,10 @@ public class IndexList implements MonoidElem<IndexList> {
     /**
      * IndexList divide. <b>Note:</b> experimental.
      * @param V other IndexList.
-     * @return this/V. <b>Note:</b> computed as innerRightProduct, eventually useful.
+     * @return this/V. <b>Note:</b> computed as interiorRightProduct, eventually useful.
      */
     public IndexList divide(IndexList V) {
-        return innerRightProduct(V);
+        return interiorRightProduct(V);
         //throw new UnsupportedOperationException("divide not implemented");
     }
 

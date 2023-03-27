@@ -159,16 +159,16 @@ public class IndexListTest extends TestCase {
         //System.out.println("div = " + div);
 
         IndexList ca, cb;
-        ca = a.innerRightProduct(c);
-        cb = b.innerRightProduct(c);
+        ca = a.interiorRightProduct(c);
+        cb = b.interiorRightProduct(c);
         //System.out.println("ca = " + ca);
         //System.out.println("cb = " + cb);
 
         assertEquals("a == cb: ", a.abs(), cb.abs());
         assertEquals("b == ca: ", b.abs(), ca.abs());
 
-        ca = c.innerLeftProduct(a);
-        cb = c.innerLeftProduct(b);
+        ca = c.interiorLeftProduct(a);
+        cb = c.interiorLeftProduct(b);
         //System.out.println("ca_l = " + ca);
         //System.out.println("cb_l = " + cb);
     }
@@ -200,8 +200,8 @@ public class IndexListTest extends TestCase {
         assertEquals("c == ab: ", c, d);
 
         IndexList ca, cb;
-        ca = a.innerRightProduct(d);
-        cb = b.innerRightProduct(d);
+        ca = a.interiorRightProduct(d);
+        cb = b.interiorRightProduct(d);
         //System.out.println("ca = " + ca);
         //System.out.println("cb = " + cb);
 

@@ -4107,21 +4107,21 @@ class RingElem:
         p = RingElem(r);
         return p
 
-    def innerLeftProduct(self,other):
+    def interiorLeftProduct(self,other):
         '''Inner left product of two exterior vectors / polynomials.
         '''
         [s,o] = coercePair(self,other);
         #print "self  type(%s) = %s" % (s,type(s));
         #print "other type(%s) = %s" % (o,type(o));
-        return RingElem( s.elem.innerLeftProduct( o.elem ) );
+        return RingElem( s.elem.interiorLeftProduct( o.elem ) );
 
-    def innerRightProduct(self,other):
+    def interiorRightProduct(self,other):
         '''Inner right product of two exterior vectors / polynomials.
         '''
         [s,o] = coercePair(self,other);
         #print "self  type(%s) = %s" % (s,type(s));
         #print "other type(%s) = %s" % (o,type(o));
-        return RingElem( s.elem.innerRightProduct( o.elem ) );
+        return RingElem( s.elem.interiorRightProduct( o.elem ) );
 
 #----------------
 # Compatibility methods for Sage/Singular:
@@ -4599,7 +4599,7 @@ class EF:
 #------------------------------------
 
 class ExtRing(Ring):
-    '''Represents a JAS exterior vector / polynomial ring: GenExteriorPolynomialRing.
+    '''Represents a JAS exterior form / vector / polynomial ring: GenExteriorPolynomialRing.
 
     '''
 
@@ -4613,7 +4613,7 @@ class ExtRing(Ring):
            tok = RingFactoryTokenizer(sr);
            pfac = tok.nextPolynomialRing();
            wfac = GenExteriorPolynomialRing(pfac);
-           #list = tok.nextExtPolynomialList(wfac);
+           list = tok.nextExteriorPolynomialList(wfac);
            self.ring = wfac;
         else:
            if isinstance(ring,Ring):
@@ -4670,7 +4670,7 @@ class ExtRing(Ring):
 
 
 class ExtPolyRing(ExtRing):
-    '''Represents a JAS exterior vector / polynomial ring: GenExteriorPolynomialRing.
+    '''Represents a JAS exterior form / vector / polynomial ring: GenExteriorPolynomialRing.
 
     Provides more convenient constructor.
     Then returns a Ring.
