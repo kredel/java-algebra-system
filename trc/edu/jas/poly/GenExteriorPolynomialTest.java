@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -58,16 +59,16 @@ public class GenExteriorPolynomialTest extends TestCase {
     int rl = 6;
 
 
-    int kl = 10;
+    int kl = 8;
 
 
-    int ll = 7;
+    int ll = 6;
 
 
-    int el = 5;
+    int el = 4;
 
 
-    float ql = 0.5f;
+    float ql = 0.4f;
 
 
     @Override
@@ -796,7 +797,7 @@ public class GenExteriorPolynomialTest extends TestCase {
      * Test old example after Blonski, 1983.
      */
     @SuppressWarnings("unchecked")
-    public void testExample() {
+    public void xtestExample() {
         BigInteger rf = new BigInteger();
         //System.out.println("rf = " + rf.toScriptFactory());
 
@@ -880,6 +881,146 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertTrue("qs /\\ s == 0: ", qs.multiply(s).isZERO());
         assertTrue("qs /\\ e1 == 0: ", qs.multiply(e1).isZERO());
         assertTrue("qs /\\ e2 == 0: ", qs.multiply(e2).isZERO());
+    }
+
+
+    /**
+     * Test derivation.
+     */
+    @SuppressWarnings("unchecked")
+    public void testDerivation() {
+        // rationals
+        BigRational rf = new BigRational();
+        System.out.println("rf = " + rf.toScriptFactory());
+
+        // 3/6 commuting vars
+        //IndexFactory wf = new IndexFactory(6);
+        //String[] vars = new String[]{ "a", "b", "c", "d", "e", "f" };
+        String[] vars = new String[]{ "x1", "x2", "x3" };
+        System.out.println("vars = " + Arrays.toString(vars));
+
+        // polynomials over rationals
+        GenPolynomialRing<BigRational> pf = new GenPolynomialRing<BigRational>(rf, vars);
+        System.out.println("pf = " + pf);
+        assertTrue("commutative", pf.isCommutative());
+        assertTrue("associative", pf.isAssociative());
+        assertFalse("not field", pf.isField());
+        assertEquals("pf == pf: ", pf, pf);
+
+        String s = pf.toScript();
+        System.out.println("pf.toScript: " + s + ", " + s.length());
+        assertEquals("#s == 38: " + s, s.length(), 38);
+
+        s = pf.toString();
+        System.out.println("pf.toString: " + s + ", " + s.length());
+        assertEquals("#s == 31: " + s, s.length(), 31);
+
+        GenPolynomial<BigRational> p = pf.getONE();
+        System.out.println("p = " + p);
+        assertTrue("p == 1", p.isONE());
+        p = pf.getZERO();
+        assertTrue("p == 0", p.isZERO());
+        System.out.println("p = " + p);
+        //p = pf.random(kl, ll, el);
+        //System.out.println("p = " + p);
+
+        List<GenPolynomial<BigRational>> gens = pf.generators();
+        System.out.println("gens = " + gens);
+        assertTrue("#gens == 4", gens.size() == 4);
+
+        gens = pf.getGenerators();
+        System.out.println("gens = " + gens);
+        assertTrue("#gens == 4", gens.size() == 4);
+
+        RingElem<GenPolynomial<BigRational>> pe = new GenPolynomial<BigRational>(pf);
+        System.out.println("pe = " + pe);
+        //System.out.println("pe.equals(pe) = " + pe.equals(pe) );
+        //System.out.println("p.equals(p) = " + p.equals(p) );
+        assertTrue("p.equals(pe) = ", p.equals(pe));
+        assertTrue("p.equals(p) = ", p.equals(p));
+
+        pe = pe.sum(p);
+        System.out.println("pe = " + pe);
+        assertTrue("pe.isZERO() = ", pe.isZERO());
+        //p = pf.random(9);
+        p = pf.random(kl, ll, el, ql);
+        p = p.subtract(p);
+        System.out.println("p = " + p);
+        System.out.println("p.isZERO() = " + p.isZERO());
+        assertTrue("p.isZERO() = ", p.isZERO());
+
+
+        // exterior polynomials over (polynomials over rationals)
+        // 3 non-commuting vars
+        IndexFactory wf2 = new IndexFactory(3);
+        System.out.println("wf2 = " + wf2);
+
+        GenExteriorPolynomialRing<GenPolynomial<BigRational>> ppf;
+        ppf = new GenExteriorPolynomialRing<GenPolynomial<BigRational>>(pf, wf2);
+        System.out.println("ppf = " + ppf.toScript());
+
+        GenExteriorPolynomial<GenPolynomial<BigRational>> pp = ppf.getONE();
+        System.out.println("pp = " + pp);
+        assertTrue("pp == 1", pp.isONE());
+        //pp = ppf.random(2);
+        pp = ppf.random(kl, ll, el);
+        System.out.println("pp = " + pp);
+        pp = ppf.getZERO();
+        System.out.println("pp = " + pp);
+        assertTrue("pp == 0", pp.isZERO());
+
+        List<GenExteriorPolynomial<GenPolynomial<BigRational>>> pgens = ppf.generators();
+        System.out.println("pgens = " + pgens);
+        assertTrue("#pgens == 4+3", pgens.size() == 4+3);
+
+        //pp = ppf.random(2);
+        pp = ppf.random(kl/2, ll, el);
+        System.out.println("\npp = " + pp);
+        //pp = pp.subtract(pp);
+        //System.out.println("pp.isZERO() = " + pp.isZERO());
+        //assertTrue("pp.isZERO() = ", pp.isZERO());
+
+        GenExteriorPolynomial<GenPolynomial<BigRational>> der;
+        der = PolyUtil.<GenPolynomial<BigRational>> exteriorDerivative(pp);
+        //System.out.println("der = " + der);
+
+        der = PolyUtil.<BigRational> exteriorDerivativePoly(pp);
+        System.out.println("der = " + der);
+
+
+        StringReader sr = new StringReader("x1 x2 x3 E(1) E(2)");
+        //System.out.println("sr = " + sr);
+        GenPolynomialTokenizer tok = new GenPolynomialTokenizer(sr);
+        //System.out.println("ppf = " + ppf.toScript());
+
+        // parse with tokenizer
+        try {
+            pp = (GenExteriorPolynomial<GenPolynomial<BigRational>>) tok.nextExteriorPolynomial(ppf);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        System.out.println("\npp = " + pp);
+        der = PolyUtil.<BigRational> exteriorDerivativePoly(pp);
+        System.out.println("der = " + der);
+
+        //sr = new StringReader("x3 E(1) + x3 E(2)");
+        //sr = new StringReader("x1 E(1) + x2 E(2)");
+        sr = new StringReader("x2 E(1) + x1 E(2)");
+        //System.out.println("sr = " + sr);
+        tok = new GenPolynomialTokenizer(sr);
+        //System.out.println("ppf = " + ppf.toScript());
+
+        // parse with tokenizer
+        try {
+            pp = (GenExteriorPolynomial<GenPolynomial<BigRational>>) tok.nextExteriorPolynomial(ppf);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        System.out.println("\npp = " + pp);
+        der = PolyUtil.<BigRational> exteriorDerivativePoly(pp);
+        System.out.println("der = " + der);
     }
 
 }

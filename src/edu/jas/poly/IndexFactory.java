@@ -544,7 +544,8 @@ public class IndexFactory implements MonoidFactory<IndexList> {
             s = -1;
         }
         int ii = 0;
-        for (int i = 0; i < w.length; i++) {
+        //for (int i = 0; i < w.length; i++) {
+        for (int i = 1; i <= w.length; i++) {
             f = rnd.nextFloat();
             if (f < q) {
                 w[ii++] = i;

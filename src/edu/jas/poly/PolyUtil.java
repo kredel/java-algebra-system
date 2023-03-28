@@ -1614,6 +1614,98 @@ public class PolyUtil {
 
 
     /**
+     * GenExteriorPolynomial polynomial exterior derivative.
+     * @param <C> coefficient type.
+     * @param P GenExteriorPolynomial.
+     * @return exteriorDerivative(P).
+     */
+    public static <C extends RingElem<C>> GenExteriorPolynomial<C> exteriorDerivative(GenExteriorPolynomial<C> P) {
+        if (P == null || P.isZERO()) {
+            return P;
+        }
+        GenExteriorPolynomialRing<C> pfac = P.ring;
+        IndexFactory ifac = pfac.ixfac;
+        int im = ifac.imaxlength;
+        if (im == 0) {
+            return pfac.getZERO();
+        }
+        RingFactory<C> rf = pfac.coFac;
+        GenExteriorPolynomial<C> d = pfac.getZERO().copy();
+        Map<IndexList, C> dm = d.val;
+        for (Map.Entry<IndexList, C> m : P.getMap().entrySet()) {
+            //if (P.length() == 1) {
+            //Map.Entry<IndexList, C> m = P.leadingMonomial();
+            C a = m.getValue();
+            IndexList il = m.getKey();
+	    C b;
+	    IndexList bi;
+	    for (int i = 1; i <= im; i++) {
+                IndexList di = new IndexList(ifac, new int[] { i });
+                bi = di.multiply(il);
+                if (bi.signum() == 0) {
+                    continue;
+                }
+                b = a; // b = a.derivative();
+                if (bi.signum() < 0) {
+                    bi = bi.negate();
+                    b = b.negate();
+                }
+                dm.put(bi, b);
+            }
+        }
+        return d;
+    }
+
+
+    /**
+     * GenExteriorPolynomial over polynomial exterior derivative.
+     * @param <C> coefficient type.
+     * @param P GenExteriorPolynomial<GenPolynomial>.
+     * @return exteriorDerivativePoly(P).
+     */
+    public static <C extends RingElem<C>> GenExteriorPolynomial<GenPolynomial<C>> exteriorDerivativePoly(GenExteriorPolynomial<GenPolynomial<C>> P) {
+        if (P == null || P.isZERO()) {
+            return P;
+        }
+        GenExteriorPolynomialRing<GenPolynomial<C>> pfac = P.ring;
+        IndexFactory ifac = pfac.ixfac;
+        int im = ifac.imaxlength;
+        if (im == 0) {
+            return pfac.getZERO();
+        }
+        RingFactory<GenPolynomial<C>> rf = pfac.coFac;
+        GenExteriorPolynomial<GenPolynomial<C>> d = pfac.getZERO().copy();
+        Map<IndexList, GenPolynomial<C>> dm = d.val;
+        for (Map.Entry<IndexList, GenPolynomial<C>> m : P.getMap().entrySet()) {
+            //if (P.length() == 1) {
+            //Map.Entry<IndexList, C> m = P.leadingMonomial();
+            GenPolynomial<C> a = m.getValue();
+            IndexList il = m.getKey();
+	    GenPolynomial<C> b;
+	    IndexList bi;
+	    for (int i = 1; i <= im; i++) {
+                IndexList di = new IndexList(ifac, new int[] { i });
+                bi = di.multiply(il);
+                if (bi.signum() == 0) {
+                    continue;
+                }
+                b = PolyUtil.<C> baseDerivative(a, i-1); //a.derivative();
+                //System.out.println("baseDerivative a = " + a + ", i-1 = " + (i-1) + ", b = " + b);
+                if (b.isZERO()) {
+                    continue;
+                }
+                if (bi.signum() < 0) {
+                    bi = bi.negate();
+                    b = b.negate();
+                }
+                dm.put(bi, b);
+            }
+        }
+        return d;
+    }
+
+
+    /**
      * GenPolynomial polynomial derivative main variable.
      * @param <C> coefficient type.
      * @param P GenPolynomial.

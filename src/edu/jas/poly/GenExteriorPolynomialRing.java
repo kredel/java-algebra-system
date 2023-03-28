@@ -710,8 +710,8 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
     public GenExteriorPolynomial<C> random(int k, int l, int d, Random rnd) {
         GenExteriorPolynomial<C> r = getZERO(); //.clone() or copy( ZERO );
         // add l random coeffs and words of maximal length d
+        int dm = Math.min(d, ixfac.imaxlength); //length());
         for (int i = 0; i < l; i++) {
-            int dm = Math.min(d, ixfac.length());
             int di = Math.abs(rnd.nextInt() % dm);
             IndexList e = ixfac.random(di, 0.5f, rnd).abs(); // s only = 0, 1
             C a = coFac.random(k, rnd);

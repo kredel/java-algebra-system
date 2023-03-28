@@ -2020,6 +2020,7 @@ public class GenPolynomialTokenizer {
                     break;
                 // read monomial, index list or recursion
                 first = tok.sval.charAt(0);
+                //System.out.println("first = '" + first + "'");
                 if (letter(first)) {
                     //ix = leer.indexVar(tok.sval, vars);
                     if ("E".charAt(0) == first) {
@@ -2028,6 +2029,7 @@ public class GenPolynomialTokenizer {
                        //System.out.println("index tok.sval " + tok.sval);
                        while (true) {
                           tt = tok.nextToken();
+                          //System.out.println("index tok.token " + tt + ", tok.sval " + tok.sval);
                           if (tt == '(') {
                               ri.append("(");
 			      continue;
