@@ -12,18 +12,18 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.Random;
+import java.util.SortedMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import edu.jas.kern.PreemptStatus;
 import edu.jas.kern.Scripting;
-import edu.jas.vector.GenVector;
-import edu.jas.vector.GenMatrix;
 import edu.jas.structure.RingElem;
 import edu.jas.structure.RingFactory;
+import edu.jas.vector.GenMatrix;
+import edu.jas.vector.GenVector;
 
 
 /**
@@ -350,8 +350,7 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a (constant) GenExteriorPolynomial element from a
-     * coefficient value.
+     * Get a (constant) GenExteriorPolynomial element from a coefficient value.
      * @param a coefficient.
      * @return a constant GenExteriorPolynomial.
      */
@@ -403,8 +402,8 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial from a multivariate GenPolynomial,
-     * terms with exponents &gt; 1 are set to zero.
+     * Get a GenExteriorPolynomial from a multivariate GenPolynomial, terms with
+     * exponents &gt; 1 are set to zero.
      * @param a multivariate GenPolynomial.
      * @return multivariate a GenExteriorPolynomial.
      */
@@ -429,8 +428,8 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial from a GenExteriorPolynomial with
-     * conformant index lists.
+     * Get a GenExteriorPolynomial from a GenExteriorPolynomial with conformant
+     * index lists.
      * @param a GenExteriorPolynomial.
      * @return a GenExteriorPolynomial with conformant index lists.
      */
@@ -457,8 +456,7 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a list of GenExteriorPolynomials from a list of
-     * GenPolynomials.
+     * Get a list of GenExteriorPolynomials from a list of GenPolynomials.
      * @param A GenPolynomial list.
      * @return a GenExteriorPolynomial list.
      */
@@ -541,7 +539,7 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
             return L;
         }
         for (int i = 0; i < A.ring.rows; i++) {
-	    GenVector<C> v = A.getRow(i);
+            GenVector<C> v = A.getRow(i);
             if (v.isZERO()) {
                 continue;
             }
@@ -589,9 +587,8 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Get a GenExteriorPolynomial from a univariate
-     * GenPolynomial. Different exponents are converted to different
-     * indexes.
+     * Get a GenExteriorPolynomial from a univariate GenPolynomial. Different
+     * exponents are converted to different indexes.
      * @param a univariate GenPolynomial.
      * @return a multivariate GenExteriorPolynomial.
      */
@@ -605,7 +602,8 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
         }
         int deg = (int) a.degree();
         if (deg > ixfac.imax.maxDeg()) {
-            throw new IllegalArgumentException("ensure deg <= ixfax.maxDeg: " + deg + " > " + ixfac.imax.maxDeg());
+            throw new IllegalArgumentException(
+                            "ensure deg <= ixfax.maxDeg: " + deg + " > " + ixfac.imax.maxDeg());
         }
         if (ixfac.imax.minDeg() > 0) {
             throw new IllegalArgumentException("ensure ixfax.minDeg == 0: " + ixfac.imax.minDeg());
@@ -650,12 +648,12 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
         }
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
-        List<GenExteriorPolynomial<C>> mat = new ArrayList<GenExteriorPolynomial<C>>(m+n);
-        for (int i = n-1; i >= 0; i--) {
+        List<GenExteriorPolynomial<C>> mat = new ArrayList<GenExteriorPolynomial<C>>(m + n);
+        for (int i = n - 1; i >= 0; i--) {
             GenExteriorPolynomial<C> c = a.shiftIndex(i);
             mat.add(c);
         }
-        for (int i = m-1; i >= 0; i--) {
+        for (int i = m - 1; i >= 0; i--) {
             GenExteriorPolynomial<C> c = b.shiftIndex(i);
             mat.add(c);
         }

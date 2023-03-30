@@ -1465,8 +1465,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial coefficient primitive part. Division by
-     * gcd of coefficients.
+     * GenExteriorPolynomial coefficient primitive part. Division by gcd of
+     * coefficients.
      * @return this/gcd(coeff(this)).
      */
     public GenExteriorPolynomial<C> coeffPrimitivePart() {
@@ -1582,8 +1582,8 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * GenExteriorPolynomial extended greatest common
-     * divisor. <b>Note:</b> not implemented.
+     * GenExteriorPolynomial extended greatest common divisor. <b>Note:</b> not
+     * implemented.
      * @param S GenExteriorPolynomial.
      * @return [ gcd(this,S), a, b ] with a*this + b*S = gcd(this,S).
      */
@@ -1625,7 +1625,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
         long d = maxDegree();
         //System.out.println("d = " + d);
         if (d + s >= gen.size()) {
-            throw new IllegalArgumentException("ixfac to small: " + (d+s) + " >= " + gen.size());
+            throw new IllegalArgumentException("ixfac to small: " + (d + s) + " >= " + gen.size());
         }
         GenExteriorPolynomial<C> p = ring.getZERO().copy();
         SortedMap<IndexList, C> pv = p.val;

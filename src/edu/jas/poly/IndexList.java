@@ -467,7 +467,8 @@ public class IndexList implements MonoidElem<IndexList> {
     /**
      * IndexList divide. <b>Note:</b> experimental.
      * @param V other IndexList.
-     * @return this/V. <b>Note:</b> computed as interiorRightProduct, eventually useful.
+     * @return this/V. <b>Note:</b> computed as interiorRightProduct, eventually
+     *         useful.
      */
     public IndexList divide(IndexList V) {
         return interiorRightProduct(V);

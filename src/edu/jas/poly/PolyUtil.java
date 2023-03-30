@@ -1528,7 +1528,7 @@ public class PolyUtil {
         //System.out.println("P*b   = " + Pb);
         //System.out.println("rhs*a = " + rhsa);
         if (Pb.degree() != rhsa.degree()
-            || !Pb.leadingBaseCoefficient().equals(rhsa.leadingBaseCoefficient())) {
+                        || !Pb.leadingBaseCoefficient().equals(rhsa.leadingBaseCoefficient())) {
             return false;
         }
         return false;
@@ -1619,7 +1619,8 @@ public class PolyUtil {
      * @param P GenExteriorPolynomial.
      * @return exteriorDerivative(P).
      */
-    public static <C extends RingElem<C>> GenExteriorPolynomial<C> exteriorDerivative(GenExteriorPolynomial<C> P) {
+    public static <C extends RingElem<C>> GenExteriorPolynomial<C> exteriorDerivative(
+                    GenExteriorPolynomial<C> P) {
         if (P == null || P.isZERO()) {
             return P;
         }
@@ -1629,7 +1630,7 @@ public class PolyUtil {
         if (im == 0) {
             return pfac.getZERO();
         }
-        RingFactory<C> rf = pfac.coFac;
+        //RingFactory<C> rf = pfac.coFac;
         GenExteriorPolynomial<C> d = pfac.getZERO().copy();
         Map<IndexList, C> dm = d.val;
         for (Map.Entry<IndexList, C> m : P.getMap().entrySet()) {
@@ -1637,9 +1638,9 @@ public class PolyUtil {
             //Map.Entry<IndexList, C> m = P.leadingMonomial();
             C a = m.getValue();
             IndexList il = m.getKey();
-	    C b;
-	    IndexList bi;
-	    for (int i = 1; i <= im; i++) {
+            C b;
+            IndexList bi;
+            for (int i = 1; i <= im; i++) {
                 IndexList di = new IndexList(ifac, new int[] { i });
                 bi = di.multiply(il);
                 if (bi.signum() == 0) {
@@ -1663,7 +1664,8 @@ public class PolyUtil {
      * @param P GenExteriorPolynomial<GenPolynomial>.
      * @return exteriorDerivativePoly(P).
      */
-    public static <C extends RingElem<C>> GenExteriorPolynomial<GenPolynomial<C>> exteriorDerivativePoly(GenExteriorPolynomial<GenPolynomial<C>> P) {
+    public static <C extends RingElem<C>> GenExteriorPolynomial<GenPolynomial<C>> exteriorDerivativePoly(
+                    GenExteriorPolynomial<GenPolynomial<C>> P) {
         if (P == null || P.isZERO()) {
             return P;
         }
@@ -1673,7 +1675,7 @@ public class PolyUtil {
         if (im == 0) {
             return pfac.getZERO();
         }
-        RingFactory<GenPolynomial<C>> rf = pfac.coFac;
+        //RingFactory<GenPolynomial<C>> rf = pfac.coFac;
         GenExteriorPolynomial<GenPolynomial<C>> d = pfac.getZERO().copy();
         Map<IndexList, GenPolynomial<C>> dm = d.val;
         for (Map.Entry<IndexList, GenPolynomial<C>> m : P.getMap().entrySet()) {
@@ -1681,15 +1683,15 @@ public class PolyUtil {
             //Map.Entry<IndexList, C> m = P.leadingMonomial();
             GenPolynomial<C> a = m.getValue();
             IndexList il = m.getKey();
-	    GenPolynomial<C> b;
-	    IndexList bi;
-	    for (int i = 1; i <= im; i++) {
+            GenPolynomial<C> b;
+            IndexList bi;
+            for (int i = 1; i <= im; i++) {
                 IndexList di = new IndexList(ifac, new int[] { i });
                 bi = di.multiply(il);
                 if (bi.signum() == 0) {
                     continue;
                 }
-                b = PolyUtil.<C> baseDerivative(a, i-1); //a.derivative();
+                b = PolyUtil.<C> baseDerivative(a, i - 1); //a.derivative();
                 //System.out.println("baseDerivative a = " + a + ", i-1 = " + (i-1) + ", b = " + b);
                 if (b.isZERO()) {
                     continue;

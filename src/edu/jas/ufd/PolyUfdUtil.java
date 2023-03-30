@@ -20,13 +20,13 @@ import edu.jas.arith.BigRational;
 import edu.jas.poly.AlgebraicNumber;
 import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.ExpVector;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenExteriorPolynomial;
 import edu.jas.poly.GenExteriorPolynomialRing;
-import edu.jas.poly.PolyUtil;
-import edu.jas.poly.IndexList;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.IndexFactory;
+import edu.jas.poly.IndexList;
+import edu.jas.poly.PolyUtil;
 import edu.jas.poly.TermOrderByName;
 import edu.jas.ps.TaylorFunction;
 import edu.jas.ps.UnivPowerSeries;
@@ -118,7 +118,8 @@ public class PolyUfdUtil {
      * @param P GenExteriorPolynomial&lt;Quotient&gt;.
      * @return exteriorDerivative(P).
      */
-    public static <C extends GcdRingElem<C>> GenExteriorPolynomial<Quotient<C>> exteriorDerivativeQuot(GenExteriorPolynomial<Quotient<C>> P) {
+    public static <C extends GcdRingElem<C>> GenExteriorPolynomial<Quotient<C>> exteriorDerivativeQuot(
+                    GenExteriorPolynomial<Quotient<C>> P) {
         if (P == null || P.isZERO()) {
             return P;
         }
@@ -128,7 +129,7 @@ public class PolyUfdUtil {
         if (im == 0) {
             return pfac.getZERO();
         }
-        RingFactory<Quotient<C>> rf = pfac.coFac;
+        //RingFactory<Quotient<C>> rf = pfac.coFac;
         GenExteriorPolynomial<Quotient<C>> d = pfac.getZERO().copy();
         //Map<IndexList, Quotient<C>> dm = d.getMap();
         for (Map.Entry<IndexList, Quotient<C>> m : P.getMap().entrySet()) {
@@ -144,7 +145,7 @@ public class PolyUfdUtil {
                 if (bi.signum() == 0) {
                     continue;
                 }
-                b = PolyUfdUtil.<C> derivative(a, i-1); //a.derivative();
+                b = PolyUfdUtil.<C> derivative(a, i - 1); //a.derivative();
                 //System.out.println("baseDerivative a = " + a + ", i-1 = " + (i-1) + ", b = " + b);
                 if (b.isZERO()) {
                     continue;
