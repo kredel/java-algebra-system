@@ -5,26 +5,23 @@
 
 package edu.jas.ufd;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Arrays;
+
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.List;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.kern.PrettyPrint;
-import edu.jas.poly.GenPolynomial;
-import edu.jas.poly.GenPolynomialRing;
-import edu.jas.poly.TermOrder;
 import edu.jas.poly.GenExteriorPolynomial;
 import edu.jas.poly.GenExteriorPolynomialRing;
-import edu.jas.poly.PolyUtil;
+import edu.jas.poly.GenPolynomial;
+import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.GenPolynomialTokenizer;
-import edu.jas.poly.IndexList;
 import edu.jas.poly.IndexFactory;
+import edu.jas.poly.TermOrder;
 import edu.jas.structure.RingElem;
-import edu.jas.structure.GcdRingElem;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -285,7 +282,7 @@ public class QuotIntPolynomialTest extends TestCase {
         // 3/6 commuting vars
         //IndexFactory wf = new IndexFactory(6);
         //String[] vars = new String[]{ "a", "b", "c", "d", "e", "f" };
-        String[] vars = new String[]{ "x1", "x2", "x3" };
+        String[] vars = new String[] { "x1", "x2", "x3" };
         System.out.println("vars = " + Arrays.toString(vars));
 
         // polynomials over rationals
@@ -364,7 +361,7 @@ public class QuotIntPolynomialTest extends TestCase {
 
         List<GenExteriorPolynomial<Quotient<BigInteger>>> pgens = ppf.generators();
         System.out.println("pgens = " + pgens);
-        assertTrue("#pgens == 4+3", pgens.size() == 4+3);
+        assertTrue("#pgens == 4+3", pgens.size() == 4 + 3);
 
         //pp = ppf.random(2);
         pp = ppf.random(kl, ll, el);

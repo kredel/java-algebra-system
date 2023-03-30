@@ -7,15 +7,15 @@ package edu.jas.poly;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
+import edu.jas.structure.RingElem;
 import edu.jas.vector.GenMatrix;
 import edu.jas.vector.GenMatrixRing;
-import edu.jas.structure.RingElem;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -496,8 +496,8 @@ public class GenExteriorPolynomialTest extends TestCase {
         GenExteriorPolynomialRing<BigRational> fac = new GenExteriorPolynomialRing<BigRational>(rf, wf);
         //System.out.println("fac = " + fac);
 
-        GenExteriorPolynomial<BigRational> a = fac.random(kl+2, ll, el);
-        GenExteriorPolynomial<BigRational> b = fac.random(kl-1, ll, 2);
+        GenExteriorPolynomial<BigRational> a = fac.random(kl + 2, ll, el);
+        GenExteriorPolynomial<BigRational> b = fac.random(kl - 1, ll, 2);
         GenExteriorPolynomial<BigRational> c, d, e;
 
         //System.out.println("a = " + a);
@@ -712,7 +712,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         BigRational rf = new BigRational();
         //System.out.println("rf = " + rf.toScriptFactory());
 
-        IndexFactory wf = new IndexFactory(0,20);
+        IndexFactory wf = new IndexFactory(0, 20);
         //System.out.println("wf = " + wf.toScript());
 
         // exterior polynomials over integers
@@ -725,7 +725,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         fac = new GenPolynomialRing<BigRational>(rf, new String[] { "a", "b", "c", "d" });
         //System.out.println("fac = " + fac.toScript());
 
-        GenPolynomial<BigRational> p = fac.random(kl/2, ll, 2, ql);
+        GenPolynomial<BigRational> p = fac.random(kl / 2, ll, 2, ql);
         //System.out.println("p = " + p);
 
         GenExteriorPolynomial<BigRational> a = pf.valueOf(p);
@@ -752,7 +752,7 @@ public class GenExteriorPolynomialTest extends TestCase {
     public void testResultant() {
         BigRational rf = new BigRational();
         //System.out.println("rf = " + rf.toScriptFactory());
-        IndexFactory wf = new IndexFactory(0,20);
+        IndexFactory wf = new IndexFactory(0, 20);
         //System.out.println("wf = " + wf.toScript());
 
         // exterior polynomials over rationals
@@ -765,9 +765,9 @@ public class GenExteriorPolynomialTest extends TestCase {
         fac = new GenPolynomialRing<BigRational>(rf, new String[] { "i" });
         //System.out.println("fac = " + fac.toScript());
 
-        GenPolynomial<BigRational> p = fac.random(kl/2, ll, el, ql);
+        GenPolynomial<BigRational> p = fac.random(kl / 2, ll, el, ql);
         //System.out.println("p = " + p);
-        GenPolynomial<BigRational> q = fac.random(kl/2, ll, el, ql);
+        GenPolynomial<BigRational> q = fac.random(kl / 2, ll, el, ql);
         //System.out.println("q = " + q);
         BigRational r = pf.resultant(p, q);
         //System.out.println("r = " + r);
@@ -777,8 +777,8 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertTrue("res != 0 && gcd == 1: " + r + ", " + g, !r.isZERO() && g.isONE());
 
         //System.out.println("fac.gens = " + fac.generators());
-        GenPolynomial<BigRational> f = fac.random(kl/3, ll, el/2, ql);
-        f = f.sum( fac.generators().get(1) );
+        GenPolynomial<BigRational> f = fac.random(kl / 3, ll, el / 2, ql);
+        f = f.sum(fac.generators().get(1));
         //System.out.println("f = " + f);
         p = p.multiply(f);
         q = q.multiply(f);
@@ -814,8 +814,8 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertTrue("associative", pf.isAssociative());
         assertFalse("not field", pf.isField());
 
-        GenExteriorPolynomial<BigInteger> emaxd, p1, p2, q1, q2, s, g1, g2, e1, e2,
-            e1dual, e2dual, q, qs, qt, g1dual, g2dual, s1, s2;
+        GenExteriorPolynomial<BigInteger> emaxd, p1, p2, q1, q2, s, g1, g2, e1, e2, e1dual, e2dual, q, qs, qt,
+                        g1dual, g2dual, s1, s2;
         // parse points in 4-space as polynomials
         emaxd = pf.parse("E(1,2,3,4)"); // wf.imax 
         System.out.println("emaxd = " + emaxd + ", imax = " + pf.ixfac.imax);
@@ -896,7 +896,7 @@ public class GenExteriorPolynomialTest extends TestCase {
         // 3/6 commuting vars
         //IndexFactory wf = new IndexFactory(6);
         //String[] vars = new String[]{ "a", "b", "c", "d", "e", "f" };
-        String[] vars = new String[]{ "x1", "x2", "x3" };
+        String[] vars = new String[] { "x1", "x2", "x3" };
         System.out.println("vars = " + Arrays.toString(vars));
 
         // polynomials over rationals
@@ -971,10 +971,10 @@ public class GenExteriorPolynomialTest extends TestCase {
 
         List<GenExteriorPolynomial<GenPolynomial<BigRational>>> pgens = ppf.generators();
         System.out.println("pgens = " + pgens);
-        assertTrue("#pgens == 4+3", pgens.size() == 4+3);
+        assertTrue("#pgens == 4+3", pgens.size() == 4 + 3);
 
         //pp = ppf.random(2);
-        pp = ppf.random(kl/2, ll, el);
+        pp = ppf.random(kl / 2, ll, el);
         System.out.println("\npp = " + pp);
         //pp = pp.subtract(pp);
         //System.out.println("pp.isZERO() = " + pp.isZERO());
