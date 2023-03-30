@@ -797,7 +797,7 @@ public class GenExteriorPolynomialTest extends TestCase {
      * Test old example after Blonski, 1983.
      */
     @SuppressWarnings("unchecked")
-    public void xtestExample() {
+    public void testExample() {
         BigInteger rf = new BigInteger();
         //System.out.println("rf = " + rf.toScriptFactory());
 
@@ -1004,9 +1004,9 @@ public class GenExteriorPolynomialTest extends TestCase {
         der = PolyUtil.<BigRational> exteriorDerivativePoly(pp);
         System.out.println("der = " + der);
 
-        //sr = new StringReader("x3 E(1) + x3 E(2)");
+        sr = new StringReader("x3 E(1) + x3 E(2)");
         //sr = new StringReader("x1 E(1) + x2 E(2)");
-        sr = new StringReader("x2 E(1) + x1 E(2)");
+        //sr = new StringReader("x2 E(1) + x1 E(2)");
         //System.out.println("sr = " + sr);
         tok = new GenPolynomialTokenizer(sr);
         //System.out.println("ppf = " + ppf.toScript());

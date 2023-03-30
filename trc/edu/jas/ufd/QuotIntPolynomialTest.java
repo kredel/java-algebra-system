@@ -5,6 +5,11 @@
 
 package edu.jas.ufd;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Arrays;
+import java.io.IOException;
+import java.io.StringReader;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.kern.ComputerThreads;
@@ -12,6 +17,14 @@ import edu.jas.kern.PrettyPrint;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
+import edu.jas.poly.GenExteriorPolynomial;
+import edu.jas.poly.GenExteriorPolynomialRing;
+import edu.jas.poly.PolyUtil;
+import edu.jas.poly.GenPolynomialTokenizer;
+import edu.jas.poly.IndexList;
+import edu.jas.poly.IndexFactory;
+import edu.jas.structure.RingElem;
+import edu.jas.structure.GcdRingElem;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -257,6 +270,150 @@ public class QuotIntPolynomialTest extends TestCase {
         //c = a.subtract(b);
         //System.out.println("c = " + c);
         assertEquals("parse(a.toSting()) = a", a, b);
+    }
+
+
+    /**
+     * Test derivation.
+     */
+    @SuppressWarnings("unchecked")
+    public void testDerivation() {
+        // rationals
+        BigInteger rf = new BigInteger();
+        System.out.println("rf = " + rf.toScriptFactory());
+
+        // 3/6 commuting vars
+        //IndexFactory wf = new IndexFactory(6);
+        //String[] vars = new String[]{ "a", "b", "c", "d", "e", "f" };
+        String[] vars = new String[]{ "x1", "x2", "x3" };
+        System.out.println("vars = " + Arrays.toString(vars));
+
+        // polynomials over rationals
+        GenPolynomialRing<BigInteger> pf = new GenPolynomialRing<BigInteger>(rf, vars);
+        System.out.println("pf = " + pf.toScript());
+
+        QuotientRing<BigInteger> qf = new QuotientRing<BigInteger>(pf);
+        System.out.println("qf = " + qf.toScript());
+
+        assertTrue("commutative", qf.isCommutative());
+        assertTrue("associative", qf.isAssociative());
+        assertTrue("not field", qf.isField());
+        assertEquals("qf == qf: ", qf, qf);
+
+        String s = qf.toScript();
+        System.out.println("qf.toScript: " + s + ", " + s.length());
+        assertEquals("#s == 42: " + s, s.length(), 42);
+
+        s = qf.toString();
+        System.out.println("qf.toString: " + s + ", " + s.length());
+        assertEquals("#s == 41: " + s, s.length(), 41);
+
+        Quotient<BigInteger> p = qf.getONE();
+        System.out.println("p = " + p);
+        assertTrue("p == 1", p.isONE());
+        p = qf.getZERO();
+        assertTrue("p == 0", p.isZERO());
+        System.out.println("p = " + p);
+        //p = qf.random(kl, ll, el);
+        //System.out.println("p = " + p);
+
+        List<Quotient<BigInteger>> gens = qf.generators();
+        System.out.println("gens = " + gens);
+        assertTrue("#gens == 4", gens.size() == 4);
+
+        gens = qf.generators();
+        System.out.println("gens = " + gens);
+        assertTrue("#gens == 4", gens.size() == 4);
+
+        RingElem<Quotient<BigInteger>> qe = new Quotient<BigInteger>(qf);
+        System.out.println("qe = " + qe);
+        //System.out.println("qe.equals(qe) = " + qe.equals(qe) );
+        //System.out.println("p.equals(p) = " + p.equals(p) );
+        assertTrue("p.equals(qe) = ", p.equals(qe));
+        assertTrue("p.equals(p) = ", p.equals(p));
+
+        qe = qe.sum(p);
+        System.out.println("qe = " + qe);
+        assertTrue("qe.isZERO() = ", qe.isZERO());
+        //p = pf.random(9);
+        p = qf.random(kl, ll, el, q);
+        p = p.subtract(p);
+        System.out.println("p = " + p);
+        System.out.println("p.isZERO() = " + p.isZERO());
+        assertTrue("p.isZERO() = ", p.isZERO());
+
+
+        // exterior polynomials over (polynomials over rationals)
+        // 3 non-commuting vars
+        IndexFactory wf2 = new IndexFactory(3);
+        System.out.println("wf2 = " + wf2);
+
+        GenExteriorPolynomialRing<Quotient<BigInteger>> ppf;
+        ppf = new GenExteriorPolynomialRing<Quotient<BigInteger>>(qf, wf2);
+        System.out.println("ppf = " + ppf.toScript());
+
+        GenExteriorPolynomial<Quotient<BigInteger>> pp = ppf.getONE();
+        System.out.println("pp = " + pp);
+        assertTrue("pp == 1", pp.isONE());
+        //pp = ppf.random(2);
+        pp = ppf.random(kl, ll, el);
+        System.out.println("pp = " + pp);
+        pp = ppf.getZERO();
+        System.out.println("pp = " + pp);
+        assertTrue("pp == 0", pp.isZERO());
+
+        List<GenExteriorPolynomial<Quotient<BigInteger>>> pgens = ppf.generators();
+        System.out.println("pgens = " + pgens);
+        assertTrue("#pgens == 4+3", pgens.size() == 4+3);
+
+        //pp = ppf.random(2);
+        pp = ppf.random(kl, ll, el);
+        System.out.println("\npp = " + pp);
+        //pp = pp.subtract(pp);
+        //System.out.println("pp.isZERO() = " + pp.isZERO());
+        //assertTrue("pp.isZERO() = ", pp.isZERO());
+
+        GenExteriorPolynomial<Quotient<BigInteger>> der;
+        //der = PolyUtil.<Quotient<BigInteger>> exteriorDerivative(pp);
+        //System.out.println("der = " + der);
+
+        der = PolyUfdUtil.<BigInteger> exteriorDerivativeQuot(pp);
+        System.out.println("der = " + der);
+
+
+        StringReader sr = new StringReader("{x1 x2 | x3 } E(1) E(2)");
+        //System.out.println("sr = " + sr);
+        GenPolynomialTokenizer tok = new GenPolynomialTokenizer(sr);
+        //System.out.println("ppf = " + ppf.toScript());
+
+        // parse with tokenizer
+        try {
+            pp = (GenExteriorPolynomial<Quotient<BigInteger>>) tok.nextExteriorPolynomial(ppf);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        System.out.println("\npp = " + pp);
+        der = PolyUfdUtil.<BigInteger> exteriorDerivativeQuot(pp);
+        System.out.println("der = " + der);
+
+        sr = new StringReader("{x3 | x2} E(1) + x3 E(2)");
+        //sr = new StringReader("x1 E(1) + x2 E(2)");
+        //sr = new StringReader("x2 E(1) + x1 E(2)");
+        //System.out.println("sr = " + sr);
+        tok = new GenPolynomialTokenizer(sr);
+        //System.out.println("ppf = " + ppf.toScript());
+
+        // parse with tokenizer
+        try {
+            pp = (GenExteriorPolynomial<Quotient<BigInteger>>) tok.nextExteriorPolynomial(ppf);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        System.out.println("\npp = " + pp);
+        der = PolyUfdUtil.<BigInteger> exteriorDerivativeQuot(pp);
+        System.out.println("der = " + der);
     }
 
 }

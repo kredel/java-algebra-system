@@ -22,7 +22,11 @@ import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
+import edu.jas.poly.GenExteriorPolynomial;
+import edu.jas.poly.GenExteriorPolynomialRing;
 import edu.jas.poly.PolyUtil;
+import edu.jas.poly.IndexList;
+import edu.jas.poly.IndexFactory;
 import edu.jas.poly.TermOrderByName;
 import edu.jas.ps.TaylorFunction;
 import edu.jas.ps.UnivPowerSeries;
@@ -82,7 +86,7 @@ public class PolyUfdUtil {
      * @param <C> coefficient type.
      * @param Q Quotient.
      * @param r variable for partial deriviate.
-     * @return derivative(Q,r).
+     * @return dq/dx_r = derivative(Q,r).
      */
     public static <C extends GcdRingElem<C>> Quotient<C> derivative(Quotient<C> Q, int r) {
         if (Q == null || Q.isZERO()) {
@@ -105,6 +109,54 @@ public class PolyUfdUtil {
         GenPolynomial<C> d = den.multiply(den);
         Quotient<C> der = new Quotient<C>(Q.ring, n, d);
         return der;
+    }
+
+
+    /**
+     * GenExteriorPolynomial over polynomial quotient exterior derivative.
+     * @param &lt;C&gt; coefficient type.
+     * @param P GenExteriorPolynomial&lt;Quotient&gt;.
+     * @return exteriorDerivative(P).
+     */
+    public static <C extends GcdRingElem<C>> GenExteriorPolynomial<Quotient<C>> exteriorDerivativeQuot(GenExteriorPolynomial<Quotient<C>> P) {
+        if (P == null || P.isZERO()) {
+            return P;
+        }
+        GenExteriorPolynomialRing<Quotient<C>> pfac = P.ring;
+        IndexFactory ifac = pfac.ixfac;
+        int im = ifac.imaxlength;
+        if (im == 0) {
+            return pfac.getZERO();
+        }
+        RingFactory<Quotient<C>> rf = pfac.coFac;
+        GenExteriorPolynomial<Quotient<C>> d = pfac.getZERO().copy();
+        //Map<IndexList, Quotient<C>> dm = d.getMap();
+        for (Map.Entry<IndexList, Quotient<C>> m : P.getMap().entrySet()) {
+            //if (P.length() == 1) {
+            //Map.Entry<IndexList, C> m = P.leadingMonomial();
+            Quotient<C> a = m.getValue();
+            IndexList il = m.getKey();
+            Quotient<C> b;
+            IndexList bi;
+            for (int i = 1; i <= im; i++) {
+                IndexList di = new IndexList(ifac, new int[] { i });
+                bi = di.multiply(il);
+                if (bi.signum() == 0) {
+                    continue;
+                }
+                b = PolyUfdUtil.<C> derivative(a, i-1); //a.derivative();
+                //System.out.println("baseDerivative a = " + a + ", i-1 = " + (i-1) + ", b = " + b);
+                if (b.isZERO()) {
+                    continue;
+                }
+                if (bi.signum() < 0) {
+                    bi = bi.negate();
+                    b = b.negate();
+                }
+                d.doPutToMap(bi, b);
+            }
+        }
+        return d;
     }
 
 
