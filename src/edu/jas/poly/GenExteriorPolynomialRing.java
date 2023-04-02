@@ -712,7 +712,51 @@ public final class GenExteriorPolynomialRing<C extends RingElem<C>>
         for (int i = 0; i < l; i++) {
             int di = Math.abs(rnd.nextInt() % dm);
             IndexList e = ixfac.random(di, 0.5f, rnd).abs(); // s only = 0, 1
+            //System.out.println("e++ = " + e);
             C a = coFac.random(k, rnd);
+            //System.out.println("e = " + e + " a = " + a);
+            r = r.sum(a, e); // somewhat inefficient but clean
+        }
+        return r;
+    }
+
+
+    /**
+     * Generate a random k-form polynomial.
+     * @param kl bitsize of random coefficients.
+     * @param l number of terms.
+     * @param k length of any random word.
+     * @return a random k-form polynomial.
+     */
+    public GenExteriorPolynomial<C> randomForm(int kl, int l, int k) {
+        return randomForm(kl, l, k, random);
+    }
+
+
+    /**
+     * Generate a random k-form polynomial.
+     * @param kl bitsize of random coefficients.
+     * @param l number of terms.
+     * @param k length of any random word.
+     * @param rnd is a source for random bits.
+     * @return a random k-form polynomial.
+     */
+    public GenExteriorPolynomial<C> randomForm(int kl, int l, int k, Random rnd) {
+        GenExteriorPolynomial<C> r = getZERO(); //.copy(); // or copy( ZERO );
+        // add l random coeffs and index lists of length k
+        if (k > ixfac.imaxlength || k < 0) {
+            return r;
+        }
+        if (k == 0) {
+            return getZERO();
+        }
+        for (int i = 0; i < l; i++) {
+            IndexList e = ixfac.random(k, 0.5f, rnd).abs(); // s only = 0, 1
+            //System.out.println("e_k = " + e);
+            if (e.length() != k) {
+                continue;
+            }
+            C a = coFac.random(kl, rnd);
             //System.out.println("e = " + e + " a = " + a);
             r = r.sum(a, e); // somewhat inefficient but clean
         }

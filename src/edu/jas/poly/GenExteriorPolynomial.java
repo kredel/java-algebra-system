@@ -464,6 +464,40 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
+     * k-form part.
+     * @param k requested k-form part.
+     * @return k-form part of given degree of this.
+     */
+    public GenExteriorPolynomial<C> form(long k) {
+        return homogeneousPart(k);
+    }
+
+
+    /**
+     * Homogeneous part.
+     * @param tdeg requested degree of part.
+     * @return polynomial part of given degree.
+     */
+    public GenExteriorPolynomial<C> homogeneousPart(long tdeg) {
+        if (isZERO()) {
+            return this;
+        }
+        GenExteriorPolynomial<C> h = ring.getZERO().copy();
+        SortedMap<IndexList, C> hv = h.val;
+        for (Map.Entry<IndexList, C> me : val.entrySet()) {
+            IndexList e = me.getKey();
+            C y = me.getValue(); // assert y != null
+            if (e.degree() != tdeg) {
+                continue;
+            } else {
+                hv.put(e, y);
+            }
+        }
+        return h;
+    }
+
+
+    /**
      * Comparison with any other object.
      * @see java.lang.Object#equals(java.lang.Object)
      */

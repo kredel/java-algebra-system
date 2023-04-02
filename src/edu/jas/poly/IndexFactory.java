@@ -533,19 +533,22 @@ public class IndexFactory implements MonoidFactory<IndexList> {
         if (r > imaxlength || r < 0) {
             throw new IllegalArgumentException("r > imaxlength not allowed: " + r + " > " + imaxlength);
         }
+        if (r == 0) {
+            return getZERO();
+        }
         int[] w = new int[r];
         int s = 1;
         float f;
         f = rnd.nextFloat();
         if (f < q * 0.001f) {
-            return getZERO(); // = 0
+            return getONE(); // = 0, 1 ??
         }
         if (f < q * q) {
             s = -1;
         }
         int ii = 0;
-        //for (int i = 0; i < w.length; i++) {
-        for (int i = 1; i <= w.length; i++) {
+        int b = Math.max(Math.min(Math.abs(rnd.nextInt()) % imaxlength, imaxlength - r - 1), 1);
+        for (int i = b; i <= imaxlength && ii < r; i++) {
             f = rnd.nextFloat();
             if (f < q) {
                 w[ii++] = i;
