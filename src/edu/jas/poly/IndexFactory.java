@@ -157,7 +157,7 @@ public class IndexFactory implements MonoidFactory<IndexList> {
         }
         int b = o.minDeg();
         int e = o.maxDeg();
-        imaxlength = e - b;
+        imaxlength = e - b + 1;
         vname = v;
         imax = new IndexList(this, 1, sequenceArray(b, imaxlength));
         if (imaxlength != o.length()) {

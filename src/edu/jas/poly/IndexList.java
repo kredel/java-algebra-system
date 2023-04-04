@@ -82,6 +82,16 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
+     * Constructor for IndexList. Converts a String representation to an
+     * IndexList. Accepted format = E(1,2,3,4,5,6,7).
+     * @param s String representation.
+     */
+    public IndexList(IndexFactory m, String s) throws NumberFormatException {
+        this(m, m.parse(s).val);
+    }
+
+
+    /**
      * Get the corresponding element factory.
      * @return factory for this Element.
      * @see edu.jas.structure.Element#factory()
@@ -165,6 +175,7 @@ public class IndexList implements MonoidElem<IndexList> {
      */
     @Override
     public String toString() {
+        //System.out.println("(" + sign + ", " + Arrays.toString(val) + ")");
         if (sign == 0) {
             return "0";
         }
@@ -193,16 +204,6 @@ public class IndexList implements MonoidElem<IndexList> {
     @Override
     public String toScript() {
         return toString();
-    }
-
-
-    /**
-     * Constructor for IndexList. Converts a String representation to an
-     * IndexList. Accepted format = E(1,2,3,4,5,6,7).
-     * @param s String representation.
-     */
-    public IndexList(IndexFactory m, String s) throws NumberFormatException {
-        this(m, m.parse(s).val);
     }
 
 
@@ -284,7 +285,7 @@ public class IndexList implements MonoidElem<IndexList> {
      * @return If this is a unit then true is returned, else false.
      */
     public boolean isUnit() {
-        return isONE();
+        return isONE() || negate().isONE();
     }
 
 

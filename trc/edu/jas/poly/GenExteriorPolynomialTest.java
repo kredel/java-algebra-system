@@ -410,6 +410,11 @@ public class GenExteriorPolynomialTest extends TestCase {
         //System.out.println("d-e = " + d.subtract(e) );
         assertEquals("a*(b*c) = (a*b)*c:", d, e);
 
+        e = b.multiply(a,c);
+        //System.out.println("d = " + d);
+        //System.out.println("e = " + e);
+        assertEquals("a*(b*c) = a*b*c:", d, e);
+
         IndexList u = wf.random(rl);
         BigInteger x = rf.random(kl);
 

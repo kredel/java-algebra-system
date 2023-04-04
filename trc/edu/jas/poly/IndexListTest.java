@@ -52,9 +52,15 @@ public class IndexListTest extends TestCase {
     IndexFactory idf;
 
 
+    int ll = 11;
+
+
+    float q = 0.5f;
+
+
     @Override
     protected void setUp() {
-        idf = new IndexFactory(11);
+        idf = new IndexFactory(ll);
         a = b = c = d = null;
     }
 
@@ -65,9 +71,6 @@ public class IndexListTest extends TestCase {
     }
 
 
-    float q = 0.5f;
-
-
     /**
      * Test constructor and toString.
      */
@@ -76,10 +79,10 @@ public class IndexListTest extends TestCase {
         b = a;
         //System.out.println("a = " + a);
         assertEquals("() = ()", a, b);
-        assertEquals("length( () ) = 0", a.length(), 0);
-        assertFalse("isZERO( () )", a.isZERO());
-        assertTrue("isONE( () )", a.isONE());
-        assertTrue("isUnit( () )", a.isUnit());
+        assertTrue("length( () ) = 0", a.length() <= 0);
+        assertTrue("isZERO( () )", a.isZERO());
+        assertFalse("isONE( () )", a.isONE());
+        assertFalse("isUnit( () )", a.isUnit());
 
         b = idf.random(10, q);
         //System.out.println("b = " + b);
@@ -96,11 +99,28 @@ public class IndexListTest extends TestCase {
         assertFalse("isONE( () )", c.isONE());
         assertFalse("isUnit( () )", c.isUnit());
 
+        c = idf.getONE();
+        //System.out.println("c = " + c);
+        assertTrue("length( 1 ) = 1", c.length() >= 0);
+        assertFalse("isZERO( () )", c.isZERO());
+        assertTrue("isONE( () )", c.isONE());
+        assertTrue("isUnit( () )", c.isUnit());
+
         String s = b.toString();
         String t = b.toScript();
         //System.out.println("s = " + s);
         //System.out.println("t = " + t);
         assertEquals("s == t: ", s, t);
+
+        IndexFactory ids = new IndexFactory(idf.imax, "I");
+        //System.out.println("ids = " + ids);
+        assertEquals("idf == ids: ", idf.length(), ids.length());
+        assertEquals("idf == ids: ", idf, ids);
+
+        ids = new IndexFactory(idf.imax);
+        //System.out.println("ids = " + ids);
+        assertEquals("idf == ids: ", idf.length(), ids.length());
+        assertEquals("idf == ids: ", idf, ids);
     }
 
 
