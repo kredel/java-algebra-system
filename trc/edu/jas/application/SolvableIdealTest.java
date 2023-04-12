@@ -848,7 +848,7 @@ public class SolvableIdealTest extends TestCase {
         J = I.infiniteQuotient(K);
         assertTrue("contains(J,I)", J.contains(I)); // GBs only
 
-        assertTrue("not isZERO( e )", !e.isZERO());
+        assertTrue("not isZERO( e ): + e", !e.isZERO());
         G.add(e);
         G = bb.leftGB(G);
         K = new SolvableIdeal<BigRational>(fac, G, true);
@@ -943,11 +943,11 @@ public class SolvableIdealTest extends TestCase {
         JJ = I.infiniteQuotient(a);
         assertTrue("contains(J,JJ)", J.contains(JJ)); // GBs only
 
-        assertTrue("not isZERO( e )", !e.isZERO());
+        assertTrue("not isZERO( e ): " + e, !e.isZERO());
         G.add(e);
         G = bb.leftGB(G);
         K = new SolvableIdeal<BigRational>(fac, G, true);
-        assertTrue("not isZERO( K )", !K.isZERO());
+        assertTrue("not isZERO( K ): " + K, !K.isZERO());
         //assertTrue("not isONE( I )", !I.isONE() );
         assertTrue("isGB( K )", K.isGB());
 

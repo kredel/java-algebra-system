@@ -10,6 +10,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TreeMap;
 
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
@@ -1054,10 +1055,10 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertTrue("homogen(p): ", p.isHomogeneous());
 
         GenExteriorPolynomial<BigInteger> q = pf.random(kl, ll*4, rl);
-        //System.out.println("q = " + q);
+        System.out.println("q = " + q);
         for (int i = 0; i <= wf.imaxlength; i++) {
             GenExteriorPolynomial<BigInteger> h = q.homogeneousPart(i);
-            //System.out.println("h = " + h);
+            System.out.println("h("+ i + ") = " + h);
             assertTrue("homogen(h): ", h.isHomogeneous());
             GenExteriorPolynomial<BigInteger> f = q.form(i);
             //System.out.println("f = " + f);
@@ -1065,12 +1066,15 @@ public class GenExteriorPolynomialTest extends TestCase {
             assertEquals("homogen(h) == form(h): ", h, f);
         }
 
+        p = pf.getZERO();
         for (int i = 0; i <= wf.imaxlength; i++) {
-            GenExteriorPolynomial<BigInteger> h = pf.randomForm(kl, ll, i);
-            //System.out.println("h = " + h);
-            assertTrue("homogen(h): ", h.isHomogeneous());
-            assertTrue("deg(h): ", h.isZERO() || h.degree() == (long)i);
+            GenExteriorPolynomial<BigInteger> hf = pf.randomForm(kl, ll, i);
+            System.out.println("hf(" + i + ") = " + hf);
+            assertTrue("homogen(hf): ", hf.isHomogeneous());
+            assertTrue("deg(hf): ", hf.isZERO() || hf.degree() == (long)i);
+            p = p.sum(hf);
         }
+        System.out.println("p = " + p);
     }
 
 }

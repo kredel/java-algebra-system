@@ -628,6 +628,32 @@ public class IndexFactory implements MonoidFactory<IndexList> {
 
 
     /**
+     * Defined descending weak order comparator. Sorts the highest terms first.
+     */
+    private final IndexListComparator hweak = new IndexListComparator() {
+
+
+        @Override
+        public int compare(IndexList e1, IndexList e2) {
+            return -e1.weakCompareTo(e2);
+        }
+    };
+
+
+    /**
+     * Defined ascending weak order comparator. Sorts the lowest terms first.
+     */
+    private final IndexListComparator lweak = new IndexListComparator() {
+
+
+        @Override
+        public int compare(IndexList e1, IndexList e2) {
+            return e1.weakCompareTo(e2);
+        }
+    };
+
+
+    /**
      * Get the descending order comparator. Sorts the highest terms first.
      * @return horder.
      */
@@ -642,6 +668,24 @@ public class IndexFactory implements MonoidFactory<IndexList> {
      */
     public IndexListComparator getAscendComparator() {
         return lorder;
+    }
+
+
+    /**
+     * Get the descending weak order comparator. Sorts the highest terms first.
+     * @return horder.
+     */
+    public IndexListComparator getDescendWeakComparator() {
+        return hweak;
+    }
+
+
+    /**
+     * Get the ascending weak order comparator. Sorts the lowest terms first.
+     * @return lorder.
+     */
+    public IndexListComparator getAscendWeakComparator() {
+        return lweak;
     }
 
 }

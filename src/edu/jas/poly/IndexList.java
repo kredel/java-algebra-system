@@ -544,11 +544,11 @@ public class IndexList implements MonoidElem<IndexList> {
 
 
     /**
-     * IndexList weekCompareTo. Ignoring the degree in first pass.
+     * IndexList weakCompareTo. Ignoring the degree in first pass.
      * @param V other index list
      * @return 0 if U == V, -1 if U &lt; V, 1 if U &gt; V.
      */
-    public int weekCompareTo(IndexList V) {
+    public int weakCompareTo(IndexList V) {
         if (sign == 0 && V.sign == 0) {
             return 0;
         }
