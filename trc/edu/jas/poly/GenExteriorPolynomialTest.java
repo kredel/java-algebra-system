@@ -104,11 +104,11 @@ public class GenExteriorPolynomialTest extends TestCase {
 
         String s = pf.toScript();
         //System.out.println("pf.toScript: " + s + ", " + s.length());
-        assertEquals("#s == 35: " + s, s.length(), 35);
+        assertTrue("#s >= 35: " + s, s.length() >= 35);
 
         s = pf.toString();
         //System.out.println("pf.toString: " + s + ", " + s.length());
-        assertEquals("#s == 40: " + s, s.length(), 40);
+        assertTrue("#s >= 40: " + s, s.length() >= 40);
 
         GenExteriorPolynomial<BigInteger> p = pf.getONE();
         //System.out.println("p = " + p);
@@ -1042,12 +1042,16 @@ public class GenExteriorPolynomialTest extends TestCase {
         // System.out.println("rf = " + rf);
 
         // 6 non-commuting vars
-        IndexFactory wf = new IndexFactory(6);
-        //System.out.println("wf = " + wf);
+        IndexFactory wf = new IndexFactory(6, false);
+        System.out.println("wf = " + wf);
+        IndexFactory wfw = new IndexFactory(6, true);
+        System.out.println("wfw = " + wfw);
 
         // polynomials over integers
         GenExteriorPolynomialRing<BigInteger> pf = new GenExteriorPolynomialRing<BigInteger>(rf, wf);
-        //System.out.println("pf = " + pf);
+        System.out.println("pf = " + pf);
+        GenExteriorPolynomialRing<BigInteger> pfw = new GenExteriorPolynomialRing<BigInteger>(rf, wfw);
+        System.out.println("pfw = " + pfw);
 
         // test 1
         GenExteriorPolynomial<BigInteger> p = pf.getONE();
@@ -1066,9 +1070,9 @@ public class GenExteriorPolynomialTest extends TestCase {
             assertEquals("homogen(h) == form(h): ", h, f);
         }
 
-        p = pf.getZERO();
+        p = pfw.getZERO();
         for (int i = 0; i <= wf.imaxlength; i++) {
-            GenExteriorPolynomial<BigInteger> hf = pf.randomForm(kl, ll, i);
+            GenExteriorPolynomial<BigInteger> hf = pfw.randomForm(kl, ll, i);
             System.out.println("hf(" + i + ") = " + hf);
             assertTrue("homogen(hf): ", hf.isHomogeneous());
             assertTrue("deg(hf): ", hf.isZERO() || hf.degree() == (long)i);

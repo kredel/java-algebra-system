@@ -112,12 +112,13 @@ public class IndexListTest extends TestCase {
         //System.out.println("t = " + t);
         assertEquals("s == t: ", s, t);
 
-        IndexFactory ids = new IndexFactory(idf.imax, "I");
+        //System.out.println("idf = " + idf);
+        IndexFactory ids = new IndexFactory(idf.imaxlength, "I");
         //System.out.println("ids = " + ids);
         assertEquals("idf == ids: ", idf.length(), ids.length());
         assertEquals("idf == ids: ", idf, ids);
 
-        ids = new IndexFactory(idf.imax);
+        ids = new IndexFactory(idf.imaxlength);
         //System.out.println("ids = " + ids);
         assertEquals("idf == ids: ", idf.length(), ids.length());
         assertEquals("idf == ids: ", idf, ids);

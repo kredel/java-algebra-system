@@ -51,6 +51,13 @@ public class IndexFactory implements MonoidFactory<IndexList> {
 
 
     /**
+     * Defined index list comparison.
+     * Strong compare: false, weak compare: true.
+     */
+    final boolean weak;
+
+
+    /**
      * Random number generator.
      */
     private final static Random random = new Random();
@@ -93,7 +100,17 @@ public class IndexFactory implements MonoidFactory<IndexList> {
      * @param r length of index lists, starting with index 1.
      */
     public IndexFactory(int r) {
-        this(1, r, DEFAULT_VNAME);
+        this(1, r, DEFAULT_VNAME, false);
+    }
+
+
+    /**
+     * Constructor for IndexFactory.
+     * @param r length of index lists, starting with index 1.
+     * @param w termorder for index lists: true for weak, false for strong.
+     */
+    public IndexFactory(int r, boolean w) {
+        this(1, r, DEFAULT_VNAME, w);
     }
 
 
@@ -103,69 +120,82 @@ public class IndexFactory implements MonoidFactory<IndexList> {
      * @param v coordinate vname.
      */
     public IndexFactory(int r, String v) {
-        this(1, r, v);
+        this(1, r, v, false);
     }
 
 
     /**
      * Constructor for IndexFactory.
-     * @param s start index.
-     * @param r length of index lists.
-     */
-    public IndexFactory(int s, int r) {
-        this(s, r, DEFAULT_VNAME);
-    }
-
-
-    /**
-     * Constructor for IndexFactory.
-     * @param s start index.
-     * @param r length of index lists.
+     * @param r length of index lists, starting with index 1.
      * @param v coordinate vname.
+     * @param w termorder for index lists: true for weak, false for strong.
      */
-    public IndexFactory(int s, int r, String v) {
-        if (r < 0) {
+    public IndexFactory(int r, String v, boolean w) {
+        this(1, r, v, w);
+    }
+
+
+    /**
+     * Constructor for IndexFactory.
+     * @param s start index.
+     * @param t length of index lists.
+     */
+    public IndexFactory(int s, int t) {
+        this(s, t, DEFAULT_VNAME, false);
+    }
+
+
+    /**
+     * Constructor for IndexFactory.
+     * @param s start index.
+     * @param t length of index lists.
+     * @param v coordinate vname.
+     * @param w termorder for index lists: true for weak, false for strong.
+     */
+    public IndexFactory(int s, int t, String v, boolean w) {
+        // not possible: this(new IndexList(this, 1, sequenceArray(s, t)), v);
+        if (t < 0) {
             throw new IllegalArgumentException("negative length index not allowed");
         }
         if (s < 0) {
             throw new IllegalArgumentException("negative start index not allowed");
         }
-        imaxlength = r;
+        imaxlength = t;
         vname = v;
+        weak = w;
         imax = new IndexList(this, 1, sequenceArray(s, imaxlength));
         ONE = new IndexList(this, 1, sequenceArray(s, 0));
     }
 
 
-    /**
-     * Constructor for IndexFactory.
-     * @param o some index list.
-     */
-    public IndexFactory(IndexList o) {
-        this(o, o.mono.vname);
-    }
+    // /** not meaningful
+    //  * Constructor for IndexFactory.
+    //  * @param o some index list.
+    //  * @param v coordinate vname.
+    //  */
+    // public IndexFactory(IndexList o, String v) {
+    //     if (o == null) {
+    //         throw new IllegalArgumentException("null index list not allowed");
+    //     }
+    //     int b = o.minDeg();
+    //     int e = o.maxDeg();
+    //     imaxlength = e - b + 1;
+    //     vname = v;
+    //     imax = new IndexList(this, 1, sequenceArray(b, imaxlength));
+    //     if (imaxlength != o.length()) {
+    //         logger.warn("length do not match: {} != {}", imaxlength, o.length());
+    //     }
+    //     ONE = new IndexList(this, 1, sequenceArray(1, 0));
+    // }
 
 
-    /**
-     * Constructor for IndexFactory.
-     * @param o some index list.
-     * @param v coordinate vname.
-     */
-    public IndexFactory(IndexList o, String v) {
-        if (o == null) {
-            throw new IllegalArgumentException("null index list not allowed");
-        }
-        int b = o.minDeg();
-        int e = o.maxDeg();
-        imaxlength = e - b + 1;
-        vname = v;
-        imax = new IndexList(this, 1, sequenceArray(b, imaxlength));
-        if (imaxlength != o.length()) {
-            logger.warn("length do not match: {} != {}", imaxlength, o.length());
-        }
-        //ONE = imax.getONE(); // ??
-        ONE = new IndexList(this, 1, new int[0]);
-    }
+    // /**
+    //  * Constructor for IndexFactory.
+    //  * @param o some index list.
+    //  */
+    // public IndexFactory(IndexList o) {
+    //     this(o, o.mono.vname);
+    // }
 
 
     /**
@@ -369,7 +399,7 @@ public class IndexFactory implements MonoidFactory<IndexList> {
      */
     @Override
     public String toString() {
-        StringBuffer s = new StringBuffer(imax.toString());
+        StringBuffer s = new StringBuffer(imax.toString() + ", " + weak);
         return s.toString();
     }
 
@@ -381,7 +411,8 @@ public class IndexFactory implements MonoidFactory<IndexList> {
      */
     @Override
     public String toScript() {
-        return imax.toScript();
+        StringBuffer s = new StringBuffer(imax.toScript() + ", " + weak);
+        return s.toString();
     }
 
 
@@ -658,6 +689,9 @@ public class IndexFactory implements MonoidFactory<IndexList> {
      * @return horder.
      */
     public IndexListComparator getDescendComparator() {
+        if (weak) {
+            return hweak;
+        }
         return horder;
     }
 
@@ -667,25 +701,10 @@ public class IndexFactory implements MonoidFactory<IndexList> {
      * @return lorder.
      */
     public IndexListComparator getAscendComparator() {
+        if (weak) {
+            return lweak;
+        }
         return lorder;
-    }
-
-
-    /**
-     * Get the descending weak order comparator. Sorts the highest terms first.
-     * @return horder.
-     */
-    public IndexListComparator getDescendWeakComparator() {
-        return hweak;
-    }
-
-
-    /**
-     * Get the ascending weak order comparator. Sorts the lowest terms first.
-     * @return lorder.
-     */
-    public IndexListComparator getAscendWeakComparator() {
-        return lweak;
     }
 
 }
