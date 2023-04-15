@@ -1039,19 +1039,19 @@ public class GenExteriorPolynomialTest extends TestCase {
     public void testForms() {
         // integers
         BigInteger rf = new BigInteger();
-        // System.out.println("rf = " + rf);
+        //System.out.println("rf = " + rf);
 
         // 6 non-commuting vars
         IndexFactory wf = new IndexFactory(6, false);
-        System.out.println("wf = " + wf);
+        //System.out.println("wf = " + wf);
         IndexFactory wfw = new IndexFactory(6, true);
-        System.out.println("wfw = " + wfw);
+        //System.out.println("wfw = " + wfw + ", " + wfw.toScript());
 
         // polynomials over integers
         GenExteriorPolynomialRing<BigInteger> pf = new GenExteriorPolynomialRing<BigInteger>(rf, wf);
-        System.out.println("pf = " + pf);
+        //System.out.println("pf = " + pf);
         GenExteriorPolynomialRing<BigInteger> pfw = new GenExteriorPolynomialRing<BigInteger>(rf, wfw);
-        System.out.println("pfw = " + pfw);
+        //System.out.println("pfw = " + pfw);
 
         // test 1
         GenExteriorPolynomial<BigInteger> p = pf.getONE();
@@ -1059,10 +1059,10 @@ public class GenExteriorPolynomialTest extends TestCase {
         assertTrue("homogen(p): ", p.isHomogeneous());
 
         GenExteriorPolynomial<BigInteger> q = pf.random(kl, ll*4, rl);
-        System.out.println("q = " + q);
+        //System.out.println("q = " + q);
         for (int i = 0; i <= wf.imaxlength; i++) {
             GenExteriorPolynomial<BigInteger> h = q.homogeneousPart(i);
-            System.out.println("h("+ i + ") = " + h);
+            //System.out.println("h("+ i + ") = " + h);
             assertTrue("homogen(h): ", h.isHomogeneous());
             GenExteriorPolynomial<BigInteger> f = q.form(i);
             //System.out.println("f = " + f);
@@ -1073,12 +1073,12 @@ public class GenExteriorPolynomialTest extends TestCase {
         p = pfw.getZERO();
         for (int i = 0; i <= wf.imaxlength; i++) {
             GenExteriorPolynomial<BigInteger> hf = pfw.randomForm(kl, ll, i);
-            System.out.println("hf(" + i + ") = " + hf);
+            //System.out.println("hf(" + i + ") = " + hf);
             assertTrue("homogen(hf): ", hf.isHomogeneous());
             assertTrue("deg(hf): ", hf.isZERO() || hf.degree() == (long)i);
             p = p.sum(hf);
         }
-        System.out.println("p = " + p);
+        //System.out.println("p = " + p);
     }
 
 }

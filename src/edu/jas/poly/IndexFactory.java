@@ -399,7 +399,11 @@ public class IndexFactory implements MonoidFactory<IndexList> {
      */
     @Override
     public String toString() {
-        StringBuffer s = new StringBuffer(imax.toString() + ", " + weak);
+        if (! weak) {
+            return imax.toString();
+        }
+        StringBuffer s = new StringBuffer(imax.toString());
+        s.append("[" + weak + "]");
         return s.toString();
     }
 
@@ -411,7 +415,11 @@ public class IndexFactory implements MonoidFactory<IndexList> {
      */
     @Override
     public String toScript() {
-        StringBuffer s = new StringBuffer(imax.toScript() + ", " + weak);
+        if (! weak) {
+            return imax.toScript();
+        }
+        StringBuffer s = new StringBuffer(imax.toScript());
+        s.append("[" + weak + "]");
         return s.toString();
     }
 
