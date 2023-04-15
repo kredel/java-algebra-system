@@ -1,0 +1,47 @@
+Nr.   Classes Functions      NCSS  Javadocs Package
+  1        58      1080     10249      1094 edu.jas.application
+  2        33       892      5294       914 edu.jas.arith
+  3        27       271      3918       274 edu.jas.fd
+  4       112       738     10273       780 edu.jas.gb
+  5         8        48       253        56 edu.jas.gbmod
+  6        56       459      8036       476 edu.jas.gbufd
+  7         9        42       995        51 edu.jas.integrate
+  8         8        45       222        43 edu.jas.kern
+  9       179      1707     14936      1644 edu.jas.poly
+ 10       109       401      2829       302 edu.jas.ps
+ 11        32       362      2911       366 edu.jas.root
+ 12        25        86       348       103 edu.jas.structure
+ 13        64       528     10920       556 edu.jas.ufd
+ 14         1         4        50         5 edu.jas.ufdroot
+ 15        49       281      2585       316 edu.jas.util
+ 16         7       162      1648       168 edu.jas.vector
+    --------- --------- --------- ---------
+          777      7106     75467      7148 Total
+
+ Packages   Classes Functions      NCSS  Javadocs | per
+-------------------------------------------------------------
+    16.00    777.00   7106.00  75467.00   7148.00 | Project
+              48.56    444.13   4716.69    446.75 | Package
+                         9.15     97.13      9.20 | Class
+                                  10.62      1.01 | Function
+
+
+Nr. NCSS Functions Classes Javadocs Class
+  1  124        26       0       27 edu.jas.application.SolvableResidueRing
+...
+777  344        12       0       13 edu.jas.vector.LinAlg
+Average Object NCSS:                 93.09
+Average Object Functions:             9.15
+Average Object Inner Classes:         0.29
+Average Object Javadoc Comments:      9.20
+Program NCSS:                    75,467.00
+
+
+Nr.  NCSS CCN JVDC Function
+   1    2   1    1 edu.jas.application.SolvableResidueRing.SolvableResidueRing(C)
+...
+7106   48  15    1 edu.jas.vector.LinAlg.fractionfreeGaussElimination(C)
+Average Function NCSS:       9.85
+Average Function CCN:        3.95
+Average Function JVDC:       0.93
+Program NCSS:           75,467.00
