@@ -34,7 +34,7 @@ PYPATH=$(LIBPATH)/jython.jar
 # --- syncing ----------
 DRY=--dry-run
 DELETE=
-RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=doc/git_change.log --include=jdepend-report.txt --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn --exclude=build/ --exclude=target/ --exclude=reports/ --exclude=.gradle/
+RSYNC=rsync -e ssh -avuz $(DRY) $(DELETE) --exclude=*~ --include=doc/git_change.log --include=jdepend-report.txt --exclude=*.log* --exclude=*.out* --exclude=*.txt* --exclude=.svn --exclude=build/ --exclude=target/ --exclude=reports/ --exclude=.gradle/ --exclude=*.exec
 ####--exclude=./test
 ####--exclude=*.ps --exclude=*.pdf --exclude=spin*
 ####--exclude=*/.jxta/
