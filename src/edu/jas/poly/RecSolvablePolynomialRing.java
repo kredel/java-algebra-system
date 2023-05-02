@@ -471,7 +471,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
         if (nvar == 1) {
             return random(5, n, n, 0.7f, rnd);
         }
-        return random(5, n, 3, 0.3f, rnd);
+        return random(2, n, 3, 0.3f, rnd);
     }
 
 
@@ -507,6 +507,7 @@ public class RecSolvablePolynomialRing<C extends RingElem<C>>
         for (int i = 0; i < l; i++) {
             e = ExpVector.random(nvar, d, q, rnd);
             a = coFac.random(k, rnd);
+            //System.out.println("a_random = " + a);
             r = (RecSolvablePolynomial<C>) r.sum(a, e);
             // somewhat inefficient but clean
         }

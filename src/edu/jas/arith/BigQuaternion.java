@@ -736,6 +736,16 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
 
 
     /**
+     * BigQuaternion multiply left.
+     * @param B BigQuaternion.
+     * @return B*this.
+     */
+    public BigQuaternion multiplyLeft(BigQuaternion B) {
+        return B.multiply(this);
+    }
+
+
+    /**
      * Quaternion number inverse.
      * @param A is a non-zero quaternion number.
      * @return S with S * A = A * S = 1.

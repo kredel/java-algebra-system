@@ -431,7 +431,48 @@ public class GenPolynomialTokenizer {
                                 tt = tok.nextToken(); // todo: decimal number
                                 if (tok.sval != null && digit(tok.sval.charAt(0))) {
                                     df.append(tok.sval);
-
+                                } else {
+                                    tok.pushBack();
+                                }
+                            }
+                        } else {
+                            tok.pushBack();
+                        }
+                    }
+                    if (tok.sval.charAt(tok.sval.length() - 1) == 'j') { // quaternion number
+                        tt = tok.nextToken();
+                        logger.debug("tt,jm = {}", tok);
+                        if (tok.sval != null || tt == '-') {
+                            if (tok.sval != null) {
+                                df.append(tok.sval);
+                            } else {
+                                df.append("-");
+                            }
+                            if (tt == '-') {
+                                tt = tok.nextToken(); // todo: decimal number
+                                if (tok.sval != null && digit(tok.sval.charAt(0))) {
+                                    df.append(tok.sval);
+                                } else {
+                                    tok.pushBack();
+                                }
+                            }
+                        } else {
+                            tok.pushBack();
+                        }
+                    }
+                    if (tok.sval.charAt(tok.sval.length() - 1) == 'k') { // quaternion number
+                        tt = tok.nextToken();
+                        logger.debug("tt,km = {}", tok);
+                        if (tok.sval != null || tt == '-') {
+                            if (tok.sval != null) {
+                                df.append(tok.sval);
+                            } else {
+                                df.append("-");
+                            }
+                            if (tt == '-') {
+                                tt = tok.nextToken(); // todo: decimal number
+                                if (tok.sval != null && digit(tok.sval.charAt(0))) {
+                                    df.append(tok.sval);
                                 } else {
                                     tok.pushBack();
                                 }
