@@ -16,9 +16,9 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 
-
-
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigQuaternion;
+import edu.jas.arith.BigQuaternionRing;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
 import edu.jas.gb.SolvableGroebnerBase;
 import edu.jas.gb.SolvableGroebnerBaseSeq;
@@ -67,12 +67,6 @@ public class SolvableSyzygyTest extends TestCase {
         TestSuite suite = new TestSuite(SolvableSyzygyTest.class);
         return suite;
     }
-
-
-    int port = 4711;
-
-
-    String host = "localhost";
 
 
     BigRational cfac;
@@ -142,7 +136,8 @@ public class SolvableSyzygyTest extends TestCase {
     protected void setUp() {
         cfac = new BigRational(1);
         tord = new TermOrder();
-        fac = new GenSolvablePolynomialRing<BigRational>(cfac, rl, tord);
+        String[] vars = new String[]{ "w", "x", "y", "z" };
+        fac = new GenSolvablePolynomialRing<BigRational>(cfac, tord, vars);
         //RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
         //wl.generate(fac);
         table = fac.table;
@@ -623,6 +618,53 @@ public class SolvableSyzygyTest extends TestCase {
         oc[1] = or1;
         assertTrue("left Ore condition: ", ssz.isLeftOreCond(ar,br,oc));
         */
+    }
+
+
+    /**
+     * Test Ore conditions quaternion coefficients.
+     */
+    public void testOreConditionsQuat() {
+	BigQuaternionRing qri = new BigQuaternionRing();
+        GenSolvablePolynomialRing<BigQuaternion> qfac = new GenSolvablePolynomialRing<BigQuaternion>(qri, fac);
+        //System.out.println("qfac = " + qfac.toScript());
+        SolvableSyzygyAbstract<BigQuaternion> ssz = new SolvableSyzygySeq<BigQuaternion>(qri);
+
+	RelationGenerator<BigQuaternion> wl = new WeylRelations<BigQuaternion>();
+        wl.generate(qfac);
+
+        GenSolvablePolynomial<BigQuaternion> a, b, c, d;
+
+	do {
+            a = qfac.random(1, 3, el, q);
+            //a = qfac.parse(" -1i1j-2k-1 "); // wrong parse of starting -
+        } while (a.isZERO());
+        do {
+            b = qfac.random(1, 3, el, q);
+            //b = qfac.parse(" -1i1/2j1k-1/2  x +  3/2i1j-1/2k1 "); // wrong parse of starting -
+        } while (b.isZERO());
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+
+        GenSolvablePolynomial<BigQuaternion>[] oc = ssz.leftOreCond(a, b);
+        System.out.println("oc[0] = " + oc[0]);
+        System.out.println("oc[1] = " + oc[1]);
+        c = oc[0].multiply(a);
+        d = oc[1].multiply(b);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+        assertEquals("c_0 * a = c_1 * b: ", c, d);
+        assertTrue("left Ore condition: ", ssz.isLeftOreCond(a, b, oc));
+
+        oc = ssz.rightOreCond(a, b);
+        System.out.println("oc[0] = " + oc[0]);
+        System.out.println("oc[1] = " + oc[1]);
+        c = a.multiply(oc[0]);
+        d = b.multiply(oc[1]);
+        //System.out.println("c = " + c);
+        //System.out.println("d = " + d);
+        assertEquals("a * c_0 = b * c_1: ", c, d);
+        assertTrue("right Ore condition: ", ssz.isRightOreCond(a, b, oc));
     }
 
 }

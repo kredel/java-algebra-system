@@ -119,7 +119,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
 
                 h = sred.leftNormalform(row, F, s);
                 if (!h.isZERO()) {
-                    throw new ArithmeticException("Syzygy no leftGB");
+                    throw new ArithmeticException("Syzygy no leftGB: h!=0, " + h);
                 }
                 logger.debug("row = {}", row);
                 Z.add(row);
@@ -621,9 +621,30 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
      */
     public boolean isLeftOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b,
                     GenSolvablePolynomial<C>[] oc) {
-        GenSolvablePolynomial<C> c = oc[0].multiply(a);
-        GenSolvablePolynomial<C> d = oc[1].multiply(b);
-        return c.equals(d);
+        if (oc == null) {
+            throw new IllegalArgumentException("oc array must be non null");
+        }
+        return isLeftOreCond(a, b, oc[0], oc[1]);
+    }
+
+
+
+    /**
+     * Is left Ore condition. Test left Ore condition of two solvable
+     * polynomials.
+     * @param a solvable polynomial
+     * @param b solvable polynomial
+     * @param p solvable polynomial
+     * @param q solvable polynomial
+     * @return true, if p*a = q*b, else false
+     */
+    public boolean isLeftOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b, GenSolvablePolynomial<C> p, GenSolvablePolynomial<C> q) {
+        if (a == null || a.isZERO() || b == null || b.isZERO()) {
+            throw new IllegalArgumentException("a and b must be non zero");
+        }
+        GenSolvablePolynomial<C> pa = p.multiply(a);
+        GenSolvablePolynomial<C> qb = q.multiply(b);
+        return pa.equals(qb);
     }
 
 
@@ -636,9 +657,29 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
      */
     public boolean isRightOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b,
                     GenSolvablePolynomial<C>[] oc) {
-        GenSolvablePolynomial<C> c = a.multiply(oc[0]);
-        GenSolvablePolynomial<C> d = b.multiply(oc[1]);
-        return c.equals(d);
+        if (oc == null) {
+            throw new IllegalArgumentException("oc array must be non null");
+        }
+        return isRightOreCond(a, b, oc[0], oc[1]);
+    }
+
+
+    /**
+     * Is right Ore condition. Test right Ore condition of two solvable
+     * polynomials.
+     * @param a solvable polynomial
+     * @param b solvable polynomial
+     * @param p solvable polynomial
+     * @param q solvable polynomial
+     * @return true, if a*p = b*q, else false
+     */
+    public boolean isRightOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b, GenSolvablePolynomial<C> p, GenSolvablePolynomial<C> q) {
+        if (a == null || a.isZERO() || b == null || b.isZERO()) {
+            throw new IllegalArgumentException("a and b must be non zero");
+        }
+        GenSolvablePolynomial<C> ap = a.multiply(p);
+        GenSolvablePolynomial<C> bq = b.multiply(q);
+        return ap.equals(bq);
     }
 
 

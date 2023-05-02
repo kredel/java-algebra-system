@@ -361,15 +361,20 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             oc[1] = pfac.getONE();
             return oc;
         }
+        if (a.equals(b.negate())) {
+            oc[0] = pfac.getONE();
+            oc[1] = (GenSolvablePolynomial<C>) pfac.getONE().negate();
+            return oc;
+        }
         if (a.isConstant()) {
             if (pfac.coFac.isCommutative()) { // ??
                 oc[0] = b;
                 oc[1] = a;
                 return oc;
             }
-            oc[1] = pfac.getONE();
             C c = a.leadingBaseCoefficient().inverse();
-            oc[0] = b.multiply(c);
+            oc[0] = b.multiply(c); // was Left
+            oc[1] = pfac.getONE();
             return oc;
         }
         if (b.isConstant()) {
@@ -380,7 +385,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             }
             oc[0] = pfac.getONE();
             C c = b.leadingBaseCoefficient().inverse();
-            oc[1] = a.multiply(c);
+            oc[1] = a.multiply(c); // was Left
             return oc;
         }
         logger.info("computing left Ore condition: {}, {}", a, b);
@@ -400,7 +405,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         List<GenSolvablePolynomial<C>> G1 = null;
         GenSolvablePolynomial<C> g1 = null;
         for (List<GenSolvablePolynomial<C>> Gi : Gz) {
-            //System.out.println("Gi = " + Gi);
+            //System.out.println("Gil = " + Gi);
             if (Gi.get(0).isZERO()) {
                 continue;
             }
@@ -446,9 +451,9 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
                 oc[1] = a;
                 return oc;
             }
-            oc[1] = pfac.getONE();
             C c = a.leadingBaseCoefficient().inverse();
-            oc[0] = b.multiply(c);
+            oc[0] = b.multiplyLeft(c);
+            oc[1] = pfac.getONE();
             return oc;
         }
         if (b.isConstant()) {
@@ -459,7 +464,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             }
             oc[0] = pfac.getONE();
             C c = b.leadingBaseCoefficient().inverse();
-            oc[1] = a.multiply(c);
+            oc[1] = a.multiplyLeft(c);
             return oc;
         }
         logger.info("computing right Ore condition: {}, {}", a, b);
@@ -470,6 +475,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         List<GenSolvablePolynomial<C>> G1 = null;
         GenSolvablePolynomial<C> g1 = null;
         for (List<GenSolvablePolynomial<C>> Gi : Gz) {
+            //System.out.println("Gir = " + Gi);
             if (Gi.get(0).isZERO()) {
                 continue;
             }
