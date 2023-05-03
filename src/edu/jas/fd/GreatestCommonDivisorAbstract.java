@@ -1084,15 +1084,20 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         GenSolvablePolynomial<C>[] ret = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
         ret[0] = hegcd[0];
         ret[1] = hegcd[1];
+        if (ret[0].isZERO()) {
+            ret[1] = P.ring.getZERO();
+            ret[2] = P.ring.getZERO();
+            return ret;
+        }
         GenSolvablePolynomial<C> x = (GenSolvablePolynomial<C>) hegcd[0].subtract(hegcd[1].multiply(P));
         GenSolvablePolynomial<C>[] qr = FDUtil.<C> leftBasePseudoQuotientRemainder(x, S);
         // assert qr[1].isZERO() 
         if (!qr[1].isZERO()) {
-            GenSolvablePolynomial<C> y = (GenSolvablePolynomial<C>) qr[0].multiply(S).sum(qr[1]);
-            System.out.println("qr: " + Arrays.toString(qr));
-            System.out.println("x: " + x);
-            System.out.println("y: " + y);
-            //throw new RuntimeException("qr[1] != 0: " + qr[1]);
+            //GenSolvablePolynomial<C> y = (GenSolvablePolynomial<C>) qr[0].multiply(S).sum(qr[1]);
+            //System.out.println("qr: " + Arrays.toString(qr));
+            //System.out.println("x: " + x);
+            //System.out.println("y: " + y);
+            throw new RuntimeException("qr[1] != 0: " + Arrays.toString(qr));
         }
         ret[2] = qr[0];
         return ret;
@@ -1225,13 +1230,13 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (a.equals(b)) { // required because of rationals gcd
             oc[0] = rf.getONE();
             oc[1] = rf.getONE();
-            logger.info("Ore multiple: {}", Arrays.toString(oc));
+            logger.info("Ore multiple ==: {}", Arrays.toString(oc));
             return oc;
         }
         if (a.equals(b.negate())) { // required because of rationals gcd
             oc[0] = rf.getONE();
             oc[1] = rf.getONE().negate();
-            logger.info("Ore multiple: {}", Arrays.toString(oc));
+            logger.info("Ore multiple ==-: {}", Arrays.toString(oc));
             return oc;
         }
         if (rf.isCommutative()) {
@@ -1274,7 +1279,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             logger.info("left Ore condition on coefficients, StarRing case: {}, {}", a, b);
             C bs = (C) ((StarRingElem) b).conjugate();
             oc[0] = bs.multiply(b); // bar(b) b a = s a 
-            oc[1] = a.multiply(bs); // a bar(b) b = a s
+            oc[1] = a.multiply(bs); // a bar(b) b = t b
             logger.info("Ore multiple: {}", Arrays.toString(oc));
             return oc;
         }
@@ -1394,7 +1399,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             logger.info("right Ore condition on coefficients, StarRing case: {}, {}", a, b);
             C bs = (C) ((StarRingElem) b).conjugate();
             oc[0] = b.multiply(bs); // a b bar(b) = a s
-            oc[1] = bs.multiply(a); // b bar(b) a = s a 
+            oc[1] = bs.multiply(a); // b bar(b) a = b t
             logger.info("Ore multiple: {}", Arrays.toString(oc));
             return oc;
         }
@@ -1442,6 +1447,34 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         oc = syz.rightOreCond(a, b);
         //logger.info("Ore multiple: {}, {}", oc[0].multiply(a), Arrays.toString(oc));
         return oc;
+    }
+
+
+    /**
+     * Is left Ore condition. Test left Ore condition of two solvable
+     * polynomials.
+     * @param a solvable polynomial
+     * @param b solvable polynomial
+     * @param p solvable polynomial
+     * @param q solvable polynomial
+     * @return true, if p*a = q*b, else false
+     */
+    public boolean isLeftOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b, GenSolvablePolynomial<C> p, GenSolvablePolynomial<C> q) {
+        return syz.isLeftOreCond(a, b, p, q);
+    }
+
+
+    /**
+     * Is right Ore condition. Test right Ore condition of two solvable
+     * polynomials.
+     * @param a solvable polynomial
+     * @param b solvable polynomial
+     * @param p solvable polynomial
+     * @param q solvable polynomial
+     * @return true, if a*p = b*q, else false
+     */
+    public boolean isRightOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b, GenSolvablePolynomial<C> p, GenSolvablePolynomial<C> q) {
+        return syz.isRightOreCond(a, b, p, q);
     }
 
 
