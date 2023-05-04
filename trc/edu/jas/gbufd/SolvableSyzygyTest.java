@@ -653,7 +653,7 @@ public class SolvableSyzygyTest extends TestCase {
         d = oc[1].multiply(b);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-        assertEquals("c_0 * a = c_1 * b: ", c, d);
+        assertEquals("c_0 * a = c_1 * b: " + qfac.toScript(), c, d);
         assertTrue("left Ore condition: ", ssz.isLeftOreCond(a, b, oc));
 
         oc = ssz.rightOreCond(a, b);
@@ -663,7 +663,7 @@ public class SolvableSyzygyTest extends TestCase {
         d = b.multiply(oc[1]);
         //System.out.println("c = " + c);
         //System.out.println("d = " + d);
-        assertEquals("a * c_0 = b * c_1: ", c, d);
+        assertEquals("a * c_0 = b * c_1: " + qfac.toScript(), c, d);
         assertTrue("right Ore condition: ", ssz.isRightOreCond(a, b, oc));
     }
 

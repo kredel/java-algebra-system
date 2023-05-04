@@ -133,9 +133,9 @@ public class GCDSimpleTest extends TestCase {
         //System.out.println("dfac = " + dfac.toScript());
         for (int i = 0; i < 3; i++) {
             //System.out.println();
-            a = dfac.random(kl * (i + 2), ll + 2 * i, el + 2, q);
-            b = dfac.random(kl * (i + 1), ll + i, el + 2, q);
-            c = dfac.random(kl * (i + 1), ll + 1, el + 1, q);
+            a = dfac.random(kl + (i + 2), ll + 2 * i, el + 2, q);
+            b = dfac.random(kl + (i + 1), ll + i, el + 2, q);
+            c = dfac.random(kl + (i + 1), ll + 1, el + 1, q);
             c = c.multiply(dfac.univariate(0));
             if (a.isZERO()||b.isZERO()||c.isZERO()) {
                 // skip for this turn
@@ -179,9 +179,9 @@ public class GCDSimpleTest extends TestCase {
         //System.out.println("dfac = " + dfac.toScript());
         for (int i = 0; i < 3; i++) {
             //System.out.println();
-            a = dfac.random(kl * (i + 2), ll + 2 * i, el + 2, q);
-            b = dfac.random(kl * (i + 1), ll + i, el + 2, q);
-            c = dfac.random(kl * (i + 1), ll + 1, el + 1, q);
+            a = dfac.random(kl + (i + 2), ll + 2 * i, el + 2, q);
+            b = dfac.random(kl + (i + 1), ll + i, el + 2, q);
+            c = dfac.random(kl + (i + 1), ll + 1, el + 1, q);
             c = c.multiply(dfac.univariate(0));
             if (a.isZERO()||b.isZERO()||c.isZERO()) {
                 // skip for this turn

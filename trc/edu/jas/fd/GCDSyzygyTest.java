@@ -105,6 +105,7 @@ public class GCDSyzygyTest extends TestCase {
         String[] vars = new String[] { "a", "b", "c", "d" };
         BigRational cf = new BigRational(1);
         fd = new GreatestCommonDivisorSimple<BigRational>(cf);
+        //fd = new GreatestCommonDivisorSyzygy<BigRational>(cf); //todo
         dfac = new GenSolvablePolynomialRing<BigRational>(cf, to, vars);
         RelationGenerator<BigRational> wl = new WeylRelationsIterated<BigRational>();
         dfac.addRelations(wl);

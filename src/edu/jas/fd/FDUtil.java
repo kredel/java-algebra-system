@@ -481,9 +481,9 @@ public class FDUtil {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException(P + " division by zero " + S);
         }
-        if (S.ring.nvar != 1) { // ok if exact division
-            throw new RuntimeException("univariate polynomials only");
-        }
+        //if (S.ring.nvar != 1) { // ok if exact division
+        //    throw new RuntimeException("univariate polynomials only");
+        //}
         GenSolvablePolynomial<GenPolynomial<C>>[] ret = new GenSolvablePolynomial[2];
         if (P == null || P.isZERO()) {
             ret[0] = S.ring.getZERO();

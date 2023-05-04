@@ -75,7 +75,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             q = P;
             r = S;
         }
-        logger.debug("degrees: e = {}, f = {}", e, f);
+        logger.info("degrees: e = {}, f = {}", e, f);
         C c;
         if (field) {
             r = r.monic();
@@ -84,22 +84,22 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         } else {
             r = (GenSolvablePolynomial<C>) r.abs();
             q = (GenSolvablePolynomial<C>) q.abs();
-            C a = rightBaseContent(r);
-            C b = rightBaseContent(q);
+            C a = leftBaseContent(r);
+            C b = leftBaseContent(q);
             r = divide(r, a); // indirection
             q = divide(q, b); // indirection
             c = gcd(a, b); // indirection
         }
         //System.out.println("baseCont: gcd(cont) = " + b);
         if (r.isONE()) {
-            return r.multiply(c);
+            return r.multiplyLeft(c);
         }
         if (q.isONE()) {
-            return q.multiply(c);
+            return q.multiplyLeft(c);
         }
         GenSolvablePolynomial<C> x;
-        //System.out.println("baseGCD: q = " + q);
-        //System.out.println("baseGCD: r = " + r);
+        logger.info("baseGCD: q = {}", q);
+        logger.info("baseGCD: r = {}", r);
         while (!r.isZERO()) {
             x = FDUtil.<C> leftBaseSparsePseudoRemainder(q, r);
             q = r;
@@ -108,11 +108,12 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             } else {
                 r = x;
             }
-            //System.out.println("baseGCD: q = " + q);
-            //System.out.println("baseGCD: r = " + r);
+            logger.info("baseGCD_w: q = {}", q);
+            logger.info("baseGCD_w: r = {}", r);
         }
-        ///q = leftBasePrimitivePart(q);
-        q = rightBasePrimitivePart(q);
+        q = leftBasePrimitivePart(q);
+        //q = rightBasePrimitivePart(q);
+        logger.info("baseGCD: pp(q) = {}", q);
         return (GenSolvablePolynomial<C>) (q.multiply(c)).abs();
     }
 
