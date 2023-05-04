@@ -524,7 +524,7 @@ public class FDUtil {
                     //System.out.println("gd*d-ga*a = " + gd.multiply(d).subtract(ga.multiply(a)));
                     throw new RuntimeException("degree not descending: r = " + r);
                 }
-                System.out.println("r = " + r);
+                //System.out.println("r = " + r);
             } else {
                 break;
             }
