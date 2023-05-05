@@ -281,7 +281,7 @@ public class QuotIntPolynomialTest extends TestCase {
 
         // 3/6 commuting vars
         String[] vars = new String[] { "x1", "x2", "x3" };
-        System.out.println("vars = " + Arrays.toString(vars));
+        //System.out.println("vars = " + Arrays.toString(vars));
 
         // polynomials over integers
         GenPolynomialRing<BigInteger> pf = new GenPolynomialRing<BigInteger>(rf, vars);
@@ -311,7 +311,7 @@ public class QuotIntPolynomialTest extends TestCase {
         //System.out.println("p = " + p);
 
         List<Quotient<BigInteger>> gens = qf.generators();
-        System.out.println("gens = " + gens);
+        //System.out.println("gens = " + gens);
         assertTrue("#gens == 4", gens.size() == 4);
 
         RingElem<Quotient<BigInteger>> qe = new Quotient<BigInteger>(qf);
@@ -333,42 +333,42 @@ public class QuotIntPolynomialTest extends TestCase {
         // exterior polynomials over (polynomials over integers)
         // 3 non-commuting vars
         IndexFactory wf2 = new IndexFactory(3);
-        System.out.println("wf2 = " + wf2);
+        //System.out.println("wf2 = " + wf2);
 
         GenExteriorPolynomialRing<Quotient<BigInteger>> ppf;
         ppf = new GenExteriorPolynomialRing<Quotient<BigInteger>>(qf, wf2);
-        System.out.println("ppf = " + ppf.toScript());
+        //System.out.println("ppf = " + ppf.toScript());
 
         GenExteriorPolynomial<Quotient<BigInteger>> pp = ppf.getONE();
         //System.out.println("pp = " + pp);
         assertTrue("pp == 1", pp.isONE());
         //pp = ppf.random(2);
         pp = ppf.random(kl, ll, el);
-        System.out.println("pp = " + pp);
+        //System.out.println("pp = " + pp);
         pp = ppf.getZERO();
         //System.out.println("pp = " + pp);
         assertTrue("pp == 0", pp.isZERO());
 
         List<GenExteriorPolynomial<Quotient<BigInteger>>> pgens = ppf.generators();
-        System.out.println("pgens = " + pgens);
+        //System.out.println("pgens = " + pgens);
         assertTrue("#pgens == 4+3", pgens.size() == 4 + 3);
 
 
         //pp = ppf.random(2);
         pp = ppf.random(kl, ll, el);
-        System.out.println("\npp = " + pp);
+        //System.out.println("\npp = " + pp);
         assertFalse("pp.isZERO() = ", pp.isZERO());
         long deg = pp.degree();
         //System.out.println("deg = " + deg);
 
         GenExteriorPolynomial<Quotient<BigInteger>> der;
         der = PolyUfdUtil.<BigInteger> exteriorDerivativeQuot(pp);
-        System.out.println("der = " + der);
+        //System.out.println("der = " + der);
         //System.out.println("deg = " + deg + ", deg(der) = " + der.degree());
         assertTrue("deg >= 0: ", deg >= 0 && der.degree() >= 0);
         deg = der.degree();
         der = PolyUfdUtil.<BigInteger> exteriorDerivativeQuot(der);
-        System.out.println("der(der) = " + der);
+        //System.out.println("der(der) = " + der);
         //System.out.println("deg = " + deg + ", deg(der) = " + der.degree());
         assertTrue("deg >= 0: ", deg >= 0 && der.degree() >= 0);
 
@@ -385,10 +385,10 @@ public class QuotIntPolynomialTest extends TestCase {
             e.printStackTrace();
             return;
         }
-        System.out.println("\npp = " + pp);
+        //System.out.println("\npp = " + pp);
         deg = pp.degree();
         der = PolyUfdUtil.<BigInteger> exteriorDerivativeQuot(pp);
-        System.out.println("der = " + der);
+        //System.out.println("der = " + der);
         assertTrue("deg >= 0: ", deg >= 0 && der.degree() >= 0);
 
 
@@ -406,14 +406,14 @@ public class QuotIntPolynomialTest extends TestCase {
             e.printStackTrace();
             return;
         }
-        System.out.println("\npp = " + pp);
+        //System.out.println("\npp = " + pp);
         deg = pp.degree();
         der = PolyUfdUtil.<BigInteger> exteriorDerivativeQuot(pp);
-        System.out.println("der = " + der);
+        //System.out.println("der = " + der);
         assertTrue("deg >= 0: ", deg >= 0 && der.degree() >= 0);
         deg = der.degree();
         der = PolyUfdUtil.<BigInteger> exteriorDerivativeQuot(der);
-        System.out.println("der(der) = " + der);
+        //System.out.println("der(der) = " + der);
         assertTrue("deg >= 0: ", deg >= 0 && der.degree() >= 0);
     }
 
