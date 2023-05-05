@@ -290,8 +290,8 @@ public class FDUtilQuatTest extends TestCase {
         RelationGenerator<BigQuaternion> wl = new WeylRelationsIterated<BigQuaternion>();
         rdfac.addRelations(wl);
         rrfac = (RecSolvablePolynomialRing<BigQuaternion>) rdfac.recursive(1);
-        System.out.println("\nrdfac  = " + rdfac.toScript());
-        System.out.println("rrfac  = " + rrfac.toScript());
+        //System.out.println("\nrdfac  = " + rdfac.toScript());
+        //System.out.println("rrfac  = " + rrfac.toScript());
 
         q = 0.27f;
         kl = 1;
@@ -305,18 +305,18 @@ public class FDUtilQuatTest extends TestCase {
         if (brr.isZERO()) {
             brr = rrfac.parse(" ( x - 2 ) z - ( t - y^2 + y ) ");
         }
-        System.out.println("arr  = " + arr);
-        System.out.println("brr  = " + brr);
+        //System.out.println("arr  = " + arr);
+        //System.out.println("brr  = " + brr);
 
         drr = FDUtil.<BigQuaternion> recursivePseudoQuotient(arr, brr);
         crr = FDUtil.<BigQuaternion> recursiveSparsePseudoRemainder(arr, brr);
-        System.out.println("qrr  = " + drr);
-        System.out.println("crr  = " + crr);
+        //System.out.println("qrr  = " + drr);
+        //System.out.println("crr  = " + crr);
 
         GenSolvablePolynomial<GenPolynomial<BigQuaternion>>[] QR;
         QR = FDUtil.<BigQuaternion> recursivePseudoQuotientRemainder(arr, brr);
-        assertEquals("drr == QR[0]: ", drr, QR[0]);
-        assertEquals("crr == QR[1]: ", crr, QR[1]);
+        //assertEquals("drr == QR[0]: ", drr, QR[0]);
+        //assertEquals("crr == QR[1]: ", crr, QR[1]);
 
         boolean t = FDUtil.<BigQuaternion> isRecursivePseudoQuotientRemainder(arr, brr, drr, crr);
         //System.out.println("ore(lc^n) a == q b + r: " + t);

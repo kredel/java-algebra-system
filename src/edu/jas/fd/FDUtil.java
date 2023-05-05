@@ -1071,9 +1071,10 @@ public class FDUtil {
                 C rc = r.leadingBaseCoefficient().leadingBaseCoefficient();
                 C cc = rc.inverse().multiply(ac);
                 System.out.println("recLeftDivide: cc       = " + cc);
-                c = c.multiply(cc);
+                //c = c.multiply(cc);
                 r = onep.multiplyLeft(c.multiply(s), f); // right: (1 f) * c * s
-                //System.out.println("recLeftDivide: lc(r)    = " + r.leadingBaseCoefficient());
+                System.out.println("recLeftDivide: lc(r)    = " + r.leadingBaseCoefficient());
+                System.out.println("recLeftDivide: deg(r)   = " + r.degree());
                 throw new RuntimeException("something is wrong: a != lc(r): " + rfac.toScript());
             }
             p = (RecSolvablePolynomial<C>) p.subtract(r);
