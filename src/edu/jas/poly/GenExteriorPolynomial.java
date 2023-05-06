@@ -85,7 +85,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * Constructor for GenExteriorPolynomial c * x<sup>e</sup>.
+     * Constructor for GenExteriorPolynomial c * x<sub>e</sub>.
      * @param r polynomial ring factory.
      * @param c coefficient.
      * @param e word.
@@ -99,7 +99,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * Constructor for GenExteriorPolynomial c * x<sup>0</sup>.
+     * Constructor for GenExteriorPolynomial c * x<sub>0</sub>.
      * @param r polynomial ring factory.
      * @param c coefficient.
      */
@@ -109,7 +109,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * Constructor for GenExteriorPolynomial x<sup>e</sup>.
+     * Constructor for GenExteriorPolynomial x<sub>e</sub>.
      * @param r polynomial ring factory.
      * @param e index list.
      */
@@ -119,7 +119,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * Constructor for GenExteriorPolynomial x<sup>e</sup>.
+     * Constructor for GenExteriorPolynomial x<sub>e</sub>.
      * @param r polynomial ring factory.
      * @param e exponent vector.
      */
@@ -129,7 +129,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
 
 
     /**
-     * Constructor for GenExteriorPolynomial c * x<sup>e</sup>.
+     * Constructor for GenExteriorPolynomial c * x<sub>e</sub>.
      * @param r polynomial ring factory.
      * @param c coefficient.
      * @param e exponent vector.
@@ -831,7 +831,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * GenExteriorPolynomial addition. This method is not very efficient, since
      * this is copied.
      * @param a coefficient.
-     * @return this + a x<sup>0</sup>.
+     * @return this + a x<sub>0</sub>.
      */
     public GenExteriorPolynomial<C> sum(C a) {
         return sum(a, ring.wone);
@@ -917,7 +917,7 @@ public final class GenExteriorPolynomial<C extends RingElem<C>>
      * GenExteriorPolynomial subtract. This method is not very efficient, since
      * this is copied.
      * @param a coefficient.
-     * @return this + a x<sup>0</sup>.
+     * @return this + a x<sub>0</sub>.
      */
     public GenExteriorPolynomial<C> subtract(C a) {
         return subtract(a, ring.wone);
