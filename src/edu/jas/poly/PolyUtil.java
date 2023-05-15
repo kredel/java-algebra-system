@@ -659,6 +659,28 @@ public class PolyUtil {
 
 
     /**
+     * Solvable polynomial list right monic.
+     * @param <C> coefficient type.
+     * @param L list of solvable polynomials with field coefficients.
+     * @return list of solvable polynomials with leading coefficient 1.
+     */
+    public static <C extends RingElem<C>> List<GenPolynomial<C>> rightMonic(List<GenPolynomial<C>> L) {
+        return ListUtil.<GenPolynomial<C>, GenPolynomial<C>> map(L,
+                        new UnaryFunctor<GenPolynomial<C>, GenPolynomial<C>>() {
+
+
+                            public GenPolynomial<C> eval(GenPolynomial<C> c) {
+                                if (c == null) {
+                                    return null;
+                                }
+                                GenSolvablePolynomial<C> d = (GenSolvablePolynomial<C>) c;
+                                return (GenPolynomial<C>) d.rightMonic();
+                            }
+                        });
+    }
+
+
+    /**
      * Word polynomial list monic.
      * @param <C> coefficient type.
      * @param L list of word polynomials with field coefficients.
