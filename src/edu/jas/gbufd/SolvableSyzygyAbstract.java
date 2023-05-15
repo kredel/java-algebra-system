@@ -60,6 +60,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
      * Linear algebra engine.
      */
     protected BasicLinAlg<GenPolynomial<C>> blas;
+    //protected BasicLinAlg<GenSolvablePolynomial<C>> blas;
 
 
     /**
@@ -69,6 +70,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
         red = new ReductionSeq<C>();
         sred = new SolvableReductionSeq<C>();
         blas = new BasicLinAlg<GenPolynomial<C>>();
+        //blas = new BasicLinAlg<GenSolvablePolynomial<C>>();
     }
 
 
@@ -331,8 +333,8 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
     public boolean isLeftZeroRelation(List<List<GenSolvablePolynomial<C>>> Z, List<GenSolvablePolynomial<C>> F) {
         List<GenPolynomial<C>> Fp = PolynomialList.<C> castToList(F);
         for (List<GenSolvablePolynomial<C>> row : Z) {
-            // p has wrong type:
-            GenPolynomial<C> p = blas.scalarProduct(PolynomialList.<C> castToList(row), Fp);
+            List<GenPolynomial<C>> yrow = PolynomialList.<C> castToList(row);
+            GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>) blas.scalarProduct(yrow, Fp);
             if (p == null) {
                 continue;
             }
@@ -356,8 +358,8 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
         List<GenPolynomial<C>> Fp = PolynomialList.<C> castToList(F);
         for (List<GenSolvablePolynomial<C>> row : Z) {
             List<GenPolynomial<C>> yrow = PolynomialList.<C> castToList(row);
-            // p has wrong type:
-            GenPolynomial<C> p = blas.scalarProduct(Fp, yrow); // param order
+            // param order:
+            GenSolvablePolynomial<C> p = (GenSolvablePolynomial<C>) blas.scalarProduct(Fp, yrow);
             if (p == null) {
                 continue;
             }
@@ -380,8 +382,10 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
         if (Z == null || Z.list == null) {
             return true;
         }
+        List<List<GenPolynomial<C>>> Fp = F.list; //F.castToSolvableList();
         for (List<GenPolynomial<C>> row : Z.list) {
-            List<GenPolynomial<C>> zr = blas.leftScalarProduct(row, F.list);
+            List<GenPolynomial<C>> zr = blas.leftScalarProduct(row, Fp);
+            //List<GenSolvablePolynomial<C>> zp = PolynomialList.<C> castToSolvableList(zr);
             if (!blas.isZero(zr)) {
                 logger.info("is not ZeroRelation ({}) = {}", zr.size(), zr);
                 return false;
@@ -401,9 +405,10 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
         if (Z == null || Z.list == null) {
             return true;
         }
+        List<List<GenPolynomial<C>>> Fp = F.list; //F.castToSolvableList();
         for (List<GenPolynomial<C>> row : Z.list) {
-            List<GenPolynomial<C>> zr = blas.rightScalarProduct(row, F.list);
-            //List<GenPolynomial<C>> zr = blas.scalarProduct(row,F.list);
+            List<GenPolynomial<C>> zr = blas.rightScalarProduct(row, Fp);
+            //List<GenSolvablePolynomial<C>> zp = PolynomialList.<C> castToSolvableList(zr);
             if (!blas.isZero(zr)) {
                 logger.info("is not ZeroRelation ({}) = {}", zr.size(), zr);
                 return false;
@@ -511,6 +516,7 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
             return Z;
         }
         GenSolvablePolynomialRing<C> rring = ring.reverse(true);
+        //System.out.println("rightZeroRelationsArbitrary: ring = " + ring.toScript() + ", reversed ring = " + rring.toScript());
         GenSolvablePolynomial<C> q;
         List<GenSolvablePolynomial<C>> rF;
         rF = new ArrayList<GenSolvablePolynomial<C>>(F.size());

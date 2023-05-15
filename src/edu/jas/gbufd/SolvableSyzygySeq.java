@@ -20,6 +20,7 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
+import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -204,6 +205,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             }
             logger.info("check2 left syz end");
         }
+        System.out.println("isLeftZeroRelation extGB: = " + isLeftZeroRelation(sg,G));
 
         List<List<GenSolvablePolynomial<C>>> sf;
         sf = new ArrayList<List<GenSolvablePolynomial<C>>>(sg.size());
@@ -245,6 +247,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             }
             logger.info("check3 left syz end");
         }
+        System.out.println("isLeftZeroRelation backtrans: = " + isLeftZeroRelation(sf,F));
 
         List<List<GenSolvablePolynomial<C>>> M;
         M = new ArrayList<List<GenSolvablePolynomial<C>>>(lenf);
@@ -267,6 +270,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
                 }
                 //pi has wrong type, should be: List<GenSolvablePolynomial<C>>
                 List<GenPolynomial<C>> pi = blas.scalarProduct(si, PolynomialList.<C> castToList(ai));
+                //--List<GenPolynomial<C>> pi = blas.scalarProduct(PolynomialList.<C> castToList(ai), si);
                 //System.out.println("pi = " + pi);
                 rf = PolynomialList.<C> castToSolvableList(blas.vectorAdd(PolynomialList.<C> castToList(rf),
                                 pi));
@@ -338,6 +342,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             }
             logger.info("check4 left syz end");
         }
+        System.out.println("isLeftZeroRelation diagonal: = " + isLeftZeroRelation(sf,F));
         return sf;
     }
 
@@ -393,6 +398,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         F.add(a);
         F.add(b);
         List<List<GenSolvablePolynomial<C>>> Gz = leftZeroRelationsArbitrary(F);
+        System.out.println("isLeftZeroRelation: = " + isLeftZeroRelation(Gz,F));
         /*
         if (Gz.size() < 0) { // always false
             //System.out.println("Gz = " + Gz);
@@ -405,7 +411,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         List<GenSolvablePolynomial<C>> G1 = null;
         GenSolvablePolynomial<C> g1 = null;
         for (List<GenSolvablePolynomial<C>> Gi : Gz) {
-            //System.out.println("Gil = " + Gi);
+            System.out.println("Gil = " + Gi);
             if (Gi.get(0).isZERO()) {
                 continue;
             }
@@ -445,6 +451,11 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             oc[1] = pfac.getONE();
             return oc;
         }
+        if (a.equals(b.negate())) {
+            oc[0] = pfac.getONE();
+            oc[1] = (GenSolvablePolynomial<C>) pfac.getONE().negate();
+            return oc;
+        }
         if (a.isConstant()) {
             if (pfac.coFac.isCommutative()) { // ??
                 oc[0] = b;
@@ -472,10 +483,11 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         F.add(a);
         F.add(b);
         List<List<GenSolvablePolynomial<C>>> Gz = rightZeroRelationsArbitrary(F);
+        System.out.println("isRightZeroRelation: = " + isRightZeroRelation(Gz,F));
         List<GenSolvablePolynomial<C>> G1 = null;
         GenSolvablePolynomial<C> g1 = null;
         for (List<GenSolvablePolynomial<C>> Gi : Gz) {
-            //System.out.println("Gir = " + Gi);
+            System.out.println("Gir = " + Gi);
             if (Gi.get(0).isZERO()) {
                 continue;
             }
@@ -489,7 +501,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
                 g1 = G1.get(0);
             }
         }
-        oc[0] = G1.get(0);
+        oc[0] = g1; //G1.get(0);
         oc[1] = (GenSolvablePolynomial<C>) G1.get(1).negate();
         //logger.info("Ore multiple: {}, {}", a.multiply(oc[0]), Arrays.toString(oc));
         return oc;
