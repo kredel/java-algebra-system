@@ -10,8 +10,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.SolvableExtendedGB;
 import edu.jas.gb.SolvableGroebnerBase;
@@ -20,7 +20,6 @@ import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.ModuleList;
 import edu.jas.poly.PolynomialList;
-import edu.jas.structure.RingElem;
 import edu.jas.structure.GcdRingElem;
 import edu.jas.structure.RingFactory;
 
@@ -100,7 +99,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
      * @return a resolution of F.
      */
     @SuppressWarnings("unchecked")
-    public List/*<SolvResPart<C>|SolvResPolPart<C>>*/resolution(PolynomialList<C> F) {
+    public List/*<SolvResPart<C>|SolvResPolPart<C>>*/ resolution(PolynomialList<C> F) {
         List<List<GenSolvablePolynomial<C>>> Z;
         ModuleList<C> Zm;
         List<GenSolvablePolynomial<C>> G;
@@ -146,7 +145,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
      * @return a resolution of F.
      */
     @SuppressWarnings("unchecked")
-    public List/*<SolvResPart<C>|SolvResPolPart<C>>*/resolutionArbitrary(PolynomialList<C> F) {
+    public List/*<SolvResPart<C>|SolvResPolPart<C>>*/ resolutionArbitrary(PolynomialList<C> F) {
         List<List<GenSolvablePolynomial<C>>> Z;
         ModuleList<C> Zm;
         PolynomialList<C> Gl = null;
@@ -205,7 +204,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             }
             logger.info("check2 left syz end");
         }
-        System.out.println("isLeftZeroRelation extGB: = " + isLeftZeroRelation(sg,G));
+        System.out.println("isLeftZeroRelation extGB: = " + isLeftZeroRelation(sg, G));
 
         List<List<GenSolvablePolynomial<C>>> sf;
         sf = new ArrayList<List<GenSolvablePolynomial<C>>>(sg.size());
@@ -231,8 +230,8 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
                 // pi has wrong type:
                 List<GenPolynomial<C>> pi = blas.scalarProduct(si, PolynomialList.<C> castToList(ai));
                 //System.out.println("pi = " + pi);
-                rf = PolynomialList.<C> castToSolvableList(blas.vectorAdd(PolynomialList.<C> castToList(rf),
-                                pi));
+                rf = PolynomialList.<C> castToSolvableList(
+                                blas.vectorAdd(PolynomialList.<C> castToList(rf), pi));
             }
             if (it.hasNext() || jt.hasNext()) {
                 logger.error("leftZeroRelationsArbitrary wrong sizes");
@@ -247,7 +246,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             }
             logger.info("check3 left syz end");
         }
-        System.out.println("isLeftZeroRelation backtrans: = " + isLeftZeroRelation(sf,F));
+        System.out.println("isLeftZeroRelation backtrans: = " + isLeftZeroRelation(sf, F));
 
         List<List<GenSolvablePolynomial<C>>> M;
         M = new ArrayList<List<GenSolvablePolynomial<C>>>(lenf);
@@ -272,8 +271,8 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
                 List<GenPolynomial<C>> pi = blas.scalarProduct(si, PolynomialList.<C> castToList(ai));
                 //--List<GenPolynomial<C>> pi = blas.scalarProduct(PolynomialList.<C> castToList(ai), si);
                 //System.out.println("pi = " + pi);
-                rf = PolynomialList.<C> castToSolvableList(blas.vectorAdd(PolynomialList.<C> castToList(rf),
-                                pi));
+                rf = PolynomialList.<C> castToSolvableList(
+                                blas.vectorAdd(PolynomialList.<C> castToList(rf), pi));
             }
             if (it.hasNext() || jt.hasNext()) {
                 logger.error("zeroRelationsArbitrary wrong sizes");
@@ -342,7 +341,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
             }
             logger.info("check4 left syz end");
         }
-        System.out.println("isLeftZeroRelation diagonal: = " + isLeftZeroRelation(sf,F));
+        System.out.println("isLeftZeroRelation diagonal: = " + isLeftZeroRelation(sf, F));
         return sf;
     }
 
@@ -398,7 +397,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         F.add(a);
         F.add(b);
         List<List<GenSolvablePolynomial<C>>> Gz = leftZeroRelationsArbitrary(F);
-        System.out.println("isLeftZeroRelation: = " + isLeftZeroRelation(Gz,F));
+        System.out.println("isLeftZeroRelation: = " + isLeftZeroRelation(Gz, F));
         /*
         if (Gz.size() < 0) { // always false
             //System.out.println("Gz = " + Gz);
@@ -483,7 +482,7 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         F.add(a);
         F.add(b);
         List<List<GenSolvablePolynomial<C>>> Gz = rightZeroRelationsArbitrary(F);
-        System.out.println("isRightZeroRelation: = " + isRightZeroRelation(Gz,F));
+        System.out.println("isRightZeroRelation: = " + isRightZeroRelation(Gz, F));
         List<GenSolvablePolynomial<C>> G1 = null;
         GenSolvablePolynomial<C> g1 = null;
         for (List<GenSolvablePolynomial<C>> Gi : Gz) {
@@ -528,7 +527,8 @@ public class SolvableSyzygySeq<C extends GcdRingElem<C>> extends SolvableSyzygyA
         if (a.totalDegree() > 3 || b.totalDegree() > 3) { // how avoid too long running GBs ?
             //if (a.totalDegree() + b.totalDegree() > 6) { 
             // && a.length() < 10 && b.length() < 10
-            logger.info("skipping simplifier GB computation: degs = {}, {}", a.totalDegree(), b.totalDegree());
+            logger.info("skipping simplifier GB computation: degs = {}, {}", a.totalDegree(),
+                            b.totalDegree());
             oc = new GenSolvablePolynomial[] { a, b };
             return oc;
         }

@@ -37,7 +37,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
     private static final Logger logger = LogManager.getLogger(GenSolvablePolynomial.class);
 
 
-    private static final boolean debug = logger.isDebugEnabled();
+    //private static final boolean debug = logger.isDebugEnabled();
 
 
     /**

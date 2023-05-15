@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gb.Reduction;
 import edu.jas.gb.ReductionSeq;
@@ -90,7 +90,8 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
      * @param F a Groebner base.
      * @return leftSyz(F), a basis for the left module of syzygies for F.
      */
-    public List<List<GenSolvablePolynomial<C>>> leftZeroRelations(int modv, List<GenSolvablePolynomial<C>> F) {
+    public List<List<GenSolvablePolynomial<C>>> leftZeroRelations(int modv,
+                    List<GenSolvablePolynomial<C>> F) {
         List<List<GenSolvablePolynomial<C>>> Z = new ArrayList<List<GenSolvablePolynomial<C>>>();
         ArrayList<GenSolvablePolynomial<C>> S = new ArrayList<GenSolvablePolynomial<C>>(F.size());
         for (int i = 0; i < F.size(); i++) {
@@ -211,7 +212,8 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
      * @return syz(F), a basis for the module of right syzygies for F.
      */
     @SuppressWarnings("unchecked")
-    public List<List<GenSolvablePolynomial<C>>> rightZeroRelations(int modv, List<GenSolvablePolynomial<C>> F) {
+    public List<List<GenSolvablePolynomial<C>>> rightZeroRelations(int modv,
+                    List<GenSolvablePolynomial<C>> F) {
         GenSolvablePolynomialRing<C> ring = null;
         for (GenSolvablePolynomial<C> p : F) {
             if (p != null) {
@@ -330,7 +332,8 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
      * @param F a polynomial list.
      * @return true, if Z is a list of left syzygies for F, else false.
      */
-    public boolean isLeftZeroRelation(List<List<GenSolvablePolynomial<C>>> Z, List<GenSolvablePolynomial<C>> F) {
+    public boolean isLeftZeroRelation(List<List<GenSolvablePolynomial<C>>> Z,
+                    List<GenSolvablePolynomial<C>> F) {
         List<GenPolynomial<C>> Fp = PolynomialList.<C> castToList(F);
         for (List<GenSolvablePolynomial<C>> row : Z) {
             List<GenPolynomial<C>> yrow = PolynomialList.<C> castToList(row);
@@ -488,7 +491,8 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
      * @param F a solvable polynomial list.
      * @return syz(F), a basis for the module of right syzygies for F.
      */
-    public List<List<GenSolvablePolynomial<C>>> rightZeroRelationsArbitrary(List<GenSolvablePolynomial<C>> F) {
+    public List<List<GenSolvablePolynomial<C>>> rightZeroRelationsArbitrary(
+                    List<GenSolvablePolynomial<C>> F) {
         return rightZeroRelationsArbitrary(0, F);
     }
 
@@ -634,7 +638,6 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
     }
 
 
-
     /**
      * Is left Ore condition. Test left Ore condition of two solvable
      * polynomials.
@@ -644,7 +647,8 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
      * @param q solvable polynomial
      * @return true, if p*a = q*b, else false
      */
-    public boolean isLeftOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b, GenSolvablePolynomial<C> p, GenSolvablePolynomial<C> q) {
+    public boolean isLeftOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b,
+                    GenSolvablePolynomial<C> p, GenSolvablePolynomial<C> q) {
         if (a == null || a.isZERO() || b == null || b.isZERO()) {
             throw new IllegalArgumentException("a and b must be non zero");
         }
@@ -679,7 +683,8 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
      * @param q solvable polynomial
      * @return true, if a*p = b*q, else false
      */
-    public boolean isRightOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b, GenSolvablePolynomial<C> p, GenSolvablePolynomial<C> q) {
+    public boolean isRightOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b,
+                    GenSolvablePolynomial<C> p, GenSolvablePolynomial<C> q) {
         if (a == null || a.isZERO() || b == null || b.isZERO()) {
             throw new IllegalArgumentException("a and b must be non zero");
         }
@@ -707,8 +712,8 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
      * @param d SolvablePolynomial.
      * @return sign((num/den)-(n/d)).
      */
-    public int compare(GenSolvablePolynomial<C> num, GenSolvablePolynomial<C> den,
-                    GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+    public int compare(GenSolvablePolynomial<C> num, GenSolvablePolynomial<C> den, GenSolvablePolynomial<C> n,
+                    GenSolvablePolynomial<C> d) {
         if (n == null || n.isZERO()) {
             return num.signum();
         }
@@ -731,8 +736,8 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
         // if (b.den.isONE()) { }
         GenSolvablePolynomial<C>[] oc = leftOreCond(den, d);
         if (debug) {
-            System.out.println("oc[0] den =<>= oc[1] d: (" + oc[0] + ") (" + den + ") = (" + oc[1] + ") ("
-                            + d + ")");
+            System.out.println("oc[0] den =<>= oc[1] d: (" + oc[0] + ") (" + den + ") = (" + oc[1] + ") (" + d
+                            + ")");
         }
         //System.out.println("oc[0] = " + oc[0]);
         //System.out.println("oc[1] = " + oc[1]);

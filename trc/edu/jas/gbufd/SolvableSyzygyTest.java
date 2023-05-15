@@ -34,6 +34,7 @@ import edu.jas.poly.RelationGenerator;
 import edu.jas.poly.RelationTable;
 import edu.jas.poly.TermOrder;
 import edu.jas.poly.WeylRelations;
+import edu.jas.poly.WeylRelationsIterated;
 
 
 /**
@@ -627,21 +628,25 @@ public class SolvableSyzygyTest extends TestCase {
     public void testOreConditionsQuat() {
 	BigQuaternionRing qri = new BigQuaternionRing();
         GenSolvablePolynomialRing<BigQuaternion> qfac = new GenSolvablePolynomialRing<BigQuaternion>(qri, fac);
-        //System.out.println("qfac = " + qfac.toScript());
         SolvableSyzygyAbstract<BigQuaternion> ssz = new SolvableSyzygySeq<BigQuaternion>(qri);
 
-	RelationGenerator<BigQuaternion> wl = new WeylRelations<BigQuaternion>();
+        //RelationGenerator<BigQuaternion> wl = new WeylRelations<BigQuaternion>();
+        RelationGenerator<BigQuaternion> wl = new WeylRelationsIterated<BigQuaternion>();
         wl.generate(qfac);
+        System.out.println("qfac = " + qfac.toScript());
 
         GenSolvablePolynomial<BigQuaternion> a, b, c, d;
 
 	do {
-            a = qfac.random(1, 3, el, q);
+            //a = qfac.random(1, 3, el, q);
             //a = qfac.parse(" -1i1j-2k-1 "); // wrong parse of starting -
+            a = qfac.parse(" 1/2i0j1k-1/2 z "); // wrong parse of starting -
         } while (a.isZERO());
         do {
-            b = qfac.random(1, 3, el, q);
+            //b = qfac.random(1, 3, el, q);
             //b = qfac.parse(" -1i1/2j1k-1/2  x +  3/2i1j-1/2k1 "); // wrong parse of starting -
+            //b = qfac.parse(" -1i-1k-1/2 w * x * z + 1i-1/2j-1/2 y "); // wrong parse of starting -
+            b = qfac.parse(" 1i-1j0k-1/2 w * x * z + 1i-1/2j-1/2k0 y "); // wrong parse of starting -
         } while (b.isZERO());
         System.out.println("a = " + a);
         System.out.println("b = " + b);
@@ -651,8 +656,8 @@ public class SolvableSyzygyTest extends TestCase {
         System.out.println("oc[1] = " + oc[1]);
         c = oc[0].multiply(a);
         d = oc[1].multiply(b);
-        //System.out.println("c = " + c);
-        //System.out.println("d = " + d);
+        System.out.println("c_l = " + c);
+        System.out.println("d_l = " + d);
         assertEquals("c_0 * a = c_1 * b: " + qfac.toScript(), c, d);
         assertTrue("left Ore condition: ", ssz.isLeftOreCond(a, b, oc));
 
@@ -661,8 +666,8 @@ public class SolvableSyzygyTest extends TestCase {
         System.out.println("oc[1] = " + oc[1]);
         c = a.multiply(oc[0]);
         d = b.multiply(oc[1]);
-        //System.out.println("c = " + c);
-        //System.out.println("d = " + d);
+        System.out.println("c_r = " + c);
+        System.out.println("d_r = " + d);
         assertEquals("a * c_0 = b * c_1: " + qfac.toScript(), c, d);
         assertTrue("right Ore condition: ", ssz.isRightOreCond(a, b, oc));
     }
