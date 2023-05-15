@@ -376,11 +376,9 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
                 //System.out.println("s right = " + s);
                 h = sred.rightNormalform(F, s);
                 if (!h.isZERO()) {
-                    logger.info("isRightGB non zero h = {} :: {}", h, h.ring);
+                    logger.info("isRightGB non zero h = {} :: {}, rspol = {}", h, h.ring.toScript(), s);
                     logger.info("p{} = {}, p{} = {}", i, pi, j, pj);
                     return false;
-                    //} else {
-                    //logger.info("isRightGB zero h = {}", h);
                 }
             }
         }
@@ -611,7 +609,7 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         }
         GenSolvablePolynomialRing<C> ring = G.get(0).ring; // assert != null
         GenSolvablePolynomialRing<C> rring = ring.reverse(true); //true
-        //System.out.println("reversed ring = " + rring);
+        //System.out.println("rightGB: ring = " + ring.toScript() + ", reversed ring = " + rring.toScript());
         GenSolvablePolynomial<C> q;
         List<GenSolvablePolynomial<C>> rF;
         rF = new ArrayList<GenSolvablePolynomial<C>>(F.size());
@@ -916,8 +914,9 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
             if (!t) {
                 System.out.println("row = " + row);
                 System.out.println("F   = " + F);
-                System.out.println("Gk  = " + G.get(k));
+                System.out.println("G[" + k + "] = " + G.get(k));
                 logger.info("F isLeftReductionMatrix s, k = {}, {}", F.size(), k);
+                System.out.println("F*row == G[k]: " + sred.isLeftReductionNF(F, row, G.get(k), null));
                 return false;
             }
             k++;
@@ -927,7 +926,10 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
         for (List<GenSolvablePolynomial<C>> row : Mf) {
             boolean t = sred.isLeftReductionNF(row, G, F.get(k), null);
             if (!t) {
-                logger.error("G isLeftReductionMatrix s, k = {}, {}", G.size(), k);
+                System.out.println("row = " + row);
+                System.out.println("G   = " + G);
+                System.out.println("F[" + k + "] = " + F.get(k));
+                logger.info("G isLeftReductionMatrix s, k = {}, {}", G.size(), k);
                 return false;
             }
             k++;

@@ -224,7 +224,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 row = PolynomialList.<C> castToSolvableList( blas.genVector(G.size(), null) );
                 H = sred.leftNormalform(row, G, f);
                 if (!H.isZERO()) {
-                    logger.error("nonzero H = {}", H);
+                    logger.error("nonzero_1 H = {}, G = {}, f = {}, row = {}", H, G, f, row);
                 }
                 F2G.add(row);
             }
@@ -335,7 +335,9 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             row = PolynomialList.<C> castToSolvableList( blas.genVector(G.size(), null) );
             H = sred.leftNormalform(row, G, f);
             if (!H.isZERO()) {
-                logger.error("nonzero H = {}", H);
+                logger.error("nonzero_end H = {}, G = {}, f = {}, row = {}", H, G, f, row);
+                logger.error("nonzero_end ring = {}", H.ring.toScript());
+                //throw new RuntimeException("nonzero_end H = " + H);
             }
             F2G.add(row);
         }
@@ -698,7 +700,8 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
     @SuppressWarnings("unchecked")
     public List<GenSolvablePolynomial<C>> rightGB(int modv, List<GenSolvablePolynomial<C>> F) {
         List<GenSolvablePolynomial<C>> G = normalizeZerosOnes(F);
-        G = PolynomialList.castToSolvableList(PolyUtil.<C> monic(PolynomialList.castToList(G)));
+        G = PolynomialList.castToSolvableList(PolyUtil.<C> rightMonic(PolynomialList.castToList(G)));
+        //G = PolyUtil.<C> rightMonic(G);
         if (G.size() <= 1) {
             return G;
         }
@@ -731,6 +734,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             }
             if (debug) {
                 logger.info("ht(S) = {}", S.leadingExpVector());
+                //logger.info("S = {}", S);
             }
 
             H = sred.rightNormalform(G, S);
@@ -742,7 +746,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
                 logger.info("ht(H) = {}", H.leadingExpVector());
             }
 
-            H = H.monic();
+            H = H.rightMonic();
             if (H.isONE()) {
                 G.clear();
                 G.add(H);
@@ -758,7 +762,7 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             }
         }
         logger.debug("#sequential list = {}", G.size());
-        G = rightMinimalGB(G);
+        //G = rightMinimalGB(G);
         logger.info("end {}", pairlist);
         return G;
     }

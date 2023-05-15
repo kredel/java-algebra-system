@@ -338,15 +338,75 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
         ExpVector e1 = g.subtract(e);
         ExpVector f1 = g.subtract(f);
 
-        GenSolvablePolynomial<C> App = Ap.multiply(e1);
-        GenSolvablePolynomial<C> Bpp = Bp.multiply(f1);
+        C a = Ap.leadingBaseCoefficient();
+        C b = Bp.leadingBaseCoefficient();
 
-        C a = App.leadingBaseCoefficient();
-        C b = Bpp.leadingBaseCoefficient();
-        App = App.multiply(b);
-        Bpp = Bpp.multiply(a);
+        GenSolvablePolynomial<C> App = Ap.multiply(b,e1);
+        GenSolvablePolynomial<C> Bpp = Bp.multiply(a,f1);
 
+        // C a = App.leadingBaseCoefficient();
+        // C b = Bpp.leadingBaseCoefficient();
+        // App = App.multiply(b);
+        // Bpp = Bpp.multiply(a);
+
+        if (!App.leadingMonomial().equals(Bpp.leadingMonomial()) ) {
+            System.out.println("lm(A) = " + App.leadingMonomial() + ", lm(B) = " + Bpp.leadingMonomial());
+            throw new UnsupportedOperationException("right S-polynomial undefined ");
+        }
         GenSolvablePolynomial<C> Cp = (GenSolvablePolynomial<C>) App.subtract(Bpp);
+        return Cp;
+    }
+
+
+    /**
+     * S-Polynomial with recording.
+     * @param S recording matrix, is modified.
+     * @param i index of Ap in basis list.
+     * @param Ap a polynomial.
+     * @param j index of Bp in basis list.
+     * @param Bp a polynomial.
+     * @return rightSpol(Ap, Bp), the right S-Polynomial for Ap and Bp.
+     */
+    public GenSolvablePolynomial<C> rightSPolynomial(List<GenSolvablePolynomial<C>> S, int i,
+                    GenSolvablePolynomial<C> Ap, int j, GenSolvablePolynomial<C> Bp) {
+        if (debug /*logger.isInfoEnabled()*/) {
+            if (Bp == null || Bp.isZERO()) {
+                throw new ArithmeticException("Spol B is zero");
+            }
+            if (Ap == null || Ap.isZERO()) {
+                throw new ArithmeticException("Spol A is zero");
+            }
+            if (!Ap.ring.equals(Bp.ring)) {
+                logger.error("rings not equal");
+            }
+        }
+        Map.Entry<ExpVector, C> ma = Ap.leadingMonomial();
+        Map.Entry<ExpVector, C> mb = Bp.leadingMonomial();
+
+        ExpVector e = ma.getKey();
+        ExpVector f = mb.getKey();
+
+        ExpVector g = e.lcm(f);
+        ExpVector e1 = g.subtract(e);
+        ExpVector f1 = g.subtract(f);
+
+        C a = ma.getValue();
+        C b = mb.getValue();
+
+        GenSolvablePolynomial<C> App = Ap.multiply(b, e1);
+        GenSolvablePolynomial<C> Bpp = Bp.multiply(a, f1);
+
+        if (!App.leadingMonomial().equals(Bpp.leadingMonomial()) ) {
+            System.out.println("lm(A) = " + App.leadingMonomial() + ", lm(B) = " + Bpp.leadingMonomial());
+            throw new UnsupportedOperationException("right S-polynomial undefined ");
+        }
+	GenSolvablePolynomial<C> Cp = (GenSolvablePolynomial<C>) App.subtract(Bpp);
+
+        GenSolvablePolynomial<C> zero = Ap.ring.getZERO();
+        GenSolvablePolynomial<C> As = (GenSolvablePolynomial<C>) zero.sum(b.negate(), e1);
+        GenSolvablePolynomial<C> Bs = (GenSolvablePolynomial<C>) zero.sum(a, f1);
+        S.set(i, As);
+        S.set(j, Bs);
         return Cp;
     }
 
