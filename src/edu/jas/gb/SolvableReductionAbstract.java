@@ -14,6 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.Monomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.poly.ModuleList;
@@ -344,14 +345,13 @@ public abstract class SolvableReductionAbstract<C extends RingElem<C>> implement
         GenSolvablePolynomial<C> App = Ap.multiply(b,e1);
         GenSolvablePolynomial<C> Bpp = Bp.multiply(a,f1);
 
-        // C a = App.leadingBaseCoefficient();
-        // C b = Bpp.leadingBaseCoefficient();
         // App = App.multiply(b);
         // Bpp = Bpp.multiply(a);
 
         if (!App.leadingMonomial().equals(Bpp.leadingMonomial()) ) {
-            System.out.println("lm(A) = " + App.leadingMonomial() + ", lm(B) = " + Bpp.leadingMonomial());
-            throw new UnsupportedOperationException("right S-polynomial undefined ");
+            logger.info("lm(A) = " + new Monomial(App.leadingMonomial()) + ", lm(B) = " + new Monomial(Bpp.leadingMonomial()));
+            logger.info("right S-polynomial with unequal leading monomials: " + Ap.ring.toScript());
+            //throw new UnsupportedOperationException("right S-polynomial with error");
         }
         GenSolvablePolynomial<C> Cp = (GenSolvablePolynomial<C>) App.subtract(Bpp);
         return Cp;

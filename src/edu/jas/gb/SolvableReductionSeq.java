@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import edu.jas.poly.ExpVector;
+import edu.jas.poly.Monomial;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.structure.RingElem;
 
@@ -285,30 +286,26 @@ public class SolvableReductionSeq<C extends RingElem<C>> extends SolvableReducti
             }
             if (!mt) {
                 //logger.debug("irred");
-                //R = (GenSolvablePolynomial<C>) R.sum(a, e);
-                //S = (GenSolvablePolynomial<C>) S.subtract(a, e);
                 R.doPutToMap(e, a);
                 S.doRemoveFromMap(e, a);
                 // System.out.println(" S = " + S);
             } else {
                 //logger.debug("red");
-                e = e.subtract(htl[i]);
+                ExpVector d = e.subtract(htl[i]);
                 //a = a.divide( (C)lbc[i] );
-                ///Q = p[i].multiply(e); // p_i * (a e) TODO
-                a = a.divide(p[i].leadingBaseCoefficient());
-                Q = p[i].multiply(a, e); // p_i * (e a) !!
+                Q = p[i].multiply(d); // p_i * (b d) TODO
+                C b = a.divide(Q.leadingBaseCoefficient());
+                Q = Q.multiply(b); // p_i * (b d) !!
                 if (!S.leadingMonomial().equals(Q.leadingMonomial()) ) {
-                    System.out.println("lm(S) = " + S.leadingMonomial() + ", lm(Q) = " + Q.leadingMonomial());
-                    throw new UnsupportedOperationException("right reduction undefined ");
+                    logger.info("S = " + S + ", Q = " + Q);
+                    logger.error("right reduction with un-equal leading terms: " + S.ring.toScript());
+                    //throw new UnsupportedOperationException("right reduction undefined ");
+                    //and treat as irreducible
+                    R.doPutToMap(e, a);
+                    S.doRemoveFromMap(e, a);
+                } else {
+                    S = (GenSolvablePolynomial<C>) S.subtract(Q);
                 }
-                //ExpVector g1 = S.leadingExpVector();
-                S = (GenSolvablePolynomial<C>) S.subtract(Q);
-                //S = S.subtractMultiple(Q, a);
-                //ExpVector g2 = S.leadingExpVector();
-                //if (g1.equals(g2)) {
-                //    throw new RuntimeException("g1.equals(g2): " + g1 + ", a = " + a + ", lc(S) = "
-                //                    + S.leadingBaseCoefficient());
-                //}
             }
         }
         return R;
