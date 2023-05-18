@@ -1162,11 +1162,15 @@ public class GenPolynomialRing<C extends RingElem<C>>
 
 
     /**
-     * Reverse variables. Used e.g. in opposite rings.
+     * Reverse variables. Used e.g. in opposite rings. The coefficient
+     * ring must be commuative.
      * @param partial true for partially reversed term orders.
      * @return polynomial ring factory with reversed variables.
      */
     public GenPolynomialRing<C> reverse(boolean partial) {
+        if (!coFac.isCommutative()) {
+            throw new IllegalArgumentException("reverse coefficients must be commutative: " + coFac);
+        }
         String[] v = null;
         if (vars != null) { // vars are not inversed
             v = new String[vars.length];

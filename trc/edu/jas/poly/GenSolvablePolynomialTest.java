@@ -14,10 +14,12 @@ import junit.framework.TestSuite;
 
 
 import edu.jas.arith.BigRational;
+import edu.jas.arith.BigComplex;
+import edu.jas.arith.BigQuaternion;
+import edu.jas.arith.BigQuaternionRing;
 import edu.jas.poly.GenSolvablePolynomial;
 import edu.jas.poly.GenSolvablePolynomialRing;
 import edu.jas.structure.RingElem;
-//import edu.jas.structure.RingFactory;
 
 
 /**
@@ -52,7 +54,6 @@ public class GenSolvablePolynomialTest extends TestCase {
         return suite;
     }
 
-    //private final static int bitlen = 100;
 
     int rl = 6;  // even for Weyl 
     int kl = 10;
@@ -235,18 +236,20 @@ public class GenSolvablePolynomialTest extends TestCase {
 
 
     /**
-     * Test reversion.
+     * Test reversion with rational coefficients.
      */
     public void testReverse() {
         // rational numbers
         BigRational cf = new BigRational( 99 );
         // System.out.println("cf = " + cf);
+        String[] vars = new String[]{ "x1", "x2", "x3", "x4", "x5", "x6" };
 
         // polynomials over rational numbers
-        GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(cf,rl);
-        //System.out.println("pf = " + pf);
+        GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(cf,vars);
+        //System.out.println("pf = " + pf.toScript());
 
-        GenSolvablePolynomial<BigRational> a = pf.random(kl,ll,el,q);
+        GenSolvablePolynomial<BigRational> a, b, c, d;
+        a = pf.random(kl,ll,el,q);
         //System.out.println("a = " + a);
 
         GenSolvablePolynomialRing<BigRational> pfr = pf.reverse();
@@ -254,32 +257,46 @@ public class GenSolvablePolynomialTest extends TestCase {
         assertEquals("pf == pfrr",pf,pfrr);
         //System.out.println("pfr = " + pfr);
 
-        GenSolvablePolynomial<BigRational> ar 
-            = (GenSolvablePolynomial<BigRational>)a.reverse(pfr);
+        GenSolvablePolynomial<BigRational> ar, br, cr, dr;
+        ar = (GenSolvablePolynomial<BigRational>)a.reverse(pfr);
         GenSolvablePolynomial<BigRational> arr 
             = (GenSolvablePolynomial<BigRational>)ar.reverse(pfrr);
         assertEquals("a == arr",a,arr);
         //System.out.println("ar = " + ar);
         //System.out.println("arr = " + arr);
+
+        b = pf.random(kl,ll,el,q);
+        //System.out.println("b = " + b);
+        br = (GenSolvablePolynomial<BigRational>) b.reverse(pfr);
+        //System.out.println("br = " + br);
+
+        c = b.multiply(a);
+        cr = ar.multiply(br);
+        //System.out.println("cr = " + cr);
+
+        d = (GenSolvablePolynomial<BigRational>)cr.reverse(pfrr);
+        //System.out.println("d = " + d);
+        assertEquals("b*a == rev(a)*rev(b): ",c,d);
     }
 
 
     /**
      * Test reversion for Weyl relations.
-     * 
      */
     public void testReverseWeyl() {
         // rational numbers
         BigRational cf = new BigRational( 99 );
         // System.out.println("cf = " + cf);
+        String[] vars = new String[]{ "x1", "x2", "x3", "x4", "x5", "x6" };
 
         // polynomials over rational numbers
-        GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(cf,rl);
+        GenSolvablePolynomialRing<BigRational> pf = new GenSolvablePolynomialRing<BigRational>(cf,vars);
         RelationGenerator<BigRational> wl = new WeylRelations<BigRational>();
         wl.generate(pf);
-        //System.out.println("pf = " + pf);
+        //System.out.println("pf = " + pf.toScript());
 
-        GenSolvablePolynomial<BigRational> a = pf.random(kl,ll,el,q);
+        GenSolvablePolynomial<BigRational> a, b, c, d;
+        a = pf.random(kl,ll,el,q);
         //System.out.println("a = " + a);
 
         GenSolvablePolynomialRing<BigRational> pfr = pf.reverse();
@@ -287,13 +304,26 @@ public class GenSolvablePolynomialTest extends TestCase {
         assertEquals("pf == pfrr",pf,pfrr);
         //System.out.println("pfr = " + pfr);
 
-        GenSolvablePolynomial<BigRational> ar 
-            = (GenSolvablePolynomial<BigRational>)a.reverse(pfr);
+        GenSolvablePolynomial<BigRational> ar, br, cr;
+        ar = (GenSolvablePolynomial<BigRational>)a.reverse(pfr);
         GenSolvablePolynomial<BigRational> arr 
             = (GenSolvablePolynomial<BigRational>)ar.reverse(pfrr);
         assertEquals("a == arr",a,arr);
         //System.out.println("ar = " + ar);
         //System.out.println("arr = " + arr);
+
+        b = pf.random(kl,ll,el,q);
+        //System.out.println("b = " + b);
+        br = (GenSolvablePolynomial<BigRational>) b.reverse(pfr);
+        //System.out.println("br = " + br);
+
+        c = b.multiply(a);
+        cr = ar.multiply(br);
+        //System.out.println("cr = " + cr);
+
+        d = (GenSolvablePolynomial<BigRational>)cr.reverse(pfrr);
+        //System.out.println("d = " + d);
+        assertEquals("b*a == rev(a)*rev(b): ",c,d);
     }
 
 
@@ -331,6 +361,146 @@ public class GenSolvablePolynomialTest extends TestCase {
         //System.out.println("rsp = " + rsp);
         rsp = (GenSolvablePolynomial<GenPolynomial<BigRational>>) rsp.subtract(rsp);
         assertTrue("rsp == 0 ",rsp.isZERO());
+    }
+
+
+    /**
+     * Test reversion with quaternion coefficients.
+     */
+    public void testReverseQuat() {
+        // quaternion numbers
+        BigQuaternionRing cf = new BigQuaternionRing();
+        // System.out.println("cf = " + cf);
+        String[] vars = new String[]{ "x1", "x2", "x3", "x4" };
+
+        // polynomials over quaternion numbers
+        GenSolvablePolynomialRing<BigQuaternion> pf = new GenSolvablePolynomialRing<BigQuaternion>(cf,vars);
+        //System.out.println("pf = " + pf.toScript());
+        GenSolvablePolynomialRing<BigQuaternion> pfr;
+        try {
+             pfr = pf.reverse();
+             assertTrue("pf coefficents commuative: " + pf, pf.coFac.isCommutative());
+        } catch (IllegalArgumentException e) {
+             assertFalse("pf coefficents commuative: " + pf, pf.coFac.isCommutative());
+	}
+    }
+
+
+    /**
+     * Test reversion with complex coefficients.
+     */
+    public void testReverseComplex() {
+        // complex numbers
+        BigComplex cf = new BigComplex();
+        // System.out.println("cf = " + cf);
+        String[] vars = new String[]{ "x1", "x2", "x3", "x4" };
+
+        // polynomials over complex numbers
+        GenSolvablePolynomialRing<BigComplex> pf = new GenSolvablePolynomialRing<BigComplex>(cf,vars);
+        //System.out.println("pf = " + pf.toScript());
+
+        GenSolvablePolynomialRing<BigComplex> pfr = pf.reverse();
+        GenSolvablePolynomialRing<BigComplex> pfrr = pfr.reverse();
+        assertEquals("pf == pfrr",pf,pfrr);
+        //System.out.println("pfr = " + pfr);
+
+        int kl = 2;
+        int ll = 4;
+        int el = 3;
+        float q = 0.3f;
+
+        GenSolvablePolynomial<BigComplex> a, b, c, d;
+        GenSolvablePolynomial<BigComplex> ar, br, cr, dr;
+
+        a = pf.random(kl,ll,el,q);
+        //System.out.println("a = " + a);
+        ar = (GenSolvablePolynomial<BigComplex>) a.reverse(pfr);
+        GenSolvablePolynomial<BigComplex> arr
+            = (GenSolvablePolynomial<BigComplex>) ar.reverse(pfrr);
+        assertEquals("a == arr",a,arr);
+        //System.out.println("ar = " + ar);
+        //System.out.println("arr = " + arr);
+
+        b = pf.random(kl,ll,el,q);
+        //System.out.println("b = " + b);
+        br = (GenSolvablePolynomial<BigComplex>) b.reverse(pfr);
+        //System.out.println("br = " + br);
+
+        c = b.multiply(a);
+        //System.out.println("c  = " + c);
+        cr = ar.multiply(br);
+        //System.out.println("cr = " + cr);
+
+        d = (GenSolvablePolynomial<BigComplex>) cr.reverse(pfrr);
+        //System.out.println("d = " + d);
+        //System.out.println("c-d = " + c.subtract(d));
+
+        dr = (GenSolvablePolynomial<BigComplex>) c.reverse(pfr);
+        //System.out.println("dr = " + dr);
+        //System.out.println("cr-dr = " + cr.subtract(dr));
+
+        assertEquals("b*a == rev(a)*rev(b): ",c,d);
+        assertEquals("rev(a)*rev(b) = b * a: ",cr,dr);
+    }
+
+
+    /**
+     * Test reversion with complex coefficients as Weyl algebra.
+     */
+    public void testReverseComplexWeyl() {
+        // complex numbers
+        BigComplex cf = new BigComplex();
+        // System.out.println("cf = " + cf);
+        String[] vars = new String[]{ "x1", "x2", "x3", "x4" };
+
+        // polynomials over complex numbers
+        GenSolvablePolynomialRing<BigComplex> pf = new GenSolvablePolynomialRing<BigComplex>(cf,vars);
+        RelationGenerator<BigComplex> wl = new WeylRelations<BigComplex>();
+        wl.generate(pf);
+        //System.out.println("pf = " + pf.toScript());
+
+        GenSolvablePolynomialRing<BigComplex> pfr = pf.reverse();
+        //System.out.println("pfr = " + pfr.toScript());
+        GenSolvablePolynomialRing<BigComplex> pfrr = pfr.reverse();
+        assertEquals("pf == pfrr",pf,pfrr);
+
+        int kl = 2;
+        int ll = 4;
+        int el = 3;
+        float q = 0.3f;
+
+        GenSolvablePolynomial<BigComplex> a, b, c, d;
+        GenSolvablePolynomial<BigComplex> ar, br, cr, dr;
+
+	a = pf.random(kl,ll,el,q);
+        //System.out.println("a = " + a);
+        ar = (GenSolvablePolynomial<BigComplex>) a.reverse(pfr);
+        GenSolvablePolynomial<BigComplex> arr
+            = (GenSolvablePolynomial<BigComplex>) ar.reverse(pfrr);
+        assertEquals("a == arr",a,arr);
+        //System.out.println("ar = " + ar);
+        //System.out.println("arr = " + arr);
+
+        b = pf.random(kl,ll,el,q);
+        //System.out.println("b = " + b);
+        br = (GenSolvablePolynomial<BigComplex>) b.reverse(pfr);
+        //System.out.println("br = " + br);
+
+        c = b.multiply(a);
+        //System.out.println("c  = " + c);
+        cr = ar.multiply(br);
+        //System.out.println("cr = " + cr);
+
+        d = (GenSolvablePolynomial<BigComplex>) cr.reverse(pfrr);
+        //System.out.println("d = " + d);
+        //System.out.println("c-d = " + c.subtract(d));
+
+        dr = (GenSolvablePolynomial<BigComplex>) c.reverse(pfr);
+        //System.out.println("dr = " + dr);
+        //System.out.println("cr-dr = " + cr.subtract(dr));
+
+        assertEquals("b*a == rev(a)*rev(b): ",c,d);
+        assertEquals("rev(a)*rev(b) = b * a: ",cr,dr);
     }
 
 }
