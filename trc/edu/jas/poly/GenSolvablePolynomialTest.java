@@ -422,6 +422,7 @@ public class GenSolvablePolynomialTest extends TestCase {
         // coefficients
         GenSolvablePolynomial<BigQuaternion> ar, br, cr;
         ar = (GenSolvablePolynomial<BigQuaternion>) a.reverse(pfr);
+        //System.out.println("StarRingElem case: " + a.ring.coFac.getONE().getClass());
         ar = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(ar);
 
         GenSolvablePolynomial<BigQuaternion> arr = (GenSolvablePolynomial<BigQuaternion>) ar.reverse(pfrr);

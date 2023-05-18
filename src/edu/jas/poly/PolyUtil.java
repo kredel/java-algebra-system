@@ -402,6 +402,9 @@ public class PolyUtil {
     @SuppressWarnings("unchecked")
     public static <C extends RingElem<C>> GenPolynomial<C> conjugateCoeff(GenPolynomial<C> A) {
         //return PolyUtil.<C,C> map(A, new ConjugPart());
+        if (! (A.ring.coFac.getONE() instanceof StarRingElem)) {
+            return A;
+        }
         return PolyUtil.<C,C> map(A.ring, A, (a) -> (C)(((StarRingElem)a).conjugate()));
     }
 
