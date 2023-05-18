@@ -395,6 +395,18 @@ public class PolyUtil {
 
 
     /**
+     * Conjugate coefficients.
+     * @param A polynomial with StarRingElem coefficients to be conjugated.
+     * @return polynomial with conjugate coefficients.
+     */
+    @SuppressWarnings("unchecked")
+    public static <C extends RingElem<C>> GenPolynomial<C> conjugateCoeff(GenPolynomial<C> A) {
+        //return PolyUtil.<C,C> map(A, new ConjugPart());
+        return PolyUtil.<C,C> map(A.ring, A, (a) -> (C)(((StarRingElem)a).conjugate()));
+    }
+
+
+    /**
      * Real part.
      * @param fac result polynomial factory.
      * @param A polynomial with BigComplex coefficients to be converted.

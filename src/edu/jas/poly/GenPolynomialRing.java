@@ -25,6 +25,7 @@ import edu.jas.kern.PreemptStatus;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.kern.Scripting;
 import edu.jas.structure.RingElem;
+import edu.jas.structure.StarRingElem;
 import edu.jas.structure.RingFactory;
 import edu.jas.util.CartesianProduct;
 import edu.jas.util.CartesianProductInfinite;
@@ -1168,8 +1169,8 @@ public class GenPolynomialRing<C extends RingElem<C>>
      * @return polynomial ring factory with reversed variables.
      */
     public GenPolynomialRing<C> reverse(boolean partial) {
-        if (!coFac.isCommutative()) {
-            throw new IllegalArgumentException("reverse coefficients must be commutative: " + coFac);
+        if (!coFac.isCommutative() && !(coFac.getONE() instanceof StarRingElem)) {
+            throw new IllegalArgumentException("reverse coefficients must be commutative or StarRing: " + coFac);
         }
         String[] v = null;
         if (vars != null) { // vars are not inversed

@@ -335,7 +335,7 @@ public class GenSolvablePolynomialTest extends TestCase {
 
         d = (GenSolvablePolynomial<BigRational>) cr.reverse(pfrr);
         //System.out.println("d = " + d);
-        assertEquals("b*a == rev(a)*rev(b): ", c, d);
+        assertEquals("rev(b*a) == rev(a)*rev(b): ", c, d);
     }
 
 
@@ -392,10 +392,58 @@ public class GenSolvablePolynomialTest extends TestCase {
         GenSolvablePolynomialRing<BigQuaternion> pfr;
         try {
             pfr = pf.reverse();
-            assertTrue("pf coefficents commuative: " + pf, pf.coFac.isCommutative());
-        } catch (IllegalArgumentException e) {
             assertFalse("pf coefficents commuative: " + pf, pf.coFac.isCommutative());
+        } catch (IllegalArgumentException e) {
+            assertTrue("pf coefficents commuative: " + pf, pf.coFac.isCommutative());
+            pfr = null;
         }
+        //System.out.println("pf = " + pf.toScript());
+        //System.out.println("pfr = " + pfr.toScript());
+        GenSolvablePolynomialRing<BigQuaternion> pfrr = pfr.reverse();
+        assertEquals("pf == pfrr", pf, pfrr);
+
+        // elements
+        BigQuaternion aq, bq, cq, dq;
+        aq = cf.random(3);
+        bq = cf.random(3);
+        //System.out.println("aq = " + aq);
+        //System.out.println("bq = " + bq);
+
+        cq = aq.multiply(bq).conjugate();
+        dq = bq.conjugate().multiply(aq.conjugate());
+        //System.out.println("cq = " + cq);
+        //System.out.println("dq = " + dq);
+        assertEquals("con(a*b) == con(b)*con(a): ", cq, dq);
+
+        GenSolvablePolynomial<BigQuaternion> a, b, c, d;
+        a = pf.random(kl, ll, el, q);
+        //System.out.println("a = " + a);
+
+        // coefficients
+        GenSolvablePolynomial<BigQuaternion> ar, br, cr;
+        ar = (GenSolvablePolynomial<BigQuaternion>) a.reverse(pfr);
+        ar = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(ar);
+
+        GenSolvablePolynomial<BigQuaternion> arr = (GenSolvablePolynomial<BigQuaternion>) ar.reverse(pfrr);
+        arr = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(arr);
+        assertEquals("a == arr", a, arr);
+        //System.out.println("ar = " + ar);
+        //System.out.println("arr = " + arr);
+
+        b = pf.random(kl, ll, el, q);
+        //System.out.println("b = " + b);
+        br = (GenSolvablePolynomial<BigQuaternion>) b.reverse(pfr);
+        br = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(br);
+        //System.out.println("br = " + br);
+
+        c = b.multiply(a);
+        cr = ar.multiply(br);
+        //System.out.println("cr = " + cr);
+
+        d = (GenSolvablePolynomial<BigQuaternion>) cr.reverse(pfrr);
+        d = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(d);
+        //System.out.println("d = " + d);
+        assertEquals("rev(a*b) == rev(b)*rev(a): ", c, d);
     }
 
 
@@ -512,6 +560,78 @@ public class GenSolvablePolynomialTest extends TestCase {
 
         assertEquals("b*a == rev(a)*rev(b): ", c, d);
         assertEquals("rev(a)*rev(b) = b * a: ", cr, dr);
+    }
+
+
+    /**
+     * Test reversion with quaternion coefficients and Weyl relations.
+     */
+    public void testReverseQuatWeyl() {
+        // quaternion numbers
+        BigQuaternionRing cf = new BigQuaternionRing();
+        // System.out.println("cf = " + cf);
+        String[] vars = new String[] { "x1", "x2", "x3", "x4" };
+
+        // polynomials over quaternion numbers
+        GenSolvablePolynomialRing<BigQuaternion> pf = new GenSolvablePolynomialRing<BigQuaternion>(cf, vars);
+        RelationGenerator<BigQuaternion> wl = new WeylRelations<BigQuaternion>();
+        wl.generate(pf);
+        //System.out.println("pf = " + pf.toScript());
+        GenSolvablePolynomialRing<BigQuaternion> pfr;
+        try {
+            pfr = pf.reverse();
+            assertFalse("pf coefficents commuative: " + pf, pf.coFac.isCommutative());
+        } catch (IllegalArgumentException e) {
+            assertTrue("pf coefficents commuative: " + pf, pf.coFac.isCommutative());
+            pfr = null;
+        }
+        //System.out.println("pf = " + pf.toScript());
+        //System.out.println("pfr = " + pfr.toScript());
+        GenSolvablePolynomialRing<BigQuaternion> pfrr = pfr.reverse();
+        assertEquals("pf == pfrr", pf, pfrr);
+
+        // elements
+        BigQuaternion aq, bq, cq, dq;
+        aq = cf.random(3);
+        bq = cf.random(3);
+        //System.out.println("aq = " + aq);
+        //System.out.println("bq = " + bq);
+
+        cq = aq.multiply(bq).conjugate();
+        dq = bq.conjugate().multiply(aq.conjugate());
+        //System.out.println("cq = " + cq);
+        //System.out.println("dq = " + dq);
+        assertEquals("con(a*b) == con(b)*con(a): ", cq, dq);
+
+        GenSolvablePolynomial<BigQuaternion> a, b, c, d;
+        a = pf.random(kl, ll, el, q);
+        //System.out.println("a = " + a);
+
+        // coefficients
+        GenSolvablePolynomial<BigQuaternion> ar, br, cr;
+        ar = (GenSolvablePolynomial<BigQuaternion>) a.reverse(pfr);
+        ar = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(ar);
+
+        GenSolvablePolynomial<BigQuaternion> arr = (GenSolvablePolynomial<BigQuaternion>) ar.reverse(pfrr);
+        arr = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(arr);
+        assertEquals("a == arr", a, arr);
+        //System.out.println("ar = " + ar);
+        //System.out.println("arr = " + arr);
+
+        b = pf.random(kl, ll, el, q);
+        //System.out.println("b = " + b);
+        br = (GenSolvablePolynomial<BigQuaternion>) b.reverse(pfr);
+        br = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(br);
+        //System.out.println("br = " + br);
+
+        c = b.multiply(a);
+        cr = ar.multiply(br);
+        //System.out.println("cr = " + cr);
+
+        d = (GenSolvablePolynomial<BigQuaternion>) cr.reverse(pfrr);
+        d = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(d);
+        //System.out.println("d = " + d);
+        assertEquals("rev(a*b) == rev(b)*rev(a): ", c, d);
     }
 
 }
