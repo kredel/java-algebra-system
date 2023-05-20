@@ -229,8 +229,8 @@
      <jvmarg value="-verbose:gc"/>
      <jvmarg value="-Xmx2900M"/>
      <jvmarg value="-Xms2900M"/>
-     <jvmarg value="-ea"/>
      -->
+     <jvmarg value="-ea"/>
      <classpath path="${cp}" />
      <formatter type="plain" /> <!-- plain, xml, brief -->
      <batchtest todir="${test}" >
