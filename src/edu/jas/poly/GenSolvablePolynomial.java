@@ -776,6 +776,16 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
 
 
     /**
+     * GenSolvablePolynomial left monic, i.e. leadingCoefficient == 1. If
+     * leadingCoefficient is not invertible returns this abs value.
+     * @return ldcf(this)**(-1) * this.
+     */
+    public GenSolvablePolynomial<C> leftMonic() {
+        return monic();
+    }
+
+
+    /**
      * GenSolvablePolynomial right monic, i.e. leadingCoefficient == 1. If
      * leadingCoefficient is not invertible returns this abs value.
      * @return this * ldcf(this)**(-1).
