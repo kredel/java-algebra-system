@@ -290,10 +290,10 @@ public class SolvableGroebnerBaseSeq<C extends RingElem<C>> extends SolvableGroe
             //                     + sred.isLeftReductionNF(row, G, H, ring.getZERO()));
             // }
 
-            //  H = H.monic();
+            //H = H.leftMonic(); //left
             C c = H.leadingBaseCoefficient();
             c = c.inverse();
-            H = H.multiply(c);
+            H = H.multiplyLeft(c);
             // 1*c*row, leads to wrong method dispatch:
             row = PolynomialList.<C> castToSolvableList(
                             blas.scalarProduct(mone.multiply(c), PolynomialList.<C> castToList(row)));
