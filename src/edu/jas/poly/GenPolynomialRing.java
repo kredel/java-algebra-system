@@ -1170,7 +1170,8 @@ public class GenPolynomialRing<C extends RingElem<C>>
      */
     public GenPolynomialRing<C> reverse(boolean partial) {
         if (!coFac.isCommutative() && !(coFac.getONE() instanceof StarRingElem)) {
-            throw new IllegalArgumentException("reverse coefficients must be commutative or StarRing: " + coFac);
+            //throw new IllegalArgumentException("reverse coefficients must be commutative or StarRing: " + coFac);
+            logger.warn("reverse coefficients should be commutative or StarRing elements: " + coFac);
         }
         String[] v = null;
         if (vars != null) { // vars are not inversed

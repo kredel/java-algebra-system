@@ -423,10 +423,8 @@ public class GenSolvablePolynomialTest extends TestCase {
         GenSolvablePolynomial<BigQuaternion> ar, br, cr;
         ar = (GenSolvablePolynomial<BigQuaternion>) a.reverse(pfr);
         //System.out.println("StarRingElem case: " + a.ring.coFac.getONE().getClass());
-        ar = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(ar);
 
         GenSolvablePolynomial<BigQuaternion> arr = (GenSolvablePolynomial<BigQuaternion>) ar.reverse(pfrr);
-        arr = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(arr);
         assertEquals("a == arr", a, arr);
         //System.out.println("ar = " + ar);
         //System.out.println("arr = " + arr);
@@ -434,7 +432,6 @@ public class GenSolvablePolynomialTest extends TestCase {
         b = pf.random(kl, ll, el, q);
         //System.out.println("b = " + b);
         br = (GenSolvablePolynomial<BigQuaternion>) b.reverse(pfr);
-        br = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(br);
         //System.out.println("br = " + br);
 
         c = b.multiply(a);
@@ -442,7 +439,6 @@ public class GenSolvablePolynomialTest extends TestCase {
         //System.out.println("cr = " + cr);
 
         d = (GenSolvablePolynomial<BigQuaternion>) cr.reverse(pfrr);
-        d = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(d);
         //System.out.println("d = " + d);
         assertEquals("rev(a*b) == rev(b)*rev(a): ", c, d);
     }
@@ -611,10 +607,8 @@ public class GenSolvablePolynomialTest extends TestCase {
         // coefficients
         GenSolvablePolynomial<BigQuaternion> ar, br, cr;
         ar = (GenSolvablePolynomial<BigQuaternion>) a.reverse(pfr);
-        ar = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(ar);
 
         GenSolvablePolynomial<BigQuaternion> arr = (GenSolvablePolynomial<BigQuaternion>) ar.reverse(pfrr);
-        arr = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(arr);
         assertEquals("a == arr", a, arr);
         //System.out.println("ar = " + ar);
         //System.out.println("arr = " + arr);
@@ -622,7 +616,6 @@ public class GenSolvablePolynomialTest extends TestCase {
         b = pf.random(kl, ll, el, q);
         //System.out.println("b = " + b);
         br = (GenSolvablePolynomial<BigQuaternion>) b.reverse(pfr);
-        br = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(br);
         //System.out.println("br = " + br);
 
         c = b.multiply(a);
@@ -630,7 +623,6 @@ public class GenSolvablePolynomialTest extends TestCase {
         //System.out.println("cr = " + cr);
 
         d = (GenSolvablePolynomial<BigQuaternion>) cr.reverse(pfrr);
-        d = (GenSolvablePolynomial<BigQuaternion>) PolyUtil.<BigQuaternion> conjugateCoeff(d);
         //System.out.println("d = " + d);
         assertEquals("rev(a*b) == rev(b)*rev(a): ", c, d);
     }

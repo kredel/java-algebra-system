@@ -28,6 +28,7 @@ import edu.jas.kern.PreemptingException;
 import edu.jas.kern.PrettyPrint;
 import edu.jas.structure.NotInvertibleException;
 import edu.jas.structure.RingElem;
+import edu.jas.structure.StarRingElem;
 import edu.jas.structure.UnaryFunctor;
 import edu.jas.util.MapEntry;
 
@@ -2435,6 +2436,13 @@ public class GenPolynomial<C extends RingElem<C>>
             C a = y.getValue();
             C.put(f, a);
         }
+        if (oring.coFac.isCommutative()) {
+            return Cp;
+        }
+        if (oring.coFac.getONE() instanceof StarRingElem) {
+            Cp = PolyUtil.<C> conjugateCoeff(Cp);
+        }
+        // other coFac ignore
         return Cp;
     }
 
