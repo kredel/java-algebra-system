@@ -532,12 +532,12 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
         }
         if (debug) {
             PolynomialList<C> pl = new PolynomialList<C>(rring, rF);
-            logger.info("reversed problem = {}", pl); //.toScript()
+            logger.info("reversed problem = {}", rF); //pl.toScript()
         }
         List<List<GenSolvablePolynomial<C>>> rZ = leftZeroRelationsArbitrary(modv, rF);
         if (debug) {
             ModuleList<C> pl = new ModuleList<C>(rring, rZ);
-            logger.info("reversed syzygies = {}", pl); //.toScript()
+            logger.info("reversed syzygies = {}", rZ); //pl.toScript()
             boolean isit = isLeftZeroRelation(rZ, rF);
             logger.info("isLeftZeroRelation = {}", isit);
         }
