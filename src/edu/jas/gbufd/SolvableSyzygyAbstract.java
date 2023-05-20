@@ -122,9 +122,11 @@ public abstract class SolvableSyzygyAbstract<C extends GcdRingElem<C>> implement
 
                 h = sred.leftNormalform(row, F, s);
                 if (!h.isZERO()) {
-                    throw new ArithmeticException("Syzygy no leftGB: h!=0, " + h);
+                    System.out.println("s   = " + s);
+                    System.out.println("F   = " + F);
+                    System.out.println("row = " + row);
+                    throw new ArithmeticException("Syzygy no leftGB: h != 0, " + h);
                 }
-                logger.debug("row = {}", row);
                 Z.add(row);
             }
         }
