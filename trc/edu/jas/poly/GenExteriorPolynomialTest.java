@@ -802,7 +802,7 @@ public class GenExteriorPolynomialTest extends TestCase {
     /*
      * Test old example after Blonski, 1983.
      */
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     public void testExample() {
         BigInteger rf = new BigInteger();
         //System.out.println("rf = " + rf.toScriptFactory());
@@ -824,66 +824,66 @@ public class GenExteriorPolynomialTest extends TestCase {
                         g1dual, g2dual, s1, s2;
         // parse points in 4-space as polynomials
         emaxd = pf.parse("E(1,2,3,4)"); // wf.imax 
-        System.out.println("emaxd = " + emaxd + ", imax = " + pf.ixfac.imax);
+        //System.out.println("emaxd = " + emaxd + ", imax = " + pf.ixfac.imax);
         p1 = pf.parse("1 E(1) + 5 E(2) - 2 E(3) + 1 E(4)");
         p2 = pf.parse("4 E(1) + 3 E(2) + 6 E(3) + 1 E(4)");
-        System.out.println("p1 = " + p1);
-        System.out.println("p2 = " + p2);
+        //System.out.println("p1 = " + p1);
+        //System.out.println("p2 = " + p2);
         q1 = pf.parse("3 E(1) - 2 E(2) - 1 E(3) + 1 E(4)");
         q2 = pf.parse("1 E(2) + 5 E(3) + 1 E(4)");
-        System.out.println("q1 = " + q1);
-        System.out.println("q2 = " + q2);
+        //System.out.println("q1 = " + q1);
+        //System.out.println("q2 = " + q2);
         s = pf.parse("1 E(3) + 1 E(4)");
-        System.out.println("s = " + s);
+        //System.out.println("s = " + s);
 
         // compute line(gerade) p1..p2 and q1..q2
         g1 = p1.multiply(p2).abs();
         g2 = q1.multiply(q2).abs().divide(new BigInteger(3));
-        System.out.println("g1 = p1 /\\ p2 = " + g1);
-        System.out.println("g2 = q1 /\\ q2 = " + g2);
-        System.out.println("pp(g2) = " + q1.multiply(q2).coeffPrimitivePart());
+        //System.out.println("g1 = p1 /\\ p2 = " + g1);
+        //System.out.println("g2 = q1 /\\ q2 = " + g2);
+        //System.out.println("pp(g2) = " + q1.multiply(q2).coeffPrimitivePart());
         assertEquals("g2 == pp(g2): ", g2, q1.multiply(q2).coeffPrimitivePart());
 
         // compute plane(ebene) g1..s and g2..s
         e1 = g1.multiply(s).abs().divide(new BigInteger(17));
         e2 = g2.multiply(s);
-        System.out.println("e1 = g1 /\\ s = " + e1);
-        System.out.println("e2 = g2 /\\ s = " + e2);
+        //System.out.println("e1 = g1 /\\ s = " + e1);
+        //System.out.println("e2 = g2 /\\ s = " + e2);
         assertEquals("e1 == pp(e1): ", e1, g1.multiply(s).coeffPrimitivePart());
 
         // compute dual planes of e1, e2 as e1..emaxd and e2..emaxd
         e1dual = e1.interiorRightProduct(emaxd).abs();
         e2dual = e2.interiorRightProduct(emaxd).abs();
-        System.out.println("e1dual = e1 |_ emaxd = " + e1dual);
-        System.out.println("e2dual = e2 |_ emaxd = " + e2dual);
+        //System.out.println("e1dual = e1 |_ emaxd = " + e1dual);
+        //System.out.println("e2dual = e2 |_ emaxd = " + e2dual);
 
         // compute intersection of plane e1, e2 via dual plane sum
         q = e1dual.multiply(e2dual).abs().divide(new BigInteger(5));
-        System.out.println("q  = (e1dual /\\ e2dual) = " + q);
+        //System.out.println("q  = (e1dual /\\ e2dual) = " + q);
         assertEquals("q == pp(q): ", q, e1dual.multiply(e2dual).coeffPrimitivePart());
         qs = q.interiorRightProduct(emaxd).abs();
-        System.out.println("qs = (e1dual /\\ e2dual) |_ emaxd = " + qs);
+        //System.out.println("qs = (e1dual /\\ e2dual) |_ emaxd = " + qs);
         qt = e1.interiorLeftProduct(e2dual).abs().divide(new BigInteger(5));
-        System.out.println("qt = e1 _| e2dual                = " + qt);
+        //System.out.println("qt = e1 _| e2dual                = " + qt);
         assertEquals("qt == pp(qt): ", qt, e1.interiorLeftProduct(e2dual).coeffPrimitivePart());
         assertEquals("qs == qt: ", qs, qt);
 
         // compute dual line(gerade) of g1, g2
         g1dual = g1.interiorRightProduct(emaxd);
         g2dual = g2.interiorRightProduct(emaxd).abs();
-        System.out.println("g1dual = g1 |_ emaxd = " + g1dual);
-        System.out.println("g2dual = g2 |_ emaxd = " + g2dual);
+        //System.out.println("g1dual = g1 |_ emaxd = " + g1dual);
+        //System.out.println("g2dual = g2 |_ emaxd = " + g2dual);
 
         // compute intersection of g1..e2 and g2..e1
         s1 = e2.interiorLeftProduct(g1dual).abs().divide(new BigInteger(5));
-        System.out.println("s1 = e2 _| g1dual = " + s1);
+        //System.out.println("s1 = e2 _| g1dual = " + s1);
         s2 = e1.interiorLeftProduct(g2dual).abs().divide(new BigInteger(5));
-        System.out.println("s2 = e1 _| g2dual = " + s2);
+        //System.out.println("s2 = e1 _| g2dual = " + s2);
 
         // check intersection of s..qs, qs..e1 and qs..e2
-        System.out.println(" s /\\ qs =  s \\in qs = " + s.multiply(qs));
-        System.out.println("qs /\\ e1 = qs \\in e1 = " + qs.multiply(e1));
-        System.out.println("qs /\\ e2 = qs \\in e2 = " + qs.multiply(e2));
+        //System.out.println(" s /\\ qs =  s \\in qs = " + s.multiply(qs));
+        //System.out.println("qs /\\ e1 = qs \\in e1 = " + qs.multiply(e1));
+        //System.out.println("qs /\\ e2 = qs \\in e2 = " + qs.multiply(e2));
         assertTrue("qs /\\ s == 0: ", qs.multiply(s).isZERO());
         assertTrue("qs /\\ e1 == 0: ", qs.multiply(e1).isZERO());
         assertTrue("qs /\\ e2 == 0: ", qs.multiply(e2).isZERO());
