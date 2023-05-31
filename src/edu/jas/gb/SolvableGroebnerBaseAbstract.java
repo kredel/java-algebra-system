@@ -654,6 +654,29 @@ public abstract class SolvableGroebnerBaseAbstract<C extends RingElem<C>> implem
 
 
     /**
+     * Solvable Extended Groebner base using critical pair class.
+     * @param F solvable polynomial list.
+     * @return a container for an extended right Groebner base of F.
+     */
+    public SolvableExtendedGB<C> extRightGB(List<GenSolvablePolynomial<C>> F) {
+        return extRightGB(0, F);
+    }
+
+
+    /**
+     * Solvable Extended Groebner base using critical pair class.
+     * @param modv module variable number.
+     * @param F polynomial list.
+     * @return a container for an extended right Groebner base G of F together
+     *         with back-and-forth transformations.
+     */
+    public SolvableExtendedGB<C> extRightGB(int modv, List<GenSolvablePolynomial<C>> F) {
+        throw new UnsupportedOperationException("extRightGB not implemented in "
+                        + this.getClass().getSimpleName());
+    }
+
+
+    /**
      * Module left Groebner base test.
      * @param M a module basis.
      * @return true, if M is a left Groebner base, else false.

@@ -68,7 +68,7 @@ public class SolvableQuatGroebnerBaseSeqTest extends TestCase {
     GenSolvablePolynomialRing<BigQuaternion> ring;
 
 
-    SolvableGroebnerBase<BigQuaternion> sbb;
+    SolvableGroebnerBaseAbstract<BigQuaternion> sbb;
 
 
     BigQuaternionRing cfac;
@@ -136,7 +136,7 @@ public class SolvableQuatGroebnerBaseSeqTest extends TestCase {
      * Test sequential left GBase.
      */
     public void testSequentialGBase() {
-        System.out.println("a = " + a + ", b = " + b + ", c = " + c + ", d = " + d);
+        //System.out.println("a = " + a + ", b = " + b + ", c = " + c + ", d = " + d);
         L = new ArrayList<GenSolvablePolynomial<BigQuaternion>>();
         L.add(a);
 
@@ -186,7 +186,7 @@ public class SolvableQuatGroebnerBaseSeqTest extends TestCase {
             a = (GenSolvablePolynomial<BigQuaternion>) a.sum(ring.univariate(1));
             //System.out.println("a+x3 = " + a);
         }
-        System.out.println("a = " + a + ", b = " + b + ", c = " + c + ", d = " + d);
+        //System.out.println("a = " + a + ", b = " + b + ", c = " + c + ", d = " + d);
 
         L = new ArrayList<GenSolvablePolynomial<BigQuaternion>>();
 
@@ -221,18 +221,18 @@ public class SolvableQuatGroebnerBaseSeqTest extends TestCase {
      * Test sequential right GBase.
      */
     public void testSequentialRightGBase() {
-        System.out.println("a = " + a + ", b = " + b + ", c = " + c + ", d = " + d);
+        //System.out.println("a = " + a + ", b = " + b + ", c = " + c + ", d = " + d);
 
         L = new ArrayList<GenSolvablePolynomial<BigQuaternion>>();
 
         L.add(a);
         L = sbb.rightGB(L);
-        System.out.println("L_r = " + L);
+        //System.out.println("L_r = " + L);
         assertTrue("isRightGB( { a } )", sbb.isRightGB(L));
 
         L.add(b);
         L = sbb.rightGB(L);
-        System.out.println("L_r = " + L);
+        //System.out.println("L_r = " + L);
         // while (!sbb.isRightGB(L)) {
         //     L = sbb.rightGB( L );
         //     System.out.println("L_r = " + L );
@@ -241,17 +241,17 @@ public class SolvableQuatGroebnerBaseSeqTest extends TestCase {
 
         L.add(c);
         L = sbb.rightGB(L);
-        System.out.println("L_r = " + L);
+        //System.out.println("L_r = " + L);
         assertTrue("isRightGB( { a, b, c } )", sbb.isRightGB(L));
 
         L.add(d);
         L = sbb.rightGB(L);
-        System.out.println("L_r = " + L);
+        //System.out.println("L_r = " + L);
         assertTrue("isRightGB( { a, b, c, d } )", sbb.isRightGB(L));
 
         L.add(e);
         L = sbb.rightGB(L);
-        System.out.println("L_r = " + L);
+        //System.out.println("L_r = " + L);
         assertTrue("isRightGB( { a, b, c, d, e } )", sbb.isRightGB(L));
     }
 
@@ -276,34 +276,34 @@ public class SolvableQuatGroebnerBaseSeqTest extends TestCase {
             a = (GenSolvablePolynomial<BigQuaternion>) a.sum(ring.univariate(1));
             //System.out.println("a+x3 = " + a);
         }
-        System.out.println("a = " + a + ", b = " + b + ", c = " + c + ", d = " + d);
+        //System.out.println("a = " + a + ", b = " + b + ", c = " + c + ", d = " + d);
 
         L = new ArrayList<GenSolvablePolynomial<BigQuaternion>>();
 
         L.add(a);
         //System.out.println("La = " + L );
         L = sbb.rightGB(L);
-        System.out.println("L_rw = " + L);
+        //System.out.println("L_rw = " + L);
         assertTrue("isRightGB( { a } )", sbb.isRightGB(L));
 
         L.add(b);
         L = sbb.rightGB(L);
-        System.out.println("L_rw = " + L);
+        //System.out.println("L_rw = " + L);
         assertTrue("isRightGB( { a, b } )", sbb.isRightGB(L));
 
         L.add(c);
         L = sbb.rightGB(L);
-        System.out.println("L_rw = " + L);
+        //System.out.println("L_rw = " + L);
         assertTrue("isRightGB( { a, b, c } )", sbb.isRightGB(L));
 
         L.add(d);
         L = sbb.rightGB(L);
-        System.out.println("L_rw = " + L);
+        //System.out.println("L_rw = " + L);
         assertTrue("isRightGB( { a, b, c, d } )", sbb.isRightGB(L));
 
         L.add(e);
         L = sbb.rightGB(L);
-        System.out.println("L_rw = " + L);
+        //System.out.println("L_rw = " + L);
         assertTrue("isRightGB( { a, b, c, d, e } )", sbb.isRightGB(L));
     }
 
@@ -311,44 +311,44 @@ public class SolvableQuatGroebnerBaseSeqTest extends TestCase {
     /**
      * Test sequential extended GBase.
      */
-    public void xtestSequentialExtendedGBase() {
-        System.out.println("a = " + a + ", b = " + b + ", c = " + c + ", d = " + d);
+    public void testSequentialExtendedGBase() {
+        //System.out.println("a = " + a + ", b = " + b + ", c = " + c + ", d = " + d);
 
         L = new ArrayList<GenSolvablePolynomial<BigQuaternion>>();
         SolvableExtendedGB<BigQuaternion> exgb;
 
         L.add(a);
-        System.out.println("L_le = " + L);
+        //System.out.println("L_le = " + L);
         exgb = sbb.extLeftGB(L);
-        System.out.println("exgb.GB_l = " + exgb.G);
+        //System.out.println("exgb.GB_l = " + exgb.G);
         assertTrue("isLeftGB( { a } )", sbb.isLeftGB(exgb.G));
         //assertTrue("isLeftRmat( { a } )", sbb.isLeftReductionMatrix(exgb) );
 
         L.add(b);
-        System.out.println("L_le = " + L);
+        //System.out.println("L_le = " + L);
         exgb = sbb.extLeftGB(L);
-        System.out.println("exgb.GB_l = " + exgb.G);
+        //System.out.println("exgb.GB_l = " + exgb.G);
         assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(exgb.G));
         //assertTrue("isLeftRmat( { a, b } )", sbb.isLeftReductionMatrix(exgb) );
 
         L.add(c);
-        System.out.println("L_le = " + L);
+        //System.out.println("L_le = " + L);
         exgb = sbb.extLeftGB(L);
-        System.out.println("exgb.GB_l = " + exgb.G);
+        //System.out.println("exgb.GB_l = " + exgb.G);
         assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(exgb.G));
         //assertTrue("isLeftRmat( { a, b, c } )", sbb.isLeftReductionMatrix(exgb) );
 
         L.add(d);
-        System.out.println("L_le = " + L);
+        //System.out.println("L_le = " + L);
         exgb = sbb.extLeftGB(L);
-        System.out.println("exgb.GB_l = " + exgb.G);
+        //System.out.println("exgb.GB_l = " + exgb.G);
         assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(exgb.G));
         //assertTrue("isLeftRmat( { a, b, c, d } )", sbb.isLeftReductionMatrix(exgb) );
 
         L.add(e);
-        System.out.println("L_le = " + L);
+        //System.out.println("L_le = " + L);
         exgb = sbb.extLeftGB(L);
-        System.out.println("exgb.GB_l = " + exgb.G);
+        //System.out.println("exgb.GB_l = " + exgb.G);
         assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(exgb.G));
         //assertTrue("isLeftRmat( { a, b, c, d, e } )", sbb.isLeftReductionMatrix(exgb) );
     }
@@ -357,7 +357,7 @@ public class SolvableQuatGroebnerBaseSeqTest extends TestCase {
     /**
      * Test Weyl sequential extended GBase.
      */
-    public void xtestWeylSequentialExtendedGBase() {
+    public void testWeylSequentialExtendedGBase() {
         //int rloc = 4; // = #vars
         ring = new GenSolvablePolynomialRing<BigQuaternion>(cfac, tord, vars);
 
@@ -374,41 +374,87 @@ public class SolvableQuatGroebnerBaseSeqTest extends TestCase {
             a = (GenSolvablePolynomial<BigQuaternion>) a.sum(ring.univariate(1));
             //System.out.println("a+x3 = " + a);
         }
-        System.out.println("a = " + a + ", b = " + b + ", c = " + c + ", d = " + d);
+        //System.out.println("a = " + a + ", b = " + b + ", c = " + c + ", d = " + d);
 
         SolvableExtendedGB<BigQuaternion> exgb;
         L = new ArrayList<GenSolvablePolynomial<BigQuaternion>>();
 
         L.add(a);
         exgb = sbb.extLeftGB(L);
-        System.out.println("exgb.GB_l = " + exgb.G);
+        //System.out.println("exgb.GB_l = " + exgb.G);
         assertTrue("isLeftGB( { a } )", sbb.isLeftGB(exgb.G));
         //assertTrue("isRmat( { a } )", sbb.isLeftReductionMatrix(exgb) );
 
         L.add(b);
         //System.out.println("L = " + L.size() );
         exgb = sbb.extLeftGB(L);
-        System.out.println("exgb.GB_l = " + exgb.G);
+        //System.out.println("exgb.GB_l = " + exgb.G);
         assertTrue("isLeftGB( { a, b } )", sbb.isLeftGB(exgb.G));
         //assertTrue("isRmat( { a, b } )", sbb.isLeftReductionMatrix(exgb) );
 
         L.add(c);
         exgb = sbb.extLeftGB(L);
-        System.out.println("exgb.GB_l = " + exgb.G);
+        //System.out.println("exgb.GB_l = " + exgb.G);
         assertTrue("isLeftGB( { a, b, c } )", sbb.isLeftGB(exgb.G));
         //assertTrue("isRmat( { a, b, c } )", sbb.isLeftReductionMatrix(exgb) );
 
         L.add(d);
         exgb = sbb.extLeftGB(L);
-        System.out.println("exgb.GB_l = " + exgb.G);
+        //System.out.println("exgb.GB_l = " + exgb.G);
         assertTrue("isLeftGB( { a, b, c, d } )", sbb.isLeftGB(exgb.G));
         //assertTrue("isRmat( { a, b, c, d } )", sbb.isLeftReductionMatrix(exgb) );
 
         L.add(e);
         exgb = sbb.extLeftGB(L);
-        System.out.println("exgb.GB_l = " + exgb.G);
+        //System.out.println("exgb.GB_l = " + exgb.G);
         assertTrue("isLeftGB( { a, b, c, d, e } )", sbb.isLeftGB(exgb.G));
         //assertTrue("isRmat( { a, b, c, d, e } )", sbb.isLeftReductionMatrix(exgb) );
+    }
+
+
+    /*
+     * Test sequential extended right GBase. extRightGB not yet implemented.
+     */
+    public void noTestSequentialExtendedRightGBase() {
+        System.out.println("a = " + a + ", b = " + b + ", c = " + c + ", d = " + d);
+
+        L = new ArrayList<GenSolvablePolynomial<BigQuaternion>>();
+        SolvableExtendedGB<BigQuaternion> exgb;
+
+        L.add(a);
+        System.out.println("L_le = " + L);
+        exgb = sbb.extRightGB(L);
+        System.out.println("exgb.GB_l = " + exgb.G);
+        assertTrue("isRightGB( { a } )", sbb.isRightGB(exgb.G));
+        //assertTrue("isRightRmat( { a } )", sbb.isRightReductionMatrix(exgb) );
+
+        L.add(b);
+        System.out.println("L_le = " + L);
+        exgb = sbb.extRightGB(L);
+        System.out.println("exgb.GB_l = " + exgb.G);
+        assertTrue("isRightGB( { a, b } )", sbb.isRightGB(exgb.G));
+        //assertTrue("isRightRmat( { a, b } )", sbb.isRightReductionMatrix(exgb) );
+
+        L.add(c);
+        System.out.println("L_le = " + L);
+        exgb = sbb.extRightGB(L);
+        System.out.println("exgb.GB_l = " + exgb.G);
+        assertTrue("isRightGB( { a, b, c } )", sbb.isRightGB(exgb.G));
+        //assertTrue("isRightRmat( { a, b, c } )", sbb.isRightReductionMatrix(exgb) );
+
+        L.add(d);
+        System.out.println("L_le = " + L);
+        exgb = sbb.extRightGB(L);
+        System.out.println("exgb.GB_l = " + exgb.G);
+        assertTrue("isRightGB( { a, b, c, d } )", sbb.isRightGB(exgb.G));
+        //assertTrue("isRightRmat( { a, b, c, d } )", sbb.isRightReductionMatrix(exgb) );
+
+        L.add(e);
+        System.out.println("L_le = " + L);
+        exgb = sbb.extRightGB(L);
+        System.out.println("exgb.GB_l = " + exgb.G);
+        assertTrue("isRightGB( { a, b, c, d, e } )", sbb.isRightGB(exgb.G));
+        //assertTrue("isRightRmat( { a, b, c, d, e } )", sbb.isRightReductionMatrix(exgb) );
     }
 
 }
