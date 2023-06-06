@@ -1562,8 +1562,8 @@ public class PolyUtil {
         }
         //System.out.println("b     = " + b);
         //System.out.println("a     = " + a);
-        //System.out.println("P*b   = " + Pb);
-        //System.out.println("rhs*a = " + rhsa);
+        System.out.println("P*b   = " + Pb);
+        System.out.println("rhs*a = " + rhsa);
         if (Pb.degree() != rhsa.degree()
                         || !Pb.leadingBaseCoefficient().equals(rhsa.leadingBaseCoefficient())) {
             return false;

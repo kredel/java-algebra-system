@@ -10,8 +10,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -39,7 +39,7 @@ public class FDUtil {
     private static final boolean debug = true; //logger.isDebugEnabled();
 
 
-    private static final boolean info = logger.isInfoEnabled();
+    //private static final boolean info = logger.isInfoEnabled();
 
 
     /**
@@ -183,8 +183,8 @@ public class FDUtil {
 
 
     /**
-     * GenSolvablePolynomial right sparse pseudo quotient and remainder
-     * for univariate polynomials or exact division.
+     * GenSolvablePolynomial right sparse pseudo quotient and remainder for
+     * univariate polynomials or exact division.
      * @param <C> coefficient type.
      * @param P GenSolvablePolynomial.
      * @param S nonzero GenSolvablePolynomial.
@@ -256,8 +256,8 @@ public class FDUtil {
 
 
     /**
-     * Is GenSolvablePolynomial left base pseudo quotient and
-     * remainder. For univariate polynomials. todo: Ore condition
+     * Is GenSolvablePolynomial left base pseudo quotient and remainder. For
+     * univariate polynomials. todo: Ore condition
      * @param <C> coefficient type.
      * @param P base GenSolvablePolynomial.
      * @param S nonzero base GenSolvablePolynomial.
@@ -309,8 +309,8 @@ public class FDUtil {
 
 
     /**
-     * Is GenSolvablePolynomial right base pseudo quotient and
-     * remainder. For univariate polynomials. todo: Ore condition
+     * Is GenSolvablePolynomial right base pseudo quotient and remainder. For
+     * univariate polynomials. todo: Ore condition
      * @param <C> coefficient type.
      * @param P base GenSolvablePolynomial.
      * @param S nonzero base GenSolvablePolynomial.
@@ -511,8 +511,8 @@ public class FDUtil {
                 GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) r.leadingBaseCoefficient();
                 GenSolvablePolynomial<C> d = (GenSolvablePolynomial<C>) h.leadingBaseCoefficient();
                 GenSolvablePolynomial<C>[] oc = fd.leftOreCond(a, d);
-                GenSolvablePolynomial<C> ga = (GenSolvablePolynomial<C>) oc[0]; // a
-                GenSolvablePolynomial<C> gd = (GenSolvablePolynomial<C>) oc[1]; // d
+                GenSolvablePolynomial<C> ga = oc[0]; // a
+                GenSolvablePolynomial<C> gd = oc[1]; // d
                 // ga * a = gd * d
                 r = r.multiplyLeft(ga); // coeff ga a, exp g
                 h = h.multiplyLeft(gd); // coeff gd d, exp f1
@@ -553,7 +553,7 @@ public class FDUtil {
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      *      <b>Note:</b> not always meaningful and working
      */
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> boolean isRecursiveRightPseudoQuotientRemainder(
                     GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<GenPolynomial<C>> S,
                     GenSolvablePolynomial<GenPolynomial<C>> q, GenSolvablePolynomial<GenPolynomial<C>> r) {
@@ -586,7 +586,7 @@ public class FDUtil {
             }
             Pp = Pp.multiplyLeft(ldcf); // side?
         }
-        GenPolynomialRing<C> cofac = (GenPolynomialRing) P.ring.coFac;
+        GenPolynomialRing<C> cofac = (GenPolynomialRing<C>) P.ring.coFac;
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>(cofac.coFac);
 
         //GenSolvablePolynomial<GenPolynomial<C>> pr = P.rightRecursivePolynomial();
@@ -1182,8 +1182,8 @@ public class FDUtil {
 
     /**
      * Solvable rational function from integral solvable polynomial
-     * coefficients. Represent as polynomial with type SolvableQuotient
-     * <C> coefficients.
+     * coefficients. Represent as polynomial with type SolvableQuotient <C>
+     * coefficients.
      * @param fac result polynomial factory.
      * @param A polynomial with integral solvable polynomial coefficients to be
      *            converted.
@@ -1214,8 +1214,8 @@ public class FDUtil {
 
     /**
      * Solvable rational function from integral solvable polynomial
-     * coefficients. Represent as polynomial with type SolvableQuotient
-     * <C> coefficients.
+     * coefficients. Represent as polynomial with type SolvableQuotient <C>
+     * coefficients.
      * @param fac result polynomial factory.
      * @param L list of polynomials with integral solvable polynomial
      *            coefficients to be converted.

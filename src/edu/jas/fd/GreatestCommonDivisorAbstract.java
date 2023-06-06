@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager; 
 
 import edu.jas.gbufd.SolvableSyzygyAbstract;
 import edu.jas.gbufd.SolvableSyzygySeq;
@@ -1441,7 +1441,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             //oc[1] = FDUtil.<C> basePseudoQuotient(lcm, b);
             oc[0] = (GenSolvablePolynomial<C>) PolyUtil.<C> basePseudoDivide(lcm, a);
             oc[1] = (GenSolvablePolynomial<C>) PolyUtil.<C> basePseudoDivide(lcm, b);
-            logger.info("Ore multiple: {}, {}", lcm , Arrays.toString(oc));
+            logger.info("Ore multiple: {}, {}", lcm, Arrays.toString(oc));
             return oc;
         }
         oc = syz.rightOreCond(a, b);
@@ -1459,7 +1459,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param q solvable polynomial
      * @return true, if p*a = q*b, else false
      */
-    public boolean isLeftOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b, GenSolvablePolynomial<C> p, GenSolvablePolynomial<C> q) {
+    public boolean isLeftOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b,
+                    GenSolvablePolynomial<C> p, GenSolvablePolynomial<C> q) {
         return syz.isLeftOreCond(a, b, p, q);
     }
 
@@ -1473,7 +1474,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param q solvable polynomial
      * @return true, if a*p = b*q, else false
      */
-    public boolean isRightOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b, GenSolvablePolynomial<C> p, GenSolvablePolynomial<C> q) {
+    public boolean isRightOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b,
+                    GenSolvablePolynomial<C> p, GenSolvablePolynomial<C> q) {
         return syz.isRightOreCond(a, b, p, q);
     }
 
@@ -1485,9 +1487,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param d second solvable polynomial.
      * @return [ g=leftGcd(n,d), n/g, d/g ]
      */
-    @SuppressWarnings("unchecked")
-    public GenSolvablePolynomial<C>[] leftGcdCofactors(
-                    GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+    //@SuppressWarnings("unchecked")
+    public GenSolvablePolynomial<C>[] leftGcdCofactors(GenSolvablePolynomialRing<C> r,
+                    GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
         logger.info("leftGCD_in: {}, {}", n, d);
         GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
         res[0] = leftGcd(n, d);
@@ -1523,9 +1525,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param d second solvable polynomial.
      * @return [ g=rightGcd(n,d), n/g, d/g ]
      */
-    @SuppressWarnings("unchecked")
-    public GenSolvablePolynomial<C>[] rightGcdCofactors(
-                    GenSolvablePolynomialRing<C> r, GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
+    //@SuppressWarnings("unchecked")
+    public GenSolvablePolynomial<C>[] rightGcdCofactors(GenSolvablePolynomialRing<C> r,
+                    GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
         logger.info("rightGCD_in: {}, {}", n, d);
         GenSolvablePolynomial<C>[] res = (GenSolvablePolynomial<C>[]) new GenSolvablePolynomial[3];
         res[0] = rightGcd(n, d);

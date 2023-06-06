@@ -7,7 +7,6 @@ package edu.jas.fd;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Arrays;
 
 import edu.jas.arith.BigRational;
 import edu.jas.gb.SolvableGroebnerBaseAbstract;
@@ -137,7 +136,7 @@ public class GCDSimpleTest extends TestCase {
             b = dfac.random(kl + (i + 1), ll + i, el + 2, q);
             c = dfac.random(kl + (i + 1), ll + 1, el + 1, q);
             c = c.multiply(dfac.univariate(0));
-            if (a.isZERO()||b.isZERO()||c.isZERO()) {
+            if (a.isZERO() || b.isZERO() || c.isZERO()) {
                 // skip for this turn
                 continue;
             }
@@ -183,7 +182,7 @@ public class GCDSimpleTest extends TestCase {
             b = dfac.random(kl + (i + 1), ll + i, el + 2, q);
             c = dfac.random(kl + (i + 1), ll + 1, el + 1, q);
             c = c.multiply(dfac.univariate(0));
-            if (a.isZERO()||b.isZERO()||c.isZERO()) {
+            if (a.isZERO() || b.isZERO() || c.isZERO()) {
                 // skip for this turn
                 continue;
             }
@@ -204,9 +203,9 @@ public class GCDSimpleTest extends TestCase {
             //System.out.println("egcd = " + Arrays.toString(egcd));
 
             d = egcd[0];
-            e = (GenSolvablePolynomial<BigRational>) a.multiply(egcd[1]).sum( b.multiply(egcd[2]) );
+            e = (GenSolvablePolynomial<BigRational>) a.multiply(egcd[1]).sum(b.multiply(egcd[2]));
             //System.out.println("e  = " + e);
-            f = (GenSolvablePolynomial<BigRational>) egcd[1].multiply(a).sum( egcd[2].multiply(b) );
+            f = (GenSolvablePolynomial<BigRational>) egcd[1].multiply(a).sum(egcd[2].multiply(b));
             //System.out.println("f  = " + f);
             assertEquals("e == f: ", e, f);
             //assertEquals("gcd(a,b) = s a + t b: " + f, d, f.monic());
@@ -222,16 +221,16 @@ public class GCDSimpleTest extends TestCase {
             GenSolvablePolynomial<BigRational>[] dio = fd.baseGcdDiophant(a, b, d);
             //System.out.println("dio = " + Arrays.toString(dio));
 
-            e = (GenSolvablePolynomial<BigRational>) dio[0].multiply(a).sum( dio[1].multiply(b) );
+            e = (GenSolvablePolynomial<BigRational>) dio[0].multiply(a).sum(dio[1].multiply(b));
             //System.out.println("e  = " + e);
-            f = (GenSolvablePolynomial<BigRational>) a.multiply(dio[0]).sum( b.multiply(dio[1]) );
+            f = (GenSolvablePolynomial<BigRational>) a.multiply(dio[0]).sum(b.multiply(dio[1]));
             //System.out.println("f  = " + f);
             assertEquals("e == f: ", e, f);
             //assertEquals("a*d + b*e == f: ", d, f.monic());
             //assertEquals("d*gcd(a,b) = s a + t b: : ", d, f.monic());
             assertTrue("d*gcd(a,b) = s a + t b: ", f.remainder(d).isZERO());
 
-            e = (GenSolvablePolynomial<BigRational>) FDUtil.<BigRational> leftBaseSparsePseudoRemainder(f, c);
+            e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(f, c);
             //System.out.println("d  = " + d);
             //System.out.println("c  = " + c);
             assertTrue("c | a*s + b*t " + e, e.isZERO());
@@ -686,13 +685,13 @@ public class GCDSimpleTest extends TestCase {
         //System.out.println("dfac = " + dfac.toScript());
         do {
             a = dfac.random(kl, ll, el, q);
-        } while (a.isZERO()||a.isConstant());
+        } while (a.isZERO() || a.isConstant());
         do {
-            b = dfac.random(kl, ll, el, q/2f);
-        } while (b.isZERO()||b.isConstant());
+            b = dfac.random(kl, ll, el, q / 2f);
+        } while (b.isZERO() || b.isConstant());
         do {
-            c = dfac.random(kl, ll, el, q/2f);
-        } while (c.isZERO()||c.isConstant());
+            c = dfac.random(kl, ll, el, q / 2f);
+        } while (c.isZERO() || c.isConstant());
         c = c.monic();
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
