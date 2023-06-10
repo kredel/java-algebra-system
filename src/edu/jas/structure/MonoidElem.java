@@ -5,6 +5,7 @@
 package edu.jas.structure;
 
 
+
 /**
  * Monoid element interface. Defines the multiplicative methods.
  * @param <C> element type
@@ -71,7 +72,10 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
      * @return right, with a * right = this
      */
     default public C rightDivide(C a) {
-        return divide(a);
+        if (((MonoidFactory<C>)factory()).isCommutative()) {
+           return divide(a);
+        }
+        throw new UnsupportedOperationException("operation not implemented");
     }
 
 
@@ -82,7 +86,10 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
      * @return left, with left * a = this
      */
     default public C leftDivide(C a) {
-        return divide(a);
+        if (((MonoidFactory<C>)factory()).isCommutative()) {
+           return divide(a);
+        }
+        throw new UnsupportedOperationException("operation not implemented");
     }
 
 
@@ -93,7 +100,10 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
      * @return r = this - a * (1/right), where a * right = this.
      */
     default public C rightRemainder(C a) {
-        return remainder(a);
+        if (((MonoidFactory<C>)factory()).isCommutative()) {
+           return remainder(a);
+        }
+        throw new UnsupportedOperationException("operation not implemented");
     }
 
 
@@ -104,7 +114,10 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
      * @return r = this - (1/left) * a, where left * a = this.
      */
     default public C leftRemainder(C a) {
-        return remainder(a);
+        if (((MonoidFactory<C>)factory()).isCommutative()) {
+           return remainder(a);
+        }
+        throw new UnsupportedOperationException("operation not implemented");
     }
 
 
@@ -116,10 +129,13 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
      */
     @SuppressWarnings("unchecked")
     default public C[] twosidedDivide(C a) {
-        C[] ret = (C[]) new MonoidElem[2];
-        ret[0] = divide(a);
-        ret[1] = ((MonoidFactory<C>)factory()).getONE();
-        return ret;
+        if (((MonoidFactory<C>)factory()).isCommutative()) {
+           C[] ret = (C[]) new MonoidElem[2];
+           ret[0] = divide(a);
+           ret[1] = ((MonoidFactory<C>)factory()).getONE();
+           return ret;
+        }
+        throw new UnsupportedOperationException("operation not implemented");
     }
 
 
@@ -130,7 +146,10 @@ public interface MonoidElem<C extends MonoidElem<C>> extends Element<C> {
      * @return r = this - (a/left) * a * (a/right), where left * a * right = this.
      */
     default public C twosidedRemainder(C a){
-        return remainder(a);
+        if (((MonoidFactory<C>)factory()).isCommutative()) {
+           return remainder(a);
+        }
+        throw new UnsupportedOperationException("operation not implemented");
     }
 
 
