@@ -789,6 +789,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param S GenSolvablePolynomial.
      * @return lcm(P,S) with lcm(P,S) = P'*P = S'*S.
      */
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> leftLcm(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
         GenSolvablePolynomial<C>[] oc = leftOreCond(P, S);
         return oc[0].multiply(P);
@@ -802,6 +803,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @return gcd(P,S) with P = p*gcd(P,S)*P' and S = s*gcd(P,S)*S', where
      *         deg_main(p) = deg_main(s) == 0.
      */
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> rightGcd(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
         if (S == null || S.isZERO()) {
             return P;
@@ -849,6 +851,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param S GenSolvablePolynomial.
      * @return lcm(P,S) with lcm(P,S) = P*P' = S*S'.
      */
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> rightLcm(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
         GenSolvablePolynomial<C>[] oc = rightOreCond(P, S);
         return P.multiply(oc[0]);
@@ -860,6 +863,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param A non empty list of GenSolvablePolynomials.
      * @return gcd(A_i) with A_i = A'_i*gcd(A_i)*a_i, where deg_main(a_i) == 0.
      */
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> leftGcd(List<GenSolvablePolynomial<C>> A) {
         if (A == null || A.isEmpty()) {
             throw new IllegalArgumentException("A may not be empty");
@@ -1076,7 +1080,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param S univariate GenSolvablePolynomial.
      * @return [ gcd(P,S), a, b ] with a*P + b*S = gcd(P,S).
      */
-    @SuppressWarnings({ "unchecked", "cast" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C>[] baseExtendedGcd(GenSolvablePolynomial<C> P,
                     GenSolvablePolynomial<C> S) {
         //return P.egcd(S);
@@ -1110,7 +1114,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param S GenSolvablePolynomial.
      * @return [ gcd(P,S), a ] with a*P + b*S = gcd(P,S).
      */
-    @SuppressWarnings({ "unchecked", "cast" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C>[] baseHalfExtendedGcd(GenSolvablePolynomial<C> P,
                     GenSolvablePolynomial<C> S) {
         if (P == null || S == null) {
@@ -1168,7 +1172,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param c univariate GenSolvablePolynomial.
      * @return [ a, b ] with a*P + b*S = c and deg(a) &lt; deg(S).
      */
-    @SuppressWarnings({ "unchecked", "cast" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C>[] baseGcdDiophant(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S,
                     GenSolvablePolynomial<C> c) {
         GenSolvablePolynomial<C>[] egcd = baseExtendedGcd(P, S);
@@ -1296,7 +1300,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param b solvable polynomial
      * @return [p,q] with p*a = q*b
      */
-    @SuppressWarnings({ "unchecked", "cast" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C>[] leftOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b) {
         if (a == null || a.isZERO() || b == null || b.isZERO()) {
             throw new IllegalArgumentException("a and b must be non zero");
@@ -1416,7 +1420,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param b solvable polynomial
      * @return [p,q] with a*p = b*q
      */
-    @SuppressWarnings({ "unchecked", "cast" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C>[] rightOreCond(GenSolvablePolynomial<C> a, GenSolvablePolynomial<C> b) {
         if (a == null || a.isZERO() || b == null || b.isZERO()) {
             throw new IllegalArgumentException("a and b must be non zero");
@@ -1487,7 +1491,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param d second solvable polynomial.
      * @return [ g=leftGcd(n,d), n/g, d/g ]
      */
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C>[] leftGcdCofactors(GenSolvablePolynomialRing<C> r,
                     GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
         logger.info("leftGCD_in: {}, {}", n, d);
@@ -1525,7 +1529,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @param d second solvable polynomial.
      * @return [ g=rightGcd(n,d), n/g, d/g ]
      */
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C>[] rightGcdCofactors(GenSolvablePolynomialRing<C> r,
                     GenSolvablePolynomial<C> n, GenSolvablePolynomial<C> d) {
         logger.info("rightGCD_in: {}, {}", n, d);

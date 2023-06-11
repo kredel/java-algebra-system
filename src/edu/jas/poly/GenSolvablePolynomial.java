@@ -822,7 +822,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
      */
     // cannot @Override
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> divide(GenSolvablePolynomial<C> S) {
         return quotientRemainder(S)[0];
     }
@@ -839,7 +839,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
      */
     // cannot @Override
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> remainder(GenSolvablePolynomial<C> S) {
         return quotientRemainder(S)[1];
     }
@@ -856,7 +856,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
      */
     // cannot @Override
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C>[] quotientRemainder(GenSolvablePolynomial<C> S) {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException("division by zero");
@@ -889,6 +889,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
                 break;
             }
         }
+        System.out.println("(left)QR: q = " + q + ", r = " + r);
         GenSolvablePolynomial<C>[] ret = new GenSolvablePolynomial[2];
         ret[0] = q;
         ret[1] = r;
@@ -906,7 +907,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      *         &lt; deg(S) or remainder = 0.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
      */
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> rightDivide(GenSolvablePolynomial<C> S) {
         return rightQuotientRemainder(S)[0];
     }
@@ -922,7 +923,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      *         &lt; deg(S) or remainder = 0.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
      */
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> rightRemainder(GenSolvablePolynomial<C> S) {
         return rightQuotientRemainder(S)[1];
     }
@@ -938,7 +939,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      *         deg(remainder) &lt; deg(S) or remainder = 0.
      * @see edu.jas.poly.PolyUtil#baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)
      */
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C>[] rightQuotientRemainder(GenSolvablePolynomial<C> S) {
         if (S == null || S.isZERO()) {
             throw new ArithmeticException("division by zero");
@@ -971,6 +972,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
                 break;
             }
         }
+        System.out.println("rightQR: q = " + q + ", r = " + r);
         GenSolvablePolynomial<C>[] ret = new GenSolvablePolynomial[2];
         ret[0] = q;
         ret[1] = r;
@@ -987,7 +989,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      *         sum(a<sub>i</sub> X<sup>i</sup> ) and eval(sum(X<sup>i</sup>
      *         b<sub>i</sub>)) == sum(a<sub>i</sub> X<sup>i</sup>)
      */
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> rightRecursivePolynomial() {
         if (this.isONE() || this.isZERO()) {
             return this;
@@ -1014,7 +1016,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      *         b<sub>i</sub> ), this = sum(a<sub>i</sub> X<sup>i</sup> ) =
      *         eval(sum(X<sup>i</sup> b<sub>i</sub>))
      */
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings("unchecked")
     public GenSolvablePolynomial<C> evalAsRightRecursivePolynomial() {
         if (this.isONE() || this.isZERO()) {
             return this;
@@ -1042,7 +1044,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      *         X<sup>i</sup> ) and eval(sum(X<sup>i</sup> b<sub>i</sub>)) ==
      *         sum(a<sub>i</sub> X<sup>i</sup>)
      */
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings("unchecked")
     public boolean isRightRecursivePolynomial(GenSolvablePolynomial<C> R) {
         if (this.isZERO()) {
             return R.isZERO();

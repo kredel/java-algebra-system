@@ -10,8 +10,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import edu.jas.poly.ExpVector;
 import edu.jas.poly.GenPolynomial;
@@ -183,8 +183,8 @@ public class FDUtil {
 
 
     /**
-     * GenSolvablePolynomial right sparse pseudo quotient and remainder for
-     * univariate polynomials or exact division.
+     * GenSolvablePolynomial right sparse pseudo quotient and remainder
+     * for univariate polynomials or exact division.
      * @param <C> coefficient type.
      * @param P GenSolvablePolynomial.
      * @param S nonzero GenSolvablePolynomial.
@@ -256,8 +256,8 @@ public class FDUtil {
 
 
     /**
-     * Is GenSolvablePolynomial left base pseudo quotient and remainder. For
-     * univariate polynomials. todo: Ore condition
+     * Is GenSolvablePolynomial left base pseudo quotient and
+     * remainder. For univariate polynomials. todo: Ore condition
      * @param <C> coefficient type.
      * @param P base GenSolvablePolynomial.
      * @param S nonzero base GenSolvablePolynomial.
@@ -309,8 +309,8 @@ public class FDUtil {
 
 
     /**
-     * Is GenSolvablePolynomial right base pseudo quotient and remainder. For
-     * univariate polynomials. todo: Ore condition
+     * Is GenSolvablePolynomial right base pseudo quotient and
+     * remainder. For univariate polynomials. todo: Ore condition
      * @param <C> coefficient type.
      * @param P base GenSolvablePolynomial.
      * @param S nonzero base GenSolvablePolynomial.
@@ -410,8 +410,8 @@ public class FDUtil {
         rhs = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiply(S).sum(r);
         GenSolvablePolynomial<C> b = (GenSolvablePolynomial<C>) rhs.leadingBaseCoefficient();
         GenSolvablePolynomial<C>[] oc = fd.leftOreCond(a, b);
-        GenPolynomial<C> ga = oc[0];
-        GenPolynomial<C> gb = oc[1];
+        GenSolvablePolynomial<C> ga = oc[0];
+        GenSolvablePolynomial<C> gb = oc[1];
         //System.out.println("FDQR: OreCond:  a = " +  a + ",  b = " +  b);
         //System.out.println("FDQR: OreCond: ga = " + ga + ", gb = " + gb);
         // ga a = gd d
@@ -553,7 +553,7 @@ public class FDUtil {
      * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
      *      <b>Note:</b> not always meaningful and working
      */
-    //@SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> boolean isRecursiveRightPseudoQuotientRemainder(
                     GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<GenPolynomial<C>> S,
                     GenSolvablePolynomial<GenPolynomial<C>> q, GenSolvablePolynomial<GenPolynomial<C>> r) {
@@ -586,7 +586,7 @@ public class FDUtil {
             }
             Pp = Pp.multiplyLeft(ldcf); // side?
         }
-        GenPolynomialRing<C> cofac = (GenPolynomialRing<C>) P.ring.coFac;
+        GenPolynomialRing<C> cofac = (GenPolynomialRing) P.ring.coFac;
         GreatestCommonDivisorAbstract<C> fd = new GreatestCommonDivisorSimple<C>(cofac.coFac);
 
         //GenSolvablePolynomial<GenPolynomial<C>> pr = P.rightRecursivePolynomial();
@@ -599,8 +599,8 @@ public class FDUtil {
         GenSolvablePolynomial<C> b = (GenSolvablePolynomial<C>) rr.leadingBaseCoefficient();
 
         GenSolvablePolynomial<C>[] oc = fd.rightOreCond(a, b);
-        GenPolynomial<C> ga = oc[0];
-        GenPolynomial<C> gb = oc[1];
+        GenSolvablePolynomial<C> ga = oc[0];
+        GenSolvablePolynomial<C> gb = oc[1];
         //System.out.println("FDQR: OreCond:  a = " +  a + ",  b = " +  b);
         //System.out.println("FDQR: OreCond: ga = " + ga + ", gb = " + gb);
         // a ga = d gd
@@ -712,8 +712,8 @@ public class FDUtil {
                 GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) rr.leadingBaseCoefficient();
                 GenSolvablePolynomial<C> d = (GenSolvablePolynomial<C>) hr.leadingBaseCoefficient();
                 GenSolvablePolynomial<C>[] oc = fd.rightOreCond(a, d);
-                GenPolynomial<C> ga = oc[0]; // a
-                GenPolynomial<C> gd = oc[1]; // d
+                GenSolvablePolynomial<C> ga = oc[0]; // a
+                GenSolvablePolynomial<C> gd = oc[1]; // d
                 //System.out.println("OreCond:  a = " +  a + ",  d = " +  d);
                 //System.out.println("OreCond: ga = " + ga + ", gd = " + gd);
                 // a ga = d gd
@@ -954,7 +954,7 @@ public class FDUtil {
      * @param s GenSolvablePolynomial.
      * @return Q with s * Q = P.
      */
-    @SuppressWarnings({ "unchecked", "cast" })
+    @SuppressWarnings("unchecked")
     public static <C extends GcdRingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> recursiveRightDivide(
                     GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<C> s) {
         if (s == null || s.isZERO()) {
@@ -968,22 +968,25 @@ public class FDUtil {
         }
         if (!(P instanceof RecSolvablePolynomial)) {
             //return FDUtil.<C> recursiveDivide(P,s);
+            //System.out.println("recRightDivide: !RecSolvablePolynomial " + P.ring.toScript());
         }
         RecSolvablePolynomialRing<C> rfac = (RecSolvablePolynomialRing<C>) P.ring;
         if (rfac.coeffTable.isEmpty()) {
             //return FDUtil.<C> recursiveDivide(P,s);
+            //System.out.println("recRightDivide: rfac.coeffTable.isEmpty()");
         }
         RecSolvablePolynomial<C> onep = rfac.getONE();
         //ExpVector zero = rfac.evzero;
         RecSolvablePolynomial<C> q = rfac.getZERO();
         RecSolvablePolynomial<C> r;
         RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) P;
-        //System.out.println("recRightDivide: p=P = " + p + ", s = " + s);
+        //System.out.println("recRightDivide: p = " + p + ", s = " + s);
         while (!p.isZERO()) {
             Map.Entry<ExpVector, GenPolynomial<C>> m1 = p.leadingMonomial();
             GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) m1.getValue();
             ExpVector f = m1.getKey();
             GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.rightDivide(s); // s * c = a
+            //GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.leftDivide(s); // c * s = a
             //System.out.println("recRightDivide: s \\ a = c: " + s + " \\ " + a + " = " + c);
             if (c.isZERO()) {
                 //logger.info("something is wrong: c is zero, a = {}, s = {}", a, s);
@@ -991,10 +994,11 @@ public class FDUtil {
             }
             r = onep.multiply(s.multiply(c), f); // left 1 * s * c * (1 f)
             if (!a.equals(r.leadingBaseCoefficient())) {
+                System.out.println("recRightDivide: class(a) = " + a.getClass() + ", class(s) = " + s.getClass());
                 System.out.println("recRightDivide: a   = " + a + ", lc(r) = " + r.leadingBaseCoefficient());
                 System.out.println("recRightDivide: c*s = " + c.multiply(s) + ", s = " + s + ", c = " + c);
-                System.out.println(
-                                "recRightDivide: s*c = " + s.multiply(c) + ", a%s = " + a.rightRemainder(s));
+                System.out.println("recRightDivide: s*c = " + s.multiply(c) + ", a%s = " + a.rightRemainder(s));
+                System.out.println("recRightDivide: c_l = " + a.rightDivide(s));
                 throw new RuntimeException("something is wrong: c*s != a: " + rfac.toScript());
             }
             p = (RecSolvablePolynomial<C>) p.subtract(r);
@@ -1055,10 +1059,10 @@ public class FDUtil {
             GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) p.leadingBaseCoefficient();
             GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.divide(s); // c * s = a
             ///GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.rightDivide(s);
+            //System.out.println("recLeftDivide: c * s = a: " + c + " * " + s + " = " + c.multiply(s) + " = " + a + ", c*s-a = " + c.multiply(s).subtract(a));
             if (c.isZERO()) {
                 throw new RuntimeException("something is wrong: c is zero, a = " + a + ", s = " + s);
             }
-            //System.out.println("recLeftDivide: a / s = c: " + a + " / " + s + " = " + c);
             //r = onep.multiply(c, f, s, zero); // right: (c f) * 1 * (s zero)
             r = onep.multiplyLeft(c.multiply(s), f); // right: (c*s f) * one
             ///r = onep.multiplyLeft(s.multiply(c), f); // left: (s*c f) * one
@@ -1066,7 +1070,10 @@ public class FDUtil {
                 System.out.println("recLeftDivide: a        = " + a);
                 System.out.println("recLeftDivide: lc(r)    = " + r.leadingBaseCoefficient());
                 System.out.println("recLeftDivide: c        = " + c);
+                System.out.println("recLeftDivide: a.riDi.s = " + a.rightDivide(s));
                 System.out.println("recLeftDivide: s        = " + s);
+                System.out.println("recLeftDivide: c * s    = " + c.multiply(s));
+                System.out.println("recLeftDivide: s * c    = " + s.multiply(c));
                 C ac = a.leadingBaseCoefficient();
                 C rc = r.leadingBaseCoefficient().leadingBaseCoefficient();
                 C cc = rc.inverse().multiply(ac);
@@ -1182,8 +1189,8 @@ public class FDUtil {
 
     /**
      * Solvable rational function from integral solvable polynomial
-     * coefficients. Represent as polynomial with type SolvableQuotient <C>
-     * coefficients.
+     * coefficients. Represent as polynomial with type SolvableQuotient
+     * <C> coefficients.
      * @param fac result polynomial factory.
      * @param A polynomial with integral solvable polynomial coefficients to be
      *            converted.
@@ -1214,8 +1221,8 @@ public class FDUtil {
 
     /**
      * Solvable rational function from integral solvable polynomial
-     * coefficients. Represent as polynomial with type SolvableQuotient <C>
-     * coefficients.
+     * coefficients. Represent as polynomial with type SolvableQuotient
+     * <C> coefficients.
      * @param fac result polynomial factory.
      * @param L list of polynomials with integral solvable polynomial
      *            coefficients to be converted.
