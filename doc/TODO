@@ -112,6 +112,10 @@ partially resolved and completed issues:
   and ResidueSolvablePolynomial(Ring) unsused, except self tests.
   Only use QLRSolvablePolynomial(Ring) instead done
 
+- rework SPIN model checking with TLA+ parallel model checker
+  https://en.wikipedia.org/wiki/TLA%2B
+  https://lamport.azurewebsites.net/tla/tla.html
+
 
 resolved and completed issues:
 
