@@ -293,11 +293,11 @@ public class FDUtilQuatTest extends TestCase {
         //System.out.println("\nrdfac  = " + rdfac.toScript());
         //System.out.println("rrfac  = " + rrfac.toScript());
 
-        q = 0.27f;
+        q = 0.23f;
         kl = 1;
         ll = 3;
 
-        arr = rrfac.random(kl, ll, el, q);
+        arr = rrfac.random(kl, ll, el-1, q);
         //arr = rrfac.parse(" ( t + x + y ) z^2 + ( 2 x - 8 ) y^2 - ( 13 t^4 - 13 t^3 + t^2 + 2 t - 13 ) ");
         //arr = rrfac.parse(" ( 131/5 y - 85/84 ) ");
         brr = rrfac.random(kl, ll, el, q);
@@ -327,7 +327,7 @@ public class FDUtilQuatTest extends TestCase {
     /**
      * Test recursive division coefficient polynomial.
      */
-    public void xtestLeftAndRightRecursiveDivision() { // todo
+    public void todoTtestLeftAndRightRecursiveDivision() { // todo
         //String[] names = new String[] { "t", "x", "y", "z" };
         String[] names = new String[] { "y", "z" };
         rdfac = new GenSolvablePolynomialRing<BigQuaternion>(cfr, to, names);
@@ -411,9 +411,9 @@ public class FDUtilQuatTest extends TestCase {
     /**
      * Test recursive right coefficient polynomial.
      */
-    public void xtestRightRecursivePolynomial() { // todo
-        //String[] names = new String[] { "t", "x", "y", "z" };
-        String[] names = new String[] { "y", "z" };
+    public void testRightRecursivePolynomial() { // todo
+        String[] names = new String[] { "t", "x", "y", "z" };
+        //String[] names = new String[] { "y", "z" };
         rdfac = new GenSolvablePolynomialRing<BigQuaternion>(cfr, to, names);
         RelationGenerator<BigQuaternion> wl = new WeylRelationsIterated<BigQuaternion>();
         rdfac.addRelations(wl);
@@ -430,10 +430,10 @@ public class FDUtilQuatTest extends TestCase {
 
         arr = rrfac.random(kl, ll, el, q);
         //arr = rrfac.parse(" z { y } ");
-        System.out.println("arr  = " + arr);
+        //System.out.println("arr  = " + arr);
 
         brr = arr.rightRecursivePolynomial();
-        System.out.println("brr  = " + brr);
+        //System.out.println("brr  = " + brr);
 
         boolean t = arr.isRightRecursivePolynomial(brr);
         assertTrue("arr == eval(brr): ", t);
@@ -441,21 +441,21 @@ public class FDUtilQuatTest extends TestCase {
         GenSolvablePolynomial<BigQuaternion> c = (GenSolvablePolynomial<BigQuaternion>) rrfac
                         .random(kl, ll, el, q).leadingBaseCoefficient();
         //c = cfac.parse("y**2");
-        System.out.println("c  = " + c);
+        //System.out.println("c  = " + c);
 
         drr = arr.multiply(c); // arr * c = drr
-        System.out.println("drr  = " + drr);
+        //System.out.println("drr  = " + drr);
 
         err = FDUtil.<BigQuaternion> recursiveLeftDivide(drr, c); // err * c = drr
-        System.out.println("err  = " + err);
+        //System.out.println("err  = " + err);
         assertEquals("arr == err: ", arr, err);
 
         //System.out.println("\nFDQR: arr  = " + arr);
         drr = arr.multiplyLeft(c); // c * arr = drr
-        System.out.println("drr  = " + drr);
+        //System.out.println("drr  = " + drr);
 
         err = FDUtil.<BigQuaternion> recursiveRightDivide(drr, c); // c * err = drr
-        System.out.println("err  = " + err);
+        //System.out.println("err  = " + err);
         assertEquals("arr == err: ", arr, err);
     }
 
@@ -469,7 +469,7 @@ public class FDUtilQuatTest extends TestCase {
         rdfac.addRelations(wl);
         //System.out.println("rdfac  = " + rdfac.toScript());
         rsfac = (RecSolvablePolynomialRing<BigQuaternion>) rdfac.recursive(1);
-        //System.out.println("rsfac  = " + rsfac.toScript());
+        System.out.println("rsfac  = " + rsfac.toScript());
 
         assertFalse("isCommutative()", rsfac.isCommutative());
         assertTrue("isAssociative()", rsfac.isAssociative());
@@ -477,18 +477,18 @@ public class FDUtilQuatTest extends TestCase {
         do {
             as = rsfac.random(kl, ll, el, q);
         } while (as.isZERO());
-        //System.out.println("as = " + as);
+        System.out.println("as = " + as);
 
         do {
             bs = rsfac.random(kl, ll, el, q);
         } while (bs.isZERO());
-        //System.out.println("bs = " + bs);
+        System.out.println("bs = " + bs);
 
         // non commutative
         cs = bs.multiply(as);
         ds = as.multiply(bs);
-        //System.out.println("cs = " + cs);
-        //System.out.println("ds = " + ds);
+        System.out.println("cs = " + cs);
+        System.out.println("ds = " + ds);
         assertTrue("cs != 0: ", !cs.isZERO());
         assertTrue("ds != 0: ", !ds.isZERO());
 
@@ -497,7 +497,7 @@ public class FDUtilQuatTest extends TestCase {
 
         // divide
         es = (RecSolvablePolynomial<BigQuaternion>) FDUtil.<BigQuaternion> recursivePseudoQuotient(cs, as);
-        //System.out.println("es = " + es);
+        System.out.println("es = " + es);
         final int max = 4;
         int i = 0;
         do {
@@ -518,7 +518,7 @@ public class FDUtilQuatTest extends TestCase {
         } while (i++ < max);
 
         fs = (RecSolvablePolynomial<BigQuaternion>) FDUtil.<BigQuaternion> recursivePseudoQuotient(ds, bs);
-        //System.out.println("fs = " + fs);
+        System.out.println("fs = " + fs);
         i = 0;
         do {
             x1 = (RecSolvablePolynomial<BigQuaternion>) as.multiplyLeft(bs.leadingBaseCoefficient().power(i));
@@ -528,9 +528,12 @@ public class FDUtilQuatTest extends TestCase {
                 break;
             }
             if (fs.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {
-                System.out.println("fail: a == a*b/b: lc(f)==lc(x1)");
+                //System.out.println("fail: a == a*b/b: lc(f)==lc(x1)");
                 if (fs.abs().equals(as.abs())) {
-                    System.out.println("success via pseudo: a == a*b/b: ");
+                    //System.out.println("success via pseudo: a == a*b/b: ");
+                    //assertEquals("a != a*b/b: ", fs.abs(), x1.abs());
+                } else {
+                    assertFalse("a != a*b/b: ", fs.abs().equals(x1.abs()));
                 }
                 break;
             }
@@ -539,9 +542,9 @@ public class FDUtilQuatTest extends TestCase {
         GenSolvablePolynomial<BigQuaternion> bc = (GenSolvablePolynomial<BigQuaternion>) bs.leadingBaseCoefficient();
         ds = (RecSolvablePolynomial<BigQuaternion>) as.multiply(bc);
         fs = (RecSolvablePolynomial<BigQuaternion>) FDUtil.<BigQuaternion> recursiveDivide(ds, bc);
-        //System.out.println("bc = " + bc);
-        //System.out.println("ds = " + ds);
-        //System.out.println("fs = " + fs);
+        System.out.println("bc = " + bc);
+        System.out.println("ds = " + ds);
+        System.out.println("fs = " + fs);
         i = 0;
         do {
             x1 = (RecSolvablePolynomial<BigQuaternion>) as.multiply(bc.power(i));
@@ -551,9 +554,11 @@ public class FDUtilQuatTest extends TestCase {
                 break;
             }
             if (fs.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {
-                System.out.println("fail: a == a*b/b: lc(f)==lc(x1)");
+                //System.out.println("fail: a == a*b/b: lc(f)==lc(x1)");
                 if (fs.abs().equals(as.abs())) {
-                    System.out.println("success via pseudo: a == a*b/b: ");
+                    //System.out.println("success via pseudo: a == a*b/b: ");
+                } else {
+                    assertFalse("a != a*b/b: ", fs.abs().equals(x1.abs()));
                 }
                 break;
             }
@@ -562,9 +567,9 @@ public class FDUtilQuatTest extends TestCase {
         bc = (GenSolvablePolynomial<BigQuaternion>) bs.leadingBaseCoefficient();
         ds = (RecSolvablePolynomial<BigQuaternion>) as.multiply(bc);
         fs = (RecSolvablePolynomial<BigQuaternion>) FDUtil.<BigQuaternion> recursiveLeftDivide(ds, bc);
-        //System.out.println("bc = " + bc);
-        //System.out.println("ds = " + ds);
-        //System.out.println("fs = " + fs);
+        System.out.println("bc = " + bc);
+        System.out.println("ds = " + ds);
+        System.out.println("fs = " + fs);
         i = 0;
         do {
             x1 = (RecSolvablePolynomial<BigQuaternion>) as.multiply(bc.power(i));
@@ -583,43 +588,47 @@ public class FDUtilQuatTest extends TestCase {
         } while (i++ < max);
 
         // todo
-        // fs = (RecSolvablePolynomial<BigQuaternion>) FDUtil.<BigQuaternion> recursiveRightPseudoQuotient(cs, bs);
-        // //System.out.println("fs = " + fs);
-        // i = 0;
-        // do {
-        //     x1 = (RecSolvablePolynomial<BigQuaternion>) as.multiply(bs.leadingBaseCoefficient().power(i));
-        //     //System.out.println("a*lc(b)^"+i+" = " + x1);
-        //     if (fs.equals(x1)) {
-        //         assertEquals("a == b*a/b: ", fs, x1);
-        //         break;
-        //     }
-        //     if (fs.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {
-        //         System.out.println("fail: a == b*a/b: lc(f)==lc(x1)");
-        //         if (fs.abs().equals(as.abs())) {
-        //             System.out.println("success via pseudo: a == b*a/b: ");
-        //         }
-        //         break;
-        //     }
-        // } while (i++ < max);
+        fs = (RecSolvablePolynomial<BigQuaternion>) FDUtil.<BigQuaternion> recursiveRightPseudoQuotient(cs, bs);
+        System.out.println("fs = " + fs);
+        i = 0;
+        do {
+            x1 = (RecSolvablePolynomial<BigQuaternion>) as.multiply(bs.leadingBaseCoefficient().power(i));
+            //System.out.println("a*lc(b)^"+i+" = " + x1);
+            if (fs.equals(x1)) {
+                assertEquals("a == b*a/b: ", fs, x1);
+                break;
+            }
+            if (fs.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {
+                //System.out.println("fail: a == b*a/b: lc(f)==lc(x1)");
+                if (fs.abs().equals(as.abs())) {
+                    //System.out.println("success via pseudo: a == b*a/b: ");
+                } else {
+                    assertFalse("a != a*b/b: ", fs.abs().equals(x1.abs()));
+                }
+                break;
+            }
+        } while (i++ < max);
 
-        // es = (RecSolvablePolynomial<BigQuaternion>) FDUtil.<BigQuaternion> recursiveRightPseudoQuotient(ds, as);
-        // //System.out.println("es = " + es);
-        // i = 0;
-        // do {
-        //     x1 = (RecSolvablePolynomial<BigQuaternion>) bs.multiply(as.leadingBaseCoefficient().power(i));
-        //     //System.out.println("b*lc(a)^"+i+" = " + x1);
-        //     if (es.equals(x1)) {
-        //         assertEquals("b == a*b/a: ", es, x1);
-        //         break;
-        //     }
-        //     if (es.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {
-        //         System.out.println("fail: b == a*b/a: lc(e) == lc(x1)");
-        //         if (es.abs().equals(bs.abs())) {
-        //             //System.out.println("success via pseudo: b == a*b/a: ");
-        //         }
-        //         break;
-        //     }
-        // } while (i++ < max);
+        es = (RecSolvablePolynomial<BigQuaternion>) FDUtil.<BigQuaternion> recursiveRightPseudoQuotient(ds, as);
+        System.out.println("es = " + es);
+        i = 0;
+        do {
+            x1 = (RecSolvablePolynomial<BigQuaternion>) bs.multiply(as.leadingBaseCoefficient().power(i));
+            //System.out.println("b*lc(a)^"+i+" = " + x1);
+            if (es.equals(x1)) {
+                assertEquals("b == a*b/a: ", es, x1);
+                break;
+            }
+            if (es.leadingBaseCoefficient().equals(x1.leadingBaseCoefficient())) {
+                //System.out.println("fail: b == a*b/a: lc(e) == lc(x1)");
+                if (es.abs().equals(bs.abs())) {
+                    //System.out.println("success via pseudo: b == a*b/a: ");
+                } else {
+                    assertFalse("a != a*b/b: ", fs.abs().equals(x1.abs()));
+                }
+                break;
+            }
+        } while (i++ < max);
     }
 
 }

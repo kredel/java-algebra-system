@@ -403,7 +403,7 @@ public class FDUtilTest extends TestCase {
 
         // q = q;
         kl = 3;
-        ll = 4;
+        ll = 5;
         el = 5;
 
         arr = rrfac.random(kl, ll, el, q);
@@ -419,7 +419,7 @@ public class FDUtilTest extends TestCase {
         GenSolvablePolynomial<BigRational> c = (GenSolvablePolynomial<BigRational>) rrfac
                         .random(kl, ll, el, q).leadingBaseCoefficient();
         //c = cfac.parse("y**2");
-        //System.out.println("FDQR: c  = " + c);
+        System.out.println("FDQR: c  = " + c);
 
         drr = arr.multiply(c); // arr * c = drr
         //System.out.println("FDQR: drr  = " + drr);
@@ -429,9 +429,9 @@ public class FDUtilTest extends TestCase {
         assertEquals("arr == err: ", arr, err);
 
 
-        //System.out.println("\nFDQR: arr  = " + arr);
+        System.out.println("\nFDQR: arr  = " + arr);
         drr = arr.multiplyLeft(c); // c * arr = drr
-        //System.out.println("FDQR: drr  = " + drr);
+        System.out.println("FDQR: drr  = " + drr);
 
         err = FDUtil.<BigRational> recursiveRightDivide(drr, c); // c * err = drr
         //System.out.println("FDQR: err  = " + err);
