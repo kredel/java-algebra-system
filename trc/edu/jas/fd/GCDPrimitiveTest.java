@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 import edu.jas.arith.BigRational;
+import edu.jas.gb.SolvableGroebnerBaseAbstract;
+import edu.jas.gb.SolvableGroebnerBaseSeq;
 import edu.jas.kern.ComputerThreads;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenSolvablePolynomial;
@@ -128,7 +130,7 @@ public class GCDPrimitiveTest extends TestCase {
         String[] uvars = new String[] { "x" };
         dfac = new GenSolvablePolynomialRing<BigRational>(new BigRational(1), to, uvars);
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 3; i++) {
             a = dfac.random(kl * (i + 2), ll + 2 * i, el + 2, q);
             b = dfac.random(kl * (i + 2), ll + 2 * i, el + 2, q);
             c = dfac.random(kl * (i + 2), ll + 2, el + 2, q);
@@ -137,8 +139,8 @@ public class GCDPrimitiveTest extends TestCase {
                 // skip for this turn
                 continue;
             }
-            //a = fd.basePrimitivePart(a);
-            //b = fd.basePrimitivePart(b);
+            //a = fd.leftBasePrimitivePart(a);
+            //b = fd.leftBasePrimitivePart(b);
             c = (GenSolvablePolynomial<BigRational>) fd.leftBasePrimitivePart(c).abs();
 
             //System.out.println("a  = " + a);
@@ -447,11 +449,11 @@ public class GCDPrimitiveTest extends TestCase {
 
         er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveSparsePseudoRemainder(ar, dr);
         //System.out.println("er = " + er);
-        assertTrue("gcd(a,b) | a: " + er, er.isZERO());
+        assertTrue("gcd(ac,bc) | ac: " + er, er.isZERO());
 
         er = (RecSolvablePolynomial<BigRational>) FDUtil.<BigRational> recursiveSparsePseudoRemainder(br, dr);
         //System.out.println("er = " + er);
-        assertTrue("gcd(a,b) | b: " + er, er.isZERO());
+        assertTrue("gcd(ac,bc) | bc: " + er, er.isZERO());
 
         // right gcd
         ar = cr.multiply(ar0);
@@ -533,28 +535,41 @@ public class GCDPrimitiveTest extends TestCase {
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
 
+
+        List<GenSolvablePolynomial<BigRational>> L = new ArrayList<GenSolvablePolynomial<BigRational>>();
+        L.add(a);
+        L.add(b);
+        SolvableGroebnerBaseAbstract<BigRational> sbb = new SolvableGroebnerBaseSeq<BigRational>();
+
+        // left
+        List<GenSolvablePolynomial<BigRational>> Llgb = sbb.leftGB(L);
+        //System.out.println("leftGB = " + Llgb);
+        //List<GenSolvablePolynomial<BigRational>> Ltgb = sbb.twosidedGB(L);
+        //System.out.println("twosidedGB = " + Ltgb);
+
         d = fd.leftGcd(a, b);
-        //System.out.println("c = " + c);
-        //System.out.println("d = " + d);
+        //System.out.println("gb = " + Llgb);
+        //System.out.println("c  = " + c);
+        //System.out.println("d  = " + d);
+        assertTrue("d in leftGB", sbb.sred.leftNormalform(Llgb, d).isZERO());
 
         e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(d, c);
         //System.out.println("e = " + e);
-        assertTrue("c | gcd(ac,bc) " + e, e.isZERO());
+        assertTrue("c | gcd(ac,bc): " + e, e.isZERO());
 
         e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(a, c);
         //System.out.println("e = " + e);
-        assertTrue("c | ac " + e, e.isZERO());
+        assertTrue("c | ac: " + e, e.isZERO());
         e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(a, d);
         //System.out.println("e = " + e);
-        assertTrue("gcd(a,b) | a " + e, e.isZERO());
+        assertTrue("gcd(a,b) | a: " + e, e.isZERO());
 
         e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(b, c);
         //System.out.println("e = " + e);
-        assertTrue("c | bc " + e, e.isZERO());
+        assertTrue("c | bc: " + e, e.isZERO());
         e = FDUtil.<BigRational> leftBaseSparsePseudoRemainder(b, d);
         //System.out.println("e = " + e);
-        assertTrue("gcd(a,b) | b " + e, e.isZERO());
-
+        assertTrue("gcd(a,b): | b " + e, e.isZERO());
 
         // right
         a = c.multiply(a0);
@@ -563,9 +578,15 @@ public class GCDPrimitiveTest extends TestCase {
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
 
+        //List<GenSolvablePolynomial<BigRational>> Lrgb = sbb.rightGB(L); // too long
+        //List<GenSolvablePolynomial<BigRational>> Ltgb = sbb.twosidedGB(L);
+        //System.out.println("twosidedGB = " + Ltgb);
+
         d = fd.rightGcd(a, b);
-        //System.out.println("c  = " + c);
-        //System.out.println("d  = " + d);
+        //System.out.println("rightGB = " + Lrgb);
+        System.out.println("c  = " + c);
+        System.out.println("d  = " + d);
+        //assertTrue("d in rightGB", sbb.sred.rightNormalform(Lrgb, d).isZERO());
 
         e = FDUtil.<BigRational> rightBaseSparsePseudoRemainder(d, c);
         //System.out.println("e = " + e);
@@ -599,20 +620,20 @@ public class GCDPrimitiveTest extends TestCase {
         //System.out.println("dfac = " + dfac.toScript());
         do {
             a = dfac.random(kl, ll, el, q);
-        } while (a.isZERO()||a.isConstant());
+        } while (a.isZERO() || a.isConstant());
         do {
-            b = dfac.random(kl, ll, el, q/2f);
-        } while (b.isZERO()||b.isConstant());
+            b = dfac.random(kl, ll, el, q / 2f);
+        } while (b.isZERO() || b.isConstant());
         do {
-            c = dfac.random(kl, ll, el, q/2f);
-        } while (c.isZERO()||c.isConstant());
+            c = dfac.random(kl, ll, el, q / 2f);
+        } while (c.isZERO() || c.isConstant());
         c = c.monic();
         //System.out.println("a = " + a);
         //System.out.println("b = " + b);
         //System.out.println("c = " + c);
 
         // non commutative left
-        //System.out.println("right: ");
+        //System.out.println("left: ");
         d = c.multiply(a);
         e = c.multiply(b);
         //System.out.println("d = " + d);
@@ -634,7 +655,7 @@ public class GCDPrimitiveTest extends TestCase {
         assertEquals("cb = c*b: ", cb, e);
 
         // non commutative right
-        //System.out.println("left: ");
+        //System.out.println("right: ");
         d = a.multiply(c);
         e = b.multiply(c);
         //System.out.println("d = " + d);

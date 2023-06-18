@@ -25,12 +25,12 @@ import junit.framework.TestSuite;
 
 
 /**
- * GCD Simple PRS algorithm tests with JUnit. <b>Note:</b> eventually not in
+ * GCD Primitive PRS algorithm tests with JUnit. <b>Note:</b> eventually not in
  * sync with implementation.
  * @author Heinz Kredel
  */
 
-public class GCDSimpleQuatTest extends TestCase {
+public class GCDPrimitiveQuatTest extends TestCase {
 
 
     /**
@@ -43,10 +43,10 @@ public class GCDSimpleQuatTest extends TestCase {
 
 
     /**
-     * Constructs a <CODE>GCDSimpleQuatTest</CODE> object.
+     * Constructs a <CODE>GCDPrimitiveQuatTest</CODE> object.
      * @param name String.
      */
-    public GCDSimpleQuatTest(String name) {
+    public GCDPrimitiveQuatTest(String name) {
         super(name);
     }
 
@@ -54,7 +54,7 @@ public class GCDSimpleQuatTest extends TestCase {
     /**
      */
     public static Test suite() {
-        TestSuite suite = new TestSuite(GCDSimpleQuatTest.class);
+        TestSuite suite = new TestSuite(GCDPrimitiveQuatTest.class);
         return suite;
     }
 
@@ -99,7 +99,7 @@ public class GCDSimpleQuatTest extends TestCase {
         ar = br = cr = dr = er = null;
         String[] vars = new String[] { "a", "b", "c", "d" };
         BigQuaternionRing cf = new BigQuaternionRing();
-        fd = new GreatestCommonDivisorSimple<BigQuaternion>(cf);
+        fd = new GreatestCommonDivisorPrimitive<BigQuaternion>(cf);
         System.out.println("fd = " + fd);
         qfac = new GenSolvablePolynomialRing<BigQuaternion>(cf, to, vars);
         RelationGenerator<BigQuaternion> wl = new WeylRelationsIterated<BigQuaternion>();
@@ -123,7 +123,7 @@ public class GCDSimpleQuatTest extends TestCase {
     /**
      * Test quaternion base gcd simple.
      */
-    public void xtestQuatBaseGcdSimple() {
+    public void xtestQuatBaseGcdPrimitive() {
         String[] uvars = new String[] { "x" };
         BigQuaternionRing cf = new BigQuaternionRing();
         qfac = new GenSolvablePolynomialRing<BigQuaternion>(cf, to, uvars);
@@ -143,6 +143,9 @@ public class GCDSimpleQuatTest extends TestCase {
             a = a.monic();
             b = b.monic();
             c = c.monic();
+            //a = fd.basePrimitivePart(a);
+            //b = fd.basePrimitivePart(b);
+            //c = (GenSolvablePolynomial<BigQuaternion>) fd.basePrimitivePart(c).abs();
             //System.out.println("a  = " + a);
             //System.out.println("b  = " + b);
             //System.out.println("c  = " + c);
@@ -179,7 +182,7 @@ public class GCDSimpleQuatTest extends TestCase {
      * Test quaternion univariate recursive left gcd simple.
      */
     //@SuppressWarnings("cast")
-    public void xtestRecursiveLeftGCDSimple() {
+    public void xtestRecursiveLeftGCDPrimitive() {
         String[] vars = new String[] { "a", "b" };
         BigQuaternionRing cf = new BigQuaternionRing();
         //GenSolvablePolynomialRing<BigQuaternion> qfac;
@@ -192,7 +195,7 @@ public class GCDSimpleQuatTest extends TestCase {
         rfac = (RecSolvablePolynomialRing<BigQuaternion>) qfac.recursive(1);
         System.out.println("rfac = " + rfac.toScript());
 
-        GreatestCommonDivisorAbstract<BigQuaternion> fd = new GreatestCommonDivisorSimple<BigQuaternion>(cf);
+        GreatestCommonDivisorAbstract<BigQuaternion> fd = new GreatestCommonDivisorPrimitive<BigQuaternion>(cf);
         System.out.println("fd = " + fd);
 
         //kl = 3;
@@ -203,7 +206,7 @@ public class GCDSimpleQuatTest extends TestCase {
         br = rfac.random(kl, ll, el, q);
         cr = rfac.random(kl, ll, el, q);
         ////cr = (RecSolvablePolynomial<BigQuaternion>) cr.abs();
-        ///cr = PolyUtil.<BigQuaternion> monic(cr); // leftMonic
+        //cr = PolyUtil.<BigQuaternion> monic(cr); // leftMonic
         //cr = (RecSolvablePolynomial<BigQuaternion>) fd.recursivePrimitivePart(cr).abs();
         //System.out.println("ar = " + ar);
         //System.out.println("br = " + br);
@@ -213,7 +216,7 @@ public class GCDSimpleQuatTest extends TestCase {
             System.out.println("univ(0) = " + er);
             cr = (RecSolvablePolynomial<BigQuaternion>) cr.sum(er);
         }
-        System.out.println("cr = " + cr);
+        //System.out.println("cr = " + cr);
 
         //ar0 = ar;
         //br0 = br;
@@ -248,7 +251,7 @@ public class GCDSimpleQuatTest extends TestCase {
      * Test quaternion univariate recursive left gcd simple Weyl.
      */
     //@SuppressWarnings("cast")
-    public void xtestRecursiveLeftGCDSimpleWeyl() {
+    public void xtestRecursiveLeftGCDPrimitiveWeyl() {
         String[] vars = new String[] { "a", "b" };
         BigQuaternionRing cf = new BigQuaternionRing();
         //GenSolvablePolynomialRing<BigQuaternion> qfac;
@@ -261,7 +264,7 @@ public class GCDSimpleQuatTest extends TestCase {
         rfac = (RecSolvablePolynomialRing<BigQuaternion>) qfac.recursive(1);
         System.out.println("rfac = " + rfac.toScript());
 
-        GreatestCommonDivisorAbstract<BigQuaternion> fd = new GreatestCommonDivisorSimple<BigQuaternion>(cf);
+        GreatestCommonDivisorAbstract<BigQuaternion> fd = new GreatestCommonDivisorPrimitive<BigQuaternion>(cf);
         System.out.println("fd = " + fd);
 
         //kl = 3;
@@ -317,7 +320,7 @@ public class GCDSimpleQuatTest extends TestCase {
      * Test 3 vars arbitrary recursive gcd simple.
      */
     @SuppressWarnings("cast")
-    public void testArbitrary3RecursiveGCDSimple() {
+    public void testArbitrary3RecursiveGCDPrimitive() {
         String[] cvars = new String[] { "a", "b" };
         String[] vars = new String[] { "c" };
         BigQuaternionRing cf = new BigQuaternionRing();
@@ -334,6 +337,10 @@ public class GCDSimpleQuatTest extends TestCase {
         ar0 = rfac.random(kl, ll, el + 1, q);
         br0 = rfac.random(kl, ll, el, q);
         cr = rfac.random(kl, ll, el, q);
+
+        //ar0 = rfac.parse(" ");
+        //br0 = rfac.parse(" ");
+        //cr  = rfac.parse(" ");
 
         //cr = (RecSolvablePolynomial<BigQuaternion>) fd.recursivePrimitivePart(cr).abs();
         //cr = (RecSolvablePolynomial<BigQuaternion>) cr.monic();
@@ -355,15 +362,15 @@ public class GCDSimpleQuatTest extends TestCase {
         System.out.println("dr = " + dr);
 
         er = FDUtil.<BigQuaternion> recursiveSparsePseudoRemainder(dr, cr);
-        //System.out.println("er = " + er);
+        System.out.println("er = " + er);
         assertTrue("c | gcd(ac,bc): " + er, er.isZERO());
 
         er = FDUtil.<BigQuaternion> recursiveSparsePseudoRemainder(ar, dr);
-        //System.out.println("er = " + er);
+        System.out.println("er = " + er);
         assertTrue("gcd(ac,bc) | ac: " + er, er.isZERO());
 
         er = FDUtil.<BigQuaternion> recursiveSparsePseudoRemainder(br, dr);
-        //System.out.println("er = " + er);
+        System.out.println("er = " + er);
         assertTrue("gcd(ac,bc) | bc: " + er, er.isZERO());
     }
 
