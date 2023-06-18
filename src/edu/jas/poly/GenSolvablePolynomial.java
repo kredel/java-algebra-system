@@ -761,17 +761,12 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
         }
         C lc = leadingBaseCoefficient();
         if (!lc.isUnit()) {
-            return (GenSolvablePolynomial<C>) this.abs();
+            //System.out.println("lc = "+lc);
+            return this;
+            //return (GenSolvablePolynomial<C>) this.abs();
         }
-        try {
-            C lm = lc.inverse();
-            //System.out.println("lm = "+lm);
-            return (GenSolvablePolynomial<C>) multiplyLeft(lm).abs();
-        } catch (NotInvertibleException e) {
-            logger.info("monic not invertible {}", lc);
-            //e.printStackTrace();
-        }
-        return this;
+        C lm = lc.inverse();
+        return (GenSolvablePolynomial<C>) multiplyLeft(lm); //.abs();
     }
 
 
@@ -780,6 +775,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
      * leadingCoefficient is not invertible returns this abs value.
      * @return ldcf(this)**(-1) * this.
      */
+    //@Override
     public GenSolvablePolynomial<C> leftMonic() {
         return monic();
     }
@@ -797,17 +793,12 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
         }
         C lc = leadingBaseCoefficient();
         if (!lc.isUnit()) {
-            return (GenSolvablePolynomial<C>) this.abs();
-        }
-        try {
-            C lm = lc.inverse();
             //System.out.println("lm = "+lm);
-            return (GenSolvablePolynomial<C>) multiply(lm).abs();
-        } catch (NotInvertibleException e) {
-            logger.info("monic not invertible {}", lc);
-            //e.printStackTrace();
+            return this;
+            //return (GenSolvablePolynomial<C>) this.abs();
         }
-        return this;
+        C lm = lc.inverse();
+        return (GenSolvablePolynomial<C>) multiply(lm); //.abs();
     }
 
 

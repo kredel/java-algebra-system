@@ -2108,9 +2108,9 @@ public class GenPolynomial<C extends RingElem<C>>
         C g = q.leadingBaseCoefficient();
         if (g.isUnit()) {
             C h = g.inverse();
-            q = q.multiply(h);
-            c1 = c1.multiply(h);
-            c2 = c2.multiply(h);
+            q = q.multiplyLeft(h);
+            c1 = c1.multiplyLeft(h);
+            c2 = c2.multiplyLeft(h);
         }
         //assert ( ((c1.multiply(this)).sum( c2.multiply(S)).equals(q) )); 
         ret[0] = q;
@@ -2163,8 +2163,8 @@ public class GenPolynomial<C extends RingElem<C>>
         C g = q.leadingBaseCoefficient();
         if (g.isUnit()) {
             C h = g.inverse();
-            q = q.multiply(h);
-            c1 = c1.multiply(h);
+            q = q.multiplyLeft(h);
+            c1 = c1.multiplyLeft(h);
         }
         //assert ( ((c1.multiply(this)).remainder(S).equals(q) )); 
         ret[0] = q;
