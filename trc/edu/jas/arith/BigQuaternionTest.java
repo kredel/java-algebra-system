@@ -246,6 +246,50 @@ public class BigQuaternionTest extends TestCase {
 
 
     /**
+     * Test division.
+     */
+    public void testDivision() {
+        assertTrue("fac is field::", fac.isField());
+        a = fac.random(10);
+        b = fac.random(10);
+        if (b.isZERO()) {
+            b = fac.getONE();
+        }
+        //System.out.println("a = " + a);
+        //System.out.println("b = " + b);
+
+        c = a.remainder(b);
+        assertTrue("rem(a,b) == 0:", c.isZERO());
+        c = a.leftRemainder(b);
+        assertTrue("left rem(a,b) == 0:", c.isZERO());
+        c = a.rightRemainder(b);
+        assertTrue("right rem(a,b) == 0:", c.isZERO());
+
+        c = a.divide(b);
+        //System.out.println("c = " + c);
+        d = c.multiply(b);
+        //System.out.println("d = " + d);
+        assertEquals("div(a,b)*b == a:", d, a);
+
+        c = a.leftDivide(b);
+        //System.out.println("c = " + c);
+        d = c.multiplyLeft(b);
+        //System.out.println("d = " + d);
+        //d = b.multiply(c);
+        //System.out.println("d = " + d);
+        assertEquals("left div(a,b)*b == a:", d, a);
+
+        c = a.rightDivide(b);
+        //System.out.println("c = " + c);
+        d = c.multiply(b);
+        //System.out.println("d = " + d);
+        //d = b.multiply(c);
+        //System.out.println("d = " + d);
+        assertEquals("right div(a,b)*b == a:", d, a);
+    }
+
+
+    /**
      * Test distributive law.
      */
     public void testDistributive() {

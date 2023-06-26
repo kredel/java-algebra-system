@@ -770,11 +770,11 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
 
 
     /**
-     * BigQuaternion remainder.
+     * BigQuaternion right remainder.
      * @param S BigQuaternion.
      * @return 0.
      */
-    public BigQuaternion remainder(BigQuaternion S) {
+    public BigQuaternion rightRemainder(BigQuaternion S) {
         if (S.isZERO()) {
             throw new ArithmeticException("division by zero");
         }
@@ -784,6 +784,36 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
             BigQuaternionInteger c = new BigQuaternionInteger(ring, this);
             BigQuaternionInteger d = new BigQuaternionInteger(ring, S);
             return c.rightRemainder(d);
+        }
+        return ring.getZERO();
+    }
+
+
+    /**
+     * BigQuaternion (right) remainder.
+     * @param S BigQuaternion.
+     * @return 0.
+     */
+    public BigQuaternion remainder(BigQuaternion S) {
+        return rightRemainder(S);
+    }
+
+
+    /**
+     * BigQuaternion left remainder.
+     * @param S BigQuaternion.
+     * @return 0.
+     */
+    public BigQuaternion leftRemainder(BigQuaternion S) {
+        if (S.isZERO()) {
+            throw new ArithmeticException("division by zero");
+        }
+        if (ring.integral) {
+            //System.out.println(
+            //       "*** entier right remainder(" + this + ", " + S + "): " + ring + " ***");
+            BigQuaternionInteger c = new BigQuaternionInteger(ring, this);
+            BigQuaternionInteger d = new BigQuaternionInteger(ring, S);
+            return c.leftRemainder(d);
         }
         return ring.getZERO();
     }
@@ -815,7 +845,7 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
     /**
      * BigQuaternion right divide.
      * @param b BigQuaternion.
-     * @return this * b**(-1).
+     * @return q = this * b**(-1), such that q * b = this.
      */
     @Override
     public BigQuaternion rightDivide(BigQuaternion b) {
@@ -832,7 +862,7 @@ public /*final*/ class BigQuaternion implements StarRingElem<BigQuaternion>, Gcd
     /**
      * BigQuaternion left divide.
      * @param b BigQuaternion.
-     * @return b**(-1) * this.
+     * @return q = b**(-1) * this, such that b * q = this.
      */
     @Override
     public BigQuaternion leftDivide(BigQuaternion b) {
