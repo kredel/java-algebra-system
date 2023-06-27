@@ -1693,6 +1693,25 @@ public class GenPolynomial<C extends RingElem<C>>
 
 
     /**
+     * GenPolynomial monic, i.e. leadingCoefficient == 1. If leadingCoefficient
+     * is not invertible returns this unmodified.
+     * @return monic(this).
+     */
+    public GenPolynomial<C> monicRight() {
+        if (this.isZERO()) {
+            return this;
+        }
+        C lc = leadingBaseCoefficient();
+        if (!lc.isUnit()) {
+            //System.out.println("lc = "+lc);
+            return this;
+        }
+        C lm = lc.inverse();
+        return multiply(lm);
+    }
+
+
+    /**
      * GenPolynomial multiplication. Product with ring element and exponent
      * vector.
      * @param s coefficient.
@@ -2206,6 +2225,34 @@ public class GenPolynomial<C extends RingElem<C>>
             throw new NotInvertibleException("element not invertible, divisible by modul");
         }
         return b;
+    }
+
+
+    /**
+     * GenPolynomial greatest common divisor. Only for univariate polynomials
+     * over fields.
+     * @param S GenPolynomial.
+     * @return right gcd(this,S).
+     */
+    public GenPolynomial<C> rightGcd(GenPolynomial<C> S) {
+        if (S == null || S.isZERO()) {
+            return this;
+        }
+        if (this.isZERO()) {
+            return S;
+        }
+        if (ring.nvar != 1) {
+            throw new IllegalArgumentException("not univariate polynomials" + ring);
+        }
+        GenPolynomial<C> x;
+        GenPolynomial<C> q = this;
+        GenPolynomial<C> r = S;
+        while (!r.isZERO()) {
+            x = q.rightRemainder(r);
+            q = r;
+            r = x;
+        }
+        return q.monicRight(); // normalize
     }
 
 
