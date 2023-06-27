@@ -1489,6 +1489,8 @@ class BigRationalUniqueIterator implements Iterator<BigRational> {
      * @return next rational.
      */
     public synchronized BigRational next() {
+        // TODO: use curr = BigRational.reduction(d, n);
+        // with curr.d == d to avoid unique
         BigRational r = ratit.next();
         while (unique.contains(r)) {
             //System.out.println("duplicate " + r);
