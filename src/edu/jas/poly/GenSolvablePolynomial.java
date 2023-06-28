@@ -880,7 +880,7 @@ public class GenSolvablePolynomial<C extends RingElem<C>> extends GenPolynomial<
                 break;
             }
         }
-        System.out.println("(left)QR: q = " + q + ", r = " + r);
+        //System.out.println("(left)QR: q = " + q + ", r = " + r);
         GenSolvablePolynomial<C>[] ret = new GenSolvablePolynomial[2];
         ret[0] = q;
         ret[1] = r;

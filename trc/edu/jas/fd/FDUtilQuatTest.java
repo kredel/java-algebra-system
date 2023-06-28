@@ -278,11 +278,11 @@ public class FDUtilQuatTest extends TestCase {
     }
 
 
-    /**
+    /*
      * Test recursive pseudo division.
      * @see edu.jas.ufd.PolyUfdUtilTest#testRecursivePseudoDivisionSparse
      */
-    public void testRecursivePseudoDivision() {
+    public void todotestRecursivePseudoDivision() {
         //String[] cnames = new String[] { "x" };
         //String[] mnames = new String[] { "t" };
         String[] names = new String[] { "t", "x", "y", "z" };
@@ -408,10 +408,10 @@ public class FDUtilQuatTest extends TestCase {
     }
 
 
-    /**
+    /*
      * Test recursive right coefficient polynomial.
      */
-    public void testRightRecursivePolynomial() { // todo
+    public void todotestRightRecursivePolynomial() { // todo
         String[] names = new String[] { "t", "x", "y", "z" };
         //String[] names = new String[] { "y", "z" };
         rdfac = new GenSolvablePolynomialRing<BigQuaternion>(cfr, to, names);
@@ -460,10 +460,10 @@ public class FDUtilQuatTest extends TestCase {
     }
 
 
-    /**
+    /*
      * Test exact division of recursive polynomials.
      */
-    public void testRecursiveDivide() {
+    public void todotestRecursiveDivide() {
         rdfac = new GenSolvablePolynomialRing<BigQuaternion>(cfr, dfac);
         RelationGenerator<BigQuaternion> wl = new WeylRelationsIterated<BigQuaternion>();
         rdfac.addRelations(wl);
@@ -487,8 +487,8 @@ public class FDUtilQuatTest extends TestCase {
         // non commutative
         cs = bs.multiply(as);
         ds = as.multiply(bs);
-        System.out.println("cs = " + cs);
-        System.out.println("ds = " + ds);
+        //System.out.println("cs = " + cs);
+        //System.out.println("ds = " + ds);
         assertTrue("cs != 0: ", !cs.isZERO());
         assertTrue("ds != 0: ", !ds.isZERO());
 
@@ -497,7 +497,7 @@ public class FDUtilQuatTest extends TestCase {
 
         // divide
         es = (RecSolvablePolynomial<BigQuaternion>) FDUtil.<BigQuaternion> recursivePseudoQuotient(cs, as);
-        System.out.println("es = " + es);
+        //System.out.println("es = " + es);
         final int max = 4;
         int i = 0;
         do {

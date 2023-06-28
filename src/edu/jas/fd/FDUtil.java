@@ -615,11 +615,9 @@ public class FDUtil {
         if (D.isZERO()) {
             return true;
         }
-        if (true) {
-            System.out.println("Pa = " + Pa);
-            System.out.println("Rb = " + Rb);
-            logger.info("not right QR: Pa-Rb = {}", D);
-        }
+        System.out.println("Pa = " + Pa);
+        System.out.println("Rb = " + Rb);
+        logger.info("not right QR: Pa-Rb = {}", D);
         return false;
     }
 
@@ -872,26 +870,26 @@ public class FDUtil {
         }
         if (!(P instanceof RecSolvablePolynomial)) {
             //return FDUtil.<C> recursiveDivide(P,s);
-            System.out.println("recRightDivide: !RecSolvablePolynomial " + P.ring.toScript());
+            System.out.println("recRightDivide: not a RecSolvablePolynomial " + P.ring.toScript());
         }
         RecSolvablePolynomialRing<C> rfac = (RecSolvablePolynomialRing<C>) P.ring;
         if (rfac.coeffTable.isEmpty()) {
             //return FDUtil.<C> recursiveDivide(P,s);
-            System.out.println("recRightDivide: rfac.coeffTable.isEmpty()");
+            //System.out.println("recRightDivide: rfac.coeffTable.isEmpty()");
         }
         RecSolvablePolynomial<C> onep = rfac.getONE();
         //ExpVector zero = rfac.evzero;
         RecSolvablePolynomial<C> q = rfac.getZERO();
         RecSolvablePolynomial<C> r;
         RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) P;
-        System.out.println("recRightDivide: p = " + p + ", s = " + s);
+        //System.out.println("recRightDivide: p = " + p + ", s = " + s);
         while (!p.isZERO()) {
             Map.Entry<ExpVector, GenPolynomial<C>> m1 = p.leadingMonomial();
             GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) m1.getValue();
             ExpVector f = m1.getKey();
             GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.rightDivide(s); // s * c = a
             //GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.leftDivide(s); // c * s = a
-            System.out.println("recRightDivide: " + s + " * " + c + " = " + a);
+            //System.out.println("recRightDivide: " + s + " * " + c + " = " + a);
             if (c.isZERO()) {
                 //logger.info("something is wrong: c is zero, a = {}, s = {}", a, s);
                 throw new RuntimeException("something is wrong: c is zero, a = " + a + ", s = " + s);
@@ -997,22 +995,22 @@ public class FDUtil {
         }
         if (!(P instanceof RecSolvablePolynomial)) {
             //return FDUtil.<C> recursiveDivide(P,s);
-            System.out.println("recLeftDivide: not RecSolvablePolynomial");
+            System.out.println("recLeftDivide: not a RecSolvablePolynomial " + P.ring);
         }
         RecSolvablePolynomialRing<C> rfac = (RecSolvablePolynomialRing<C>) P.ring;
         if (rfac.coeffTable.isEmpty()) {
             //return FDUtil.<C> recursiveDivide(P,s);
-            System.out.println("recLeftDivide: rfac.coeffTable.isEmpty()");
+            //System.out.println("recLeftDivide: rfac.coeffTable.isEmpty()");
         }
         GenSolvablePolynomial<GenPolynomial<C>> p = P.ring.getZERO().copy();
-        System.out.println("recLeftDivide: P = " + P + ", s = " + s + ", p = " + p);
+        //System.out.println("recLeftDivide: P = " + P + ", s = " + s + ", p = " + p);
         for (Map.Entry<ExpVector, GenPolynomial<C>> m1 : P.getMap().entrySet()) {
             GenSolvablePolynomial<C> c1 = (GenSolvablePolynomial<C>) m1.getValue();
             ExpVector e1 = m1.getKey();
             GenPolynomial<C> c = FDUtil.<C> basePseudoLeftDivide(c1, s);
-            System.out.println("recLeftDivide: c = " + c);
+            //System.out.println("recLeftDivide: c = " + c);
             if (!c.isZERO()) {
-                System.out.println("recLeftDivide: e1 = " + e1);
+                //System.out.println("recLeftDivide: e1 = " + e1);
                 p.doPutToMap(e1, c);
             } else {
                 System.out.println("recLeftDivide: c * s = " + c.multiply(s));
@@ -1038,7 +1036,7 @@ public class FDUtil {
      * @return Q with P = Q * s.
      */
     @SuppressWarnings({ "unchecked", "cast" })
-    public static <C extends GcdRingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> experimentalRecursiveLeftDivide(
+    static <C extends GcdRingElem<C>> GenSolvablePolynomial<GenPolynomial<C>> experimentalRecursiveLeftDivide(
                     GenSolvablePolynomial<GenPolynomial<C>> P, GenSolvablePolynomial<C> s) {
         if (s == null || s.isZERO()) {
             throw new ArithmeticException("division by zero " + P + ", " + s);
@@ -1051,12 +1049,12 @@ public class FDUtil {
         }
         if (!(P instanceof RecSolvablePolynomial)) {
             //return FDUtil.<C> recursiveDivide(P,s);
-            System.out.println("not RecSolvablePolynomial");
+            System.out.println("not a RecSolvablePolynomial " + P.ring);
         }
         RecSolvablePolynomialRing<C> rfac = (RecSolvablePolynomialRing<C>) P.ring;
         if (rfac.coeffTable.isEmpty()) {
             //return FDUtil.<C> recursiveDivide(P,s);
-            System.out.println("rfac.coeffTable.isEmpty()");
+            //System.out.println("rfac.coeffTable.isEmpty()");
         }
         RecSolvablePolynomial<C> onep = rfac.getONE();
         //ExpVector zero = rfac.evzero;
@@ -1064,15 +1062,15 @@ public class FDUtil {
         RecSolvablePolynomial<C> r, Pp;
         RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) P;
         //RecSolvablePolynomial<C> p = (RecSolvablePolynomial<C>) P.rightRecursivePolynomial();
-        System.out.println("recLeftDivide: P        = " + P + ", s = " + s);
-        System.out.println("recLeftDivide: p        = " + p);
+        //System.out.println("recLeftDivide: P        = " + P + ", s = " + s);
+        //System.out.println("recLeftDivide: p        = " + p);
         Pp = p;
         while (!p.isZERO()) {
             ExpVector f = p.leadingExpVector();
             GenSolvablePolynomial<C> a = (GenSolvablePolynomial<C>) p.leadingBaseCoefficient();
             GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.divide(s); // c * s = a
             ///GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) a.rightDivide(s); // s * c = a
-            System.out.println("recLeftDivide: c * s = a: " + c + " * " + s + " = " + c.multiply(s) + " = " + a + ", c*s-a = " + c.multiply(s).subtract(a));
+            //System.out.println("recLeftDivide: c * s = a: " + c + " * " + s + " = " + c.multiply(s) + " = " + a + ", c*s-a = " + c.multiply(s).subtract(a));
             if (c.isZERO()) {
                 throw new RuntimeException("something is wrong: c is zero, a = " + a + ", s = " + s);
             }
@@ -1113,7 +1111,7 @@ public class FDUtil {
         }
         //System.out.println("recLeftDivide: q        = " + q);
         //q = (RecSolvablePolynomial<C>) q.evalAsRightRecursivePolynomial();
-        System.out.println("recLeftDivide: q = " + q);
+        //System.out.println("recLeftDivide: q = " + q);
         return q;
     }
 
