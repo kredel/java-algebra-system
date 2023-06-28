@@ -43,7 +43,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
 
 
     /**
-     * Engine for syzygy computation.
+     * Engine for syzygy computation, mainly for Ore conditions.
      */
     final SolvableSyzygyAbstract<C> syz;
 
@@ -375,8 +375,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             if (d == null) {
                 d = cs;
             } else {
-                d = rightGcd(d, cs); // go to recursion
-                ///d = leftGcd(d, cs); // go to recursion
+                //d = rightGcd(d, cs); // go to recursion
+                d = leftGcd(d, cs); // go to recursion
                 logger.info("recCont: cs = {}, d = {}", cs, d);
             }
             if (d.isONE()) {
@@ -405,7 +405,8 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             return P;
         }
         GenSolvablePolynomial<GenPolynomial<C>> pp;
-        pp = FDUtil.<C> recursiveRightDivide(P, d);
+        //pp = FDUtil.<C> recursiveRightDivide(P, d);
+        pp = FDUtil.<C> recursiveLeftDivide(P, d);
         if (debug) { // not checkable
             if (!P.equals(pp.multiplyLeft(d))) {
                 System.out.println("ppart, P         = " + P);
@@ -504,8 +505,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         }
         GenSolvablePolynomial<C> Pd = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(dfac, P);
         GenSolvablePolynomial<C> Sd = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(dfac, S);
+        // left gcd
         GenSolvablePolynomial<C> Dd = leftGcd(Pd, Sd);
-        // convert to recursive
+        // convert back to recursive
         GenSolvablePolynomial<GenPolynomial<C>> C = (GenSolvablePolynomial<GenPolynomial<C>>) PolyUtil
                         .<C> recursive(rfac, Dd);
         return C;
@@ -695,16 +697,17 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (a == null || a.isZERO()) {
             return a;
         }
-        return (GenSolvablePolynomial<C>) a.divide(b);
+        return (GenSolvablePolynomial<C>) a.leftDivideCoeff(b);
     }
 
 
-    /*
+    /**
      * GenSolvablePolynomial right division. Indirection to GenSolvablePolynomial
      * method.
      * @param a GenSolvablePolynomial.
      * @param b coefficient.
      * @return a' = a/b with a = b*a'.
+     */
     public GenSolvablePolynomial<C> rightDivide(GenSolvablePolynomial<C> a, C b) {
         if (b == null || b.isZERO()) {
             throw new IllegalArgumentException("division by zero");
@@ -713,16 +716,15 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (a == null || a.isZERO()) {
             return a;
         }
-        return (GenSolvablePolynomial<C>) a.rightDivide(b);
+        return (GenSolvablePolynomial<C>) a.rightDivideCoeff(b);
     }
-     */
 
 
     /**
      * Coefficient greatest common divisor. Indirection to coefficient method.
      * @param a coefficient.
      * @param b coefficient.
-     * @return gcd(a,b) with a = a'*gcd(a,b) and b = b'*gcd(a,b).
+     * @return gcd(a,b) with a = gcd(a,b)*a' and b = gcd(a,b)*b'.
      */
     public C gcd(C a, C b) {
         if (b == null || b.isZERO()) {
@@ -732,6 +734,17 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             return b;
         }
         return a.gcd(b);
+    }
+
+
+    /**
+     * Coefficient greatest common divisor. Indirection to coefficient method.
+     * @param a coefficient.
+     * @param b coefficient.
+     * @return gcd(a,b) with a = gcd(a,b)*a' and b = gcd(a,b)*b'.
+     */
+    public C leftGcd(C a, C b) {
+        return gcd(a, b);
     }
 
 
@@ -793,6 +806,23 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
     public GenSolvablePolynomial<C> leftLcm(GenSolvablePolynomial<C> P, GenSolvablePolynomial<C> S) {
         GenSolvablePolynomial<C>[] oc = leftOreCond(P, S);
         return oc[0].multiply(P);
+    }
+
+
+    /**
+     * Coefficient greatest common divisor. Indirection to coefficient method.
+     * @param a coefficient.
+     * @param b coefficient.
+     * @return gcd(a,b) with a = gcd(a,b)*a' and b = gcd(a,b)*b'.
+     */
+    public C rightGcd(C a, C b) {
+        if (b == null || b.isZERO()) {
+            return a;
+        }
+        if (a == null || a.isZERO()) {
+            return b;
+        }
+        return a.gcd(b); // TODO
     }
 
 

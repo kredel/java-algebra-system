@@ -61,6 +61,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             throw new IllegalArgumentException(this.getClass().getName() + " no univariate polynomial");
         }
         boolean field = P.ring.coFac.isField();
+        System.out.println("baseGcd: field = " + field);
         long e = P.degree(0);
         long f = S.degree(0);
         GenSolvablePolynomial<C> q;
@@ -88,9 +89,9 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             C b = leftBaseContent(q);
             r = divide(r, a); // indirection
             q = divide(q, b); // indirection
-            c = gcd(a, b); // indirection
+            c = leftGcd(a, b); // indirection
         }
-        //System.out.println("baseCont: gcd(cont) = " + b);
+        System.out.println("baseCont: gcd(cont) = " + c);
         if (r.isONE()) {
             return r.multiplyLeft(c);
         }
@@ -100,6 +101,7 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         GenSolvablePolynomial<C> x;
         logger.info("baseGCD: q = {}", q);
         logger.info("baseGCD: r = {}", r);
+        System.out.println("baseGcd: rem = " + r);
         while (!r.isZERO()) {
             x = FDUtil.<C> leftBaseSparsePseudoRemainder(q, r);
             q = r;
@@ -108,13 +110,14 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             } else {
                 r = x;
             }
+            System.out.println("baseGcd: rem = " + r);
             logger.info("baseGCD_w: q = {}", q);
             logger.info("baseGCD_w: r = {}", r);
         }
+        System.out.println("baseGcd: quot = " + q);
         q = leftBasePrimitivePart(q);
-        //q = rightBasePrimitivePart(q);
         logger.info("baseGCD: pp(q) = {}", q);
-        return (GenSolvablePolynomial<C>) (q.multiply(c)).abs();
+        return (GenSolvablePolynomial<C>) (q.multiplyLeft(c)).abs();
     }
 
 
@@ -160,18 +163,18 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         } else {
             r = (GenSolvablePolynomial<C>) r.abs();
             q = (GenSolvablePolynomial<C>) q.abs();
-            C a = leftBaseContent(r);
-            C b = leftBaseContent(q);
-            r = divide(r, a); // indirection
-            q = divide(q, b); // indirection
-            c = gcd(a, b); // indirection
+            C a = rightBaseContent(r);
+            C b = rightBaseContent(q);
+            r = rightDivide(r, a); // indirection
+            q = rightDivide(q, b); // indirection
+            c = rightGcd(a, b); // indirection
         }
         //System.out.println("baseCont: gcd(cont) = " + b);
         if (r.isONE()) {
-            return r.multiply(c);
+            return r.multiplyLeft(c);
         }
         if (q.isONE()) {
-            return q.multiply(c);
+            return q.multiplyLeft(c);
         }
         GenSolvablePolynomial<C> x;
         //System.out.println("baseGCD: q = " + q);
@@ -187,9 +190,9 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             //System.out.println("baseGCD: q = " + q);
             //System.out.println("baseGCD: r = " + r);
         }
-        ///q = rightBasePrimitivePart(q);
-        q = leftBasePrimitivePart(q);
-        return (GenSolvablePolynomial<C>) (q.multiplyLeft(c)).abs();
+        q = rightBasePrimitivePart(q);
+        ///q = leftBasePrimitivePart(q);
+        return (GenSolvablePolynomial<C>) (q.multiply(c)).abs();
     }
 
 
@@ -213,7 +216,10 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
         if (P.ring.nvar > 1) {
             throw new IllegalArgumentException("no univariate polynomial");
         }
-        boolean field = P.leadingBaseCoefficient().ring.coFac.isField();
+        //boolean field = P.leadingBaseCoefficient().ring.coFac.isField();
+        //boolean field = P.leadingBaseCoefficient().ring.isField();
+        boolean field = P.ring.coFac.isField();
+        System.out.println("recursiveUnivGcd: field = " + field);
         long e = P.degree(0);
         long f = S.degree(0);
         GenSolvablePolynomial<GenPolynomial<C>> q, r, x, qs, rs, qp, rp;
@@ -243,88 +249,88 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             r = (GenSolvablePolynomial<GenPolynomial<C>>) r.abs();
             q = (GenSolvablePolynomial<GenPolynomial<C>>) q.abs();
         }
-        GenSolvablePolynomial<C> a = rightRecursiveContent(r);
-        ///rs = FDUtil.<C> recursiveDivideRightEval(r, a);  
-        rs = FDUtil.<C> recursiveLeftDivide(r, a); 
-        //rs = FDUtil.<C> recursiveRightDivide(r, a);
-        if (debug) {
-            logger.info("recCont a = {}, r = {}", a, r);
-            logger.info("recCont r/a = {}, r%a = {}", rs, r.subtract(rs.multiply(a)));
-            if (!r.equals(rs.multiply(a))) {
-                if (!rs.multiplyLeft(a).equals(r)) {
-                    System.out.println("recGcd, r         = " + r);
-                    System.out.println("recGcd, cont(r)   = " + a);
-                    System.out.println("recGcd, pp(r)     = " + rs);
-                    System.out.println("recGcd, pp(r)c(r) = " + rs.multiply(a));
-                    System.out.println("recGcd, c(r)pp(r) = " + rs.multiplyLeft(a));
-                    throw new RuntimeException("recGcd, pp: not divisible");
-                }
-            }
+        GenSolvablePolynomial<C> a = leftRecursiveContent(r);
+        System.out.println("recursiveUnivGcd: a = " + a);
+        rs = FDUtil.<C> recursiveLeftDivide(r, a);
+        System.out.println("recursiveUnivGcd: rs = " + rs);
+        System.out.println("recursiveUnivGcd: r = " + r + ", rs * a = " + rs.multiply(a));
+        System.out.println("recursiveUnivGcd: r = " + r + ", a * rs = " + rs.multiplyLeft(a));
+        //logger.info("recCont a = {}, r = {}", a, r);
+        //logger.info("recCont r/a = {}, r%a = {}", rs, r.subtract(rs.multiply(a)));
+        if (!r.equals(rs.multiply(a))) {
+            System.out.println("recursiveUnivGcd, r         = " + r);
+            System.out.println("recursiveUnivGcd, cont(r)   = " + a);
+            System.out.println("recursiveUnivGcd, pp(r)     = " + rs);
+            System.out.println("recursiveUnivGcd, pp(r)c(r) = " + rs.multiply(a));
+            System.out.println("recursiveUnivGcd, c(r)pp(r) = " + rs.multiplyLeft(a));
+            throw new RuntimeException("recGcd, pp: not divisible");
         }
         r = rs;
-        GenSolvablePolynomial<C> b = rightRecursiveContent(q);
-        ///qs = FDUtil.<C> recursiveDivideRightEval(q, b);  
-        qs = FDUtil.<C> recursiveLeftDivide(q, b); 
+        //GenSolvablePolynomial<C> b = rightRecursiveContent(q);
+        GenSolvablePolynomial<C> b = leftRecursiveContent(q);
+        System.out.println("recursiveUnivGcd: b = " + b);
+        qs = FDUtil.<C> recursiveLeftDivide(q, b);
+        System.out.println("recursiveUnivGcd: qs = " + qs);
+        System.out.println("recursiveUnivGcd: q = " + q + ", qs * b = " + qs.multiply(b));
+        System.out.println("recursiveUnivGcd: q = " + q + ", b * qs = " + qs.multiplyLeft(b));
         //qs = FDUtil.<C> recursiveRightDivide(q, b);
-        if (debug) {
-            logger.info("recCont b = {}, q = {}", b, q);
-            logger.info("recCont q/b = {}, q%b = {}", qs, q.subtract(qs.multiply(b)));
-            if (!q.equals(qs.multiply(b))) {
-                if (!qs.multiplyLeft(b).equals(q)) {
-                    System.out.println("recGcd, q         = " + q);
-                    System.out.println("recGcd, cont(q)   = " + b);
-                    System.out.println("recGcd, pp(q)     = " + qs);
-                    System.out.println("recGcd, pp(q)c(q) = " + qs.multiply(b));
-                    System.out.println("recGcd, c(q)pp(q) = " + qs.multiplyLeft(b));
-                    throw new RuntimeException("recGcd, pp: not divisible");
-                }
-            }
+        logger.info("recCont b = {}, q = {}", b, q);
+        logger.info("recCont q/b = {}, q%b = {}", qs, q.subtract(qs.multiply(b)));
+        if (!q.equals(qs.multiply(b))) {
+            System.out.println("recursiveUnivGcd, q         = " + q);
+            System.out.println("recursiveUnivGcd, cont(q)   = " + b);
+            System.out.println("recursiveUnivGcd, pp(q)     = " + qs);
+            System.out.println("recursiveUnivGcd, pp(q)c(q) = " + qs.multiply(b));
+            System.out.println("recursiveUnivGcd, c(q)pp(q) = " + qs.multiplyLeft(b));
+            throw new RuntimeException("recGcd, pp: not divisible");
         }
         q = qs;
         logger.info("Gcd(content).ring = {}, a = {}, b = {}", a.ring.toScript(), a, b);
-        //no: GenSolvablePolynomial<C> c = leftGcd(a, b); // go to recursion
-        GenSolvablePolynomial<C> c = rightGcd(a, b); // go to recursion
+        GenSolvablePolynomial<C> c = leftGcd(a, b); // go to recursion
+        //GenSolvablePolynomial<C> c = rightGcd(a, b); // go to recursion
         logger.info("Gcd(contents) c = {}, a = {}, b = {}", c, a, b);
         if (r.isONE()) {
-            return r.multiply(c);
+            return r.multiplyLeft(c);
         }
         if (q.isONE()) {
-            return q.multiply(c);
+            return q.multiplyLeft(c);
         }
         if (debug) {
             logger.info("r.ring = {}", r.ring.toScript());
             logger.info("gcd-loop, start: q = {}, r = {}", q, r);
         }
+        System.out.println("recursiveUnivGcd: r = " + r);
         while (!r.isZERO()) {
             x = FDUtil.<C> recursiveSparsePseudoRemainder(q, r);
             q = r;
             if (field) {
                 r = PolyUtil.<C> monic(x);
+                //r = x.leftMonic();
             } else {
                 r = x;
             }
+            System.out.println("recursiveUnivGcd: r = " + r);
             if (debug) {
                 logger.info("gcd-loop, rem: q = {}, r = {}", q, r);
             }
         }
-        if (debug) {
-            logger.info("gcd(div) = {}, rs = {}, qs = {}", q, rs, qs);
-            rp = FDUtil.<C> recursiveSparsePseudoRemainder(rs, q);
-            qp = FDUtil.<C> recursiveSparsePseudoRemainder(qs, q);
-            if (!qp.isZERO() || !rp.isZERO()) {
-                logger.info("gcd(div): rem(r,g) = {}, rem(q,g) = {}", rp, qp);
-                rp = FDUtil.<C> recursivePseudoQuotient(rs, q);
-                qp = FDUtil.<C> recursivePseudoQuotient(qs, q);
-                logger.info("gcd(div): r/g = {}, q/g = {}", rp, qp);
-                throw new RuntimeException("recGcd, div: not divisible");
-            }
+        logger.info("gcd(div) = {}, rs = {}, qs = {}", q, rs, qs);
+        rp = FDUtil.<C> recursiveSparsePseudoRemainder(rs, q);
+        qp = FDUtil.<C> recursiveSparsePseudoRemainder(qs, q);
+        if (!qp.isZERO() || !rp.isZERO()) {
+            logger.info("gcd(div): rem(r,g) = {}, rem(q,g) = {}", rp, qp);
+            rp = FDUtil.<C> recursivePseudoQuotient(rs, q);
+            qp = FDUtil.<C> recursivePseudoQuotient(qs, q);
+            logger.info("gcd(div): r/g = {}, q/g = {}", rp, qp);
+            throw new RuntimeException("recGcd, div: not divisible");
         }
         qp = q;
-        q = rightRecursivePrimitivePart(q);
+        //q = rightRecursivePrimitivePart(q);
+        q = leftRecursivePrimitivePart(q);
         if (!qp.equals(q)) {
             logger.info("gcd(pp) = {}, qp = {}", q, qp);
         }
-        q = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiply(c).abs();
+        q = (GenSolvablePolynomial<GenPolynomial<C>>) q.multiplyLeft(c).abs();
         return q;
     }
 
@@ -382,35 +388,31 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
             q = (GenSolvablePolynomial<GenPolynomial<C>>) q.abs();
         }
         GenSolvablePolynomial<C> a = leftRecursiveContent(r);
-        rs = FDUtil.<C> recursiveRightDivide(r, a);
-        //no: rs = FDUtil.<C> recursiveLeftDivide(r, a);
+        //no: rs = FDUtil.<C> recursiveRightDivide(r, a);
+        rs = FDUtil.<C> recursiveLeftDivide(r, a);
         //no: rs = FDUtil.<C> recursiveRightPseudoQuotient(r, a);
-        if (debug) {
-            logger.info("RI-recCont a = {}, r = {}", a, r);
-            logger.info("RI-recCont r/a = {}, r%a = {}", r, r.subtract(rs.multiplyLeft(a)));
-            if (!r.equals(rs.multiplyLeft(a))) { // Left
-                System.out.println("RI-recGcd, r         = " + r);
-                System.out.println("RI-recGcd, cont(r)   = " + a);
-                System.out.println("RI-recGcd, pp(r)     = " + rs);
-                System.out.println("RI-recGcd, pp(r)c(r) = " + rs.multiply(a));
-                System.out.println("RI-recGcd, c(r)pp(r) = " + rs.multiplyLeft(a));
-                throw new RuntimeException("RI-recGcd, pp: not divisible");
-            }
+        logger.info("RI-recCont a = {}, r = {}", a, r);
+        logger.info("RI-recCont r/a = {}, r%a = {}", r, r.subtract(rs.multiplyLeft(a)));
+        if (!r.equals(rs.multiplyLeft(a))) { // Left
+            System.out.println("RI-recGcd, r         = " + r);
+            System.out.println("RI-recGcd, cont(r)   = " + a);
+            System.out.println("RI-recGcd, pp(r)     = " + rs);
+            System.out.println("RI-recGcd, pp(r)c(r) = " + rs.multiply(a));
+            System.out.println("RI-recGcd, c(r)pp(r) = " + rs.multiplyLeft(a));
+            throw new RuntimeException("RI-recGcd, pp: not divisible");
         }
         r = rs;
         GenSolvablePolynomial<C> b = leftRecursiveContent(q);
         qs = FDUtil.<C> recursiveRightDivide(q, b);
-        if (debug) {
-            logger.info("RI-recCont b = {}, q = {}", b, q);
-            logger.info("RI-recCont q/b = {}, q%b = {}", qs, q.subtract(qs.multiplyLeft(b)));
-            if (!q.equals(qs.multiplyLeft(b))) { // Left
-                System.out.println("RI-recGcd, q         = " + q);
-                System.out.println("RI-recGcd, cont(q)   = " + b);
-                System.out.println("RI-recGcd, pp(q)     = " + qs);
-                System.out.println("RI-recGcd, pp(q)c(q) = " + qs.multiply(b));
-                System.out.println("RI-recGcd, c(q)pp(q) = " + qs.multiplyLeft(b));
-                throw new RuntimeException("RI-recGcd, pp: not divisible");
-            }
+        logger.info("RI-recCont b = {}, q = {}", b, q);
+        logger.info("RI-recCont q/b = {}, q%b = {}", qs, q.subtract(qs.multiplyLeft(b)));
+        if (!q.equals(qs.multiplyLeft(b))) { // Left
+            System.out.println("RI-recGcd, q         = " + q);
+            System.out.println("RI-recGcd, cont(q)   = " + b);
+            System.out.println("RI-recGcd, pp(q)     = " + qs);
+            System.out.println("RI-recGcd, pp(q)c(q) = " + qs.multiply(b));
+            System.out.println("RI-recGcd, c(q)pp(q) = " + qs.multiplyLeft(b));
+            throw new RuntimeException("RI-recGcd, pp: not divisible");
         }
         q = qs;
         //no: GenSolvablePolynomial<C> c = rightGcd(a, b); // go to recursion
@@ -438,18 +440,16 @@ public class GreatestCommonDivisorSimple<C extends GcdRingElem<C>> extends Great
                 logger.info("RI-gcd-loop, rem: q = {}, r = {}", q, r);
             }
         }
-        if (debug) {
-            logger.info("RI-gcd(div) = {}, rs = {}, qs = {}", q, rs, qs);
-            rp = FDUtil.<C> recursiveRightSparsePseudoRemainder(rs, q);
-            qp = FDUtil.<C> recursiveRightSparsePseudoRemainder(qs, q);
-            if (!qp.isZERO() || !rp.isZERO()) {
-                logger.info("RI-gcd(div): rem(r,g) = {}, rem(q,g) = {}", rp, qp);
-                rp = FDUtil.<C> recursivePseudoQuotient(rs, q);
-                qp = FDUtil.<C> recursivePseudoQuotient(qs, q);
-                logger.info("RI-gcd(div): r/g = {}, q/g = {}", rp, qp);
-                //logger.info("gcd(div): rp*g = {},  qp*g = {}", rp.multiply(q), qp.multiply(q));
-                throw new RuntimeException("recGcd, div: not divisible");
-            }
+        logger.info("RI-gcd(div) = {}, rs = {}, qs = {}", q, rs, qs);
+        rp = FDUtil.<C> recursiveRightSparsePseudoRemainder(rs, q);
+        qp = FDUtil.<C> recursiveRightSparsePseudoRemainder(qs, q);
+        if (!qp.isZERO() || !rp.isZERO()) {
+            logger.info("RI-gcd(div): rem(r,g) = {}, rem(q,g) = {}", rp, qp);
+            rp = FDUtil.<C> recursivePseudoQuotient(rs, q);
+            qp = FDUtil.<C> recursivePseudoQuotient(qs, q);
+            logger.info("RI-gcd(div): r/g = {}, q/g = {}", rp, qp);
+            //logger.info("gcd(div): rp*g = {},  qp*g = {}", rp.multiply(q), qp.multiply(q));
+            throw new RuntimeException("recGcd, div: not divisible");
         }
         qp = q;
         logger.info("RI-recGcd(P,S) pre pp okay: qp = {}", qp);
