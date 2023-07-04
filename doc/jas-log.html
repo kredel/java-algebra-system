@@ -23,23 +23,38 @@
 
 <dl>
 
-<dt>2023, May </dt> <!-- 2.7.190 -->
+<dt>2023, July </dt> <!-- 2.7.200 -->
 <dd>
 
+ More tests with <code>BigQuaternion</code> polynomial coefficients.
+ Fixed a left-right bug in solvable polynomials <code>monic()</code>
+ method. (left and right monic must be distinguished although the
+ inverse of the leading base coefficient is a left and right inverse.)
+ Fix to <code>leftMonic()</code> where required.
+
+ Adjust polynomial <code>reverse()</code> method with using
+ <code>conjugate()</code> on coefficients. More tests for Ore
+ conditions for polynomials with quaternion coefficients.
+
+ Fixed default implementations in interface <code>MonoidElem</code> for
+ left, right and two-sided operations by throwing exceptions when not
+ correctly overriden.
+
+</dd>
+
+<dt>2023, May </dt> <!-- 2.7.190 -->
+<dd>
  This release adds exterior derivations for polynomials and rational
  functions. The weak or strong term order for index lists are now
  selectable. Explicit k-forms and improved random index lists.
-
  More non-commutative unit tests (quotient remainder, Ore conditions,
  common divisors) for solvable polynomials with quaternion
  coefficients.
-
  Exterior algebra provided within Jruby and Jython interfaces.
- Renamed <code>inner*Product</code> to <code>interior*Product</code>
+ Renamed <code>inner*Product()</code> to <code>interior*Product()</code>
  since this seems to be the correct translation.  Remove and cleanup
  unsued experimental code and small bug fixes. Add file with simple
  NCSS report summary.
-
 </dd>
 
 <dt>2023, March </dt> <!-- 2.7.180 -->
@@ -2407,9 +2422,9 @@ Usage: RunGB [seq|par|dist|cli] &lt;file&gt; #procs [machinefile]
 
 <dt>2004, 1, 25</dt>
 <dd>
-Spin model checker:
-Setup Promella description of parallel and distributed GB algorithm.
-Used to verify the safety and liveness properties of the algorithms.
+<a href="https://en.wikipedia.org/wiki/SPIN_model_checker">SPIN model checker:</>
+Setup a Promela description of parallel and distributed GB algorithm.  Used to
+verify the safety and liveness properties of the algorithms.
 </dd>
 
 <dt>2004, 1, 17</dt>
@@ -3026,7 +3041,7 @@ CPU TIME (ms) END
 <p>
 <!-- Created: Sun Jun  4 12:58:30 MEST 2000 -->
 <!-- hhmts start -->
-Last modified: Fri May  5 11:32:42 CEST 2023
+Last modified: Tue Jul  4 09:58:27 CEST 2023
 <!-- hhmts end -->
 </p>
 <!--p align="right" >
