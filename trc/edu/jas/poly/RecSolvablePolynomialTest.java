@@ -254,7 +254,7 @@ public class RecSolvablePolynomialTest extends TestCase {
         d = (RecSolvablePolynomial<BigRational>) a.monic();
         assertTrue("a.monic(): " + d.leadingBaseCoefficient() + ", " + a.leadingBaseCoefficient(),
                         d.leadingBaseCoefficient().isONE() || d.leadingBaseCoefficient()
-                                        .equals(a.leadingBaseCoefficient().abs()));
+                                        .equals(a.leadingBaseCoefficient()));
     }
 
 

@@ -254,7 +254,7 @@ public class RecSolvableWordPolynomialTest extends TestCase {
         d = (RecSolvableWordPolynomial<BigRational>) a.monic();
         assertTrue("a.monic(): " + d.leadingBaseCoefficient() + ", " + a.leadingBaseCoefficient(),
                    d.leadingBaseCoefficient().isONE()
-                   || d.leadingBaseCoefficient().equals(a.leadingBaseCoefficient().abs()));
+                   || d.leadingBaseCoefficient().equals(a.leadingBaseCoefficient()));
     }
 
 
