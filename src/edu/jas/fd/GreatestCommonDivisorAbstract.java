@@ -206,9 +206,9 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             return P;
         }
         if (P.ring.coFac.isField()) { // make monic
-            return P.multiplyLeft(d.inverse()); // avoid the divisions
+            return P.multiply(d.inverse()); // avoid the divisions
         }
-        GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.leftDivideCoeff(d); // leftDivide TODO/done
+        GenSolvablePolynomial<C> pp = (GenSolvablePolynomial<C>) P.rightDivideCoeff(d); // leftDivide TODO/done
         if (debug) {
             GenSolvablePolynomial<C> p = pp.multiplyLeft(d);
             if (!p.equals(P)) {
@@ -254,19 +254,15 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (P instanceof RecSolvablePolynomial) {
             RecSolvablePolynomialRing<C> rfac = (RecSolvablePolynomialRing<C>) P.ring;
             if (!rfac.coeffTable.isEmpty()) {
-                throw new IllegalArgumentException("P is a RecSolvablePolynomial, use recursiveContent()");
+                throw new UnsupportedOperationException("RecSolvablePolynomial with non empty coeffTable");
             }
         }
         if (P.isZERO()) {
             return (GenSolvablePolynomial<C>) P.ring.getZEROCoefficient();
         }
-        if (P.isONE()) {
-            return (GenSolvablePolynomial<C>) P.ring.getONECoefficient();
-        }
         if (P.leadingBaseCoefficient().isONE()) {
             return (GenSolvablePolynomial<C>) P.ring.getONECoefficient();
         }
-        //GenSolvablePolynomial<GenPolynomial<C>> p = P;
         GenSolvablePolynomial<C> d = null;
         for (GenPolynomial<C> cp : P.getMap().values()) {
             GenSolvablePolynomial<C> c = (GenSolvablePolynomial<C>) cp;
@@ -275,6 +271,40 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
             } else {
                 ///d = leftGcd(d, c); // go to recursion
                 d = rightGcd(d, c); // go to recursion
+            }
+            if (d.isONE()) {
+                return d;
+            }
+        }
+        return (GenSolvablePolynomial<C>) d.abs();
+    }
+
+
+    /**
+     * GenSolvablePolynomial left recursive content.
+     * @param P recursive GenSolvablePolynomial.
+     * @return cont(P) with cont(P)*pp(P) = P.
+     */
+    public GenSolvablePolynomial<C> leftRecursiveContent(GenSolvablePolynomial<GenPolynomial<C>> P) {
+        if (P == null) {
+            throw new IllegalArgumentException("P != null");
+        }
+        if (P.isZERO()) {
+            return (GenSolvablePolynomial<C>) P.ring.getZEROCoefficient();
+        }
+        if (P.leadingBaseCoefficient().isONE()) {
+            return (GenSolvablePolynomial<C>) P.ring.getONECoefficient();
+        }
+        GenSolvablePolynomial<C> d = null, cs = null;
+        GenSolvablePolynomial<GenPolynomial<C>> Pr = P; //FDUtil.<C> rightRecursivePolynomial(P);
+        logger.info("recCont: P = {}, left(P) = {}", P, Pr);
+        for (GenPolynomial<C> c : Pr.getMap().values()) {
+            cs = (GenSolvablePolynomial<C>) c;
+            if (d == null) {
+                d = cs;
+            } else {
+                d = leftGcd(d, cs); // go to recursion
+                logger.info("recCont: cs = {}, d = {}", cs, d);
             }
             if (d.isONE()) {
                 return d;
@@ -301,7 +331,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         }
         GenSolvablePolynomial<C> d = null, cs = null, x;
         GenSolvablePolynomial<GenPolynomial<C>> Pr = P.rightRecursivePolynomial();
-        logger.info("RI-recCont: P = {}, right(P) = {}", P, Pr);
+        logger.warn("RI-recCont: P = {}, right(P) = {}", P, Pr);
         for (GenPolynomial<C> c : Pr.getMap().values()) {
             cs = (GenSolvablePolynomial<C>) c;
             if (d == null) {
@@ -316,74 +346,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
                 return d;
             }
         }
-        return (GenSolvablePolynomial<C>) d.abs();
-    }
-
-
-    /**
-     * GenSolvablePolynomial right recursive primitive part.
-     * @param P recursive GenSolvablePolynomial.
-     * @return pp(P) with pp(P)*cont(P) = P.
-     */
-    public GenSolvablePolynomial<GenPolynomial<C>> rightRecursivePrimitivePart(
-                    GenSolvablePolynomial<GenPolynomial<C>> P) {
-        if (P == null) {
-            throw new IllegalArgumentException("P == null");
-        }
-        if (P.isZERO()) {
-            return P;
-        }
-        GenSolvablePolynomial<C> d = rightRecursiveContent(P);
-        if (d.isONE()) {
-            return P;
-        }
-        GenSolvablePolynomial<GenPolynomial<C>> pp;
-        pp = FDUtil.<C> recursiveLeftDivide(P, d); //RightEval
-        if (debug) { // not checkable
-            if (!P.equals(pp.multiply(d))) {
-                System.out.println("RI-ppart, P         = " + P);
-                System.out.println("RI-ppart, cont(P)   = " + d);
-                System.out.println("RI-ppart, pp(P)     = " + pp);
-                System.out.println("RI-ppart, pp(P)c(P) = " + pp.multiply(d));
-                throw new RuntimeException("RI-primitivePart: P != pp(P)*cont(P)");
-            }
-        }
-        return pp;
-    }
-
-
-    /**
-     * GenSolvablePolynomial left recursive content.
-     * @param P recursive GenSolvablePolynomial.
-     * @return cont(P) with cont(P)*pp(P) = P.
-     */
-    public GenSolvablePolynomial<C> leftRecursiveContent(GenSolvablePolynomial<GenPolynomial<C>> P) {
-        if (P == null) {
-            throw new IllegalArgumentException("P != null");
-        }
-        if (P.isZERO()) {
-            return (GenSolvablePolynomial<C>) P.ring.getZEROCoefficient();
-        }
-        if (P.leadingBaseCoefficient().isONE()) {
-            return (GenSolvablePolynomial<C>) P.ring.getONECoefficient();
-        }
-        GenSolvablePolynomial<C> d = null, cs = null;
-        GenSolvablePolynomial<GenPolynomial<C>> Pr = P; //FDUtil.<C> rightRecursivePolynomial(P);
-        logger.info("recCont: P = {}, right(P) = {}", P, Pr);
-        for (GenPolynomial<C> c : Pr.getMap().values()) {
-            cs = (GenSolvablePolynomial<C>) c;
-            if (d == null) {
-                d = cs;
-            } else {
-                //d = rightGcd(d, cs); // go to recursion
-                d = leftGcd(d, cs); // go to recursion
-                logger.info("recCont: cs = {}, d = {}", cs, d);
-            }
-            if (d.isONE()) {
-                return d;
-            }
-        }
-        return (GenSolvablePolynomial<C>) d.abs();
+        return (GenSolvablePolynomial<C>) d.abs();// todo: eval right ?
     }
 
 
@@ -414,6 +377,38 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
                 System.out.println("ppart, pp(P)     = " + pp);
                 System.out.println("ppart, pp(P)c(P) = " + pp.multiplyLeft(d));
                 throw new RuntimeException("primitivePart: P != cont(P)*pp(P)");
+            }
+        }
+        return pp;
+    }
+
+
+    /**
+     * GenSolvablePolynomial right recursive primitive part.
+     * @param P recursive GenSolvablePolynomial.
+     * @return pp(P) with pp(P)*cont(P) = P.
+     */
+    public GenSolvablePolynomial<GenPolynomial<C>> rightRecursivePrimitivePart(
+                    GenSolvablePolynomial<GenPolynomial<C>> P) {
+        if (P == null) {
+            throw new IllegalArgumentException("P == null");
+        }
+        if (P.isZERO()) {
+            return P;
+        }
+        GenSolvablePolynomial<C> d = rightRecursiveContent(P);
+        if (d.isONE()) {
+            return P;
+        }
+        GenSolvablePolynomial<GenPolynomial<C>> pp;
+        pp = FDUtil.<C> recursiveRightDivide(P, d); //RightEval
+        if (debug) { // not checkable
+            if (!P.equals(pp.multiply(d))) {
+                System.out.println("RI-ppart, P         = " + P);
+                System.out.println("RI-ppart, cont(P)   = " + d);
+                System.out.println("RI-ppart, pp(P)     = " + pp);
+                System.out.println("RI-ppart, pp(P)c(P) = " + pp.multiply(d));
+                throw new RuntimeException("RI-primitivePart: P != pp(P)*cont(P)");
             }
         }
         return pp;
@@ -579,58 +574,6 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
 
 
     /**
-     * GenSolvablePolynomial right content.
-     * @param P GenSolvablePolynomial.
-     * @return cont(P) with pp(P)*cont(P) = P.
-     */
-    public GenSolvablePolynomial<C> rightContent(GenSolvablePolynomial<C> P) {
-        if (P == null) {
-            throw new IllegalArgumentException("P == null");
-        }
-        GenSolvablePolynomialRing<C> pfac = P.ring;
-        if (pfac.nvar <= 1) {
-            // baseContent not possible by return type
-            throw new IllegalArgumentException("use baseContent() for univariate polynomials");
-        }
-        GenSolvablePolynomialRing<GenPolynomial<C>> rfac // = (RecSolvablePolynomialRing<C>) 
-                        = pfac.recursive(1);
-
-        GenSolvablePolynomial<GenPolynomial<C>> Pr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac,
-                        P);
-        GenSolvablePolynomial<C> D = rightRecursiveContent(Pr);
-        return D;
-    }
-
-
-    /**
-     * GenSolvablePolynomial right primitive part.
-     * @param P GenSolvablePolynomial.
-     * @return pp(P) with pp(P)*cont(P) = P.
-     */
-    public GenSolvablePolynomial<C> rightPrimitivePart(GenSolvablePolynomial<C> P) {
-        if (P == null) {
-            throw new IllegalArgumentException("P == null");
-        }
-        if (P.isZERO()) {
-            return P;
-        }
-        GenSolvablePolynomialRing<C> pfac = P.ring;
-        if (pfac.nvar <= 1) {
-            return rightBasePrimitivePart(P);
-        }
-        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = /*(RecSolvablePolynomialRing<C>)*/pfac
-                        .recursive(1);
-
-        GenSolvablePolynomial<GenPolynomial<C>> Pr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac,
-                        P);
-        GenSolvablePolynomial<GenPolynomial<C>> PP = rightRecursivePrimitivePart(Pr);
-
-        GenSolvablePolynomial<C> D = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(pfac, PP);
-        return D;
-    }
-
-
-    /**
      * GenSolvablePolynomial left content.
      * @param P GenSolvablePolynomial.
      * @return cont(P) with cont(P)*pp(P) = P.
@@ -676,6 +619,58 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         GenSolvablePolynomial<GenPolynomial<C>> Pr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac,
                         P);
         GenSolvablePolynomial<GenPolynomial<C>> PP = leftRecursivePrimitivePart(Pr);
+
+        GenSolvablePolynomial<C> D = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(pfac, PP);
+        return D;
+    }
+
+
+    /**
+     * GenSolvablePolynomial right content.
+     * @param P GenSolvablePolynomial.
+     * @return cont(P) with pp(P)*cont(P) = P.
+     */
+    public GenSolvablePolynomial<C> rightContent(GenSolvablePolynomial<C> P) {
+        if (P == null) {
+            throw new IllegalArgumentException("P == null");
+        }
+        GenSolvablePolynomialRing<C> pfac = P.ring;
+        if (pfac.nvar <= 1) {
+            // baseContent not possible by return type
+            throw new IllegalArgumentException("use baseContent() for univariate polynomials");
+        }
+        GenSolvablePolynomialRing<GenPolynomial<C>> rfac // = (RecSolvablePolynomialRing<C>) 
+                        = pfac.recursive(1);
+
+        GenSolvablePolynomial<GenPolynomial<C>> Pr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac,
+                        P);
+        GenSolvablePolynomial<C> D = rightRecursiveContent(Pr);
+        return D;
+    }
+
+
+    /**
+     * GenSolvablePolynomial right primitive part.
+     * @param P GenSolvablePolynomial.
+     * @return pp(P) with pp(P)*cont(P) = P.
+     */
+    public GenSolvablePolynomial<C> rightPrimitivePart(GenSolvablePolynomial<C> P) {
+        if (P == null) {
+            throw new IllegalArgumentException("P == null");
+        }
+        if (P.isZERO()) {
+            return P;
+        }
+        GenSolvablePolynomialRing<C> pfac = P.ring;
+        if (pfac.nvar <= 1) {
+            return rightBasePrimitivePart(P);
+        }
+        GenSolvablePolynomialRing<GenPolynomial<C>> rfac = /*(RecSolvablePolynomialRing<C>)*/pfac
+                        .recursive(1);
+
+        GenSolvablePolynomial<GenPolynomial<C>> Pr = (RecSolvablePolynomial<C>) PolyUtil.<C> recursive(rfac,
+                        P);
+        GenSolvablePolynomial<GenPolynomial<C>> PP = rightRecursivePrimitivePart(Pr);
 
         GenSolvablePolynomial<C> D = (GenSolvablePolynomial<C>) PolyUtil.<C> distribute(pfac, PP);
         return D;
@@ -744,7 +739,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
      * @return gcd(a,b) with a = gcd(a,b)*a' and b = gcd(a,b)*b'.
      */
     public C leftGcd(C a, C b) {
-        return gcd(a, b);
+        return a.leftGcd(b);
     }
 
 
@@ -822,7 +817,7 @@ public abstract class GreatestCommonDivisorAbstract<C extends GcdRingElem<C>>
         if (a == null || a.isZERO()) {
             return b;
         }
-        return a.gcd(b); // TODO
+        return a.rightGcd(b); // TODO
     }
 
 
