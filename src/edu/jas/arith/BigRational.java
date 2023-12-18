@@ -1142,20 +1142,57 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
 
 
     /**
+     * {@link java.math.BigInteger} number least common multiple.
+     * 
+     * @param i0
+     * @param i1
+     * @return
+     */
+    private static BigInteger lcm(final BigInteger i0, final BigInteger i1) {
+      if (i0.signum()==0 && i1.signum()==0) {
+        return BigInteger.ZERO;
+      }
+      BigInteger a = i0.abs();
+      BigInteger b = i1.abs();
+      BigInteger gcd = i0.gcd(b);
+      BigInteger lcm = (a.multiply(b)).divide(gcd);
+      return lcm;
+    }
+
+    /**
      * Rational number greatest common divisor.
+     * 
      * @param S BigRational.
      * @return gcd(this,S).
      */
+    @Override
     public BigRational gcd(BigRational S) {
-        if (S == null || S.isZERO()) {
-            return this;
-        }
-        if (this.isZERO()) {
-            return S;
-        }
-        return ONE;
+      if (S == null || S.isZERO()) {
+        return this;
+      }
+      if (this.isZERO()) {
+        return S;
+      }
+      BigInteger p = num.gcd(S.num);
+      BigInteger q = lcm(den, S.den);
+      return new BigRational(p, q);
     }
 
+    /**
+     * Rational number least common multiple.
+     * 
+     * @param S BigRational.
+     * @return lcm(this,S).
+     */
+    public BigRational lcm(BigRational S) {
+      if (S == null || S.isZERO()) {
+        return ZERO;
+      }
+      if (this.isZERO()) {
+        return ZERO;
+      }
+      return new BigRational(lcm(num, S.num), den.gcd(S.den));
+    }
 
     /**
      * BigRational extended greatest common divisor.
