@@ -7,7 +7,7 @@ package edu.jas.structure;
 
 /**
  * Quotient pair interface. Defines selectors for numerator and denominator.
- * @typeparam C base element type
+ * @param <C> base element type
  * @author Heinz Kredel
  */
 public interface QuotPair<C extends RingElem<C>> {

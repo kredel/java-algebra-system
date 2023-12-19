@@ -17,7 +17,7 @@ import edu.jas.structure.RingElem;
 /**
  * Container for a GB and transformation matrices. A container for F, G, calG
  * and calF. Immutable objects.
- * @typeparam C coefficient type
+ * @param <C> coefficient type
  */
 public class ExtendedGB<C extends RingElem<C>> {
 

@@ -11,7 +11,7 @@ import edu.jas.structure.RingElem;
 
 /**
  * Container for a polynomial and its signature.
- * @typeparam <C> coefficient type
+ * @param <C> coefficient type
  */
 public class SigPoly<C extends RingElem<C>> {
 

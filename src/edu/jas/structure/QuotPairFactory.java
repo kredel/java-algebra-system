@@ -8,8 +8,8 @@ package edu.jas.structure;
 /**
  * Quotient pair factory interface. Defines constructors from numerators and
  * denominators.
- * @typeparam C base element type
- * @typeparam D result element type
+ * @param <C> base element type
+ * @param <D> result element type
  * @author Heinz Kredel
  */
 public interface QuotPairFactory<C extends RingElem<C>, D extends RingElem<D>> {
