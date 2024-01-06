@@ -227,10 +227,13 @@ public class PolyUtil {
 
 
     /**
+     * <p>
      * BigInteger from BigRational coefficients. Represent as polynomial with
      * BigInteger coefficients by multiplication with the gcd of the numerators
-     * and the lcm of the denominators of the BigRational coefficients. <br />
+     * and the lcm of the denominators of the BigRational coefficients.  
+     * <p>
      * <b>Author:</b> Axel Kramer
+     * 
      * @param fac result polynomial factory.
      * @param A polynomial with BigRational coefficients to be converted.
      * @return Object[] with 3 entries: [0]=gcd [1]=lcm and [2]=polynomial with
@@ -286,7 +289,8 @@ public class PolyUtil {
     /**
      * BigInteger from BigRational coefficients. Represent as polynomial with
      * BigInteger coefficients by multiplication with the gcd of the numerators
-     * and the lcm of the denominators of the BigRational coefficients. <br />
+     * and the lcm of the denominators of the BigRational coefficients. 
+     * 
      * @param fac result polynomial factory.
      * @param gcd of rational coefficient numerators.
      * @param lcm of rational coefficient denominators.
@@ -435,9 +439,10 @@ public class PolyUtil {
 
     /**
      * Complex from real polynomial.
+     * 
      * @param fac result polynomial factory.
      * @param A polynomial with C coefficients to be converted.
-     * @return polynomial with Complex<C> coefficients.
+     * @return polynomial with {@link Complex} coefficients.
      */
     public static <C extends RingElem<C>> GenPolynomial<Complex<C>> toComplex(
                     GenPolynomialRing<Complex<C>> fac, GenPolynomial<C> A) {
@@ -447,6 +452,7 @@ public class PolyUtil {
 
     /**
      * Complex from rational coefficients.
+     * 
      * @param fac result polynomial factory.
      * @param A polynomial with BigRational coefficients to be converted.
      * @return polynomial with BigComplex coefficients.
@@ -485,7 +491,7 @@ public class PolyUtil {
 
     /**
      * Convert to AlgebraicNumber coefficients. Represent as polynomial with
-     * AlgebraicNumber<C> coefficients, C is e.g. ModInteger or BigRational.
+     * <code>AlgebraicNumber<C></code> coefficients, C is e.g. ModInteger or BigRational.
      * @param pfac result polynomial factory.
      * @param A polynomial with C coefficients to be converted.
      * @return polynomial with AlgebraicNumber&lt;C&gt; coefficients.
@@ -499,8 +505,9 @@ public class PolyUtil {
 
     /**
      * Convert to recursive AlgebraicNumber coefficients. Represent as
-     * polynomial with recursive AlgebraicNumber<C> coefficients, C is e.g.
+     * polynomial with recursive <code>AlgebraicNumber<C></code> coefficients, C is e.g.
      * ModInteger or BigRational.
+     * 
      * @param depth recursion depth of AlgebraicNumber coefficients.
      * @param pfac result polynomial factory.
      * @param A polynomial with C coefficients to be converted.
@@ -515,7 +522,8 @@ public class PolyUtil {
 
     /**
      * Convert to AlgebraicNumber coefficients. Represent as polynomial with
-     * AlgebraicNumber<C> coefficients, C is e.g. ModInteger or BigRational.
+     * <code>AlgebraicNumber<C></code> coefficients, C is e.g. ModInteger or BigRational.
+     * 
      * @param pfac result polynomial factory.
      * @param A recursive polynomial with GenPolynomial&lt;BigInteger&gt;
      *            coefficients to be converted.
@@ -609,7 +617,7 @@ public class PolyUtil {
     /**
      * GenPolynomial monic, i.e. leadingBaseCoefficient == 1. If
      * leadingBaseCoefficient is not invertible returns this unmodified.
-     * @param <C> coefficient type.
+     *  
      * @param p recursive GenPolynomial&lt;GenPolynomial<C>&gt;.
      * @return monic(p).
      */
@@ -632,7 +640,7 @@ public class PolyUtil {
     /**
      * GenSolvablePolynomial monic, i.e. leadingBaseCoefficient == 1. If
      * leadingBaseCoefficient is not invertible returns this unmodified.
-     * @param <C> coefficient type.
+     * 
      * @param p recursive GenSolvablePolynomial&lt;GenPolynomial<C>&gt;.
      * @return monic(p).
      */
@@ -883,7 +891,7 @@ public class PolyUtil {
      * @param P GenPolynomial.
      * @param s nonzero coefficient.
      * @return coefficient wise remainder.
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial)
      */
     public static <C extends RingElem<C>> GenPolynomial<C> baseRemainderPoly(GenPolynomial<C> P, C s) {
         if (s == null || s.isZERO()) {
@@ -908,7 +916,7 @@ public class PolyUtil {
      * @param S nonzero GenPolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      *         m' &le; deg(P)-deg(S)
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial)
      * @deprecated(forRemoval=true) Use
      *                              {@link #baseSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)}
      *                              instead
@@ -927,7 +935,7 @@ public class PolyUtil {
      * @param S nonzero GenPolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      *         m' &le; deg(P)-deg(S)
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial)
      */
     public static <C extends RingElem<C>> GenPolynomial<C> baseSparsePseudoRemainder(GenPolynomial<C> P,
                     GenPolynomial<C> S) {
@@ -972,7 +980,7 @@ public class PolyUtil {
      * @param S nonzero GenPolynomial.
      * @return remainder with ldcf(S)<sup>m</sup> P = quotient * S + remainder.
      *         m == deg(P)-deg(S)
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial)
      */
     public static <C extends RingElem<C>> GenPolynomial<C> baseDensePseudoRemainder(GenPolynomial<C> P,
                     GenPolynomial<C> S) {
@@ -1018,7 +1026,7 @@ public class PolyUtil {
      * @param S nonzero GenPolynomial.
      * @return quotient with ldcf(S)<sup>m</sup> P = quotient * S + remainder. m
      *         == deg(P)-deg(S)
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial)
      */
     public static <C extends RingElem<C>> GenPolynomial<C> baseDensePseudoQuotient(GenPolynomial<C> P,
                     GenPolynomial<C> S) {
@@ -1070,7 +1078,7 @@ public class PolyUtil {
      * @param S nonzero GenPolynomial.
      * @return quotient with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
      *         m' &le; deg(P)-deg(S)
-     * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial)
      */
     public static <C extends RingElem<C>> GenPolynomial<C> basePseudoDivide(GenPolynomial<C> P,
                     GenPolynomial<C> S) {
@@ -1124,7 +1132,7 @@ public class PolyUtil {
      * @param S nonzero GenPolynomial.
      * @return [ quotient, remainder ] with ldcf(S)<sup>m'</sup> P = quotient *
      *         S + remainder. m' &le; deg(P)-deg(S)
-     * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#divide(edu.jas.poly.GenPolynomial)
      */
     @SuppressWarnings("unchecked")
     public static <C extends RingElem<C>> GenPolynomial<C>[] basePseudoQuotientRemainder(
@@ -1189,7 +1197,7 @@ public class PolyUtil {
      * @param P base GenPolynomial.
      * @param S nonzero base GenPolynomial.
      * @return true, if P = q * S + r, else false.
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial)
      *      <b>Note:</b> not always meaningful and working
      */
     public static <C extends RingElem<C>> boolean isBasePseudoQuotientRemainder(GenPolynomial<C> P,
@@ -1357,7 +1365,7 @@ public class PolyUtil {
      * @param P recursive GenPolynomial.
      * @param S nonzero recursive GenPolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial)
      * @deprecated(forRemoval=true) Use
      *                              {@link #recursiveSparsePseudoRemainder(edu.jas.poly.GenPolynomial,edu.jas.poly.GenPolynomial)}
      *                              instead
@@ -1375,7 +1383,7 @@ public class PolyUtil {
      * @param P recursive GenPolynomial.
      * @param S nonzero recursive GenPolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial)
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursiveSparsePseudoRemainder(
                     GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S) {
@@ -1419,7 +1427,7 @@ public class PolyUtil {
      * @param P recursive GenPolynomial.
      * @param S nonzero recursive GenPolynomial.
      * @return remainder with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial)
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursiveDensePseudoRemainder(
                     GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S) {
@@ -1465,7 +1473,7 @@ public class PolyUtil {
      * @param P recursive GenPolynomial.
      * @param S nonzero recursive GenPolynomial.
      * @return quotient with ldcf(S)<sup>m'</sup> P = quotient * S + remainder.
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial)
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> recursivePseudoDivide(
                     GenPolynomial<GenPolynomial<C>> P, GenPolynomial<GenPolynomial<C>> S) {
@@ -1520,7 +1528,7 @@ public class PolyUtil {
      * @param P recursive GenPolynomial.
      * @param S nonzero recursive GenPolynomial.
      * @return true, if P ~= q * S + r, else false.
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial)
      *      <b>Note:</b> not always meaningful and working
      */
     public static <C extends RingElem<C>> boolean isRecursivePseudoQuotientRemainder(
@@ -1578,7 +1586,7 @@ public class PolyUtil {
      * @param P recursive GenPolynomial.
      * @param s nonzero GenPolynomial.
      * @return quotient with ldcf(s)<sup>m</sup> P = quotient * s + remainder.
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial)
      */
     public static <C extends RingElem<C>> GenPolynomial<GenPolynomial<C>> coefficientPseudoDivide(
                     GenPolynomial<GenPolynomial<C>> P, GenPolynomial<C> s) {
@@ -1617,7 +1625,7 @@ public class PolyUtil {
      * @param P GenPolynomial.
      * @param s nonzero coefficient.
      * @return quotient with ldcf(s)<sup>m</sup> P = quotient * s + remainder.
-     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial).
+     * @see edu.jas.poly.GenPolynomial#remainder(edu.jas.poly.GenPolynomial)
      */
     public static <C extends RingElem<C>> GenPolynomial<C> coefficientBasePseudoDivide(GenPolynomial<C> P,
                     C s) {
