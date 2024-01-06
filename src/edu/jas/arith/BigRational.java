@@ -71,7 +71,7 @@ public final class BigRational implements GcdRingElem<BigRational>, RingFactory<
      * @param n math.BigInteger.
      * @param d math.BigInteger.
      */
-    public BigRational(BigInteger n, BigInteger d) {
+    protected BigRational(BigInteger n, BigInteger d) {
         // assert gcd(n,d) == 1
         num = n;
         den = d;

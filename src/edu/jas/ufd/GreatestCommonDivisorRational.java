@@ -58,7 +58,7 @@ public class GreatestCommonDivisorRational<C extends GcdRingElem<C>>
     }
     BigInteger p = a.num.gcd(b.num);
     BigInteger q = lcm(a.den, b.den);
-    return new BigRational(p, q);
+    return BigRational.RNRED(p, q);
   }
 
   public BigRational lcmRational(BigRational a, BigRational b) {
@@ -68,7 +68,7 @@ public class GreatestCommonDivisorRational<C extends GcdRingElem<C>>
     if (a.isZERO()) {
       return BigRational.ZERO;
     }
-    return new BigRational(lcm(a.num, b.num), a.den.gcd(b.den));
+    return BigRational.RNRED(lcm(a.num, b.num), a.den.gcd(b.den));
   }
 
 
