@@ -15,7 +15,6 @@ import edu.jas.poly.AlgebraicNumberRing;
 import edu.jas.poly.GenPolynomial;
 import edu.jas.poly.GenPolynomialRing;
 import edu.jas.poly.TermOrder;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -155,6 +154,59 @@ public class GCDFactoryTest extends TestCase {
         assertTrue("ufd = Primitive " + ufd, ufd instanceof GreatestCommonDivisorPrimitive);
     }
 
+    /**
+     * Test get BigRational GCD implementation.
+     */
+    public void testBigRationalGCD() {
+      GreatestCommonDivisorAbstract<BigRational> ufd =
+          GCDFactory.getImplementation(BigRational.ZERO, true);
+      assertTrue("ufd = Primitive " + ufd, ufd instanceof GreatestCommonDivisorRational);
+
+      GenPolynomialRing<BigRational> pfac = new GenPolynomialRing<BigRational>(BigRational.ZERO, new String[] { "x" });
+      GenPolynomial<BigRational> p1 = pfac.parse("-1/2");
+      GenPolynomial<BigRational> p2 = pfac.parse("x^2 -5 x - 6");
+
+      GenPolynomial<BigRational> gcd = ufd.gcd(p1, p2);
+
+
+      assertEquals("1/2 ", //
+          gcd.toString());
+
+      p1 = pfac.parse("1/2");
+      p2 = pfac.parse("2");
+
+      gcd = ufd.gcd(p1, p2);
+
+      assertEquals("1/2 ", //
+          gcd.toString());
+
+    }
+
+    /**
+     * Test get BigRational LCM implementation.
+     */
+    public void testBigRationalLCM() {
+      GreatestCommonDivisorAbstract<BigRational> ufd =
+          GCDFactory.getImplementation(BigRational.ZERO, true);
+      assertTrue("ufd = Primitive " + ufd, ufd instanceof GreatestCommonDivisorRational);
+
+      GenPolynomialRing<BigRational> pfac =
+          new GenPolynomialRing<BigRational>(BigRational.ZERO, new String[] {"x"});
+      GenPolynomial<BigRational> p1 = pfac.parse("x^2 + 7 x + 6");
+      GenPolynomial<BigRational> p2 = pfac.parse("-1/2");
+
+      GenPolynomial<BigRational> lcm = ufd.lcm(p1, p2);
+
+      assertEquals("( -1 ) x^2 - 7 x - 6 ", //
+          lcm.toString());
+
+      p1 = pfac.parse("1/2");
+      p2 = pfac.parse("2");
+      lcm = ufd.lcm(p1, p2);
+
+      assertEquals("2 ", //
+          lcm.toString());
+    }
 
     /**
      * Test get BigComplex implementation.

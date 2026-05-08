@@ -38,3 +38,4 @@ doc/git_change.log
 versuch*
 jacoco.exec
 report/
+/target/

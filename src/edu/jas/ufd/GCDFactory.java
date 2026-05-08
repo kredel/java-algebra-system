@@ -7,7 +7,6 @@ package edu.jas.ufd;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import edu.jas.arith.BigInteger;
 import edu.jas.arith.BigRational;
 import edu.jas.arith.ModInt;
@@ -225,20 +224,38 @@ public class GCDFactory {
         return new GCDProxy<BigInteger>(ufd1, ufd2);
     }
 
-
     /**
      * Determine suitable implementation of gcd algorithms, case BigRational.
+     * 
      * @param fac BigRational.
      * @return gcd algorithm implementation.
      */
     public static GreatestCommonDivisorAbstract<BigRational> getImplementation(BigRational fac) {
-        if (fac == null) {
-            throw new IllegalArgumentException("fac == null not supported");
-        }
-        GreatestCommonDivisorAbstract<BigRational> ufd;
-        ufd = new GreatestCommonDivisorPrimitive<BigRational>();
-        return ufd;
+      return getImplementation(fac, false);
     }
+
+    /**
+     * Determine suitable implementation of gcd algorithms, case BigRational.
+     * 
+     * @param fac BigRational.
+     * @param rationalGCD if <code>true</code> use the extended rational GCD as described
+     *        <a href="https://math.stackexchange.com/a/151431">here</a>
+     * @return gcd algorithm implementation.
+     */
+    public static GreatestCommonDivisorAbstract<BigRational> getImplementation(BigRational fac,
+        boolean rationalGCD) {
+      if (fac == null) {
+        throw new IllegalArgumentException("fac == null not supported");
+      }
+      GreatestCommonDivisorAbstract<BigRational> ufd;
+      if (rationalGCD) {
+        ufd = new GreatestCommonDivisorRational<BigRational>();
+      } else {
+        ufd = new GreatestCommonDivisorPrimitive<BigRational>();
+      }
+      return ufd;
+    }
+
 
 
     /**
